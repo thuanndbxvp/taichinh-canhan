@@ -32,31 +32,31 @@ const YoutubeLogoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 );
 
 const App: React.FC = () => {
-  // --- DEFAULT DF MODE STATES ---
-  const [isDarkFrontiers, setIsDarkFrontiers] = useState<boolean>(true);
+  // --- DEFAULT DF MODE STATES (NOW OFF BY DEFAULT) ---
+  const [isDarkFrontiers, setIsDarkFrontiers] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [outlineContent, setOutlineContent] = useState<string>('');
-  const [targetAudience, setTargetAudience] = useState<string>('English');
+  const [targetAudience, setTargetAudience] = useState<string>('Vietnamese');
   const [styleOptions, setStyleOptions] = useState<StyleOptions>({
-    expression: 'Ominous',
-    style: 'Cinematic Horror',
+    expression: 'Conversational',
+    style: 'Narrative',
   });
-  const [themeColor, setThemeColor] = useState<string>('#f59e0b');
+  const [themeColor, setThemeColor] = useState<string>('#ef4444');
   
   const [keywords, setKeywords] = useState<string>('');
   const [formattingOptions, setFormattingOptions] = useState<FormattingOptions>({
     headings: true,
-    bullets: false,
-    bold: false,
+    bullets: true,
+    bold: true,
     includeIntro: false,
     includeOutro: false,
   });
-  const [wordCount, setWordCount] = useState<string>('5000');
+  const [wordCount, setWordCount] = useState<string>('800');
   const [scriptParts, setScriptParts] = useState<string>('Auto');
   const [scriptType, setScriptType] = useState<ScriptType>('Video');
   const [numberOfSpeakers, setNumberOfSpeakers] = useState<NumberOfSpeakers>('Auto');
   const [lengthType, setLengthType] = useState<'words' | 'duration'>('words');
-  const [videoDuration, setVideoDuration] = useState<string>('30');
+  const [videoDuration, setVideoDuration] = useState<string>('5');
 
   const [generatedScript, setGeneratedScript] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -799,7 +799,7 @@ const App: React.FC = () => {
                         setWordCount('5000');
                         setVideoDuration('30');
                     } else {
-                        setThemeColor('#38bdf8');
+                        setThemeColor('#ef4444');
                         setTargetAudience(LANGUAGE_OPTIONS[0].value);
                         setFormattingOptions(prev => ({ ...prev, bullets: true, bold: true }));
                         setWordCount('800');

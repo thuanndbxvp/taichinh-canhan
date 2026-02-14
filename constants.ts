@@ -40,6 +40,7 @@ export const EXPRESSION_OPTIONS: LabeledOption<Expression>[] = [
   { value: 'Ominous', label: 'U ám / Điềm báo' },
   { value: 'Gritty', label: 'Gai góc' },
   { value: 'Melancholic', label: 'U sầu' },
+  { value: 'Inspirational', label: 'Truyền cảm hứng' },
   { value: 'Conversational', label: 'Thân mật' },
   { value: 'Humorous', label: 'Hài hước' },
   { value: 'Authoritative', label: 'Chuyên gia' },

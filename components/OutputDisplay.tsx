@@ -51,7 +51,7 @@ const InitialState: React.FC<{ onImportClick: () => void }> = ({ onImportClick }
                 <div>
                     <h3 className="font-semibold text-accent/90 text-lg mb-2">Bước 1: Khởi động Ý tưởng (hoặc Kịch bản)</h3>
                     <ul className="list-disc list-inside space-y-2 text-sm text-text-secondary">
-                        <li><strong>Cài đặt API Key:</strong> Nhấp vào nút "API" để thêm key của bạn.</li>
+                        <li><strong>Cài đặt API Key:</strong> Nhấp vào nút "API" để thêm key của bạn. <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-xs ml-1">(Lấy key Google tại đây)</a></li>
                         <li><strong>Nhập ý tưởng:</strong> Trong ô "Ý tưởng chính", điền chủ đề video.</li>
                         <li><strong>Chọn AI:</strong> Lựa chọn Gemini hoặc OpenAI phù hợp nhất.</li>
                     </ul>

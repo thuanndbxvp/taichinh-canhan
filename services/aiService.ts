@@ -137,18 +137,39 @@ Aspect ratio 16:9.
 [INSERT IMAGE CONTENT HERE]`;
 
 export const generateScript = async (params: GenerationParams, provider: AiProvider, model: string): Promise<string> => {
-    const { title, targetAudience, wordCount, isDarkFrontiers } = params;
+    const { title, targetAudience, wordCount, isDarkFrontiers, styleOptions } = params;
+    
+    // Construct style instruction based on user selection
+    const styleInstruction = `
+    YÊU CẦU VỀ PHONG CÁCH VÀ LỐI DIỄN ĐẠT (TUÂN THỦ TUYỆT ĐỐI):
+    - Tone (Tông giọng): ${styleOptions.expression} (Hãy thể hiện rõ nét tông giọng này xuyên suốt kịch bản).
+    - Style (Phong cách viết): ${styleOptions.style}.
+    `;
+
     let prompt = isDarkFrontiers 
-        ? `${DARK_FRONTIERS_DNA}\nVIẾT KỊCH BẢN CHI TIẾT THEO CẤU TRÚC 5 GIAI ĐOẠN CHO: "${title}". NGÔN NGỮ: ${targetAudience}. ĐỘ DÀI: ${wordCount} từ.\nTUÂN THỦ POV VÀ CHI TIẾT GIÁC QUAN.`
-        : `Viết kịch bản YouTube về "${title}". Ngôn ngữ: ${targetAudience}. Chia phần ##. KỊCH BẢN SẠCH.`;
+        ? `${DARK_FRONTIERS_DNA}\nVIẾT KỊCH BẢN CHI TIẾT THEO CẤU TRÚC 5 GIAI ĐOẠN CHO: "${title}". \n${styleInstruction}\nNGÔN NGỮ: ${targetAudience}. ĐỘ DÀI: ${wordCount} từ.\nTUÂN THỦ POV VÀ CHI TIẾT GIÁC QUAN.`
+        : `Viết kịch bản YouTube về "${title}". 
+           ${styleInstruction}
+           Ngôn ngữ: ${targetAudience}. 
+           Độ dài ước lượng: ${wordCount} từ.
+           Chia phần rõ ràng bằng tiêu đề ##. 
+           KỊCH BẢN SẠCH, HẤP DẪN, GIỮ CHÂN NGƯỜI XEM.`;
+           
     try { return await callApi(prompt, provider, model); } catch (error) { throw handleApiError(error, 'tạo kịch bản'); }
 };
 
 export const generateScriptOutline = async (params: GenerationParams, provider: AiProvider, model: string): Promise<string> => {
-    const { title, targetAudience, isDarkFrontiers } = params;
+    const { title, targetAudience, isDarkFrontiers, styleOptions } = params;
+    
+    const styleInstruction = `Tone: ${styleOptions.expression}, Style: ${styleOptions.style}`;
+
     let prompt = isDarkFrontiers 
-        ? `${DARK_FRONTIERS_DNA}\nTạo dàn ý 5 phần đúng cấu trúc: ## THE HOOK (Ngôi 3), ## THE SLOW BURN (Ngôi 1), ## THE SIEGE (Ngôi 1), ## THE CLIMAX (Ngôi 1), ## THE SCAR (Ngôi 1) cho chủ đề: "${title}". Ngôn ngữ: ${targetAudience}.` 
-        : `Tạo dàn ý YouTube cho "${title}". Chia phần ##.`;
+        ? `${DARK_FRONTIERS_DNA}\nTạo dàn ý 5 phần đúng cấu trúc: ## THE HOOK (Ngôi 3), ## THE SLOW BURN (Ngôi 1), ## THE SIEGE (Ngôi 1), ## THE CLIMAX (Ngôi 1), ## THE SCAR (Ngôi 1) cho chủ đề: "${title}". Ngôn ngữ: ${targetAudience}. Phong cách: ${styleInstruction}.` 
+        : `Tạo dàn ý chi tiết cho kịch bản YouTube: "${title}".
+           Phong cách & Tông giọng: ${styleInstruction}.
+           Ngôn ngữ: ${targetAudience}.
+           Yêu cầu: Chia thành các phần rõ ràng bắt đầu bằng ##.`;
+           
     try {
         const outline = await callApi(prompt, provider, model);
         return `### Dàn Ý Chi Tiết (Chuẩn bị tạo kịch bản sạch cho TTS)\n\n` + outline;
@@ -156,8 +177,10 @@ export const generateScriptOutline = async (params: GenerationParams, provider: 
 };
 
 export const generateScriptPart = async (fullOutline: string, previousPartsScript: string, currentPartOutline: string, params: GenerationParams, provider: AiProvider, model: string): Promise<string> => {
-    const { targetAudience, isDarkFrontiers, title } = params;
+    const { targetAudience, isDarkFrontiers, title, styleOptions } = params;
     
+    const styleInstruction = `DUY TRÌ TÔNG GIỌNG (Tone): ${styleOptions.expression} VÀ PHONG CÁCH (Style): ${styleOptions.style}.`;
+
     let arcInstruction = "";
     if (isDarkFrontiers) {
         const upperPart = currentPartOutline.toUpperCase();
@@ -175,8 +198,12 @@ export const generateScriptPart = async (fullOutline: string, previousPartsScrip
     }
 
     let prompt = isDarkFrontiers 
-        ? `${DARK_FRONTIERS_DNA}\nVIẾT TIẾP PHẦN KỊCH BẢN: "${currentPartOutline}".\nCHỦ ĐỀ: ${title}.\nCHỈ DẪN ARC: ${arcInstruction}\nNGÔN NGỮ: ${targetAudience}.\nBẮT BUỘC BẮT ĐẦU BẰNG TIÊU ĐỀ ##.`
-        : `Viết tiếp phần này cho kịch bản "${title}". BẮT BUỘC bắt đầu bằng ##.`;
+        ? `${DARK_FRONTIERS_DNA}\nVIẾT TIẾP PHẦN KỊCH BẢN: "${currentPartOutline}".\nCHỦ ĐỀ: ${title}.\nCHỈ DẪN ARC: ${arcInstruction}\n${styleInstruction}\nNGÔN NGỮ: ${targetAudience}.\nBẮT BUỘC BẮT ĐẦU BẰNG TIÊU ĐỀ ##.`
+        : `Viết tiếp phần kịch bản này dựa trên dàn ý: "${currentPartOutline}".
+           Chủ đề video: "${title}".
+           ${styleInstruction}
+           Ngôn ngữ: ${targetAudience}.
+           BẮT BUỘC bắt đầu bằng tiêu đề ##. Viết nội dung chi tiết, hấp dẫn.`;
     
     try { return await callApi(prompt, provider, model); } catch (error) { throw handleApiError(error, 'tạo phần kịch bản'); }
 };
@@ -190,7 +217,14 @@ export const generateTopicSuggestions = async (title: string, provider: AiProvid
 };
 
 export const reviseScript = async (script: string, revisionPrompt: string, params: any, provider: AiProvider, model: string): Promise<string> => {
-    const prompt = `Chỉnh sửa kịch bản: "${revisionPrompt}". \nLƯU Ý: Giữ vững cấu trúc POV và triết lý sensory (âm thanh, mùi vị) của Dark Frontiers.\nKịch bản:\n${script}`;
+    const { isDarkFrontiers, styleOptions } = params;
+    const styleInstruction = styleOptions ? `Giữ vững Tone: ${styleOptions.expression} và Style: ${styleOptions.style}.` : '';
+    
+    const prompt = `Chỉnh sửa kịch bản theo yêu cầu: "${revisionPrompt}". 
+    ${isDarkFrontiers ? 'LƯU Ý: Giữ vững cấu trúc POV và triết lý sensory (âm thanh, mùi vị) của Dark Frontiers.' : ''}
+    ${styleInstruction}
+    
+    Kịch bản gốc:\n${script}`;
     try { return await callApi(prompt, provider, model); } catch (e) { throw handleApiError(e, 'sửa kịch bản'); }
 };
 

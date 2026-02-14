@@ -404,62 +404,64 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             </select>
         </ControlSection>
 
-        <div>
-          <Tooltip text="Để AI phân tích chủ đề và tự động chọn lối diễn đạt và phong cách viết phù hợp nhất cho bạn.">
-            <button 
-                onClick={onSuggestStyle}
-                disabled={isSuggestingStyle || !title}
-                className={`w-full mb-4 flex items-center justify-center border font-semibold py-2.5 px-4 rounded-lg transition ${isDarkFrontiers ? 'border-amber-600 text-amber-600 hover:bg-amber-900/20' : 'border-accent text-accent hover:bg-accent/20'} disabled:opacity-40 disabled:cursor-not-allowed`}
-            >
-                {isSuggestingStyle ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Đang phân tích...
-                    </>
-                ) : (
-                    <>
-                        <SparklesIcon className="w-5 h-5 mr-2" />
-                        <span>AI Gợi ý Phong cách</span>
-                        {!isSuggestingStyle && hasSuggestedStyle && <CheckIcon className="w-5 h-5 ml-2 text-green-400" />}
-                    </>
-                )}
-            </button>
-          </Tooltip>
+        <ControlSection title={`${scriptType === 'Podcast' ? '7' : '6'}. Phong cách & Lối diễn đạt`} isDark={isDarkFrontiers}>
+            <Tooltip text="Để AI phân tích chủ đề và tự động chọn lối diễn đạt và phong cách viết phù hợp nhất cho bạn.">
+                <button 
+                    onClick={onSuggestStyle}
+                    disabled={isSuggestingStyle || !title}
+                    className={`w-full mb-4 flex items-center justify-center border font-semibold py-2.5 px-4 rounded-lg transition ${isDarkFrontiers ? 'border-amber-600 text-amber-600 hover:bg-amber-900/20' : 'border-accent text-accent hover:bg-accent/20'} disabled:opacity-40 disabled:cursor-not-allowed`}
+                >
+                    {isSuggestingStyle ? (
+                        <>
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Đang phân tích...
+                        </>
+                    ) : (
+                        <>
+                            <SparklesIcon className="w-5 h-5 mr-2" />
+                            <span>AI Gợi ý Phong cách</span>
+                            {!isSuggestingStyle && hasSuggestedStyle && <CheckIcon className="w-5 h-5 ml-2 text-green-400" />}
+                        </>
+                    )}
+                </button>
+            </Tooltip>
             {styleSuggestionError && <p className="text-red-400 text-sm -mt-2 mb-2 text-center">{styleSuggestionError}</p>}
-        </div>
 
-        <ControlSection title={`${scriptType === 'Podcast' ? '7' : '6'}. Lối diễn đạt`} isDark={isDarkFrontiers}>
-            <div className="flex flex-wrap gap-2">
-                {EXPRESSION_OPTIONS.map((option) => (
-                    <Tooltip key={option.value} text={EXPRESSION_EXPLANATIONS?.[option.value] ?? ''}>
-                    <button
-                        onClick={() => setStyleOptions({ ...styleOptions, expression: option.value })}
-                        className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${
-                        styleOptions.expression === option.value
-                            ? (isDarkFrontiers ? 'bg-amber-700 text-white shadow-md' : 'bg-accent text-white shadow-md')
-                            : (isDarkFrontiers ? 'bg-zinc-800 hover:bg-zinc-700 text-amber-200/70' : 'bg-secondary hover:bg-primary/50 text-text-primary')
-                        }`}
-                    >
-                        {option.label}
-                    </button>
-                    </Tooltip>
-                ))}
+            <div className="mb-4">
+                <label className={`block text-xs font-medium mb-2 ${isDarkFrontiers ? 'text-amber-200/80' : 'text-text-secondary'}`}>Lối diễn đạt (Tone)</label>
+                <div className="flex flex-wrap gap-2">
+                    {EXPRESSION_OPTIONS.map((option) => (
+                        <Tooltip key={option.value} text={EXPRESSION_EXPLANATIONS?.[option.value] ?? ''}>
+                        <button
+                            onClick={() => setStyleOptions({ ...styleOptions, expression: option.value })}
+                            className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${
+                            styleOptions.expression === option.value
+                                ? (isDarkFrontiers ? 'bg-amber-700 text-white shadow-md' : 'bg-accent text-white shadow-md')
+                                : (isDarkFrontiers ? 'bg-zinc-800 hover:bg-zinc-700 text-amber-200/70' : 'bg-secondary hover:bg-primary/50 text-text-primary')
+                            }`}
+                        >
+                            {option.label}
+                        </button>
+                        </Tooltip>
+                    ))}
+                </div>
+            </div>
+
+            <div>
+                <label className={`block text-xs font-medium mb-2 ${isDarkFrontiers ? 'text-amber-200/80' : 'text-text-secondary'}`}>Phong cách Viết (Style)</label>
+                <OptionSelector<Style>
+                    options={STYLE_OPTIONS}
+                    selectedOption={styleOptions.style}
+                    onSelect={(option) => setStyleOptions({ ...styleOptions, style: option })}
+                    explanations={STYLE_EXPLANATIONS}
+                />
             </div>
         </ControlSection>
 
-        <ControlSection title={`${scriptType === 'Podcast' ? '8' : '7'}. Phong cách Viết (Style)`} isDark={isDarkFrontiers}>
-          <OptionSelector<Style>
-            options={STYLE_OPTIONS}
-            selectedOption={styleOptions.style}
-            onSelect={(option) => setStyleOptions({ ...styleOptions, style: option })}
-            explanations={STYLE_EXPLANATIONS}
-          />
-        </ControlSection>
-
-        <ControlSection title={`${scriptType === 'Podcast' ? '9' : '8'}. Cấu trúc & Định dạng`} isDark={isDarkFrontiers}>
+        <ControlSection title={`${scriptType === 'Podcast' ? '8' : '7'}. Cấu trúc & Định dạng`} isDark={isDarkFrontiers}>
             <div className={`flex rounded-lg p-1 mb-4 ${isDarkFrontiers ? 'bg-black' : 'bg-primary'}`}>
                 <button
                     onClick={() => setLengthType('words')}
