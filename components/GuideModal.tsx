@@ -1,5 +1,4 @@
 import React from 'react';
-import { LightBulbIcon } from '@heroicons/react/24/outline';
 
 interface GuideModalProps {
     isOpen: boolean;
@@ -13,7 +12,9 @@ export default function GuideModal({ isOpen, onClose }: GuideModalProps) {
         <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center p-4" onClick={onClose}>
             <div className="bg-secondary rounded-lg shadow-2xl w-full max-w-2xl max-h-[95vh] flex flex-col border border-border" onClick={e => e.stopPropagation()}>
                 <div className="p-5 border-b border-border flex items-center gap-3">
-                    <LightBulbIcon className="w-6 h-6 text-yellow-400" />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-yellow-400">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.82 1.507-2.098a5.981 5.981 0 1 0-7.514 0C9.092 15.988 9.75 16.825 9.75 17.808v.192" />
+                    </svg>
                     <div>
                         <h2 className="text-xl font-bold text-accent">Hướng dẫn chọn Model AI</h2>
                         <p className="text-sm text-text-secondary mt-1">Gợi ý model phù hợp nhất cho kịch bản bám sát DNA</p>
