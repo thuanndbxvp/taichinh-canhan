@@ -1,9 +1,9 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { OptionSelector } from './OptionSelector';
 import { SparklesIcon } from './icons/SparklesIcon';
 import type { StyleOptions, FormattingOptions, Expression, Style, ScriptType, NumberOfSpeakers, TopicSuggestionItem, SavedIdea, AiProvider } from '../types';
-import { EXPRESSION_OPTIONS, STYLE_OPTIONS, LANGUAGE_OPTIONS, SCRIPT_TYPE_OPTIONS, NUMBER_OF_SPEAKERS_OPTIONS, AI_PROVIDER_OPTIONS, GEMINI_MODELS, OPENAI_MODELS, FINANCE_IDEAS } from '../constants';
+import { EXPRESSION_OPTIONS, STYLE_OPTIONS, LANGUAGE_OPTIONS, SCRIPT_TYPE_OPTIONS, NUMBER_OF_SPEAKERS_OPTIONS, AI_PROVIDER_OPTIONS, DEFAULT_KYMA_MODELS, OPENAI_MODELS, FINANCE_IDEAS } from '../constants';
 import { IdeaBrainstorm } from './IdeaBrainstorm';
 import { Tooltip } from './Tooltip';
 import { EXPRESSION_EXPLANATIONS, STYLE_EXPLANATIONS, FORMATTING_EXPLANATIONS } from '../constants/explanations';
@@ -67,6 +67,7 @@ interface ControlPanelProps {
   selectedModel: string;
   setSelectedModel: (model: string) => void;
   isFinanceMode?: boolean;
+  apiKeys?: Record<AiProvider, string[]>;
 }
 
 const ControlSection: React.FC<{title: string; children: React.ReactNode; isDark?: boolean}> = ({ title, children, isDark }) => (
@@ -95,8 +96,31 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   savedIdeas, onSaveIdea, onOpenSavedIdeasModal,
   onParseFile, isParsingFile, parsingFileError, uploadedIdeas,
   aiProvider, setAiProvider, selectedModel, setSelectedModel,
-  isFinanceMode
+  isFinanceMode, apiKeys
 }) => {
+  const [kymaModels, setKymaModels] = useState<{value: string, label: string}[]>([]);
+  const [openAiModels, setOpenAiModels] = useState<{value: string, label: string}[]>([]);
+
+  useEffect(() => {
+    if (aiProvider === 'kyma' && apiKeys?.kyma?.[0]) {
+        fetch('https://kymaapi.com/v1/models', { headers: { 'Authorization': `Bearer ${apiKeys.kyma[0]}` } })
+        .then(res => res.json())
+        .then(data => {
+            if (data?.data) {
+                const models = data.data.map((m: any) => ({ value: m.id, label: m.name || m.id }));
+                setKymaModels(models);
+                if (!models.find((m: any) => m.value === selectedModel)) {
+                    setSelectedModel(models[0]?.value || '');
+                }
+            }
+        })
+        .catch(console.error);
+    } else if (aiProvider === 'openai') {
+        const customModel = localStorage.getItem('openai-custom-model') || 'gpt-4o-mini';
+        setOpenAiModels([{ value: customModel, label: `Custom: ${customModel}` }]);
+        if (selectedModel !== customModel) setSelectedModel(customModel);
+    }
+  }, [aiProvider, apiKeys?.kyma]);
   const handleCheckboxChange = (key: keyof FormattingOptions, value: boolean) => {
     setFormattingOptions({ ...formattingOptions, [key]: value });
   };
@@ -119,10 +143,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
 
   const handleProviderChange = (provider: AiProvider) => {
     setAiProvider(provider);
-    if (provider === 'gemini') {
-        setSelectedModel(GEMINI_MODELS[0].value);
+    if (provider === 'kyma') {
+        setSelectedModel(kymaModels.length > 0 ? kymaModels[0].value : DEFAULT_KYMA_MODELS[0].value);
     } else {
-        setSelectedModel(OPENAI_MODELS[0].value);
+        const customModel = localStorage.getItem('openai-custom-model') || 'gpt-4o-mini';
+        setSelectedModel(customModel);
     }
   };
 
@@ -138,7 +163,9 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     }
   };
 
-  const modelOptions = aiProvider === 'gemini' ? GEMINI_MODELS : OPENAI_MODELS;
+  const modelOptions = aiProvider === 'kyma' 
+    ? (kymaModels.length > 0 ? kymaModels : DEFAULT_KYMA_MODELS)
+    : (openAiModels.length > 0 ? openAiModels : OPENAI_MODELS);
 
   const IdeaList: React.FC<{
     ideaList: TopicSuggestionItem[], 

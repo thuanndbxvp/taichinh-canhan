@@ -7,20 +7,16 @@ interface LabeledOption<T> {
 }
 
 export const AI_PROVIDER_OPTIONS: LabeledOption<AiProvider>[] = [
-    { value: 'gemini', label: 'Google Gemini' },
-    { value: 'openai', label: 'OpenAI' },
+    { value: 'kyma', label: 'Kyma API' },
+    { value: 'openai', label: 'OpenAI Tương Thích' },
 ];
 
-export const GEMINI_MODELS: LabeledOption<string>[] = [
-    { value: 'gemini-3-pro-preview', label: 'Gemini 3 Pro (Mạnh nhất)' },
-    { value: 'gemini-3-flash-preview', label: 'Gemini 3 Flash (Nhanh)' },
-    { value: 'gemini-2.5-flash-lite-latest', label: 'Gemini 2.5 Flash Lite' },
+export const DEFAULT_KYMA_MODELS: LabeledOption<string>[] = [
+    { value: 'gemini-2.5-flash', label: 'Kyma Default (gemini-2.5-flash)' },
 ];
 
 export const OPENAI_MODELS: LabeledOption<string>[] = [
-    { value: 'gpt-5.2', label: 'GPT-5.2 (Flagship)' },
-    { value: 'gpt-4o', label: 'GPT-4o' },
-    { value: 'gpt-4-turbo', label: 'GPT-4 Turbo' },
+    { value: 'gpt-4o-mini', label: 'Custom: gpt-4o-mini' },
 ];
 
 export const SCRIPT_TYPE_OPTIONS: LabeledOption<ScriptType>[] = [

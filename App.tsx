@@ -13,7 +13,7 @@ import { SideToolsPanel } from './components/SideToolsPanel';
 import { ScoreModal } from './components/ScoreModal';
 import { generateScript, generateScriptOutline, generateTopicSuggestions, reviseScript, generateScriptPart, extractDialogue, generateKeywordSuggestions, validateApiKey, generateVisualPrompt, generateAllVisualPrompts, summarizeScriptForScenes, suggestStyleOptions, parseIdeasFromFile, scoreScript, generateSingleVideoPrompt, parseOutlineIntoSegments } from './services/aiService';
 import type { StyleOptions, FormattingOptions, LibraryItem, GenerationParams, VisualPrompt, AllVisualPromptsResult, ScriptPartSummary, ScriptType, NumberOfSpeakers, CachedData, TopicSuggestionItem, SavedIdea, AiProvider, WordCountStats, SummarizeConfig, SceneSummary } from './types';
-import { STYLE_OPTIONS, LANGUAGE_OPTIONS, GEMINI_MODELS } from './constants';
+import { STYLE_OPTIONS, LANGUAGE_OPTIONS, DEFAULT_KYMA_MODELS } from './constants';
 import { CogIcon } from './components/icons/CogIcon';
 import { Tooltip } from './components/Tooltip';
 import { CheckIcon } from './components/icons/CheckIcon';
@@ -126,7 +126,7 @@ const App: React.FC = () => {
   const [scoringError, setScoringError] = useState<string | null>(null);
 
   const [aiProvider, setAiProvider] = useState<AiProvider>('kyma');
-  const [selectedModel, setSelectedModel] = useState<string>(GEMINI_MODELS[0].value);
+  const [selectedModel, setSelectedModel] = useState<string>(DEFAULT_KYMA_MODELS[0].value);
 
   const [visualPromptsCache, setVisualPromptsCache] = useState<Map<string, VisualPrompt[]>>(new Map());
   const [allVisualPromptsCache, setAllVisualPromptsCache] = useState<AllVisualPromptsResult[] | null>(null);
@@ -795,6 +795,7 @@ const App: React.FC = () => {
             onParseFile={handleParseFileLocal} isParsingFile={isParsing} parsingFileError={parsingError} uploadedIdeas={uploadedIdeas}
             aiProvider={aiProvider} setAiProvider={setAiProvider} selectedModel={selectedModel} setSelectedModel={setSelectedModel}
             isFinanceMode={isFinanceMode}
+            apiKeys={apiKeys}
           />
         </div>
         <div className="lg:col-span-6">
