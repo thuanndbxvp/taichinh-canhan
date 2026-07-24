@@ -1,6 +1,4 @@
-
-import { GoogleGenAI, Type } from "@google/genai";
-import type { GenerationParams, VisualPrompt, AllVisualPromptsResult, ScriptPartSummary, StyleOptions, TopicSuggestionItem, AiProvider, ElevenlabsVoice, Expression, SummarizeConfig, SceneSummary, ScenarioType } from '../types';
+import type { GenerationParams, VisualPrompt, AllVisualPromptsResult, ScriptPartSummary, StyleOptions, TopicSuggestionItem, AiProvider, Expression, SummarizeConfig, SceneSummary, ScenarioType } from '../types';
 import { EXPRESSION_OPTIONS, STYLE_OPTIONS } from '../constants';
 import { apiKeyManager } from './apiKeyManager';
 
@@ -33,22 +31,31 @@ const handleApiError = (error: any, action: string) => {
 };
 
 const callApi = async (prompt: string, provider: AiProvider, model: string): Promise<string> => {
-    if (provider === 'gemini') {
-        const { apiKey, releaseKey } = await apiKeyManager.getAvailableKey('gemini');
+    if (provider === 'kyma') {
+        const { apiKey, releaseKey } = await apiKeyManager.getAvailableKey('kyma');
         try {
-            const ai = new GoogleGenAI({ apiKey: apiKey || process.env.API_KEY || '' });
-            const response = await ai.models.generateContent({
-                model: model,
-                contents: prompt,
+            const res = await fetch('https://kymaapi.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: model,
+                    messages: [{ role: 'user', content: prompt }],
+                })
             });
-            return response.text || '';
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error?.message || 'Kyma API Error');
+            return data.choices[0].message.content;
         } finally {
             releaseKey();
         }
     } else if (provider === 'openai') {
         const { apiKey, releaseKey } = await apiKeyManager.getAvailableKey('openai');
         try {
-            const res = await fetch('https://api.openai.com/v1/chat/completions', {
+            const baseUrl = localStorage.getItem('openai-base-url') || 'https://api.openai.com/v1';
+            const res = await fetch(`${baseUrl}/chat/completions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -70,20 +77,15 @@ const callApi = async (prompt: string, provider: AiProvider, model: string): Pro
 };
 
 export const validateApiKey = async (key: string, provider: AiProvider): Promise<boolean> => {
-    if (provider === 'gemini') {
+    if (provider === 'kyma') {
         try {
-            const ai = new GoogleGenAI({ apiKey: key });
-            await ai.models.generateContent({ model: 'gemini-3-flash-preview', contents: 'ping' });
-            return true;
-        } catch (e) { throw new Error("Gemini API Key không hợp lệ."); }
+            const res = await fetch('https://kymaapi.com/v1/models', { headers: { 'Authorization': `Bearer ${key}` } });
+            return res.ok;
+        } catch (e) { throw new Error("Kyma API Key không hợp lệ."); }
     } else if (provider === 'openai') {
         try {
-            const res = await fetch('https://api.openai.com/v1/models', { headers: { 'Authorization': `Bearer ${key}` } });
-            return res.ok;
-        } catch (e) { return false; }
-    } else if (provider === 'elevenlabs') {
-        try {
-            const res = await fetch('https://api.elevenlabs.io/v1/user', { headers: { 'xi-api-key': key } });
+            const baseUrl = localStorage.getItem('openai-base-url') || 'https://api.openai.com/v1';
+            const res = await fetch(`${baseUrl}/models`, { headers: { 'Authorization': `Bearer ${key}` } });
             return res.ok;
         } catch (e) { return false; }
     }
@@ -329,99 +331,6 @@ export const parseIdeasFromFile = async (content: string, provider: AiProvider, 
     } catch (e) { throw handleApiError(e, 'phân tích file'); }
 };
 
-/**
- * Lấy danh sách giọng nói ElevenLabs
- */
-export const getElevenlabsVoices = async (): Promise<ElevenlabsVoice[]> => {
-    const savedKeysJson = localStorage.getItem('ai-api-keys');
-    const totalKeys = savedKeysJson ? (JSON.parse(savedKeysJson).elevenlabs?.length || 0) : 0;
-    
-    for (let attempt = 0; attempt < Math.max(1, totalKeys); attempt++) {
-        const { apiKey, releaseKey } = await apiKeyManager.getAvailableKey('elevenlabs');
-        try {
-            const res = await fetch('https://api.elevenlabs.io/v1/voices', { headers: { 'xi-api-key': apiKey } });
-            
-            if (res.status === 401 || res.status === 429) {
-                apiKeyManager.reportError('elevenlabs', apiKey);
-                releaseKey();
-                continue;
-            }
-
-            if (!res.ok) throw new Error("Không thể tải danh sách giọng nói.");
-            const data = await res.json();
-            releaseKey();
-            return data.voices || [];
-        } catch (error) {
-            releaseKey();
-            if (attempt === totalKeys - 1) throw error;
-        }
-    }
-    throw new Error("Tất cả API Key ElevenLabs đều bị lỗi hoặc hết hạn.");
-};
-
-/**
- * Lấy thông tin một giọng nói cụ thể theo ID
- */
-export const getElevenlabsVoiceById = async (voiceId: string): Promise<ElevenlabsVoice> => {
-    const { apiKey, releaseKey } = await apiKeyManager.getAvailableKey('elevenlabs');
-    try {
-        const res = await fetch(`https://api.elevenlabs.io/v1/voices/${voiceId}`, {
-            headers: { 'xi-api-key': apiKey }
-        });
-        if (!res.ok) throw new Error(`Không tìm thấy giọng nói với ID: ${voiceId}`);
-        const data = await res.json();
-        return data;
-    } finally {
-        releaseKey();
-    }
-};
-
-/**
- * Tạo TTS ElevenLabs
- */
-export const generateElevenlabsTts = async (text: string, voiceId: string): Promise<string> => {
-    const savedKeysJson = localStorage.getItem('ai-api-keys');
-    const totalKeys = savedKeysJson ? (JSON.parse(savedKeysJson).elevenlabs?.length || 0) : 0;
-
-    for (let attempt = 0; attempt < Math.max(1, totalKeys); attempt++) {
-        const { apiKey, releaseKey } = await apiKeyManager.getAvailableKey('elevenlabs');
-        try {
-            const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json', 
-                    'xi-api-key': apiKey,
-                    'accept': 'audio/mpeg'
-                },
-                body: JSON.stringify({ 
-                    text, 
-                    model_id: 'eleven_multilingual_v2',
-                    voice_settings: { stability: 0.5, similarity_boost: 0.75 }
-                })
-            });
-
-            if (res.status === 401 || res.status === 429) {
-                apiKeyManager.reportError('elevenlabs', apiKey);
-                releaseKey();
-                continue;
-            }
-
-            if (!res.ok) {
-                const errorData = await res.json().catch(() => ({}));
-                throw new Error(errorData.detail?.message || `Lỗi TTS: ${res.status}`);
-            }
-
-            const blob = await res.blob();
-            releaseKey();
-            if (blob.size < 100) throw new Error("Dữ liệu âm thanh nhận được không hợp lệ.");
-            return URL.createObjectURL(blob);
-        } catch (error) {
-            releaseKey();
-            if (attempt === totalKeys - 1) throw error;
-        }
-    }
-    throw new Error("Tất cả API Key ElevenLabs đều bị lỗi hoặc hết quota.");
-};
 
 export const scoreScript = async (script: string, provider: AiProvider, model: string): Promise<string> => {
     const prompt = `Bạn là chuyên gia thẩm định nội dung của kênh Tài chính cá nhân. Hãy chấm điểm kịch bản này dựa trên 8 tiêu chí cực kỳ khắt khe:

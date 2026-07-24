@@ -54,7 +54,7 @@ export const DialogueModal: React.FC<DialogueModalProps> = ({ isOpen, onClose, d
         onClick={e => e.stopPropagation()}
       >
         <div className="flex justify-between items-center p-4 border-b border-border">
-          <h2 className="text-xl font-bold text-accent">Lời thoại cho TTS</h2>
+          <h2 className="text-xl font-bold text-accent">Lời thoại</h2>
           <button onClick={onClose} className="text-text-secondary hover:text-text-primary text-2xl font-bold">&times;</button>
         </div>
         <div className="p-6 overflow-y-auto flex-grow">

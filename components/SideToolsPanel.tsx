@@ -28,7 +28,6 @@ interface SideToolsPanelProps {
   onOpenDialogueModal: () => void;
   wordCountStats: WordCountStats | null;
   isExtracting: boolean;
-  onOpenTtsModal: () => void;
   onScoreScript: () => void;
   isScoring: boolean;
   onGenerateAllPrompts?: () => void;
@@ -53,7 +52,6 @@ export const SideToolsPanel: React.FC<SideToolsPanelProps> = ({
     onOpenDialogueModal,
     wordCountStats,
     isExtracting,
-    onOpenTtsModal,
     onScoreScript,
     isScoring,
     onGenerateAllPrompts,
@@ -145,7 +143,6 @@ export const SideToolsPanel: React.FC<SideToolsPanelProps> = ({
                         isLoading={isLoading}
                         isSummarizing={isSummarizing}
                         hasSummarizedScript={hasSummarizedScript}
-                        onOpenTtsModal={onOpenTtsModal}
                     />
                 </>
             )}

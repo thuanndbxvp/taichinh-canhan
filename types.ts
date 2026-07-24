@@ -4,7 +4,7 @@ export type Expression = 'Formal' | 'Informative' | 'Conversational' | 'Persuasi
 export type Style = 'Narrative' | 'Descriptive' | 'Expository' | 'Persuasive' | 'Technical' | 'Academic' | 'Business' | 'Cinematic Horror' | 'Survival Memoir';
 export type ScriptType = 'Video' | 'Podcast';
 export type NumberOfSpeakers = 'Auto' | '2' | '3' | '4' | '5';
-export type AiProvider = 'gemini' | 'openai' | 'elevenlabs';
+export type AiProvider = 'kyma' | 'openai';
 export type ScenarioType = 'general' | 'ww2' | 'finance';
 
 // Options interfaces
@@ -23,14 +23,6 @@ export interface FormattingOptions {
 }
 
 // Data structures
-export interface ElevenlabsVoice {
-  voice_id: string;
-  name: string;
-  category: string;
-  labels: Record<string, string>;
-  preview_url: string;
-}
-
 export interface TopicSuggestionItem {
     title: string;
     vietnameseTitle?: string;
@@ -117,9 +109,3 @@ export interface SummarizeConfig {
   referenceImages?: string[];
 }
 
-export interface TtsGenerationStatus {
-    isLoading: boolean;
-    audioUrl: string | null;
-    duration: number | null;
-    error: string | null;
-}

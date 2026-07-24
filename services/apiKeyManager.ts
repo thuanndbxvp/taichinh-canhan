@@ -12,15 +12,12 @@ class ApiKeyManager {
     private waitingQueue: Map<AiProvider, KeyRequest[]> = new Map();
 
     constructor() {
-        this.allKeys.set('gemini', []);
+        this.allKeys.set('kyma', []);
         this.allKeys.set('openai', []);
-        this.allKeys.set('elevenlabs', []);
-        this.activeKeys.set('gemini', new Set());
+        this.activeKeys.set('kyma', new Set());
         this.activeKeys.set('openai', new Set());
-        this.activeKeys.set('elevenlabs', new Set());
-        this.waitingQueue.set('gemini', []);
+        this.waitingQueue.set('kyma', []);
         this.waitingQueue.set('openai', []);
-        this.waitingQueue.set('elevenlabs', []);
     }
 
     public updateKeys(newKeys: Record<AiProvider, string[]>) {

@@ -10,10 +10,9 @@ import { AllVisualPromptsModal } from './components/AllVisualPromptsModal';
 import { SummarizeModal } from './components/SummarizeModal';
 import { SavedIdeasModal } from './components/SavedIdeasModal';
 import { SideToolsPanel } from './components/SideToolsPanel';
-import { TtsModal } from './components/TtsModal';
 import { ScoreModal } from './components/ScoreModal';
-import { generateScript, generateScriptOutline, generateTopicSuggestions, reviseScript, generateScriptPart, extractDialogue, generateKeywordSuggestions, validateApiKey, generateVisualPrompt, generateAllVisualPrompts, summarizeScriptForScenes, suggestStyleOptions, parseIdeasFromFile, getElevenlabsVoices, generateElevenlabsTts, scoreScript, generateSingleVideoPrompt, parseOutlineIntoSegments } from './services/aiService';
-import type { StyleOptions, FormattingOptions, LibraryItem, GenerationParams, VisualPrompt, AllVisualPromptsResult, ScriptPartSummary, ScriptType, NumberOfSpeakers, CachedData, TopicSuggestionItem, SavedIdea, AiProvider, WordCountStats, ElevenlabsVoice, SummarizeConfig, SceneSummary, TtsGenerationStatus } from './types';
+import { generateScript, generateScriptOutline, generateTopicSuggestions, reviseScript, generateScriptPart, extractDialogue, generateKeywordSuggestions, validateApiKey, generateVisualPrompt, generateAllVisualPrompts, summarizeScriptForScenes, suggestStyleOptions, parseIdeasFromFile, scoreScript, generateSingleVideoPrompt, parseOutlineIntoSegments } from './services/aiService';
+import type { StyleOptions, FormattingOptions, LibraryItem, GenerationParams, VisualPrompt, AllVisualPromptsResult, ScriptPartSummary, ScriptType, NumberOfSpeakers, CachedData, TopicSuggestionItem, SavedIdea, AiProvider, WordCountStats, SummarizeConfig, SceneSummary } from './types';
 import { STYLE_OPTIONS, LANGUAGE_OPTIONS, GEMINI_MODELS } from './constants';
 import { CogIcon } from './components/icons/CogIcon';
 import { Tooltip } from './components/Tooltip';
@@ -102,7 +101,7 @@ const App: React.FC = () => {
   const [extractionError, setExtractionError] = useState<string | null>(null);
   
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState<boolean>(false);
-  const [apiKeys, setApiKeys] = useState<Record<AiProvider, string[]>>({ gemini: [], openai: [], elevenlabs: [] });
+  const [apiKeys, setApiKeys] = useState<Record<AiProvider, string[]>>({ kyma: [], openai: [] });
 
   const [isVisualPromptModalOpen, setIsVisualPromptModalOpen] = useState<boolean>(false);
   const [visualPrompts, setVisualPrompts] = useState<VisualPrompt[] | null>(null);
@@ -121,21 +120,12 @@ const App: React.FC = () => {
   const [isSummarizing, setIsSummarizing] = useState<boolean>(false);
   const [summarizationError, setSummarizationError] = useState<string | null>(null);
 
-  const [isTtsModalOpen, setIsTtsModalOpen] = useState<boolean>(false);
-  const [ttsVoices, setTtsVoices] = useState<ElevenlabsVoice[]>([]);
-  const [isFetchingTtsVoices, setIsFetchingTtsVoices] = useState<boolean>(false);
-  const [ttsModalError, setTtsModalError] = useState<string | null>(null);
-  
-  // SESSION STORAGE FOR TTS (Persists until new script generation or reload)
-  const [ttsEditableDialogue, setTtsEditableDialogue] = useState<Record<string, string>>({});
-  const [ttsGenerationState, setTtsGenerationState] = useState<Record<string, TtsGenerationStatus>>({});
-
   const [isScoreModalOpen, setIsScoreModalOpen] = useState<boolean>(false);
   const [scriptScore, setScriptScore] = useState<string | null>(null);
   const [isScoring, setIsScoring] = useState<boolean>(false);
   const [scoringError, setScoringError] = useState<string | null>(null);
 
-  const [aiProvider, setAiProvider] = useState<AiProvider>('gemini');
+  const [aiProvider, setAiProvider] = useState<AiProvider>('kyma');
   const [selectedModel, setSelectedModel] = useState<string>(GEMINI_MODELS[0].value);
 
   const [visualPromptsCache, setVisualPromptsCache] = useState<Map<string, VisualPrompt[]>>(new Map());
@@ -163,7 +153,7 @@ const App: React.FC = () => {
       const savedIdeasData = localStorage.getItem('yt-script-saved-ideas');
       if (savedIdeasData) setSavedIdeas(JSON.parse(savedIdeasData));
       const savedApiKeys = localStorage.getItem('ai-api-keys');
-      const defaultKeys = { gemini: [], openai: [], elevenlabs: [] };
+      const defaultKeys = { kyma: [], openai: [] };
       let parsedKeys = defaultKeys;
       if (savedApiKeys) {
         parsedKeys = JSON.parse(savedApiKeys);
@@ -227,10 +217,6 @@ const App: React.FC = () => {
     isStoppingRef.current = false;
     setLoadingVisualPromptsParts(new Set());
     setIsGeneratingAllSegmentPrompts(false);
-    
-    // Clear TTS Session on new script
-    setTtsEditableDialogue({});
-    setTtsGenerationState({});
   };
 
   const handleGenerateScript = useCallback(async () => {
@@ -378,10 +364,6 @@ const App: React.FC = () => {
         setGeneratedScript(revised);
         setRevisionCount(prev => prev + 1);
         setRevisionPrompt('');
-        
-        // Reset TTS session on revision as content has changed
-        setTtsEditableDialogue({});
-        setTtsGenerationState({});
     } catch (err) {
         setError(err instanceof Error ? err.message : 'Lỗi khi sửa kịch bản.');
     } finally {
@@ -475,9 +457,6 @@ const App: React.FC = () => {
         }
         
         setExtractedDialogue(dialogue);
-        
-        // SESSION PERSISTENCE: Initialize TTS dialogue if empty
-        setTtsEditableDialogue(prev => Object.keys(prev).length === 0 ? dialogue : prev);
         
         // Calculate stats accurately
         const statsSections = Object.entries(dialogue).map(([title, text]) => {
@@ -687,24 +666,7 @@ const App: React.FC = () => {
     }
   }, [aiProvider, selectedModel]);
 
-  const handleOpenTtsModal = useCallback(async () => {
-    setIsTtsModalOpen(true);
-    if (ttsVoices.length === 0) {
-        setIsFetchingTtsVoices(true);
-        try {
-            const voices = await getElevenlabsVoices();
-            setTtsVoices(voices);
-        } catch (err) {
-            setTtsModalError('Lỗi tải danh sách giọng nói.');
-        } finally {
-            setIsFetchingTtsVoices(false);
-        }
-    }
-  }, [ttsVoices]);
 
-  const handleGenerateTtsLocal = async (text: string, voiceId: string) => {
-    return await generateElevenlabsTts(text, voiceId);
-  };
 
   const handleGenerateVideoPromptLocal = async (scene: SceneSummary, partIndex: number, config: SummarizeConfig) => {
     try {
@@ -761,19 +723,6 @@ const App: React.FC = () => {
       setHasGeneratedTopicSuggestions(true);
     } catch (err) { setSuggestionError('Lỗi tạo gợi ý.'); } finally { setIsSuggesting(false); }
   }, [title, aiProvider, selectedModel]);
-
-  const handleDeleteTtsPart = useCallback((partTitle: string) => {
-    setTtsEditableDialogue(prev => {
-        const next = { ...prev };
-        delete next[partTitle];
-        return next;
-    });
-    setTtsGenerationState(prev => {
-        const next = { ...prev };
-        delete next[partTitle];
-        return next;
-    });
-  }, []);
 
   const hasApiKey = apiKeys[aiProvider] && apiKeys[aiProvider].length > 0;
 
@@ -885,7 +834,7 @@ const App: React.FC = () => {
                 onExtractAndCount={handleExtractDialogue} 
                 onOpenDialogueModal={() => setIsDialogueModalOpen(true)}
                 wordCountStats={wordCountStats} isExtracting={isExtracting}
-                onOpenTtsModal={handleOpenTtsModal} onScoreScript={handleScoreScript} isScoring={isScoring}
+                onScoreScript={handleScoreScript} isScoring={isScoring}
                 onGenerateAllPrompts={handleGenerateAllSegmentPrompts}
                 onDownloadAllPrompts={handleDownloadAllPrompts}
                 isGeneratingAllPrompts={isGeneratingAllSegmentPrompts}
@@ -908,19 +857,7 @@ const App: React.FC = () => {
       <VisualPromptModal isOpen={isVisualPromptModalOpen} onClose={() => setIsVisualPromptModalOpen(false)} prompts={visualPrompts} isLoading={isGeneratingVisualPrompt} error={visualPromptError} />
       <AllVisualPromptsModal isOpen={isAllVisualPromptsModalOpen} onClose={() => setIsAllVisualPromptsModalOpen(false)} prompts={allVisualPrompts} isLoading={isGeneratingAllVisualPrompts} error={allVisualPromptsError} />
       <SummarizeModal isOpen={isSummarizeModalOpen} onClose={() => setIsSummarizeModalOpen(false)} summary={summarizedScript} isLoading={isSummarizing} error={summarizationError} scriptType={scriptType} title={title} onGenerate={handleSummarizeScript} onGenerateVideoPrompt={handleGenerateVideoPromptLocal} />
-      <TtsModal 
-          isOpen={isTtsModalOpen} 
-          onClose={() => setIsTtsModalOpen(false)} 
-          voices={ttsVoices} 
-          isLoadingVoices={isFetchingTtsVoices} 
-          onGenerate={handleGenerateTtsLocal} 
-          error={ttsModalError}
-          editableDialogue={ttsEditableDialogue}
-          setEditableDialogue={setTtsEditableDialogue}
-          generationState={ttsGenerationState}
-          setGenerationState={setTtsGenerationState}
-          onDeletePart={handleDeleteTtsPart}
-      />
+
     </div>
   );
 };

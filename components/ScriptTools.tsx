@@ -10,7 +10,6 @@ interface ScriptToolsProps {
   isLoading: boolean;
   isSummarizing: boolean;
   hasSummarizedScript: boolean;
-  onOpenTtsModal: () => void;
 }
 
 export const ScriptTools: React.FC<ScriptToolsProps> = ({
@@ -21,7 +20,6 @@ export const ScriptTools: React.FC<ScriptToolsProps> = ({
   isLoading,
   isSummarizing,
   hasSummarizedScript,
-  onOpenTtsModal,
 }) => {
   return (
     <div className="bg-secondary p-4 rounded-lg border border-border">
@@ -60,13 +58,6 @@ export const ScriptTools: React.FC<ScriptToolsProps> = ({
                         <span>Chuyển thể kịch bản</span>
                     )}
                     {hasSummarizedScript && !isSummarizing && <CheckIcon className="w-5 h-5 text-white/80 ml-2" />}
-                </button>
-                <button
-                    onClick={onOpenTtsModal}
-                    disabled={isLoading}
-                    className="flex-1 flex items-center justify-center bg-sky-500 hover:bg-sky-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2 px-3 rounded-lg transition text-sm"
-                >
-                    <span>Chuyển thành Giọng nói</span>
                 </button>
             </div>
         </div>
