@@ -47,7 +47,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
     useEffect(() => {
         if (isOpen) {
             setLocalApiKeys(JSON.parse(JSON.stringify(currentApiKeys)));
-            setNewKeyInputs({ kyma: '', openai: '' });
+            setNewKeyInputs({ kyma: currentApiKeys.kyma[0] || '', openai: '' });
             setValidationStatus({
                 kyma: { state: 'idle', message: null },
                 openai: { state: 'idle', message: null }
@@ -145,7 +145,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
         
         const finalKeys = { ...localApiKeys };
         
-        (['kyma', 'openai'] as AiProvider[]).forEach(provider => {
+        (['openai'] as AiProvider[]).forEach(provider => {
             const raw = newKeyInputs[provider].trim();
             if (raw) {
                 const keysToProcess = raw.split('\n').map(k => k.trim()).filter(k => k && !finalKeys[provider].includes(k));
@@ -154,6 +154,10 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
                 }
             }
         });
+
+        // Always save Kyma key exactly as it is in the input
+        const kymaVal = newKeyInputs.kyma.trim();
+        finalKeys.kyma = kymaVal ? [kymaVal] : [];
         
         onSaveKeys(finalKeys);
         onClose();
@@ -206,24 +210,60 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
                 )}
                 
                 <div className="flex flex-col gap-2">
-                    <div className="relative">
-                        <KeyIcon className="w-4 h-4 absolute left-2.5 top-3 text-text-secondary"/>
-                         <textarea
-                            className="w-full bg-secondary border border-border rounded-md p-2 pl-8 text-text-primary focus:ring-2 focus:ring-accent focus:border-accent transition font-mono text-xs h-24"
-                            value={newKeyInputs[provider]}
-                            onChange={(e) => setNewKeyInputs(prev => ({ ...prev, [provider]: e.target.value }))}
-                            placeholder={"Dán API keys tại đây...\nKey_1\nKey_2"}
-                        />
-                    </div>
-                    <button
-                        onClick={() => handleAddKey(provider)}
-                        disabled={status.state === 'checking' || !newKeyInputs[provider].trim()}
-                        className="w-full bg-accent hover:brightness-110 text-white font-bold py-2 px-3 rounded-md transition disabled:opacity-50 flex items-center justify-center gap-2"
-                    >
-                        {status.state === 'checking' ? (
-                            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        ) : 'Thêm danh sách'}
-                    </button>
+                    {isKyma ? (
+                        <div className="flex gap-2">
+                             <input
+                                type="password"
+                                className="flex-1 bg-secondary border border-border rounded-md p-2 text-text-primary focus:ring-2 focus:ring-accent focus:border-accent transition text-xs"
+                                value={newKeyInputs.kyma}
+                                onChange={(e) => setNewKeyInputs(prev => ({ ...prev, kyma: e.target.value }))}
+                                placeholder="Nhập Kyma API Key"
+                            />
+                            <button
+                                onClick={() => {
+                                    const key = newKeyInputs.kyma.trim();
+                                    if (!key) return;
+                                    setValidationStatus(prev => ({ ...prev, kyma: { state: 'checking', message: null } }));
+                                    validateApiKey(key, 'kyma').then(isValid => {
+                                        setValidationStatus(prev => ({ 
+                                            ...prev, 
+                                            kyma: { state: isValid ? 'valid' : 'invalid', message: isValid ? 'API Key hợp lệ! Đã lưu (Bấm Lưu & Đóng để áp dụng).' : 'API Key không hợp lệ hoặc đã hết hạn.' } 
+                                        }));
+                                    }).catch(e => {
+                                        setValidationStatus(prev => ({ 
+                                            ...prev, 
+                                            kyma: { state: 'invalid', message: 'Lỗi kết nối khi kiểm tra API Key. (Vẫn lưu tạm)' } 
+                                        }));
+                                    });
+                                }}
+                                disabled={status.state === 'checking' || !newKeyInputs.kyma.trim()}
+                                className="bg-accent hover:brightness-110 text-white font-bold py-2 px-3 rounded-md transition disabled:opacity-50 min-w-[120px] text-xs"
+                            >
+                                {status.state === 'checking' ? '...' : 'Kiểm tra & Lưu'}
+                            </button>
+                        </div>
+                    ) : (
+                        <>
+                        <div className="relative">
+                            <KeyIcon className="w-4 h-4 absolute left-2.5 top-3 text-text-secondary"/>
+                             <textarea
+                                className="w-full bg-secondary border border-border rounded-md p-2 pl-8 text-text-primary focus:ring-2 focus:ring-accent focus:border-accent transition font-mono text-xs h-24"
+                                value={newKeyInputs[provider]}
+                                onChange={(e) => setNewKeyInputs(prev => ({ ...prev, [provider]: e.target.value }))}
+                                placeholder={"Dán API keys tại đây...\nKey_1\nKey_2"}
+                            />
+                        </div>
+                        <button
+                            onClick={() => handleAddKey(provider)}
+                            disabled={status.state === 'checking' || !newKeyInputs[provider].trim()}
+                            className="w-full bg-accent hover:brightness-110 text-white font-bold py-2 px-3 rounded-md transition disabled:opacity-50 flex items-center justify-center gap-2 text-xs"
+                        >
+                            {status.state === 'checking' ? (
+                                <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            ) : 'Thêm danh sách'}
+                        </button>
+                        </>
+                    )}
                 </div>
                 {status.message && (
                     <p className={`text-xs mt-1.5 ${status.state === 'valid' ? 'text-green-400' : 'text-red-400'}`}>
@@ -231,40 +271,42 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
                     </p>
                 )}
 
-                <div className="mt-4 flex-grow space-y-2 min-h-[8rem] overflow-y-auto pr-1">
-                    <h4 className="text-xs font-semibold text-text-secondary/80">Keys đã lưu:</h4>
-                    {displayedKeys.length === 0 ? (
-                        <div className="text-center text-sm text-text-secondary pt-6">Chưa có key nào.</div>
-                    ) : (
-                        displayedKeys.map((key, index) => (
-                            <div key={`${provider}-${index}`} className="bg-secondary p-2 rounded-md flex justify-between items-center text-sm transition-all group">
-                                <div className="flex items-center gap-2 overflow-hidden">
-                                     <KeyIcon className="w-4 h-4 text-text-secondary flex-shrink-0"/>
-                                    <span className="font-mono text-text-secondary truncate">{`...${key.slice(-8)}`}</span>
-                                    {index === 0 && <span className="text-[10px] font-bold text-accent bg-primary px-1.5 py-0.5 rounded-full flex-shrink-0">ACTIVE</span>}
-                                </div>
-                                <div className="flex items-center gap-1 flex-shrink-0">
-                                    {index > 0 && (
+                {!isKyma && (
+                    <div className="mt-4 flex-grow space-y-2 min-h-[8rem] overflow-y-auto pr-1">
+                        <h4 className="text-xs font-semibold text-text-secondary/80">Keys đã lưu:</h4>
+                        {displayedKeys.length === 0 ? (
+                            <div className="text-center text-sm text-text-secondary pt-6">Chưa có key nào.</div>
+                        ) : (
+                            displayedKeys.map((key, index) => (
+                                <div key={`${provider}-${index}`} className="bg-secondary p-2 rounded-md flex justify-between items-center text-sm transition-all group">
+                                    <div className="flex items-center gap-2 overflow-hidden">
+                                         <KeyIcon className="w-4 h-4 text-text-secondary flex-shrink-0"/>
+                                        <span className="font-mono text-text-secondary truncate">{`...${key.slice(-8)}`}</span>
+                                        {index === 0 && <span className="text-[10px] font-bold text-accent bg-primary px-1.5 py-0.5 rounded-full flex-shrink-0">ACTIVE</span>}
+                                    </div>
+                                    <div className="flex items-center gap-1 flex-shrink-0">
+                                        {index > 0 && (
+                                            <button 
+                                                onClick={() => handleActivateKey(provider, index)}
+                                                className="text-xs font-semibold text-text-secondary hover:text-accent opacity-0 group-hover:opacity-100 transition-opacity p-1"
+                                                aria-label="Kích hoạt key"
+                                            >
+                                                Kích hoạt
+                                            </button>
+                                        )}
                                         <button 
-                                            onClick={() => handleActivateKey(provider, index)}
-                                            className="text-xs font-semibold text-text-secondary hover:text-accent opacity-0 group-hover:opacity-100 transition-opacity p-1"
-                                            aria-label="Kích hoạt key"
+                                            onClick={() => handleDeleteKey(provider, index)}
+                                            className="text-text-secondary hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-1"
+                                            aria-label="Xóa key"
                                         >
-                                            Kích hoạt
+                                            <TrashIcon className="w-4 h-4"/>
                                         </button>
-                                    )}
-                                    <button 
-                                        onClick={() => handleDeleteKey(provider, index)}
-                                        className="text-text-secondary hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-1"
-                                        aria-label="Xóa key"
-                                    >
-                                        <TrashIcon className="w-4 h-4"/>
-                                    </button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))
-                    )}
-                </div>
+                            ))
+                        )}
+                    </div>
+                )}
             </div>
         );
     }
