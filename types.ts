@@ -5,7 +5,7 @@ export type Style = 'Narrative' | 'Descriptive' | 'Expository' | 'Persuasive' | 
 export type ScriptType = 'Video' | 'Podcast';
 export type NumberOfSpeakers = 'Auto' | '2' | '3' | '4' | '5';
 export type AiProvider = 'gemini' | 'openai' | 'elevenlabs';
-export type ScenarioType = 'general' | 'ww2' | 'finance' | 'dark_frontier';
+export type ScenarioType = 'general' | 'ww2' | 'finance';
 
 // Options interfaces
 export interface StyleOptions {
@@ -74,7 +74,7 @@ export interface GenerationParams {
   scriptParts: string;
   scriptType: ScriptType;
   numberOfSpeakers: NumberOfSpeakers;
-  isDarkFrontiers?: boolean; // New flag for specialized horror mode
+  isFinanceMode?: boolean; // Flag for specialized finance mode
 }
 
 export interface VisualPrompt {

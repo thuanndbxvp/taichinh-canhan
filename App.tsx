@@ -33,7 +33,7 @@ const YoutubeLogoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 
 const App: React.FC = () => {
   // --- DEFAULT DF MODE STATES (NOW OFF BY DEFAULT) ---
-  const [isDarkFrontiers, setIsDarkFrontiers] = useState<boolean>(false);
+  const [isFinanceMode, setisFinanceMode] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [outlineContent, setOutlineContent] = useState<string>('');
   const [targetAudience, setTargetAudience] = useState<string>('Vietnamese');
@@ -258,7 +258,7 @@ const App: React.FC = () => {
         scriptParts, 
         scriptType, 
         numberOfSpeakers,
-        isDarkFrontiers 
+        isFinanceMode 
     };
 
     try {
@@ -276,7 +276,7 @@ const App: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [title, outlineContent, targetAudience, styleOptions, keywords, formattingOptions, wordCount, scriptParts, scriptType, numberOfSpeakers, lengthType, videoDuration, aiProvider, selectedModel, isDarkFrontiers]);
+  }, [title, outlineContent, targetAudience, styleOptions, keywords, formattingOptions, wordCount, scriptParts, scriptType, numberOfSpeakers, lengthType, videoDuration, aiProvider, selectedModel, isFinanceMode]);
 
   const handleGenerateNextPart = useCallback(async (indexToGenerate?: number) => {
     const targetIndex = indexToGenerate !== undefined ? indexToGenerate : currentPartIndex;
@@ -303,7 +303,7 @@ const App: React.FC = () => {
         scriptParts, 
         scriptType, 
         numberOfSpeakers,
-        isDarkFrontiers 
+        isFinanceMode 
     };
 
     try {
@@ -333,7 +333,7 @@ const App: React.FC = () => {
     } finally {
         setIsLoading(false);
     }
-  }, [isGeneratingSequentially, currentPartIndex, outlineParts, title, outlineContent, targetAudience, styleOptions, keywords, formattingOptions, wordCount, scriptParts, scriptType, numberOfSpeakers, lengthType, videoDuration, aiProvider, selectedModel, isDarkFrontiers, fullOutlineText, generatedScript, autoContinue]);
+  }, [isGeneratingSequentially, currentPartIndex, outlineParts, title, outlineContent, targetAudience, styleOptions, keywords, formattingOptions, wordCount, scriptParts, scriptType, numberOfSpeakers, lengthType, videoDuration, aiProvider, selectedModel, isFinanceMode, fullOutlineText, generatedScript, autoContinue]);
 
   const handleStartSequentialGenerate = useCallback(() => {
     if (!generatedScript) return;
@@ -370,7 +370,7 @@ const App: React.FC = () => {
     
     const params: GenerationParams = { 
         title, outlineContent, targetAudience, styleOptions, keywords, formattingOptions, 
-        wordCount, scriptParts, scriptType, numberOfSpeakers, isDarkFrontiers 
+        wordCount, scriptParts, scriptType, numberOfSpeakers, isFinanceMode 
     };
 
     try {
@@ -387,7 +387,7 @@ const App: React.FC = () => {
     } finally {
         setIsLoading(false);
     }
-  }, [generatedScript, revisionPrompt, title, outlineContent, targetAudience, styleOptions, keywords, formattingOptions, wordCount, scriptParts, scriptType, numberOfSpeakers, isDarkFrontiers, aiProvider, selectedModel]);
+  }, [generatedScript, revisionPrompt, title, outlineContent, targetAudience, styleOptions, keywords, formattingOptions, wordCount, scriptParts, scriptType, numberOfSpeakers, isFinanceMode, aiProvider, selectedModel]);
 
   // Helper function to clean text for word counting and TTS readiness
   const cleanTextForCount = (text: string): string => {
@@ -778,19 +778,19 @@ const App: React.FC = () => {
   const hasApiKey = apiKeys[aiProvider] && apiKeys[aiProvider].length > 0;
 
   return (
-    <div className={`min-h-screen ${isDarkFrontiers ? 'bg-black text-slate-300' : 'bg-primary text-text-primary'}`}>
+    <div className={`min-h-screen ${isFinanceMode ? 'bg-black text-slate-300' : 'bg-primary text-text-primary'}`}>
       {notification && (
             <div className="fixed top-5 right-5 bg-secondary border border-accent text-text-primary p-4 rounded-lg shadow-lg z-[100] flex items-center gap-4">
                 <CheckIcon className="w-6 h-6 text-green-400" />
                 <p className="text-sm">{notification}</p>
             </div>
         )}
-      <header className={`bg-secondary/60 border-b border-border p-4 shadow-sm flex justify-between items-center sticky top-0 z-20 backdrop-blur-sm ${isDarkFrontiers ? 'border-amber-900/30' : ''}`}>
+      <header className={`bg-secondary/60 border-b border-border p-4 shadow-sm flex justify-between items-center sticky top-0 z-20 backdrop-blur-sm ${isFinanceMode ? 'border-amber-900/30' : ''}`}>
         <div className="flex-1 flex gap-4 items-center">
             <button 
                 onClick={() => {
-                    const newState = !isDarkFrontiers;
-                    setIsDarkFrontiers(newState);
+                    const newState = !isFinanceMode;
+                    setisFinanceMode(newState);
                     if (newState) {
                         setThemeColor('#f59e0b');
                         setStyleOptions({ expression: 'Ominous', style: 'Cinematic Horror' });
@@ -806,17 +806,17 @@ const App: React.FC = () => {
                         setVideoDuration('5');
                     }
                 }}
-                className={`px-4 py-2 rounded-lg font-bold text-xs transition-all flex items-center gap-2 border ${isDarkFrontiers ? 'bg-amber-900/40 text-amber-500 border-amber-500 shadow-lg shadow-amber-900/20' : 'bg-secondary text-text-secondary border-border hover:text-text-primary'}`}
+                className={`px-4 py-2 rounded-lg font-bold text-xs transition-all flex items-center gap-2 border ${isFinanceMode ? 'bg-amber-900/40 text-amber-500 border-amber-500 shadow-lg shadow-amber-900/20' : 'bg-secondary text-text-secondary border-border hover:text-text-primary'}`}
             >
                 <BoltIcon className="w-4 h-4" />
-                {isDarkFrontiers ? 'DARK FRONTIERS: ON' : 'DARK FRONTIERS: OFF'}
+                {isFinanceMode ? 'DARK FRONTIERS: ON' : 'DARK FRONTIERS: OFF'}
             </button>
         </div>
         <div className="flex-1 text-center">
             <a href="/" className="inline-flex justify-center items-center gap-3 no-underline">
               <YoutubeLogoIcon />
               <h1 className="text-2xl font-bold" style={{color: 'var(--color-accent)'}}>
-                {isDarkFrontiers ? 'Dark Frontiers AI' : 'Youtube Script Generator'}
+                {isFinanceMode ? 'Dark Frontiers AI' : 'Youtube Script Generator'}
               </h1>
             </a>
         </div>
@@ -845,7 +845,7 @@ const App: React.FC = () => {
             savedIdeas={savedIdeas} onSaveIdea={handleSaveIdea} onOpenSavedIdeasModal={() => setIsSavedIdeasModalOpen(true)}
             onParseFile={handleParseFileLocal} isParsingFile={isParsing} parsingFileError={parsingError} uploadedIdeas={uploadedIdeas}
             aiProvider={aiProvider} setAiProvider={setAiProvider} selectedModel={selectedModel} setSelectedModel={setSelectedModel}
-            isDarkFrontiers={isDarkFrontiers}
+            isFinanceMode={isFinanceMode}
           />
         </div>
         <div className="lg:col-span-6">

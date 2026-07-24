@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { OptionSelector } from './OptionSelector';
 import { SparklesIcon } from './icons/SparklesIcon';
 import type { StyleOptions, FormattingOptions, Expression, Style, ScriptType, NumberOfSpeakers, TopicSuggestionItem, SavedIdea, AiProvider } from '../types';
-import { EXPRESSION_OPTIONS, STYLE_OPTIONS, LANGUAGE_OPTIONS, SCRIPT_TYPE_OPTIONS, NUMBER_OF_SPEAKERS_OPTIONS, AI_PROVIDER_OPTIONS, GEMINI_MODELS, OPENAI_MODELS, DARK_FRONTIERS_IDEAS } from '../constants';
+import { EXPRESSION_OPTIONS, STYLE_OPTIONS, LANGUAGE_OPTIONS, SCRIPT_TYPE_OPTIONS, NUMBER_OF_SPEAKERS_OPTIONS, AI_PROVIDER_OPTIONS, GEMINI_MODELS, OPENAI_MODELS, FINANCE_IDEAS } from '../constants';
 import { IdeaBrainstorm } from './IdeaBrainstorm';
 import { Tooltip } from './Tooltip';
 import { EXPRESSION_EXPLANATIONS, STYLE_EXPLANATIONS, FORMATTING_EXPLANATIONS } from '../constants/explanations';
@@ -66,12 +66,12 @@ interface ControlPanelProps {
   setAiProvider: (provider: AiProvider) => void;
   selectedModel: string;
   setSelectedModel: (model: string) => void;
-  isDarkFrontiers?: boolean;
+  isFinanceMode?: boolean;
 }
 
 const ControlSection: React.FC<{title: string; children: React.ReactNode; isDark?: boolean}> = ({ title, children, isDark }) => (
-  <div className={`${isDark ? 'bg-zinc-900 border-amber-900/40' : 'bg-secondary border-border'} p-4 rounded-lg border`}>
-    <label className={`block text-sm font-semibold mb-3 ${isDark ? 'text-amber-500/80' : 'text-text-primary'}`}>{title}</label>
+  <div className={`${isDark ? 'bg-zinc-900 border-emerald-900/40' : 'bg-secondary border-border'} p-4 rounded-lg border`}>
+    <label className={`block text-sm font-semibold mb-3 ${isDark ? 'text-emerald-500/80' : 'text-text-primary'}`}>{title}</label>
     {children}
   </div>
 );
@@ -95,7 +95,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   savedIdeas, onSaveIdea, onOpenSavedIdeasModal,
   onParseFile, isParsingFile, parsingFileError, uploadedIdeas,
   aiProvider, setAiProvider, selectedModel, setSelectedModel,
-  isDarkFrontiers
+  isFinanceMode
 }) => {
   const handleCheckboxChange = (key: keyof FormattingOptions, value: boolean) => {
     setFormattingOptions({ ...formattingOptions, [key]: value });
@@ -130,7 +130,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     const selectedTitle = e.target.value;
     if (!selectedTitle) return;
     
-    const idea = DARK_FRONTIERS_IDEAS.find(i => i.title === selectedTitle);
+    const idea = FINANCE_IDEAS.find(i => i.title === selectedTitle);
     if (idea) {
         const cleanedTitle = idea.title.replace(/^\d+\.\s*/, '');
         setTitle(cleanedTitle);
@@ -150,17 +150,17 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             {ideaList.length > 0 && (
                 <button 
                     onClick={() => handleSaveAll(ideaList)}
-                    className={`flex items-center gap-1 text-xs px-2 py-1 rounded-md transition ${isDarkFrontiers ? 'bg-amber-900/20 text-amber-500 hover:bg-amber-900/40' : 'bg-secondary hover:bg-border text-text-secondary hover:text-text-primary'}`}
+                    className={`flex items-center gap-1 text-xs px-2 py-1 rounded-md transition ${isFinanceMode ? 'bg-emerald-900/20 text-emerald-500 hover:bg-emerald-900/40' : 'bg-secondary hover:bg-border text-text-secondary hover:text-text-primary'}`}
                 >
                     <BookmarkIcon className="w-3 h-3"/>
                     <span>Lưu tất cả</span>
                 </button>
             )}
         </div>
-        <div className={`h-48 min-h-[10rem] resize-y overflow-auto border rounded-md space-y-2 p-2 ${isDarkFrontiers ? 'bg-black border-amber-900/50' : 'bg-primary border-border'}`}>
+        <div className={`h-48 min-h-[10rem] resize-y overflow-auto border rounded-md space-y-2 p-2 ${isFinanceMode ? 'bg-black border-emerald-900/50' : 'bg-primary border-border'}`}>
             {ideaList.map((idea, index) => (
-                <div key={`${listTitle}-${idea.title}-${index}`} className={`text-left text-sm w-full p-3 rounded-md ${isDarkFrontiers ? 'bg-zinc-900/50 border border-amber-900/20' : 'bg-secondary'}`}>
-                  <strong className={`${isDarkFrontiers ? 'text-amber-100' : 'text-text-primary'} block`}>{idea.title}</strong>
+                <div key={`${listTitle}-${idea.title}-${index}`} className={`text-left text-sm w-full p-3 rounded-md ${isFinanceMode ? 'bg-zinc-900/50 border border-emerald-900/20' : 'bg-secondary'}`}>
+                  <strong className={`${isFinanceMode ? 'text-emerald-100' : 'text-text-primary'} block`}>{idea.title}</strong>
                   {idea.vietnameseTitle && idea.vietnameseTitle !== idea.title && <span className="text-xs mt-1 block text-accent/80">{idea.vietnameseTitle}</span>}
                   <span className="text-xs mt-1 block text-text-secondary">{idea.outline}</span>
                   <div className="flex items-center gap-2 mt-2">
@@ -169,14 +169,14 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                         setTitle(idea.title);
                         setOutlineContent(idea.outline);
                       }}
-                      className={`text-xs px-2 py-1 rounded-md transition ${isDarkFrontiers ? 'bg-amber-700 text-white hover:bg-amber-600' : 'bg-accent/80 hover:bg-accent text-white'}`}
+                      className={`text-xs px-2 py-1 rounded-md transition ${isFinanceMode ? 'bg-emerald-700 text-white hover:bg-emerald-600' : 'bg-accent/80 hover:bg-accent text-white'}`}
                     >
                         Sử dụng
                     </button>
                     <button 
                         onClick={() => onSaveIdea(idea)}
                         disabled={isIdeaSaved(idea)}
-                        className={`flex items-center gap-1 text-xs px-2 py-1 rounded-md transition disabled:opacity-50 disabled:cursor-not-allowed ${isDarkFrontiers ? 'bg-zinc-800 text-amber-500 hover:bg-zinc-700' : 'bg-primary hover:bg-secondary text-text-secondary'}`}
+                        className={`flex items-center gap-1 text-xs px-2 py-1 rounded-md transition disabled:opacity-50 disabled:cursor-not-allowed ${isFinanceMode ? 'bg-zinc-800 text-emerald-500 hover:bg-zinc-700' : 'bg-primary hover:bg-secondary text-text-secondary'}`}
                       >
                           {isIdeaSaved(idea) ? (
                               <>
@@ -199,11 +199,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
 
   return (
     <div className="space-y-6">
-        <ControlSection title="1. Ý tưởng chính" isDark={isDarkFrontiers}>
+        <ControlSection title="1. Ý tưởng chính" isDark={isFinanceMode}>
             <input
               id="title"
               type="text"
-              className={`w-full border rounded-md p-2 transition focus:ring-2 ${isDarkFrontiers ? 'bg-black border-amber-900/50 text-amber-100 focus:ring-amber-500 focus:border-amber-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
+              className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
               placeholder="Nhập Tiêu đề Video, VD: 'Tương lai của du hành vũ trụ'"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -211,7 +211,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             <textarea
               id="outline"
               rows={4}
-              className={`mt-2 w-full border rounded-md p-2 transition focus:ring-2 ${isDarkFrontiers ? 'bg-black border-amber-900/50 text-amber-100 focus:ring-amber-500 focus:border-amber-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
+              className={`mt-2 w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
               placeholder="Phác họa nội dung (tùy chọn), VD: 'Đề cập đến SpaceX, Blue Origin. Các thách thức về công nghệ. Tầm nhìn 50 năm tới.'"
               value={outlineContent}
               onChange={(e) => setOutlineContent(e.target.value)}
@@ -226,19 +226,19 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               />
             </Tooltip>
 
-            {isDarkFrontiers && (
-                <div className="mt-3 bg-amber-900/20 border border-amber-500/30 rounded-lg p-3">
-                    <label className="flex items-center gap-2 text-xs font-bold text-amber-500 mb-2 uppercase tracking-wider">
+            {isFinanceMode && (
+                <div className="mt-3 bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-3">
+                    <label className="flex items-center gap-2 text-xs font-bold text-emerald-500 mb-2 uppercase tracking-wider">
                         <BoltIcon className="w-4 h-4" />
-                        Dark Frontiers Master List
+                        Finance Ideas Master List
                     </label>
                     <select 
                         onChange={handleSelectDarkFrontiersIdea}
-                        className="w-full bg-black border border-amber-500/50 rounded-md p-2 text-amber-200 text-sm focus:ring-1 focus:ring-amber-500 outline-none"
+                        className="w-full bg-black border border-emerald-500/50 rounded-md p-2 text-emerald-200 text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
                         defaultValue=""
                     >
                         <option value="" disabled>-- Chọn chủ đề kinh dị dã sử --</option>
-                        {DARK_FRONTIERS_IDEAS.map(idea => (
+                        {FINANCE_IDEAS.map(idea => (
                             <option key={idea.title} value={idea.title}>{idea.title}</option>
                         ))}
                     </select>
@@ -257,7 +257,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                   <button 
                     onClick={onGenerateSuggestions} 
                     disabled={isSuggesting || !title}
-                    className={`w-full flex items-center justify-center font-bold py-2 px-4 rounded-lg transition border ${isDarkFrontiers ? 'bg-amber-900/20 border-amber-900/40 text-amber-500 hover:bg-amber-900/40' : 'bg-secondary hover:bg-secondary/70 text-text-primary border-border'} disabled:opacity-40 disabled:cursor-not-allowed`}
+                    className={`w-full flex items-center justify-center font-bold py-2 px-4 rounded-lg transition border ${isFinanceMode ? 'bg-emerald-900/20 border-emerald-900/40 text-emerald-500 hover:bg-emerald-900/40' : 'bg-secondary hover:bg-secondary/70 text-text-primary border-border'} disabled:opacity-40 disabled:cursor-not-allowed`}
                   >
                     {isSuggesting ? (
                       <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -276,7 +276,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 <Tooltip text="Xem và quản lý tất cả các ý tưởng video bạn đã lưu trước đó.">
                   <button 
                     onClick={onOpenSavedIdeasModal} 
-                    className={`w-full flex items-center justify-center font-bold py-2 px-4 rounded-lg transition border ${isDarkFrontiers ? 'bg-amber-900/20 border-amber-900/40 text-amber-500 hover:bg-amber-900/40' : 'bg-secondary hover:bg-secondary/70 text-text-primary border-border'}`}
+                    className={`w-full flex items-center justify-center font-bold py-2 px-4 rounded-lg transition border ${isFinanceMode ? 'bg-emerald-900/20 border-emerald-900/40 text-emerald-500 hover:bg-emerald-900/40' : 'bg-secondary hover:bg-secondary/70 text-text-primary border-border'}`}
                   >
                     Kho Ý Tưởng
                   </button>
@@ -288,16 +288,16 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             {uploadedIdeas.length > 0 && <IdeaList ideaList={uploadedIdeas} listTitle="Ý tưởng từ File của bạn" />}
         </ControlSection>
 
-        <ControlSection title="2. Nhà cung cấp AI & Model" isDark={isDarkFrontiers}>
-            <div className={`flex rounded-lg p-1 mb-3 ${isDarkFrontiers ? 'bg-black' : 'bg-primary'}`}>
+        <ControlSection title="2. Nhà cung cấp AI & Model" isDark={isFinanceMode}>
+            <div className={`flex rounded-lg p-1 mb-3 ${isFinanceMode ? 'bg-black' : 'bg-primary'}`}>
                 {AI_PROVIDER_OPTIONS.map(option => (
                     <button
                         key={option.value}
                         onClick={() => handleProviderChange(option.value)}
                         className={`w-full py-2 text-sm font-semibold rounded-md transition-colors ${
                             aiProvider === option.value 
-                            ? (isDarkFrontiers ? 'bg-amber-700 text-white shadow-sm' : 'bg-accent text-white shadow-sm') 
-                            : (isDarkFrontiers ? 'text-amber-500/60 hover:text-amber-500' : 'text-text-primary hover:bg-secondary')
+                            ? (isFinanceMode ? 'bg-emerald-700 text-white shadow-sm' : 'bg-accent text-white shadow-sm') 
+                            : (isFinanceMode ? 'text-emerald-500/60 hover:text-emerald-500' : 'text-text-primary hover:bg-secondary')
                         }`}
                     >
                         {option.label}
@@ -308,7 +308,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               id="model"
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
-              className={`w-full border rounded-md p-2 transition focus:ring-2 ${isDarkFrontiers ? 'bg-black border-amber-900/50 text-amber-100 focus:ring-amber-500 focus:border-amber-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
+              className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
             >
               {modelOptions.map(model => (
                 <option key={model.value} value={model.value}>{model.label}</option>
@@ -316,11 +316,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             </select>
         </ControlSection>
 
-        <ControlSection title="3. Từ khóa SEO (Tùy chọn)" isDark={isDarkFrontiers}>
+        <ControlSection title="3. Từ khóa SEO (Tùy chọn)" isDark={isFinanceMode}>
             <input
               id="keywords"
               type="text"
-              className={`w-full border rounded-md p-2 transition focus:ring-2 ${isDarkFrontiers ? 'bg-black border-amber-900/50 text-amber-100 focus:ring-amber-500 focus:border-amber-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
+              className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
               placeholder="VD: AI, sáng tạo, tương lai"
               value={keywords}
               onChange={(e) => setKeywords(e.target.value)}
@@ -329,7 +329,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               <button 
                 onClick={onGenerateKeywordSuggestions} 
                 disabled={isSuggestingKeywords || !title}
-                className={`w-full mt-2 flex items-center justify-center transition text-sm py-2 px-4 rounded-lg border ${isDarkFrontiers ? 'bg-amber-900/10 border-amber-900/30 text-amber-500 hover:bg-amber-900/20' : 'bg-secondary/70 hover:bg-secondary text-text-primary border-border'} disabled:opacity-40 disabled:cursor-not-allowed`}
+                className={`w-full mt-2 flex items-center justify-center transition text-sm py-2 px-4 rounded-lg border ${isFinanceMode ? 'bg-emerald-900/10 border-emerald-900/30 text-emerald-500 hover:bg-emerald-900/20' : 'bg-secondary/70 hover:bg-secondary text-text-primary border-border'} disabled:opacity-40 disabled:cursor-not-allowed`}
               >
                 {isSuggestingKeywords ? (
                   <>
@@ -354,7 +354,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                     <p className="text-xs font-medium text-text-secondary mb-2">Gợi ý:</p>
                     <div className="flex flex-wrap gap-2">
                         {keywordSuggestions.map((suggestion, index) => (
-                            <button key={index} onClick={() => handleAddKeyword(suggestion)} className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${isDarkFrontiers ? 'bg-amber-900/20 text-amber-500 hover:bg-amber-900/40' : 'bg-secondary hover:bg-primary/50 text-text-primary'}`}>
+                            <button key={index} onClick={() => handleAddKeyword(suggestion)} className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${isFinanceMode ? 'bg-emerald-900/20 text-emerald-500 hover:bg-emerald-900/40' : 'bg-secondary hover:bg-primary/50 text-text-primary'}`}>
                                 {suggestion}
                             </button>
                         ))}
@@ -363,16 +363,16 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             )}
         </ControlSection>
 
-        <ControlSection title="4. Định dạng Kịch bản" isDark={isDarkFrontiers}>
-            <div className={`flex rounded-lg p-1 ${isDarkFrontiers ? 'bg-black' : 'bg-primary'}`}>
+        <ControlSection title="4. Định dạng Kịch bản" isDark={isFinanceMode}>
+            <div className={`flex rounded-lg p-1 ${isFinanceMode ? 'bg-black' : 'bg-primary'}`}>
                 {SCRIPT_TYPE_OPTIONS.map(option => (
                     <button
                         key={option.value}
                         onClick={() => setScriptType(option.value)}
                         className={`w-full py-2 text-sm font-semibold rounded-md transition-colors ${
                             scriptType === option.value 
-                            ? (isDarkFrontiers ? 'bg-amber-700 text-white shadow-sm' : 'bg-accent text-white shadow-sm') 
-                            : (isDarkFrontiers ? 'text-amber-500/60 hover:text-amber-500' : 'text-text-primary hover:bg-secondary')
+                            ? (isFinanceMode ? 'bg-emerald-700 text-white shadow-sm' : 'bg-accent text-white shadow-sm') 
+                            : (isFinanceMode ? 'text-emerald-500/60 hover:text-emerald-500' : 'text-text-primary hover:bg-secondary')
                         }`}
                     >
                         {option.label}
@@ -382,7 +382,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         </ControlSection>
 
         {scriptType === 'Podcast' && (
-          <ControlSection title="5. Số lượng người nói" isDark={isDarkFrontiers}>
+          <ControlSection title="5. Số lượng người nói" isDark={isFinanceMode}>
             <OptionSelector<NumberOfSpeakers>
                 options={NUMBER_OF_SPEAKERS_OPTIONS}
                 selectedOption={numberOfSpeakers}
@@ -391,12 +391,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           </ControlSection>
         )}
 
-        <ControlSection title={`${scriptType === 'Podcast' ? '6' : '5'}. Ngôn ngữ`} isDark={isDarkFrontiers}>
+        <ControlSection title={`${scriptType === 'Podcast' ? '6' : '5'}. Ngôn ngữ`} isDark={isFinanceMode}>
             <select
               id="language"
               value={targetAudience}
               onChange={(e) => setTargetAudience(e.target.value)}
-              className={`w-full border rounded-md p-2 transition focus:ring-2 ${isDarkFrontiers ? 'bg-black border-amber-900/50 text-amber-100 focus:ring-amber-500 focus:border-amber-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
+              className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
             >
               {LANGUAGE_OPTIONS.map(lang => (
                 <option key={lang.value} value={lang.value}>{lang.label}</option>
@@ -404,12 +404,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             </select>
         </ControlSection>
 
-        <ControlSection title={`${scriptType === 'Podcast' ? '7' : '6'}. Phong cách & Lối diễn đạt`} isDark={isDarkFrontiers}>
+        <ControlSection title={`${scriptType === 'Podcast' ? '7' : '6'}. Phong cách & Lối diễn đạt`} isDark={isFinanceMode}>
             <Tooltip text="Để AI phân tích chủ đề và tự động chọn lối diễn đạt và phong cách viết phù hợp nhất cho bạn.">
                 <button 
                     onClick={onSuggestStyle}
                     disabled={isSuggestingStyle || !title}
-                    className={`w-full mb-4 flex items-center justify-center border font-semibold py-2.5 px-4 rounded-lg transition ${isDarkFrontiers ? 'border-amber-600 text-amber-600 hover:bg-amber-900/20' : 'border-accent text-accent hover:bg-accent/20'} disabled:opacity-40 disabled:cursor-not-allowed`}
+                    className={`w-full mb-4 flex items-center justify-center border font-semibold py-2.5 px-4 rounded-lg transition ${isFinanceMode ? 'border-emerald-600 text-emerald-600 hover:bg-emerald-900/20' : 'border-accent text-accent hover:bg-accent/20'} disabled:opacity-40 disabled:cursor-not-allowed`}
                 >
                     {isSuggestingStyle ? (
                         <>
@@ -431,7 +431,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             {styleSuggestionError && <p className="text-red-400 text-sm -mt-2 mb-2 text-center">{styleSuggestionError}</p>}
 
             <div className="mb-4">
-                <label className={`block text-xs font-medium mb-2 ${isDarkFrontiers ? 'text-amber-200/80' : 'text-text-secondary'}`}>Lối diễn đạt (Tone)</label>
+                <label className={`block text-xs font-medium mb-2 ${isFinanceMode ? 'text-emerald-200/80' : 'text-text-secondary'}`}>Lối diễn đạt (Tone)</label>
                 <div className="flex flex-wrap gap-2">
                     {EXPRESSION_OPTIONS.map((option) => (
                         <Tooltip key={option.value} text={EXPRESSION_EXPLANATIONS?.[option.value] ?? ''}>
@@ -439,8 +439,8 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                             onClick={() => setStyleOptions({ ...styleOptions, expression: option.value })}
                             className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${
                             styleOptions.expression === option.value
-                                ? (isDarkFrontiers ? 'bg-amber-700 text-white shadow-md' : 'bg-accent text-white shadow-md')
-                                : (isDarkFrontiers ? 'bg-zinc-800 hover:bg-zinc-700 text-amber-200/70' : 'bg-secondary hover:bg-primary/50 text-text-primary')
+                                ? (isFinanceMode ? 'bg-emerald-700 text-white shadow-md' : 'bg-accent text-white shadow-md')
+                                : (isFinanceMode ? 'bg-zinc-800 hover:bg-zinc-700 text-emerald-200/70' : 'bg-secondary hover:bg-primary/50 text-text-primary')
                             }`}
                         >
                             {option.label}
@@ -451,7 +451,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             </div>
 
             <div>
-                <label className={`block text-xs font-medium mb-2 ${isDarkFrontiers ? 'text-amber-200/80' : 'text-text-secondary'}`}>Phong cách Viết (Style)</label>
+                <label className={`block text-xs font-medium mb-2 ${isFinanceMode ? 'text-emerald-200/80' : 'text-text-secondary'}`}>Phong cách Viết (Style)</label>
                 <OptionSelector<Style>
                     options={STYLE_OPTIONS}
                     selectedOption={styleOptions.style}
@@ -461,14 +461,14 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             </div>
         </ControlSection>
 
-        <ControlSection title={`${scriptType === 'Podcast' ? '8' : '7'}. Cấu trúc & Định dạng`} isDark={isDarkFrontiers}>
-            <div className={`flex rounded-lg p-1 mb-4 ${isDarkFrontiers ? 'bg-black' : 'bg-primary'}`}>
+        <ControlSection title={`${scriptType === 'Podcast' ? '8' : '7'}. Cấu trúc & Định dạng`} isDark={isFinanceMode}>
+            <div className={`flex rounded-lg p-1 mb-4 ${isFinanceMode ? 'bg-black' : 'bg-primary'}`}>
                 <button
                     onClick={() => setLengthType('words')}
                     className={`w-full py-2 text-sm font-semibold rounded-md transition-colors ${
                         lengthType === 'words' 
-                        ? (isDarkFrontiers ? 'bg-amber-700 text-white shadow-sm' : 'bg-accent text-white shadow-sm') 
-                        : (isDarkFrontiers ? 'text-amber-500/60 hover:text-amber-500' : 'text-text-primary hover:bg-secondary')
+                        ? (isFinanceMode ? 'bg-emerald-700 text-white shadow-sm' : 'bg-accent text-white shadow-sm') 
+                        : (isFinanceMode ? 'text-emerald-500/60 hover:text-emerald-500' : 'text-text-primary hover:bg-secondary')
                     }`}
                 >
                     Theo số từ
@@ -477,8 +477,8 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                     onClick={() => setLengthType('duration')}
                     className={`w-full py-2 text-sm font-semibold rounded-md transition-colors ${
                         lengthType === 'duration' 
-                        ? (isDarkFrontiers ? 'bg-amber-700 text-white shadow-sm' : 'bg-accent text-white shadow-sm') 
-                        : (isDarkFrontiers ? 'text-amber-500/60 hover:text-amber-500' : 'text-text-primary hover:bg-secondary')
+                        ? (isFinanceMode ? 'bg-emerald-700 text-white shadow-sm' : 'bg-accent text-white shadow-sm') 
+                        : (isFinanceMode ? 'text-emerald-500/60 hover:text-emerald-500' : 'text-text-primary hover:bg-secondary')
                     }`}
                 >
                     Theo thời lượng
@@ -490,14 +490,14 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                     <Tooltip text={FORMATTING_EXPLANATIONS.wordCount}>
                         <div>
                             <label htmlFor="wordCount" className="block text-xs font-medium text-text-secondary mb-1">Tổng số từ</label>
-                            <input id="wordCount" type="number" value={wordCount} onChange={e => setWordCount(e.target.value)} className={`w-full border rounded-md p-2 transition focus:ring-2 ${isDarkFrontiers ? 'bg-black border-amber-900/50 text-amber-100 focus:ring-amber-500 focus:border-amber-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`} placeholder="VD: 800"/>
+                            <input id="wordCount" type="number" value={wordCount} onChange={e => setWordCount(e.target.value)} className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`} placeholder="VD: 800"/>
                         </div>
                     </Tooltip>
                 ) : (
                     <Tooltip text={FORMATTING_EXPLANATIONS.videoDuration}>
                         <div>
                             <label htmlFor="videoDuration" className="block text-xs font-medium text-text-secondary mb-1">Thời lượng video (phút)</label>
-                            <input id="videoDuration" type="number" value={videoDuration} onChange={e => setVideoDuration(e.target.value)} className={`w-full border rounded-md p-2 transition focus:ring-2 ${isDarkFrontiers ? 'bg-black border-amber-900/50 text-amber-100 focus:ring-amber-500 focus:border-amber-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`} placeholder="VD: 5"/>
+                            <input id="videoDuration" type="number" value={videoDuration} onChange={e => setVideoDuration(e.target.value)} className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`} placeholder="VD: 5"/>
                         </div>
                     </Tooltip>
                 )}
@@ -513,17 +513,17 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                                   value={scriptParts === 'Auto' ? '' : scriptParts} 
                                   onChange={e => setScriptParts(e.target.value)} 
                                   disabled={scriptParts === 'Auto'}
-                                  className={`w-full border rounded-md p-2 transition focus:ring-2 ${isDarkFrontiers ? 'bg-black border-amber-900/50 text-amber-100 focus:ring-amber-500 focus:border-amber-500 disabled:opacity-40' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent disabled:bg-primary/50'} disabled:cursor-not-allowed`} 
+                                  className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500 disabled:opacity-40' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent disabled:bg-primary/50'} disabled:cursor-not-allowed`} 
                                   placeholder="3"
                               />
                               <label className="flex items-center space-x-2 cursor-pointer whitespace-nowrap">
                                   <input 
                                       type="checkbox" 
-                                      className={`h-4 w-4 rounded border-border focus:ring-accent ${isDarkFrontiers ? 'text-amber-600 bg-zinc-900' : 'text-accent bg-secondary'}`} 
+                                      className={`h-4 w-4 rounded border-border focus:ring-accent ${isFinanceMode ? 'text-emerald-600 bg-zinc-900' : 'text-accent bg-secondary'}`} 
                                       checked={scriptParts === 'Auto'} 
                                       onChange={(e) => setScriptParts(e.target.checked ? 'Auto' : '3')} 
                                   />
-                                  <span className={`text-sm ${isDarkFrontiers ? 'text-amber-200/80' : 'text-text-primary'}`}>Tự động</span>
+                                  <span className={`text-sm ${isFinanceMode ? 'text-emerald-200/80' : 'text-text-primary'}`}>Tự động</span>
                               </label>
                           </div>
                       </div>
@@ -533,32 +533,32 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             <div className="grid grid-cols-2 gap-y-2 gap-x-4 mt-4">
                 <Tooltip text={FORMATTING_EXPLANATIONS.includeIntro} className="block">
                     <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isDarkFrontiers ? 'text-amber-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.includeIntro} onChange={(e) => handleCheckboxChange('includeIntro', e.target.checked)} />
-                        <span className={`${isDarkFrontiers ? 'text-amber-200/80' : 'text-text-primary'}`}>Intro</span>
+                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isFinanceMode ? 'text-emerald-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.includeIntro} onChange={(e) => handleCheckboxChange('includeIntro', e.target.checked)} />
+                        <span className={`${isFinanceMode ? 'text-emerald-200/80' : 'text-text-primary'}`}>Intro</span>
                     </label>
                 </Tooltip>
                  <Tooltip text={FORMATTING_EXPLANATIONS.includeOutro} className="block">
                     <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isDarkFrontiers ? 'text-amber-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.includeOutro} onChange={(e) => handleCheckboxChange('includeOutro', e.target.checked)} />
-                        <span className={`${isDarkFrontiers ? 'text-amber-200/80' : 'text-text-primary'}`}>Outro</span>
+                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isFinanceMode ? 'text-emerald-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.includeOutro} onChange={(e) => handleCheckboxChange('includeOutro', e.target.checked)} />
+                        <span className={`${isFinanceMode ? 'text-emerald-200/80' : 'text-text-primary'}`}>Outro</span>
                     </label>
                 </Tooltip>
                 <Tooltip text={FORMATTING_EXPLANATIONS.headings} className="block">
                     <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isDarkFrontiers ? 'text-amber-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.headings} onChange={(e) => handleCheckboxChange('headings', e.target.checked)} />
-                        <span className={`${isDarkFrontiers ? 'text-amber-200/80' : 'text-text-primary'}`}>Tiêu đề</span>
+                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isFinanceMode ? 'text-emerald-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.headings} onChange={(e) => handleCheckboxChange('headings', e.target.checked)} />
+                        <span className={`${isFinanceMode ? 'text-emerald-200/80' : 'text-text-primary'}`}>Tiêu đề</span>
                     </label>
                 </Tooltip>
                 <Tooltip text={FORMATTING_EXPLANATIONS.bullets} className="block">
                     <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isDarkFrontiers ? 'text-amber-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.bullets} onChange={(e) => handleCheckboxChange('bullets', e.target.checked)} />
-                        <span className={`${isDarkFrontiers ? 'text-amber-200/80' : 'text-text-primary'}`}>Gạch đầu dòng</span>
+                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isFinanceMode ? 'text-emerald-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.bullets} onChange={(e) => handleCheckboxChange('bullets', e.target.checked)} />
+                        <span className={`${isFinanceMode ? 'text-emerald-200/80' : 'text-text-primary'}`}>Gạch đầu dòng</span>
                     </label>
                 </Tooltip>
                  <Tooltip text={FORMATTING_EXPLANATIONS.bold} className="block">
                     <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isDarkFrontiers ? 'text-amber-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.bold} onChange={(e) => handleCheckboxChange('bold', e.target.checked)} />
-                        <span className={`${isDarkFrontiers ? 'text-amber-200/80' : 'text-text-primary'}`}>In đậm/nghiêng</span>
+                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isFinanceMode ? 'text-emerald-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.bold} onChange={(e) => handleCheckboxChange('bold', e.target.checked)} />
+                        <span className={`${isFinanceMode ? 'text-emerald-200/80' : 'text-text-primary'}`}>In đậm/nghiêng</span>
                     </label>
                 </Tooltip>
             </div>
@@ -567,7 +567,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           <button
               onClick={onGenerate}
               disabled={isLoading || !title}
-              className={`w-full flex items-center justify-center font-bold py-3 px-4 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 shadow-lg ${isDarkFrontiers ? 'bg-amber-600 hover:bg-amber-500 shadow-amber-900/40 text-white' : 'bg-accent hover:brightness-110 shadow-accent/20 text-white'} disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`w-full flex items-center justify-center font-bold py-3 px-4 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 shadow-lg ${isFinanceMode ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/40 text-white' : 'bg-accent hover:brightness-110 shadow-accent/20 text-white'} disabled:opacity-50 disabled:cursor-not-allowed`}
           >
               {isLoading ? (
                 <>

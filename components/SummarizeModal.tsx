@@ -69,7 +69,7 @@ export const SummarizeModal: React.FC<SummarizeModalProps> = ({ isOpen, onClose,
     const [isAutoPrompts, setIsAutoPrompts] = useState(true);
     const [promptCountInput, setPromptCountInput] = useState('10');
     const [includeNarration, setIncludeNarration] = useState(false);
-    const [scenarioType, setScenarioType] = useState<ScenarioType>('dark_frontier');
+    const [scenarioType, setScenarioType] = useState<ScenarioType>('finance');
     const [referenceImages, setReferenceImages] = useState<string[]>([]);
     const [activeTab, setActiveTab] = useState<'image' | 'video'>('image');
     const [generatingVideoPromptKey, setGeneratingVideoPromptKey] = useState<string | null>(null);
@@ -81,7 +81,7 @@ export const SummarizeModal: React.FC<SummarizeModalProps> = ({ isOpen, onClose,
             setIsAutoPrompts(true);
             setPromptCountInput('10');
             setIncludeNarration(false);
-            setScenarioType('dark_frontier');
+            setScenarioType('finance');
             setReferenceImages([]);
             setIsBulkGenerating(false);
         }
@@ -246,7 +246,7 @@ export const SummarizeModal: React.FC<SummarizeModalProps> = ({ isOpen, onClose,
                             onChange={(e) => setScenarioType(e.target.value as ScenarioType)}
                             className="w-full bg-primary border border-border rounded-md p-2 text-text-primary focus:ring-2 focus:ring-accent focus:border-accent transition"
                         >
-                            <option value="dark_frontier">1-Dark Frontier (Social Realism)</option>
+                            <option value="finance">1-Finance (Professional)</option>
                             <option value="general">2-Kịch bản chung</option>
                             <option value="ww2">3-Kịch bản WW2</option>
                             <option value="finance">4-Kịch bản Finance</option>

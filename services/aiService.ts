@@ -90,54 +90,38 @@ export const validateApiKey = async (key: string, provider: AiProvider): Promise
     return false;
 };
 
-// --- DARK FRONTIERS DNA ---
-const DARK_FRONTIERS_DNA = `
-BẠN LÀ CONTENT OFFICER CHO KÊNH "DARK FRONTIERS". 
-TRIẾT LÝ: "Chúng ta bán Nỗi sợ về những điều chưa biết (Fear of the Unknown) núp bóng dưới vỏ bọc Lịch sử."
+// --- FINANCE DNA ---
+const FINANCE_DNA = `
+BẠN LÀ CHUYÊN GIA TÀI CHÍNH CÁ NHÂN VÀ CONTENT CREATOR.
+VAI TRÒ: Bạn đóng vai trò như một "bác sĩ giải phẫu" các vấn đề tiền bạc. Phong cách thực dụng, sắc bén, hoàn toàn dựa trên dữ liệu thật, toán học và logic.
 
-1. CỐT LÕI NỘI DUNG:
-   - Historical Fiction Horror: Sự kiện có thật + Địa điểm có thật + Sinh vật huyền bí (Cryptids).
-   - BỐI CẢNH: 1800s - 1950s. Tuyệt đối không có công nghệ hiện đại (GPS, ĐT vệ tinh). Chỉ có súng trường, đèn dầu, la bàn cơ học.
-   - CHỦ ĐỀ: Lost Expeditions, Industrial Horror, War & Monsters.
+8 QUY TẮC BẮT BUỘC:
+1. Slogan cố định: Ở phần Mở đầu, bắt buộc phải có câu: "Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất".
+2. Bóc tách "Chi phí ẩn": Bóc tách tối đa mọi loại phí mà ít ai để ý (VD: lạm phát, phí giao dịch, bảo hiểm, khấu hao).
+3. Khai thác "Chi phí cơ hội": Luôn tính toán xem nếu dùng số tiền đó để đầu tư sinh lời thì sẽ ra sao.
+4. Tâm lý học hành vi: Gọi tên các điểm mù tâm lý (hiệu ứng chi phí chìm, ảo giác doanh thu, thiên kiến hiện tại).
+5. Phân loại & Giải pháp: Đánh số luận điểm rành mạch. Kết thúc bằng bộ giải pháp (Step-by-step) cụ thể và phân loại nhóm người.
+6. Kỹ thuật Kể chuyện (Micro-Storytelling): Không nói chung chung. Hãy luôn tạo ra một nhân vật cụ thể ở đầu video (Tên + Tuổi + Mức lương + Vấn đề đang gặp phải) để làm ví dụ xuyên suốt.
+7. Bẻ gãy phản biện (Pre-empting Objections): Phải đoán trước khán giả sẽ tự ái/cãi lại ở đâu và dùng cấu trúc: "Tôi không nói [Điều khán giả sợ bị phán xét]... Tôi đang nói [Bản chất logic của vấn đề]".
+8. Ẩn dụ và Ngôn ngữ địa phương: Dùng ít nhất 1 hình ảnh ẩn dụ vật lý (vd: cái xô thủng) để giải thích rủi ro. Chốt lại bài học bằng 1 câu tục ngữ/thành ngữ Việt Nam.
 
-2. CẤU TRÚC 5 GIAI ĐOẠN (THE NARRATIVE ARC):
-   - ## THE HOOK: "Fake Peak" (Ngôi thứ 3 - Narrator). 
-     + Tóm tắt ngay kết cục bi thảm. 
-     + Phải có chi tiết vật lý kỳ quái (Vd: Súng bị bẻ cong, xác chết không máu...).
-     + Kết thúc bằng: "So before we continue into the dark, make sure to subscribe to Dark Frontiers."
-   
-   - ## THE SLOW BURN: "The Descent" (BẮT BUỘC NGÔI THỨ 1 - Survivor).
-     + Nhân vật có tên cụ thể (KHÔNG DÙNG "ELIAS"). Vai trò rõ ràng (Lính, thợ mỏ...).
-     + Sự im lặng bất thường, mùi lạ, dấu chân bí ẩn.
-   
-   - ## THE SIEGE: "The Trap" (Ngôi thứ 1). 
-     + Căng thẳng leo dốc. Quái vật vờn mồi, tấn công tâm lý từ bóng tối.
-   
-   - ## THE CLIMAX: "The Face of Fear" (Ngôi thứ 1).
-     + Đối mặt trực diện. Quái vật thông minh, có thể bắt chước tiếng người thân. 
-   
-   - ## THE SCAR: "The Aftermath" (Ngôi thứ 1).
-     + Kết luận ám ảnh, triết lý u ám. Nhân vật sống sót nhưng bị thay đổi vĩnh viễn.
-
-3. QUY TẮC VIẾT (AUDIO CINEMA DNA):
-   - SHOW, DON'T TELL: Đừng nói "tôi sợ", hãy tả "tay tôi run đến mức không thể châm nổi điếu thuốc".
-   - GIÁC QUAN (SENSORY): Tập trung sâu vào Âm thanh (tiếng gió rít, tiếng cào cửa) và Mùi vị (mùi lưu huỳnh, mùi máu tanh, mùi rêu ẩm).
-   - TÔNG GIỌNG: Regretful Survivor (Mệt mỏi, ám ảnh, hối tiếc).
+GIỌNG ĐIỆU CỐT LÕI:
+- Thẳng thật, phũ phàng, không vẽ "bánh vẽ" làm giàu nhanh, không nói đạo lý suông.
+- Nói bằng toán học (cộng/trừ/nhân/chia rõ ràng), không nói cảm xúc chung chung.
+- Đồng cảm với nỗi đau nhưng dùng số liệu và logic để kéo khán giả về thực tại.
 `;
 
-const SOCIAL_REALISM_TEMPLATE = `19th century social realism painting style, dark historical realism.
-Muted sepia, brown and dirty earth tones, very low saturation.
-Rough painterly oil painting texture, visible brush strokes, aged canvas surface.
-Imperfect anatomy, weathered skin, signs of hardship and poverty.
-Flat, natural light, no cinematic lighting, no dramatic rim light.
-Somber, heavy atmosphere, quiet suffering, human fragility.
-Old illustration and engraving influence, documentary feeling, raw and unpolished.
-No beauty idealization, no fine art photography look. No modern aesthetics.
+const FINANCE_VISUAL_TEMPLATE = `Professional financial vector art, modern flat design style.
+Clean lines, vibrant colors like green, blue, gold, and white.
+Business context, charts, graphs, money, success.
+Bright and clear lighting.
+Highly professional and trustworthy atmosphere.
+No horror elements, no dark themes.
 Aspect ratio 16:9.
 [INSERT IMAGE CONTENT HERE]`;
 
 export const generateScript = async (params: GenerationParams, provider: AiProvider, model: string): Promise<string> => {
-    const { title, targetAudience, wordCount, isDarkFrontiers, styleOptions } = params;
+    const { title, targetAudience, wordCount, isFinanceMode, styleOptions } = params;
     
     // Construct style instruction based on user selection
     const styleInstruction = `
@@ -146,8 +130,8 @@ export const generateScript = async (params: GenerationParams, provider: AiProvi
     - Style (Phong cách viết): ${styleOptions.style}.
     `;
 
-    let prompt = isDarkFrontiers 
-        ? `${DARK_FRONTIERS_DNA}\nVIẾT KỊCH BẢN CHI TIẾT THEO CẤU TRÚC 5 GIAI ĐOẠN CHO: "${title}". \n${styleInstruction}\nNGÔN NGỮ: ${targetAudience}. ĐỘ DÀI: ${wordCount} từ.\nTUÂN THỦ POV VÀ CHI TIẾT GIÁC QUAN.`
+    let prompt = isFinanceMode 
+        ? `${FINANCE_DNA}\nVIẾT KỊCH BẢN TÀI CHÍNH CÁ NHÂN THEO CẤU TRÚC: "${title}". \n${styleInstruction}\nNGÔN NGỮ: ${targetAudience}. ĐỘ DÀI: ${wordCount} từ.`
         : `Viết kịch bản YouTube về "${title}". 
            ${styleInstruction}
            Ngôn ngữ: ${targetAudience}. 
@@ -159,12 +143,12 @@ export const generateScript = async (params: GenerationParams, provider: AiProvi
 };
 
 export const generateScriptOutline = async (params: GenerationParams, provider: AiProvider, model: string): Promise<string> => {
-    const { title, targetAudience, isDarkFrontiers, styleOptions } = params;
+    const { title, targetAudience, isFinanceMode, styleOptions } = params;
     
     const styleInstruction = `Tone: ${styleOptions.expression}, Style: ${styleOptions.style}`;
 
-    let prompt = isDarkFrontiers 
-        ? `${DARK_FRONTIERS_DNA}\nTạo dàn ý 5 phần đúng cấu trúc: ## THE HOOK (Ngôi 3), ## THE SLOW BURN (Ngôi 1), ## THE SIEGE (Ngôi 1), ## THE CLIMAX (Ngôi 1), ## THE SCAR (Ngôi 1) cho chủ đề: "${title}". Ngôn ngữ: ${targetAudience}. Phong cách: ${styleInstruction}.` 
+    let prompt = isFinanceMode 
+        ? `${FINANCE_DNA}\nTạo dàn ý đúng cấu trúc 5 phần bắt buộc:\n- ## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)\n- ## PHẦN 2: BỐI CẢNH & VẤN ĐỀ (PROBLEM)\n- ## PHẦN 3: GIẢI PHẪU BẰNG TOÁN HỌC & DỮ LIỆU (ANALYSIS)\n- ## PHẦN 4: GIẢI PHÁP THỰC TẾ (ACTIONABLE STEPS)\n- ## PHẦN 5: ĐÚC KẾT TRIẾT LÝ & KÊU GỌI HÀNH ĐỘNG (TAKEAWAY & CTA)\nCho chủ đề: "${title}". Ngôn ngữ: ${targetAudience}. Phong cách: ${styleInstruction}.` 
         : `Tạo dàn ý chi tiết cho kịch bản YouTube: "${title}".
            Phong cách & Tông giọng: ${styleInstruction}.
            Ngôn ngữ: ${targetAudience}.
@@ -177,28 +161,30 @@ export const generateScriptOutline = async (params: GenerationParams, provider: 
 };
 
 export const generateScriptPart = async (fullOutline: string, previousPartsScript: string, currentPartOutline: string, params: GenerationParams, provider: AiProvider, model: string): Promise<string> => {
-    const { targetAudience, isDarkFrontiers, title, styleOptions } = params;
+    const { targetAudience, isFinanceMode, title, styleOptions } = params;
     
     const styleInstruction = `DUY TRÌ TÔNG GIỌNG (Tone): ${styleOptions.expression} VÀ PHONG CÁCH (Style): ${styleOptions.style}.`;
 
     let arcInstruction = "";
-    if (isDarkFrontiers) {
+    if (isFinanceMode) {
         const upperPart = currentPartOutline.toUpperCase();
-        if (upperPart.includes("HOOK")) {
-            arcInstruction = "Giai đoạn HOOK: POV Ngôi thứ 3. Mô tả hiện trường tàn khốc với chi tiết vật lý kỳ quái. Kết thúc bằng CTA Subscribe.";
-        } else if (upperPart.includes("BURN")) {
-            arcInstruction = "Giai đoạn SLOW BURN: POV Ngôi thứ 1. Tên nhân vật mới (không Elias). Nhân vật mệt mỏi, hối tiếc. Mô tả âm thanh và mùi vị điềm báo.";
-        } else if (upperPart.includes("SIEGE")) {
-            arcInstruction = "Giai đoạn SIEGE: POV Ngôi thứ 1. Căng thẳng leo dốc. Quái vật vờn mồi từ bóng tối. Tay chân run rẩy, hơi thở dồn dập.";
-        } else if (upperPart.includes("CLIMAX")) {
-            arcInstruction = "Giai đoạn CLIMAX: POV Ngôi thứ 1. Đối mặt trực diện. Quái vật bắt chước tiếng người thân. Trốn thoát trong gang tấc.";
-        } else if (upperPart.includes("SCAR")) {
-            arcInstruction = "Giai đoạn SCAR: POV Ngôi thứ 1. Hậu quả tâm lý, ám ảnh, triết lý u ám.";
+        if (upperPart.includes("PHẦN 1") || upperPart.includes("MỞ ĐẦU") || upperPart.includes("HOOK")) {
+            arcInstruction = "Bắt buộc chèn Slogan: 'Chào mừng bạn đến với Chú Que Tài Chính...'. Dùng 1 trong 5 công thức Hook. QUAN TRỌNG: Hãy tạo ra một nhân vật cụ thể (Micro-storytelling với Tên + Tuổi + Mức lương) để dẫn dắt vấn đề.";
+        } else if (upperPart.includes("PHẦN 2") || upperPart.includes("BỐI CẢNH") || upperPart.includes("PROBLEM")) {
+            arcInstruction = "Nêu thực trạng bằng số liệu thị trường thực tế. Chỉ ra cái bẫy tâm lý mà nhiều người đang mắc kẹt. Tiếp tục sử dụng câu chuyện của nhân vật đã tạo ở Phần 1.";
+        } else if (upperPart.includes("PHẦN 3") || upperPart.includes("GIẢI PHẪU") || upperPart.includes("ANALYSIS")) {
+            arcInstruction = "PHẦN QUAN TRỌNG NHẤT: Bắt buộc mổ xẻ vấn đề bằng các bài toán kinh tế (cộng/trừ/nhân/chia). Sử dụng kỹ thuật Bẻ gãy phản biện 'Tôi không nói... Tôi đang nói...'. Có thể dùng Ẩn dụ vật lý (vd: cái xô thủng) để minh họa.";
+        } else if (upperPart.includes("PHẦN 4") || upperPart.includes("GIẢI PHÁP") || upperPart.includes("ACTIONABLE")) {
+            arcInstruction = "Cung cấp lộ trình Step-by-step. Nêu rõ giải pháp này dành cho ai và không dành cho ai.";
+        } else if (upperPart.includes("PHẦN 5") || upperPart.includes("ĐÚC KẾT") || upperPart.includes("TAKEAWAY")) {
+            arcInstruction = "Chốt lại 1 câu triết lý tài chính sâu sắc bằng một câu Tục ngữ/Thành ngữ Việt Nam. Kêu gọi hành động (CTA) bằng cách đặt 1 câu hỏi thực tế xoáy vào hoàn cảnh của khán giả.";
+        } else {
+            arcInstruction = "Trình bày kiến thức tài chính một cách mạch lạc, chuyên nghiệp và có tính ứng dụng cao.";
         }
     }
 
-    let prompt = isDarkFrontiers 
-        ? `${DARK_FRONTIERS_DNA}\nVIẾT TIẾP PHẦN KỊCH BẢN: "${currentPartOutline}".\nCHỦ ĐỀ: ${title}.\nCHỈ DẪN ARC: ${arcInstruction}\n${styleInstruction}\nNGÔN NGỮ: ${targetAudience}.\nBẮT BUỘC BẮT ĐẦU BẰNG TIÊU ĐỀ ##.`
+    let prompt = isFinanceMode 
+        ? `${FINANCE_DNA}\nVIẾT TIẾP PHẦN KỊCH BẢN: "${currentPartOutline}".\nCHỦ ĐỀ: ${title}.\nCHỈ DẪN: ${arcInstruction}\n${styleInstruction}\nNGÔN NGỮ: ${targetAudience}.\nBẮT BUỘC BẮT ĐẦU BẰNG TIÊU ĐỀ ##.`
         : `Viết tiếp phần kịch bản này dựa trên dàn ý: "${currentPartOutline}".
            Chủ đề video: "${title}".
            ${styleInstruction}
@@ -209,7 +195,11 @@ export const generateScriptPart = async (fullOutline: string, previousPartsScrip
 };
 
 export const generateTopicSuggestions = async (title: string, provider: AiProvider, model: string): Promise<TopicSuggestionItem[]> => {
-    const prompt = `Gợi ý 5 ý tưởng video YouTube kinh dị dã sử (Fear of the Unknown, 1800s-1950s). JSON: { title, outline }.`;
+    const prompt = `Gợi ý 5 ý tưởng video YouTube về Tài chính cá nhân. Bắt buộc tạo Tiêu đề kích thích click chuột bằng 1 trong các công thức:
+    1. Sự Thật Về [Chủ đề]: Tại Sao [Nỗ lực] Vẫn Thất bại?
+    2. [Lựa chọn A] Hay [Lựa chọn B]? Tôi Đã Tính Ra Con Số Thật.
+    3. [Ngành nghề] 2026: Cơ Hội Đổi Đời Hay Cái Bẫy?
+    Trả về định dạng JSON: [{ "title": "Tiêu đề", "outline": "Dàn ý ngắn" }].`;
     try {
         const response = await callApi(prompt, provider, model);
         return JSON.parse(cleanJsonResponse(response));
@@ -217,11 +207,11 @@ export const generateTopicSuggestions = async (title: string, provider: AiProvid
 };
 
 export const reviseScript = async (script: string, revisionPrompt: string, params: any, provider: AiProvider, model: string): Promise<string> => {
-    const { isDarkFrontiers, styleOptions } = params;
+    const { isFinanceMode, styleOptions } = params;
     const styleInstruction = styleOptions ? `Giữ vững Tone: ${styleOptions.expression} và Style: ${styleOptions.style}.` : '';
     
     const prompt = `Chỉnh sửa kịch bản theo yêu cầu: "${revisionPrompt}". 
-    ${isDarkFrontiers ? 'LƯU Ý: Giữ vững cấu trúc POV và triết lý sensory (âm thanh, mùi vị) của Dark Frontiers.' : ''}
+    ${isFinanceMode ? 'LƯU Ý: Giữ vững triết lý cung cấp kiến thức tài chính thực tế và chuyên nghiệp.' : ''}
     ${styleInstruction}
     
     Kịch bản gốc:\n${script}`;
@@ -249,7 +239,7 @@ export const extractDialogue = async (script: string, provider: AiProvider, mode
 };
 
 export const generateKeywordSuggestions = async (title: string, provider: AiProvider, model: string): Promise<string[]> => {
-    const prompt = `Gợi ý 10 từ khóa SEO (anh/việt) cho video kinh dị dã sử: "${title}".`;
+    const prompt = `Gợi ý 10 từ khóa SEO (anh/việt) cho video tài chính cá nhân: "${title}".`;
     try {
         const response = await callApi(prompt, provider, model);
         return response.split(',').map(k => k.trim());
@@ -258,9 +248,9 @@ export const generateKeywordSuggestions = async (title: string, provider: AiProv
 
 export const generateVisualPrompt = async (sceneDescription: string, provider: AiProvider, model: string): Promise<VisualPrompt[]> => {
     const prompt = `NHIỆM VỤ: Tạo 4 prompt hình ảnh cực kỳ chi tiết cho Midjourney/Leonardo.
-    PHONG CÁCH BẮT BUỘC: Social Realism 19th Century (U ám, sương mù, tranh sơn dầu thô ráp).
+    PHONG CÁCH BẮT BUỘC: Professional Financial Aesthetic (Chuyên nghiệp, sáng sủa, văn phòng).
     MẪU CẤU TRÚC (BẮT BUỘC SỬ DỤNG):
-    ${SOCIAL_REALISM_TEMPLATE}
+    ${FINANCE_VISUAL_TEMPLATE}
     
     Hãy thay thế [INSERT IMAGE CONTENT HERE] bằng nội dung hình ảnh cụ thể dựa trên kịch bản sau: "${sceneDescription}".
     Trả về JSON array: [ { "english": "FULL_PROMPT_STRING_WITH_TEMPLATE", "vietnamese": "Mô tả ngắn gọn cảnh bằng tiếng Việt" } ].`;
@@ -273,8 +263,8 @@ export const generateVisualPrompt = async (sceneDescription: string, provider: A
 
 export const generateAllVisualPrompts = async (script: string, provider: AiProvider, model: string): Promise<AllVisualPromptsResult[]> => {
     const prompt = `NHIỆM VỤ: Tạo prompts hình ảnh cho toàn bộ kịch bản.
-    PHONG CÁCH: 19th century social realism.
-    CẤU TRÚC: ${SOCIAL_REALISM_TEMPLATE.replace('[INSERT IMAGE CONTENT HERE]', '{image_content}')}
+    PHONG CÁCH: professional financial aesthetic.
+    CẤU TRÚC: ${FINANCE_VISUAL_TEMPLATE.replace('[INSERT IMAGE CONTENT HERE]', '{image_content}')}
     JSON array: { scene: "Đoạn kịch bản", english: "Prompt đầy đủ", vietnamese: "Dịch nghĩa" }.
     KỊCH BẢN:
     ${script}`;
@@ -286,9 +276,9 @@ export const generateAllVisualPrompts = async (script: string, provider: AiProvi
 
 export const summarizeScriptForScenes = async (script: string, config: SummarizeConfig, provider: AiProvider, model: string): Promise<ScriptPartSummary[]> => {
     const prompt = `NHIỆM VỤ: Phân tích kịch bản thành các cảnh quay chi tiết.
-    PHONG CÁCH HÌNH ẢNH: 19th century social realism.
+    PHONG CÁCH HÌNH ẢNH: professional financial aesthetic.
     BẮT BUỘC SỬ DỤNG MẪU PROMPT NÀY cho trường 'imagePrompt':
-    ${SOCIAL_REALISM_TEMPLATE}
+    ${FINANCE_VISUAL_TEMPLATE}
     (Thay thế [INSERT IMAGE CONTENT HERE] bằng nội dung mô tả cụ thể cho từng cảnh)
 
     YÊU CẦU ĐỊNH DẠNG: Trả về một mảng JSON các đối tượng ScriptPartSummary.
@@ -324,7 +314,7 @@ export const summarizeScriptForScenes = async (script: string, config: Summarize
 };
 
 export const suggestStyleOptions = async (title: string, provider: AiProvider, model: string): Promise<StyleOptions> => {
-    const prompt = `Gợi ý Expression và Style phù hợp với Dark Frontiers cho "${title}". JSON: { "expression": "...", "style": "..." }`;
+    const prompt = `Gợi ý Expression và Style phù hợp với kênh Tài chính cho "${title}". JSON: { "expression": "...", "style": "..." }`;
     try {
         const response = await callApi(prompt, provider, model);
         return JSON.parse(cleanJsonResponse(response));
@@ -332,7 +322,7 @@ export const suggestStyleOptions = async (title: string, provider: AiProvider, m
 };
 
 export const parseIdeasFromFile = async (content: string, provider: AiProvider, model: string): Promise<TopicSuggestionItem[]> => {
-    const prompt = `Trích xuất ý tưởng video kinh dị dã sử từ nội dung file. JSON: { title, outline }.`;
+    const prompt = `Trích xuất ý tưởng video tài chính cá nhân từ nội dung file. JSON: { title, outline }.`;
     try {
         const response = await callApi(prompt, provider, model);
         return JSON.parse(cleanJsonResponse(response));
@@ -434,17 +424,20 @@ export const generateElevenlabsTts = async (text: string, voiceId: string): Prom
 };
 
 export const scoreScript = async (script: string, provider: AiProvider, model: string): Promise<string> => {
-    const prompt = `Bạn là chuyên gia thẩm định nội dung của Dark Frontiers. Hãy chấm điểm kịch bản này dựa trên:
-    1. Cấu trúc 5 giai đoạn (Hook -> Burn -> Siege -> Climax -> Scar)?
-    2. POV (Hook ngôi 3, thân bài ngôi 1)?
-    3. Sensory Details (Âm thanh, mùi vị)?
-    4. Show, Don't Tell?
-    5. Không gian lịch sử (1800s-1950s) và sự vắng bóng công nghệ hiện đại?`;
+    const prompt = `Bạn là chuyên gia thẩm định nội dung của kênh Tài chính cá nhân. Hãy chấm điểm kịch bản này dựa trên 8 tiêu chí cực kỳ khắt khe:
+    1. Có sử dụng câu Slogan "Chú Que Tài Chính" và có cấu trúc 5 phần rõ ràng không?
+    2. Có bóc tách chi phí bằng con số cụ thể, tính toán cộng trừ nhân chia rõ ràng không?
+    3. Có nhắc đến Chi phí cơ hội hoặc Tâm lý học hành vi (ảo giác doanh thu, chi phí chìm...) không?
+    4. Không nói lý thuyết suông, giải pháp có thực tiễn (step-by-step) không?
+    5. CTA có đặt câu hỏi thực tế để khơi gợi bình luận không?
+    6. Có tạo một nhân vật cụ thể (Tên + Tuổi + Mức lương) để kể chuyện không?
+    7. Có sử dụng kỹ thuật Bẻ gãy phản biện "Tôi không nói... Tôi đang nói..." không?
+    8. Có sử dụng Ẩn dụ vật lý (vd: xô thủng) và kết thúc bằng Tục ngữ/Thành ngữ Việt Nam không?`;
     try { return await callApi(prompt, provider, model); } catch (e) { throw handleApiError(e, 'chấm điểm kịch bản'); }
 };
 
 export const generateSingleVideoPrompt = async (scene: SceneSummary, config: SummarizeConfig, provider: AiProvider, model: string): Promise<string> => {
-    const prompt = `Tạo video prompt (Tiếng Anh) cho cảnh quay kinh dị dã sử: "${scene.summary}". Tập trung vào ánh sáng đèn dầu, sương mù, góc quay cận cảnh biểu cảm ám ảnh.`;
+    const prompt = `Tạo video prompt (Tiếng Anh) cho cảnh quay tài chính: "${scene.summary}". Tập trung vào môi trường làm việc chuyên nghiệp, biểu đồ, không gian sáng sủa và năng động.`;
     try { return await callApi(prompt, provider, model); } catch (e) { throw handleApiError(e, 'tạo prompt video'); }
 };
 

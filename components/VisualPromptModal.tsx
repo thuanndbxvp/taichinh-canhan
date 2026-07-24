@@ -100,7 +100,7 @@ export const VisualPromptModal: React.FC<VisualPromptModalProps> = ({ isOpen, on
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'dark-frontiers-prompts.txt';
+    link.download = 'finance-prompts.txt';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
