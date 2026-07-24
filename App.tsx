@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { ControlPanel } from './components/ControlPanel';
 import { OutputDisplay } from './components/OutputDisplay';
 import { LibraryModal } from './components/LibraryModal';
@@ -11,20 +11,18 @@ import { SummarizeModal } from './components/SummarizeModal';
 import { SavedIdeasModal } from './components/SavedIdeasModal';
 import { SideToolsPanel } from './components/SideToolsPanel';
 import { ScoreModal } from './components/ScoreModal';
-import { generateScript, generateScriptOutline, generateTopicSuggestions, reviseScript, generateScriptPart, extractDialogue, generateKeywordSuggestions, validateApiKey, generateVisualPrompt, generateAllVisualPrompts, summarizeScriptForScenes, suggestStyleOptions, parseIdeasFromFile, scoreScript, generateSingleVideoPrompt, parseOutlineIntoSegments } from './services/aiService';
-import type { StyleOptions, FormattingOptions, LibraryItem, GenerationParams, VisualPrompt, AllVisualPromptsResult, ScriptPartSummary, ScriptType, NumberOfSpeakers, CachedData, TopicSuggestionItem, SavedIdea, AiProvider, WordCountStats, SummarizeConfig, SceneSummary } from './types';
-import { STYLE_OPTIONS, LANGUAGE_OPTIONS, DEFAULT_KYMA_MODELS, APP_BRAND } from './constants';
-import { CogIcon } from './components/icons/CogIcon';
-import { Tooltip } from './components/Tooltip';
-import { CheckIcon } from './components/icons/CheckIcon';
-import { apiKeyManager } from './services/apiKeyManager';
+import { APP_BRAND } from './constants';
 import { BoltIcon } from './components/icons/BoltIcon';
-import { stripMarkdownForWordCount, countWords } from './src/lib/markdown';
-import { downloadLibrary, parseLibraryImport } from './src/lib/libraryIo';
-import { AppError } from './src/lib/errors';
-
-// Make TypeScript aware of the global XLSX object from the CDN
-declare const XLSX: any;
+import { CheckIcon } from './components/icons/CheckIcon';
+import { useContentBrief } from './src/features/brief/useContentBrief';
+import { useAiSettings } from './src/features/settings/useAiSettings';
+import { useGenerationWorkflow } from './src/features/generation/useGenerationWorkflow';
+import { useDialogueWorkflow } from './src/features/dialogue/useDialogueWorkflow';
+import { useSceneWorkflow } from './src/features/scenes/useSceneWorkflow';
+import { useReviewWorkflow } from './src/features/review/useReviewWorkflow';
+import { useLibrary } from './src/features/library/useLibrary';
+import { useIdeaWorkflow } from './src/features/ideas/useIdeaWorkflow';
+import { useModalState } from './src/features/modals/useModalState';
 
 const YoutubeLogoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="24" viewBox="0 0 28 20" fill="none" {...props}>
@@ -34,840 +32,350 @@ const YoutubeLogoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 );
 
 const App: React.FC = () => {
-  // --- DEFAULT DF MODE STATES (NOW OFF BY DEFAULT) ---
-  const [isFinanceMode, setisFinanceMode] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>('');
-  const [outlineContent, setOutlineContent] = useState<string>('');
-  const [targetAudience, setTargetAudience] = useState<string>('Vietnamese');
-  const [styleOptions, setStyleOptions] = useState<StyleOptions>({
-    expression: 'Conversational',
-    style: 'Narrative',
+  const brief = useContentBrief();
+  const aiSettings = useAiSettings();
+  const generation = useGenerationWorkflow({
+    brief: brief.brief,
+    aiProvider: aiSettings.aiProvider,
+    selectedModel: aiSettings.selectedModel,
   });
-  const [themeColor, setThemeColor] = useState<string>('#ef4444');
-  
-  const [keywords, setKeywords] = useState<string>('');
-  const [formattingOptions, setFormattingOptions] = useState<FormattingOptions>({
-    headings: true,
-    bullets: true,
-    bold: true,
-    includeIntro: false,
-    includeOutro: false,
+  const dialogue = useDialogueWorkflow({
+    aiProvider: aiSettings.aiProvider,
+    selectedModel: aiSettings.selectedModel,
   });
-  const [wordCount, setWordCount] = useState<string>('800');
-  const [scriptParts, setScriptParts] = useState<string>('Auto');
-  const [scriptType, setScriptType] = useState<ScriptType>('Video');
-  const [numberOfSpeakers, setNumberOfSpeakers] = useState<NumberOfSpeakers>('Auto');
-  const [lengthType, setLengthType] = useState<'words' | 'duration'>('words');
-  const [videoDuration, setVideoDuration] = useState<string>('5');
+  const scenes = useSceneWorkflow({
+    aiProvider: aiSettings.aiProvider,
+    selectedModel: aiSettings.selectedModel,
+  });
+  const review = useReviewWorkflow({
+    aiProvider: aiSettings.aiProvider,
+    selectedModel: aiSettings.selectedModel,
+  });
+  const library = useLibrary();
+  const ideas = useIdeaWorkflow({
+    aiProvider: aiSettings.aiProvider,
+    selectedModel: aiSettings.selectedModel,
+  });
+  const modals = useModalState();
 
-  const [generatedScript, setGeneratedScript] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  
-  const [topicSuggestions, setTopicSuggestions] = useState<TopicSuggestionItem[]>([]);
-  const [isSuggesting, setIsSuggesting] = useState<boolean>(false);
-  const [suggestionError, setSuggestionError] = useState<string | null>(null);
-  const [hasGeneratedTopicSuggestions, setHasGeneratedTopicSuggestions] = useState<boolean>(false);
+  // Khi bắt đầu generate mới, clear các cache downstream
+  const handleGenerate = useCallback(async () => {
+    if (!brief.brief.title.trim()) return;
+    scenes.clearAll();
+    dialogue.clear();
+    review.clear();
+    library.setHasSaved(false);
+    await generation.generate();
+  }, [brief.brief.title, scenes, dialogue, review, library, generation]);
 
-  const [uploadedIdeas, setUploadedIdeas] = useState<TopicSuggestionItem[]>([]);
-  const [isParsing, setIsParsing] = useState<boolean>(false);
-  const [parsingError, setParsingError] = useState<string | null>(null);
+  // Load script từ library: cập nhật brief + script + reset caches
+  const handleLoadLibraryItem = useCallback(
+    (item: ReturnType<typeof library.loadItem> extends infer T ? Parameters<typeof library.loadItem>[0] : never) => {
+      const loaded = library.loadItem(item);
+      brief.setTitle(loaded.title);
+      brief.setOutlineContent(loaded.outlineContent);
+      generation.setGeneratedScript(loaded.script);
+      scenes.clearAll();
+      dialogue.clear();
+      review.clear();
+      modals.close('library');
+    },
+    [library, brief, generation, scenes, dialogue, review, modals],
+  );
 
-  const [keywordSuggestions, setKeywordSuggestions] = useState<string[]>([]);
-  const [isSuggestingKeywords, setIsSuggestingKeywords] = useState<boolean>(false);
-  const [keywordSuggestionError, setKeywordSuggestionError] = useState<string | null>(null);
-  const [hasGeneratedKeywordSuggestions, setHasGeneratedKeywordSuggestions] = useState<boolean>(false);
+  const handleLoadSavedIdea = useCallback(
+    (idea: Parameters<typeof ideas.loadSavedIdea>[0]) => {
+      const loaded = ideas.loadSavedIdea(idea);
+      brief.setTitle(loaded.title);
+      brief.setOutlineContent(loaded.outlineContent);
+      modals.close('savedIdeas');
+    },
+    [ideas, brief, modals],
+  );
 
-  const [isSuggestingStyle, setIsSuggestingStyle] = useState<boolean>(false);
-  const [styleSuggestionError, setStyleSuggestionError] = useState<string | null>(null);
-  const [hasSuggestedStyle, setHasSuggestedStyle] = useState<boolean>(false);
+  // Score dialog
+  const handleScoreClick = useCallback(async () => {
+    modals.open('score');
+    await review.score2(generation.generatedScript);
+  }, [modals, review, generation.generatedScript]);
 
-  const [library, setLibrary] = useState<LibraryItem[]>([]);
-  const [isLibraryOpen, setIsLibraryOpen] = useState<boolean>(false);
+  // Summarize dialog
+  const handleSummarizeClick = useCallback((config: Parameters<typeof scenes.summarize>[1]) => {
+    scenes.summarize(generation.generatedScript, config);
+  }, [scenes, generation.generatedScript]);
 
-  const [savedIdeas, setSavedIdeas] = useState<SavedIdea[]>([]);
-  const [isSavedIdeasModalOpen, setIsSavedIdeasModalOpen] = useState<boolean>(false);
+  // Extract dialogue: mở modal + chạy
+  const handleOpenDialogue = useCallback(async () => {
+    modals.open('dialogue');
+    await dialogue.extract(generation.generatedScript);
+  }, [modals, dialogue, generation.generatedScript]);
 
-  const [revisionPrompt, setRevisionPrompt] = useState<string>('');
-  const [revisionCount, setRevisionCount] = useState<number>(0);
-
-  const [isGeneratingSequentially, setIsGeneratingSequentially] = useState<boolean>(false);
-  const [outlineParts, setOutlineParts] = useState<string[]>([]);
-  const [currentPartIndex, setCurrentPartIndex] = useState<number>(0);
-  const [fullOutlineText, setFullOutlineText] = useState<string>('');
-  const [autoContinue, setAutoContinue] = useState<boolean>(true);
-  const isStoppingRef = useRef<boolean>(false);
-
-  const [isDialogueModalOpen, setIsDialogueModalOpen] = useState<boolean>(false);
-  const [extractedDialogue, setExtractedDialogue] = useState<Record<string, string> | null>(null);
-  const [isExtracting, setIsExtracting] = useState<boolean>(false);
-  const [extractionError, setExtractionError] = useState<string | null>(null);
-  
-  const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState<boolean>(false);
-  const [isGuideModalOpen, setIsGuideModalOpen] = useState<boolean>(false);
-  const [apiKeys, setApiKeys] = useState<Record<AiProvider, string[]>>({ kyma: [], openai: [] });
-
-  const [isVisualPromptModalOpen, setIsVisualPromptModalOpen] = useState<boolean>(false);
-  const [visualPrompts, setVisualPrompts] = useState<VisualPrompt[] | null>(null);
-  const [isGeneratingVisualPrompt, setIsGeneratingVisualPrompt] = useState<boolean>(false);
-  const [visualPromptError, setVisualPromptError] = useState<string | null>(null);
-  const [loadingVisualPromptsParts, setLoadingVisualPromptsParts] = useState<Set<string>>(new Set());
-  const [isGeneratingAllSegmentPrompts, setIsGeneratingAllSegmentPrompts] = useState<boolean>(false);
-
-  const [isAllVisualPromptsModalOpen, setIsAllVisualPromptsModalOpen] = useState<boolean>(false);
-  const [allVisualPrompts, setAllVisualPrompts] = useState<AllVisualPromptsResult[] | null>(null);
-  const [isGeneratingAllVisualPrompts, setIsGeneratingAllVisualPrompts] = useState<boolean>(false);
-  const [allVisualPromptsError, setAllVisualPromptsError] = useState<string | null>(null);
-
-  const [isSummarizeModalOpen, setIsSummarizeModalOpen] = useState<boolean>(false);
-  const [summarizedScript, setSummarizedScript] = useState<ScriptPartSummary[] | null>(null);
-  const [isSummarizing, setIsSummarizing] = useState<boolean>(false);
-  const [summarizationError, setSummarizationError] = useState<string | null>(null);
-
-  const [isScoreModalOpen, setIsScoreModalOpen] = useState<boolean>(false);
-  const [scriptScore, setScriptScore] = useState<string | null>(null);
-  const [isScoring, setIsScoring] = useState<boolean>(false);
-  const [scoringError, setScoringError] = useState<string | null>(null);
-
-  const [aiProvider, setAiProvider] = useState<AiProvider>('kyma');
-  const [selectedModel, setSelectedModel] = useState<string>(DEFAULT_KYMA_MODELS[0].value);
-
-  const [visualPromptsCache, setVisualPromptsCache] = useState<Map<string, VisualPrompt[]>>(new Map());
-  const [allVisualPromptsCache, setAllVisualPromptsCache] = useState<AllVisualPromptsResult[] | null>(null);
-  const [summarizedScriptCache, setSummarizedScriptCache] = useState<ScriptPartSummary[] | null>(null);
-  const [extractedDialogueCache, setExtractedDialogueCache] = useState<Record<string, string> | null>(null);
-
-  const [hasExtractedDialogue, setHasExtractedDialogue] = useState<boolean>(false);
-  const [hasGeneratedAllVisualPrompts, setHasGeneratedAllVisualPrompts] = useState<boolean>(false);
-  const [hasSummarizedScript, setHasSummarizedScript] = useState<boolean>(false);
-  const [hasSavedToLibrary, setHasSavedToLibrary] = useState<boolean>(false);
-
-  const [wordCountStats, setWordCountStats] = useState<WordCountStats | null>(null);
-  const [notification, setNotification] = useState<string | null>(null);
-
-  // NEW: Logic to calculate the effective target word count based on user selection in "Mục 8"
-  const effectiveTargetWordCount = lengthType === 'duration'
-    ? (Math.max(0, parseInt(videoDuration || '0', 10)) * 150).toString()
-    : wordCount;
-
+  // Khi generation.generatedScript thay đổi do user import, sync dialogue stats
   useEffect(() => {
-    try {
-      const savedLibrary = localStorage.getItem('yt-script-library');
-      if (savedLibrary) setLibrary(JSON.parse(savedLibrary));
-      const savedIdeasData = localStorage.getItem('yt-script-saved-ideas');
-      if (savedIdeasData) setSavedIdeas(JSON.parse(savedIdeasData));
-      const savedApiKeys = localStorage.getItem('ai-api-keys');
-      const defaultKeys = { kyma: [], openai: [] };
-      let parsedKeys = defaultKeys;
-      if (savedApiKeys) {
-        parsedKeys = JSON.parse(savedApiKeys);
-      }
-      setApiKeys(parsedKeys);
-      apiKeyManager.updateKeys(parsedKeys);
-      const savedTheme = localStorage.getItem('yt-script-theme');
-      if (savedTheme) setThemeColor(savedTheme);
-    } catch (e) {
-      console.error("Failed to load data", e);
+    if (generation.generatedScript && dialogue.dialogue === null) {
+      // no-op: chỉ chạy khi user explicitly gọi extract
     }
-    const handleApiKeyRotation = (event: Event) => {
-        const customEvent = event as CustomEvent;
-        const provider = customEvent.detail.provider as AiProvider;
-        setNotification(`API key ${provider} đã tự động chuyển đổi.`);
-        const latestApiKeys = localStorage.getItem('ai-api-keys');
-        if (latestApiKeys) setApiKeys(JSON.parse(latestApiKeys));
-    };
-    window.addEventListener('apiKeyRotated', handleApiKeyRotation);
-    return () => window.removeEventListener('apiKeyRotated', handleApiKeyRotation);
-  }, []);
+  }, [generation.generatedScript, dialogue.dialogue]);
 
-  useEffect(() => {
-    if (notification) {
-        const timer = setTimeout(() => setNotification(null), 6000);
-        return () => clearTimeout(timer);
-    }
-  }, [notification]);
-
-  useEffect(() => {
-    localStorage.setItem('yt-script-theme', themeColor);
-    document.documentElement.style.setProperty('--color-accent', themeColor);
-  }, [themeColor]);
-  
-  useEffect(() => {
-    localStorage.setItem('yt-script-saved-ideas', JSON.stringify(savedIdeas));
-  }, [savedIdeas]);
-
-  useEffect(() => {
-    localStorage.setItem('ai-api-keys', JSON.stringify(apiKeys));
-    apiKeyManager.updateKeys(apiKeys);
-  }, [apiKeys]);
-
-
-  const resetCachesAndStates = () => {
-    setVisualPromptsCache(new Map());
-    setAllVisualPromptsCache(null);
-    setSummarizedScriptCache(null);
-    setExtractedDialogueCache(null);
-    setHasExtractedDialogue(false);
-    setHasGeneratedAllVisualPrompts(false);
-    setHasSummarizedScript(false);
-    setHasSavedToLibrary(false);
-    setWordCountStats(null);
-    setRevisionCount(0);
-    setScriptScore(null);
-    setIsGeneratingSequentially(false);
-    setOutlineParts([]);
-    setCurrentPartIndex(0);
-    setFullOutlineText('');
-    isStoppingRef.current = false;
-    setLoadingVisualPromptsParts(new Set());
-    setIsGeneratingAllSegmentPrompts(false);
-  };
-
-  const handleGenerateScript = useCallback(async () => {
-    if (!title.trim()) {
-      setError('Vui lòng nhập hoặc chọn một tiêu đề video.');
-      return;
-    }
-    setIsLoading(true);
-    setError(null);
-    setGeneratedScript('');
-    resetCachesAndStates();
-
-    const finalWordCount = lengthType === 'duration' && videoDuration
-      ? (parseInt(videoDuration, 10) * 150).toString()
-      : wordCount;
-
-    const params: GenerationParams = { 
-        title, 
-        outlineContent, 
-        targetAudience, 
-        styleOptions, 
-        keywords, 
-        formattingOptions, 
-        wordCount: finalWordCount, 
-        scriptParts, 
-        scriptType, 
-        numberOfSpeakers,
-        isFinanceMode 
-    };
-
-    try {
-      const isLongScript = parseInt(finalWordCount, 10) >= 1000;
-      if (isLongScript) {
-        const outline = await generateScriptOutline(params, aiProvider, selectedModel);
-        setGeneratedScript(outline);
-        setFullOutlineText(outline);
-      } else {
-        const script = await generateScript(params, aiProvider, selectedModel);
-        setGeneratedScript(script);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi không xác định.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [title, outlineContent, targetAudience, styleOptions, keywords, formattingOptions, wordCount, scriptParts, scriptType, numberOfSpeakers, lengthType, videoDuration, aiProvider, selectedModel, isFinanceMode]);
-
-  const handleGenerateNextPart = useCallback(async (indexToGenerate?: number) => {
-    const targetIndex = indexToGenerate !== undefined ? indexToGenerate : currentPartIndex;
-    if (!isGeneratingSequentially || targetIndex >= outlineParts.length || isStoppingRef.current) {
-        if (isStoppingRef.current) setIsGeneratingSequentially(false);
-        return;
-    }
-
-    setIsLoading(true);
-    const currentOutlinePart = outlineParts[targetIndex];
-    
-    const finalWordCount = lengthType === 'duration' && videoDuration
-      ? (parseInt(videoDuration, 10) * 150).toString()
-      : wordCount;
-
-    const params: GenerationParams = { 
-        title, 
-        outlineContent, 
-        targetAudience, 
-        styleOptions, 
-        keywords, 
-        formattingOptions, 
-        wordCount: finalWordCount, 
-        scriptParts, 
-        scriptType, 
-        numberOfSpeakers,
-        isFinanceMode 
-    };
-
-    try {
-        const partContent = await generateScriptPart(
-            fullOutlineText, 
-            generatedScript, 
-            currentOutlinePart, 
-            params, 
-            aiProvider, 
-            selectedModel
-        );
-        if (isStoppingRef.current) return;
-
-        setGeneratedScript(prev => prev + partContent + '\n\n---\n\n');
-        const nextIndex = targetIndex + 1;
-        setCurrentPartIndex(nextIndex);
-        
-        // Auto-continue logic
-        if (autoContinue && nextIndex < outlineParts.length && !isStoppingRef.current) {
-            setTimeout(() => handleGenerateNextPart(nextIndex), 100);
-        } else if (nextIndex >= outlineParts.length) {
-            setIsGeneratingSequentially(false);
-        }
-    } catch (err) {
-        setError(err instanceof Error ? err.message : 'Lỗi khi tạo phần tiếp theo.');
-        setIsGeneratingSequentially(false);
-    } finally {
-        setIsLoading(false);
-    }
-  }, [isGeneratingSequentially, currentPartIndex, outlineParts, title, outlineContent, targetAudience, styleOptions, keywords, formattingOptions, wordCount, scriptParts, scriptType, numberOfSpeakers, lengthType, videoDuration, aiProvider, selectedModel, isFinanceMode, fullOutlineText, generatedScript, autoContinue]);
-
-  const handleStartSequentialGenerate = useCallback(() => {
-    if (!generatedScript) return;
-    const parts = parseOutlineIntoSegments(generatedScript);
-    if (parts.length === 0) {
-        setError('Không tìm thấy cấu trúc phần trong dàn ý. Vui lòng thử lại.');
-        return;
-    }
-    isStoppingRef.current = false;
-    setOutlineParts(parts);
-    setCurrentPartIndex(0);
-    setIsGeneratingSequentially(true);
-    setGeneratedScript('--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---\n\n');
-  }, [generatedScript]);
-
-  const handleStopSequentialGenerate = useCallback(() => {
-    isStoppingRef.current = true;
-    setIsLoading(false);
-    setIsGeneratingSequentially(false);
-    setNotification("Đã yêu cầu dừng tạo kịch bản.");
-  }, []);
-
-  // Effect to trigger first part when isGeneratingSequentially turns true
-  useEffect(() => {
-      if (isGeneratingSequentially && currentPartIndex === 0 && outlineParts.length > 0 && !isLoading && generatedScript.includes('BẮT ĐẦU') && !isStoppingRef.current) {
-          handleGenerateNextPart(0);
-      }
-  }, [isGeneratingSequentially, currentPartIndex, outlineParts.length, isLoading, generatedScript, handleGenerateNextPart]);
-
-  const handleReviseScript = useCallback(async () => {
-    if (!generatedScript || !revisionPrompt.trim()) return;
-    setIsLoading(true);
-    setError(null);
-    
-    const params: GenerationParams = { 
-        title, outlineContent, targetAudience, styleOptions, keywords, formattingOptions, 
-        wordCount, scriptParts, scriptType, numberOfSpeakers, isFinanceMode 
-    };
-
-    try {
-        const revised = await reviseScript(generatedScript, revisionPrompt, params, aiProvider, selectedModel);
-        setGeneratedScript(revised);
-        setRevisionCount(prev => prev + 1);
-        setRevisionPrompt('');
-    } catch (err) {
-        setError(err instanceof Error ? err.message : 'Lỗi khi sửa kịch bản.');
-    } finally {
-        setIsLoading(false);
-    }
-  }, [generatedScript, revisionPrompt, title, outlineContent, targetAudience, styleOptions, keywords, formattingOptions, wordCount, scriptParts, scriptType, numberOfSpeakers, isFinanceMode, aiProvider, selectedModel]);
-
-  // Helper function to clean text for word counting and TTS readiness
-  const cleanTextForCount = (text: string): string => {
-    return stripMarkdownForWordCount(text);
-  };
-
-  const handleExtractDialogue = useCallback(async () => {
-    if (!generatedScript) return;
-    setIsExtracting(true);
-    setIsDialogueModalOpen(true);
-    setExtractionError(null);
-    
-    try {
-        let dialogue: Record<string, string> = {};
-
-        // OPTIMIZATION: Better Markdown parsing with support for **## pattern
-        const sections = generatedScript.split(/(?=^#+ .*?$|^### Dàn Ý|^#{0,3}\s*\*\*#+ .*?)/m)
-            .filter(s => s.trim() !== '' && !s.includes('---') && !s.includes('### Dàn Ý'));
-        
-        if (sections.length > 0) {
-            sections.forEach(s => {
-                const lines = s.split('\n');
-                const titleLine = lines[0].trim();
-                // Clean title from both # and **# markers
-                const partTitle = titleLine
-                    .replace(/^\*\*#+/, '')
-                    .replace(/\*\*/g, '')
-                    .replace(/^#+\s+/, '')
-                    .trim() || 'Phần không tên';
-                
-                const contentLines = lines.slice(1);
-                
-                // Advanced line-by-line filtering for dialogue
-                const filteredContent = contentLines
-                    .filter(line => {
-                        const trimmed = line.trim();
-                        if (!trimmed) return false;
-                        if (trimmed === '***') return false;
-                        if (trimmed.startsWith('[') && trimmed.endsWith(']')) return false;
-                        if (/^Visual:|^SFX:|^Audio:|^Scene:|^Camera:/i.test(trimmed)) return false;
-                        if (/^\*\*\(.*?\)\*\*/.test(trimmed)) return false; // Filter instruction lines
-                        if (/^\*\*#+/.test(trimmed)) return false; // Filter bolded header lines
-                        return true;
-                    })
-                    .map(line => {
-                        // Clean inline instructions or residual markdown
-                        return line
-                            .replace(/\*\*\s*\(.*?\)\s*\*\*/g, '') 
-                            .replace(/\*\s*\(.*?\)\s*\*/g, '')
-                            .replace(/\*\*\s*#+.*?\*\*/g, '')
-                            .replace(/\*\*\*/g, '')
-                            .trim();
-                    })
-                    .filter(line => line.length > 0)
-                    .join('\n')
-                    .trim();
-
-                if (filteredContent) dialogue[partTitle] = filteredContent;
-            });
-        }
-
-        // FALLBACK: Use AI if local parsing is insufficient or produced "dirty" results (too many markers left)
-        const totalChars = Object.values(dialogue).join('').length;
-        const hasMarkers = /#|\*\*|\[|\]/g.test(Object.values(dialogue).join(''));
-        
-        if (Object.keys(dialogue).length === 0 || (totalChars > 100 && hasMarkers)) {
-            dialogue = await extractDialogue(generatedScript, aiProvider, selectedModel);
-        }
-        
-        setExtractedDialogue(dialogue);
-        
-        // Calculate stats accurately
-        const statsSections = Object.entries(dialogue).map(([title, text]) => ({
-            title,
-            count: countWords(text),
-        }));
-        const total = statsSections.reduce((sum, s) => sum + s.count, 0);
-        setWordCountStats({ sections: statsSections, total });
-        setHasExtractedDialogue(true);
-    } catch (err) {
-        setExtractionError(err instanceof Error ? err.message : 'Lỗi khi tách lời thoại.');
-    } finally {
-        setIsExtracting(false);
-    }
-  }, [generatedScript, aiProvider, selectedModel]);
-
-  const handleScoreScript = useCallback(async () => {
-    if (!generatedScript) return;
-    setIsScoring(true);
-    setIsScoreModalOpen(true);
-    try {
-        const score = await scoreScript(generatedScript, aiProvider, selectedModel);
-        setScriptScore(score);
-    } catch (err) {
-        setScoringError(err instanceof Error ? err.message : 'Lỗi khi chấm điểm.');
-    } finally {
-        setIsScoring(false);
-    }
-  }, [generatedScript, aiProvider, selectedModel]);
-
-  const handleSummarizeScript = useCallback(async (config: SummarizeConfig) => {
-    if (!generatedScript) return;
-    setIsSummarizing(true);
-    try {
-        const sum = await summarizeScriptForScenes(generatedScript, config, aiProvider, selectedModel);
-        setSummarizedScript(sum);
-        setHasSummarizedScript(true);
-    } catch (err) {
-        setSummarizationError(err instanceof Error ? err.message : 'Lỗi khi tóm tắt.');
-    } finally {
-        setIsSummarizing(false);
-    }
-  }, [generatedScript, aiProvider, selectedModel]);
-
-  const handleGenerateVisualPrompt = useCallback(async (scene: string) => {
-    // If it's already generated, just open the modal to show it
-    if (visualPromptsCache.has(scene)) {
-        setVisualPrompts(visualPromptsCache.get(scene) || null);
-        setIsVisualPromptModalOpen(true);
-        return;
-    }
-
-    // Mark as loading and show modal
-    setIsGeneratingVisualPrompt(true);
-    setIsVisualPromptModalOpen(true);
-    setVisualPromptError(null);
-    setVisualPrompts(null);
-    
-    setLoadingVisualPromptsParts(prev => {
-        const next = new Set(prev);
-        next.add(scene);
-        return next;
-    });
-
-    try {
-        const prompts = await generateVisualPrompt(scene, aiProvider, selectedModel);
-        setVisualPromptsCache(prev => {
-            const next = new Map(prev);
-            next.set(scene, prompts);
-            return next;
-        });
-        setVisualPrompts(prompts);
-    } catch (err) {
-        setVisualPromptError(err instanceof Error ? err.message : 'Lỗi tạo prompt hình ảnh.');
-    } finally {
-        setIsGeneratingVisualPrompt(false);
-        setLoadingVisualPromptsParts(prev => {
-            const next = new Set(prev);
-            next.delete(scene);
-            return next;
-        });
-    }
-  }, [aiProvider, selectedModel, visualPromptsCache]);
-
-  const handleGenerateAllSegmentPrompts = useCallback(async () => {
-    if (!generatedScript) return;
-    const sections = generatedScript.split(/(?=^## .*?$|^### .*?$)/m).filter(s => s.trim() !== '' && s.trim().length > 50 && !s.includes("Dàn Ý Chi Tiết") && !s.includes("BẮT ĐẦU TẠO"));
-    
-    setIsGeneratingAllSegmentPrompts(true);
-    setNotification("Đang bắt đầu tạo hàng loạt prompt cho kịch bản...");
-
-    for (const section of sections) {
-        if (visualPromptsCache.has(section)) continue;
-
-        setLoadingVisualPromptsParts(prev => {
-            const next = new Set(prev);
-            next.add(section);
-            return next;
-        });
-
-        try {
-            const prompts = await generateVisualPrompt(section, aiProvider, selectedModel);
-            setVisualPromptsCache(prev => {
-                const next = new Map(prev);
-                next.set(section, prompts);
-                return next;
-            });
-        } catch (err) {
-            console.error("Lỗi khi tạo prompt cho đoạn:", section.substring(0, 50), err);
-        } finally {
-            setLoadingVisualPromptsParts(prev => {
-                const next = new Set(prev);
-                next.delete(section);
-                return next;
-            });
-        }
-    }
-
-    setIsGeneratingAllSegmentPrompts(false);
-    setNotification("Đã hoàn tất tạo toàn bộ prompt ảnh!");
-  }, [generatedScript, aiProvider, selectedModel, visualPromptsCache]);
-
-  const handleDownloadAllPrompts = useCallback(() => {
-    if (visualPromptsCache.size === 0) {
-        setError("Chưa có prompt nào được tạo để tải về.");
-        return;
-    }
-
-    // Flatten all visual prompt lists from cache
-    const allEnglishPrompts: string[] = [];
-    visualPromptsCache.forEach((prompts) => {
-        prompts.forEach(p => {
-            // Flatten internal newlines to single lines
-            const flat = p.english.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
-            allEnglishPrompts.push(flat);
-        });
-    });
-
-    if (allEnglishPrompts.length === 0) return;
-
-    const blob = new Blob([allEnglishPrompts.join('\n')], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `All_Prompts_${title.replace(/\s+/g, '_')}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  }, [visualPromptsCache, title]);
-
-  const handleGenerateAllVisualPrompts = useCallback(async () => {
-    if (!generatedScript) return;
-    setIsGeneratingAllVisualPrompts(true);
-    setIsAllVisualPromptsModalOpen(true);
-    try {
-        const prompts = await generateAllVisualPrompts(generatedScript, aiProvider, selectedModel);
-        setAllVisualPrompts(prompts);
-        setHasGeneratedAllVisualPrompts(true);
-    } catch (err) {
-        setAllVisualPromptsError(err instanceof Error ? err.message : 'Lỗi tạo toàn bộ prompt.');
-    } finally {
-        setIsGeneratingAllVisualPrompts(false);
-    }
-  }, [generatedScript, aiProvider, selectedModel]);
-
-  const handleSuggestStyle = useCallback(async () => {
-    if (!title.trim()) return;
-    setIsSuggestingStyle(true);
-    try {
-        const suggested = await suggestStyleOptions(title, aiProvider, selectedModel);
-        setStyleOptions(suggested);
-        setHasSuggestedStyle(true);
-    } catch (err) {
-        setStyleSuggestionError('Lỗi gợi ý phong cách.');
-    } finally {
-        setIsSuggestingStyle(false);
-    }
-  }, [title, aiProvider, selectedModel]);
-
-  const handleGenerateKeywordSuggestionsLocal = useCallback(async () => {
-    if (!title.trim()) return;
-    setIsSuggestingKeywords(true);
-    try {
-        const kws = await generateKeywordSuggestions(title, aiProvider, selectedModel);
-        setKeywordSuggestions(kws);
-        setHasGeneratedKeywordSuggestions(true);
-    } catch (err) {
-        setKeywordSuggestionError('Lỗi gợi ý từ khóa.');
-    } finally {
-        setIsSuggestingKeywords(false);
-    }
-  }, [title, aiProvider, selectedModel]);
-
-  const handleParseFileLocal = useCallback(async (content: string) => {
-    setIsParsing(true);
-    try {
-        const ideas = await parseIdeasFromFile(content, aiProvider, selectedModel);
-        setUploadedIdeas(ideas);
-    } catch (err) {
-        setParsingError('Lỗi đọc file ý tưởng.');
-    } finally {
-        setIsParsing(false);
-    }
-  }, [aiProvider, selectedModel]);
-
-
-
-  const handleGenerateVideoPromptLocal = async (scene: SceneSummary, partIndex: number, config: SummarizeConfig) => {
-    const videoPrompt = await generateSingleVideoPrompt(scene, config, aiProvider, selectedModel);
-    setSummarizedScript(prev => {
-        if (!prev) return null;
-        const next = [...prev];
-        next[partIndex].scenes = next[partIndex].scenes.map(s =>
-            s.sceneNumber === scene.sceneNumber ? { ...s, videoPrompt } : s
-        );
-        return next;
-    });
-  };
-
-  const handleSaveApiKeys = (keysToSave: Record<AiProvider, string[]>) => setApiKeys(keysToSave);
-  const handleSaveToLibrary = useCallback(() => {
-    if (!generatedScript.trim() || !title.trim()) return;
-    const now = Date.now();
-    const newItem: LibraryItem = { id: now, savedAt: now, title, outlineContent, script: generatedScript };
-    const updatedLibrary = [newItem, ...library];
-    setLibrary(updatedLibrary);
-    localStorage.setItem('yt-script-library', JSON.stringify(updatedLibrary));
-    setHasSavedToLibrary(true);
-  }, [generatedScript, title, outlineContent, library]);
-
-  const handleDeleteScript = useCallback((id: number) => {
-    const updatedLibrary = library.filter(item => item.id !== id);
-    setLibrary(updatedLibrary);
-    localStorage.setItem('yt-script-library', JSON.stringify(updatedLibrary));
-  }, [library]);
-
-  const handleLoadScript = useCallback((item: LibraryItem) => {
-    resetCachesAndStates();
-    setTitle(item.title);
-    setOutlineContent(item.outlineContent);
-    setGeneratedScript(item.script);
-    setHasSavedToLibrary(true);
-    setIsLibraryOpen(false);
-  }, []);
-
-  const handleSaveIdea = useCallback((ideaToSave: TopicSuggestionItem) => {
-    if (savedIdeas.some(idea => idea.title === ideaToSave.title)) return;
-    setSavedIdeas(prev => [{ id: Date.now(), title: ideaToSave.title, vietnameseTitle: ideaToSave.vietnameseTitle, outline: ideaToSave.outline }, ...prev]);
-  }, [savedIdeas]);
-
-  const handleGenerateSuggestions = useCallback(async () => {
-    if (!title.trim()) return;
-    setIsSuggesting(true);
-    try {
-      setTopicSuggestions(await generateTopicSuggestions(title, aiProvider, selectedModel));
-      setHasGeneratedTopicSuggestions(true);
-    } catch (err) { setSuggestionError('Lỗi tạo gợi ý.'); } finally { setIsSuggesting(false); }
-  }, [title, aiProvider, selectedModel]);
-
-  const hasApiKey = apiKeys[aiProvider] && apiKeys[aiProvider].length > 0;
+  const hasApiKey = aiSettings.hasApiKey;
 
   return (
-    <div className={`min-h-screen ${isFinanceMode ? 'bg-black text-slate-300' : 'bg-primary text-text-primary'}`}>
-      {notification && (
-            <div className="fixed top-5 right-5 bg-secondary border border-accent text-text-primary p-4 rounded-lg shadow-lg z-[100] flex items-center gap-4">
-                <CheckIcon className="w-6 h-6 text-green-400" />
-                <p className="text-sm">{notification}</p>
-            </div>
-        )}
-      <header className={`bg-secondary/60 border-b border-border p-4 shadow-sm flex justify-between items-center sticky top-0 z-20 backdrop-blur-sm ${isFinanceMode ? 'border-amber-900/30' : ''}`}>
+    <div className={`min-h-screen ${brief.brief.isFinanceMode ? 'bg-black text-slate-300' : 'bg-primary text-text-primary'}`}>
+      {aiSettings.notification && (
+        <div className="fixed top-5 right-5 bg-secondary border border-accent text-text-primary p-4 rounded-lg shadow-lg z-[100] flex items-center gap-4">
+          <CheckIcon className="w-6 h-6 text-green-400" />
+          <p className="text-sm">{aiSettings.notification}</p>
+        </div>
+      )}
+      <header className={`bg-secondary/60 border-b border-border p-4 shadow-sm flex justify-between items-center sticky top-0 z-20 backdrop-blur-sm ${brief.brief.isFinanceMode ? 'border-amber-900/30' : ''}`}>
         <div className="flex-1 flex gap-4 items-center">
-            <button
-                onClick={() => {
-                    const newState = !isFinanceMode;
-                    setisFinanceMode(newState);
-                    if (newState) {
-                        // Bật Chú Que Tài Chính: thiết lập cấu hình tối ưu cho kênh tài chính cá nhân.
-                        setThemeColor('#f59e0b');
-                        setStyleOptions({ expression: 'Empathetic', style: 'Storytelling' });
-                        setTargetAudience('Vietnamese');
-                        setFormattingOptions(prev => ({ ...prev, bullets: true, bold: true }));
-                        setWordCount('1200');
-                        setVideoDuration('8');
-                    } else {
-                        setThemeColor('#ef4444');
-                        setTargetAudience('Vietnamese');
-                        setFormattingOptions(prev => ({ ...prev, bullets: true, bold: true }));
-                        setWordCount('800');
-                        setVideoDuration('5');
-                    }
-                }}
-                className={`px-4 py-2 rounded-lg font-bold text-xs transition-all flex items-center gap-2 border ${isFinanceMode ? 'bg-amber-900/40 text-amber-500 border-amber-500 shadow-lg shadow-amber-900/20' : 'bg-secondary text-text-secondary border-border hover:text-text-primary'}`}
-            >
-                <BoltIcon className="w-4 h-4" />
-                {isFinanceMode ? 'CHÚ QUE TÀI CHÍNH: ON' : 'CHÚ QUE TÀI CHÍNH: OFF'}
-            </button>
+          <button
+            onClick={() => brief.setIsFinanceMode(!brief.brief.isFinanceMode)}
+            className={`px-4 py-2 rounded-lg font-bold text-xs transition-all flex items-center gap-2 border ${brief.brief.isFinanceMode ? 'bg-amber-900/40 text-amber-500 border-amber-500 shadow-lg shadow-amber-900/20' : 'bg-secondary text-text-secondary border-border hover:text-text-primary'}`}
+          >
+            <BoltIcon className="w-4 h-4" />
+            {brief.brief.isFinanceMode ? 'CHÚ QUE TÀI CHÍNH: ON' : 'CHÚ QUE TÀI CHÍNH: OFF'}
+          </button>
         </div>
         <div className="flex-1 text-center">
-            <a href="/" className="inline-flex justify-center items-center gap-3 no-underline">
-              <YoutubeLogoIcon />
-              <h1 className="text-2xl font-bold" style={{color: 'var(--color-accent)'}}>
-                {isFinanceMode ? APP_BRAND.name : 'YouTube Script Generator'}
-              </h1>
-            </a>
+          <a href="/" className="inline-flex justify-center items-center gap-3 no-underline">
+            <YoutubeLogoIcon />
+            <h1 className="text-2xl font-bold" style={{ color: 'var(--color-accent)' }}>
+              {brief.brief.isFinanceMode ? APP_BRAND.name : 'YouTube Script Generator'}
+            </h1>
+          </a>
         </div>
         <div className="flex-1 flex justify-end items-center gap-2 md:gap-4">
-            <button onClick={() => setIsGuideModalOpen(true)} className="px-3 md:px-4 py-1.5 text-sm font-semibold rounded-md border border-border text-yellow-400 hover:bg-yellow-400/10 transition-colors flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.82 1.507-2.098a5.981 5.981 0 1 0-7.514 0C9.092 15.988 9.75 16.825 9.75 17.808v.192" />
-                </svg>
-                <span className="hidden md:inline">Hướng dẫn</span>
-            </button>
-            <button onClick={() => setIsApiKeyModalOpen(true)} className="px-4 py-1.5 text-sm font-semibold rounded-md border border-border text-text-secondary">API</button>
+          <button onClick={() => modals.open('guide')} className="px-3 md:px-4 py-1.5 text-sm font-semibold rounded-md border border-border text-yellow-400 hover:bg-yellow-400/10 transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.82 1.507-2.098a5.981 5.981 0 1 0-7.514 0C9.092 15.988 9.75 16.825 9.75 17.808v.192" />
+            </svg>
+            <span className="hidden md:inline">Hướng dẫn</span>
+          </button>
+          <button onClick={() => modals.open('apiKey')} className="px-4 py-1.5 text-sm font-semibold rounded-md border border-border text-text-secondary">API</button>
         </div>
       </header>
 
       <main className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 md:p-6 max-w-[96rem] mx-auto">
         <div className="lg:col-span-3">
           <ControlPanel
-            title={title} setTitle={setTitle} outlineContent={outlineContent} setOutlineContent={setOutlineContent}
-            onGenerateSuggestions={handleGenerateSuggestions} isSuggesting={isSuggesting} suggestions={topicSuggestions} suggestionError={suggestionError} hasGeneratedTopicSuggestions={hasGeneratedTopicSuggestions}
-            targetAudience={targetAudience} setTargetAudience={setTargetAudience}
-            styleOptions={styleOptions} setStyleOptions={setStyleOptions}
-            keywords={keywords} setKeywords={setKeywords}
-            formattingOptions={formattingOptions} setFormattingOptions={setFormattingOptions}
-            wordCount={wordCount} setWordCount={setWordCount}
-            scriptParts={scriptParts} setScriptParts={setScriptParts}
-            onGenerate={handleGenerateScript} isLoading={isLoading || !hasApiKey}
-            onGenerateKeywordSuggestions={handleGenerateKeywordSuggestionsLocal} isSuggestingKeywords={isSuggestingKeywords} keywordSuggestions={keywordSuggestions} keywordSuggestionError={keywordSuggestionError} hasGeneratedKeywordSuggestions={hasGeneratedKeywordSuggestions}
-            scriptType={scriptType} setScriptType={setScriptType}
-            numberOfSpeakers={numberOfSpeakers} setNumberOfSpeakers={setNumberOfSpeakers}
-            onSuggestStyle={handleSuggestStyle} isSuggestingStyle={isSuggestingStyle} styleSuggestionError={styleSuggestionError} hasSuggestedStyle={hasSuggestedStyle}
-            lengthType={lengthType} setLengthType={setLengthType} videoDuration={videoDuration} setVideoDuration={setVideoDuration}
-            savedIdeas={savedIdeas} onSaveIdea={handleSaveIdea} onOpenSavedIdeasModal={() => setIsSavedIdeasModalOpen(true)}
-            onParseFile={handleParseFileLocal} isParsingFile={isParsing} parsingFileError={parsingError} uploadedIdeas={uploadedIdeas}
-            aiProvider={aiProvider} setAiProvider={setAiProvider} selectedModel={selectedModel} setSelectedModel={setSelectedModel}
-            isFinanceMode={isFinanceMode}
-            apiKeys={apiKeys}
+            title={brief.brief.title}
+            setTitle={brief.setTitle}
+            outlineContent={brief.brief.outlineContent}
+            setOutlineContent={brief.setOutlineContent}
+            onGenerateSuggestions={() => ideas.generateSuggestions(brief.brief.title)}
+            isSuggesting={ideas.isSuggesting}
+            suggestions={ideas.topicSuggestions}
+            suggestionError={ideas.suggestionError}
+            hasGeneratedTopicSuggestions={ideas.hasGeneratedTopicSuggestions}
+            targetAudience={brief.brief.targetAudience}
+            setTargetAudience={brief.setTargetAudience}
+            styleOptions={brief.brief.styleOptions}
+            setStyleOptions={brief.setStyleOptions}
+            keywords={brief.brief.keywords}
+            setKeywords={brief.setKeywords}
+            formattingOptions={brief.brief.formattingOptions}
+            setFormattingOptions={brief.setFormattingOptions}
+            wordCount={brief.brief.wordCount}
+            setWordCount={brief.setWordCount}
+            scriptParts={brief.brief.scriptParts}
+            setScriptParts={brief.setScriptParts}
+            onGenerate={handleGenerate}
+            isLoading={generation.isLoading || !hasApiKey}
+            onGenerateKeywordSuggestions={() => ideas.generateKeywordSuggestions(brief.brief.title)}
+            isSuggestingKeywords={ideas.isSuggestingKeywords}
+            keywordSuggestions={ideas.keywordSuggestions}
+            keywordSuggestionError={ideas.keywordSuggestionError}
+            hasGeneratedKeywordSuggestions={ideas.hasGeneratedKeywordSuggestions}
+            scriptType={brief.brief.scriptType}
+            setScriptType={brief.setScriptType}
+            numberOfSpeakers={brief.brief.numberOfSpeakers}
+            setNumberOfSpeakers={brief.setNumberOfSpeakers}
+            onSuggestStyle={() => ideas.suggestStyle(brief.brief.title)}
+            isSuggestingStyle={ideas.isSuggestingStyle}
+            styleSuggestionError={ideas.styleSuggestionError}
+            hasSuggestedStyle={ideas.hasSuggestedStyle}
+            lengthType={brief.brief.lengthType}
+            setLengthType={brief.setLengthType}
+            videoDuration={brief.brief.videoDuration}
+            setVideoDuration={brief.setVideoDuration}
+            savedIdeas={ideas.savedIdeas}
+            onSaveIdea={ideas.saveIdea}
+            onOpenSavedIdeasModal={() => modals.open('savedIdeas')}
+            onParseFile={ideas.parseFile}
+            isParsingFile={ideas.isParsing}
+            parsingFileError={ideas.parsingError}
+            uploadedIdeas={ideas.uploadedIdeas}
+            aiProvider={aiSettings.aiProvider}
+            setAiProvider={aiSettings.setAiProvider}
+            selectedModel={aiSettings.selectedModel}
+            setSelectedModel={aiSettings.setSelectedModel}
+            isFinanceMode={brief.brief.isFinanceMode}
+            apiKeys={aiSettings.apiKeys}
           />
         </div>
         <div className="lg:col-span-6">
           <OutputDisplay
-            title={title}
-            script={generatedScript} isLoading={isLoading} error={error}
-            onStartSequentialGenerate={handleStartSequentialGenerate} 
-            onStopSequentialGenerate={handleStopSequentialGenerate}
-            isGeneratingSequentially={isGeneratingSequentially} 
-            onGenerateNextPart={() => handleGenerateNextPart()} 
-            currentPart={currentPartIndex} 
-            totalParts={outlineParts.length}
-            revisionCount={revisionCount} 
-            onGenerateVisualPrompt={handleGenerateVisualPrompt} 
-            onGenerateAllVisualPrompts={handleGenerateAllVisualPrompts} 
-            isGeneratingAllVisualPrompts={isGeneratingAllVisualPrompts}
-            scriptType={scriptType} 
-            hasGeneratedAllVisualPrompts={hasGeneratedAllVisualPrompts} 
-            visualPromptsCache={visualPromptsCache} 
-            loadingVisualPromptsParts={loadingVisualPromptsParts}
-            onImportScript={(file) => {
-                 const reader = new FileReader();
-                 reader.onload = (e) => setGeneratedScript(e.target?.result as string);
-                 reader.readAsText(file);
+            title={brief.brief.title}
+            script={generation.generatedScript}
+            isLoading={generation.isLoading}
+            error={generation.error}
+            onStartSequentialGenerate={generation.startSequential}
+            onStopSequentialGenerate={generation.stopSequential}
+            isGeneratingSequentially={generation.isGeneratingSequentially}
+            onGenerateNextPart={() => generation.generateNextPart()}
+            currentPart={generation.currentPartIndex}
+            totalParts={generation.totalParts}
+            revisionCount={generation.revisionCount}
+            onGenerateVisualPrompt={(scene) => {
+              modals.open('visualPrompt');
+              return scenes.generateVisualPromptForScene(scene).then(() => undefined);
             }}
-            autoContinue={autoContinue}
-            setAutoContinue={setAutoContinue}
+            onGenerateAllVisualPrompts={() => {
+              modals.open('allVisualPrompts');
+              return scenes.generateAllVisualPromptsForScript(generation.generatedScript);
+            }}
+            isGeneratingAllVisualPrompts={scenes.isGeneratingAllVisualPrompts}
+            scriptType={brief.brief.scriptType}
+            hasGeneratedAllVisualPrompts={!!scenes.allVisualPrompts}
+            visualPromptsCache={scenes.visualPromptsCache}
+            loadingVisualPromptsParts={scenes.loadingVisualPromptsParts}
+            onImportScript={(file) => {
+              const reader = new FileReader();
+              reader.onload = (e) => generation.setGeneratedScript((e.target?.result as string) ?? '');
+              reader.readAsText(file);
+            }}
+            autoContinue={generation.autoContinue}
+            setAutoContinue={generation.setAutoContinue}
           />
         </div>
-         <div className="lg:col-span-3">
-            <SideToolsPanel
-                script={generatedScript} 
-                targetWordCount={effectiveTargetWordCount}
-                revisionPrompt={revisionPrompt} setRevisionPrompt={setRevisionPrompt}
-                onRevise={handleReviseScript} onSummarizeScript={() => setIsSummarizeModalOpen(true)} isLoading={isLoading} isSummarizing={isSummarizing} hasSummarizedScript={hasSummarizedScript}
-                onOpenLibrary={() => setIsLibraryOpen(true)} onSaveToLibrary={handleSaveToLibrary} hasSavedToLibrary={hasSavedToLibrary}
-                onExtractAndCount={handleExtractDialogue} 
-                onOpenDialogueModal={() => setIsDialogueModalOpen(true)}
-                wordCountStats={wordCountStats} isExtracting={isExtracting}
-                onScoreScript={handleScoreScript} isScoring={isScoring}
-                onGenerateAllPrompts={handleGenerateAllSegmentPrompts}
-                onDownloadAllPrompts={handleDownloadAllPrompts}
-                isGeneratingAllPrompts={isGeneratingAllSegmentPrompts}
-            />
+        <div className="lg:col-span-3">
+          <SideToolsPanel
+            script={generation.generatedScript}
+            targetWordCount={brief.effectiveTargetWordCount}
+            revisionPrompt={generation.revisionPrompt}
+            setRevisionPrompt={generation.setRevisionPrompt}
+            onRevise={generation.revise}
+            onSummarizeScript={() => modals.open('summarize')}
+            isLoading={generation.isLoading}
+            isSummarizing={scenes.isSummarizing}
+            hasSummarizedScript={!!scenes.summarizedScript}
+            onOpenLibrary={() => modals.open('library')}
+            onSaveToLibrary={() => library.saveCurrent({
+              title: brief.brief.title,
+              outlineContent: brief.brief.outlineContent,
+              script: generation.generatedScript,
+            })}
+            hasSavedToLibrary={library.hasSaved}
+            onExtractAndCount={handleOpenDialogue}
+            onOpenDialogueModal={() => modals.open('dialogue')}
+            wordCountStats={dialogue.stats}
+            isExtracting={dialogue.isExtracting}
+            onScoreScript={handleScoreClick}
+            isScoring={review.isScoring}
+            onGenerateAllPrompts={() => scenes.generateAllSegmentPrompts(generation.generatedScript)}
+            onDownloadAllPrompts={() => {
+              if (scenes.visualPromptsCache.size === 0) {
+                generation.setExternalError('Chưa có prompt nào được tạo để tải về.');
+                return;
+              }
+              const all: string[] = [];
+              scenes.visualPromptsCache.forEach((prompts) => {
+                prompts.forEach((p) => {
+                  const flat = p.english.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
+                  all.push(flat);
+                });
+              });
+              if (all.length === 0) return;
+              const blob = new Blob([all.join('\n')], { type: 'text/plain;charset=utf-8' });
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = `All_Prompts_${brief.brief.title.replace(/\s+/g, '_')}.txt`;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              URL.revokeObjectURL(url);
+            }}
+            isGeneratingAllPrompts={scenes.isGeneratingAllSegmentPrompts}
+          />
         </div>
       </main>
-      
-      <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={() => setIsApiKeyModalOpen(false)} currentApiKeys={apiKeys} onSaveKeys={handleSaveApiKeys} />
+
+      <ApiKeyModal
+        isOpen={modals.isOpen('apiKey')}
+        onClose={() => modals.close('apiKey')}
+        currentApiKeys={aiSettings.apiKeys}
+        onSaveKeys={aiSettings.saveApiKeys}
+      />
       <LibraryModal
-        isOpen={isLibraryOpen}
-        onClose={() => setIsLibraryOpen(false)}
-        library={library}
-        onLoad={handleLoadScript}
-        onDelete={handleDeleteScript}
-        onExport={() => downloadLibrary(library)}
-        onImport={(content) => {
-            try {
-                const result = parseLibraryImport(content);
-                setLibrary(prev => [...result.items, ...prev]);
-                setHasSavedToLibrary(true);
-                if (result.warnings.length > 0) {
-                    setNotification(`Đã nhập ${result.items.length} mục. Cảnh báo: ${result.warnings.join(' ')}`);
-                } else {
-                    setNotification(`Đã nhập ${result.items.length} mục vào thư viện.`);
-                }
-            } catch (err) {
-                const message = err instanceof AppError ? err.message : 'Không thể đọc file thư viện.';
-                setError(message);
-            }
+        isOpen={modals.isOpen('library')}
+        onClose={() => modals.close('library')}
+        library={library.library}
+        onLoad={handleLoadLibraryItem}
+        onDelete={library.removeItem}
+        onExport={library.exportAll}
+        onImport={async (content) => {
+          try {
+            const result = await library.importFromText(content);
+            aiSettings.setLocalNotification(
+              result.warnings.length > 0
+                ? `Đã nhập ${result.imported} mục. Cảnh báo: ${result.warnings.join(' ')}`
+                : `Đã nhập ${result.imported} mục vào thư viện.`,
+            );
+          } catch (err) {
+            const message = err instanceof Error ? err.message : 'Không thể đọc file thư viện.';
+            generation.setExternalError(message);
+          }
         }}
       />
-      <SavedIdeasModal isOpen={isSavedIdeasModalOpen} onClose={() => setIsSavedIdeasModalOpen(false)} ideas={savedIdeas} onLoad={(i) => { setTitle(i.title); setOutlineContent(i.outline); setIsSavedIdeasModalOpen(false); }} onDelete={(id) => setSavedIdeas(prev => prev.filter(i => i.id !== id))} />
-      <DialogueModal 
-          isOpen={isDialogueModalOpen} 
-          onClose={() => setIsDialogueModalOpen(false)} 
-          dialogue={extractedDialogue} 
-          isLoading={isExtracting} 
-          error={extractionError} 
-          onReExtract={handleExtractDialogue}
+      <SavedIdeasModal
+        isOpen={modals.isOpen('savedIdeas')}
+        onClose={() => modals.close('savedIdeas')}
+        ideas={ideas.savedIdeas}
+        onLoad={handleLoadSavedIdea}
+        onDelete={ideas.deleteSavedIdea}
       />
-      <ScoreModal isOpen={isScoreModalOpen} onClose={() => setIsScoreModalOpen(false)} score={scriptScore} isLoading={isScoring} error={scoringError} />
-      <VisualPromptModal isOpen={isVisualPromptModalOpen} onClose={() => setIsVisualPromptModalOpen(false)} prompts={visualPrompts} isLoading={isGeneratingVisualPrompt} error={visualPromptError} />
-      <AllVisualPromptsModal isOpen={isAllVisualPromptsModalOpen} onClose={() => setIsAllVisualPromptsModalOpen(false)} prompts={allVisualPrompts} isLoading={isGeneratingAllVisualPrompts} error={allVisualPromptsError} />
-      <SummarizeModal isOpen={isSummarizeModalOpen} onClose={() => setIsSummarizeModalOpen(false)} summary={summarizedScript} isLoading={isSummarizing} error={summarizationError} scriptType={scriptType} title={title} onGenerate={handleSummarizeScript} onGenerateVideoPrompt={handleGenerateVideoPromptLocal} />
-
+      <DialogueModal
+        isOpen={modals.isOpen('dialogue')}
+        onClose={() => modals.close('dialogue')}
+        dialogue={dialogue.dialogue}
+        isLoading={dialogue.isExtracting}
+        error={dialogue.error}
+        onReExtract={handleOpenDialogue}
+      />
+      <ScoreModal
+        isOpen={modals.isOpen('score')}
+        onClose={() => modals.close('score')}
+        score={review.score}
+        isLoading={review.isScoring}
+        error={review.error}
+      />
+      <VisualPromptModal
+        isOpen={modals.isOpen('visualPrompt')}
+        onClose={() => modals.close('visualPrompt')}
+        prompts={scenes.visualPrompts}
+        isLoading={scenes.isGeneratingVisualPrompt}
+        error={scenes.visualPromptError}
+      />
+      <AllVisualPromptsModal
+        isOpen={modals.isOpen('allVisualPrompts')}
+        onClose={() => modals.close('allVisualPrompts')}
+        prompts={scenes.allVisualPrompts}
+        isLoading={scenes.isGeneratingAllVisualPrompts}
+        error={scenes.allVisualPromptsError}
+      />
+      <SummarizeModal
+        isOpen={modals.isOpen('summarize')}
+        onClose={() => modals.close('summarize')}
+        summary={scenes.summarizedScript}
+        isLoading={scenes.isSummarizing}
+        error={scenes.summarizationError}
+        scriptType={brief.brief.scriptType}
+        title={brief.brief.title}
+        onGenerate={handleSummarizeClick}
+        onGenerateVideoPrompt={scenes.generateVideoPrompt}
+      />
     </div>
   );
 };
