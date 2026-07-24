@@ -81,27 +81,43 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
         setValidationStatus(prev => ({ ...prev, [provider]: { state: 'checking', message: null } }));
         
         try {
-            await validateApiKey(keysToProcess[0], provider);
+            const isValid = await validateApiKey(keysToProcess[0], provider);
             
             setLocalApiKeys(prev => {
                 const updatedKeys = [...prev[provider], ...keysToProcess];
                 return { ...prev, [provider]: updatedKeys };
             });
 
-            setValidationStatus(prev => ({ 
-                ...prev, 
-                [provider]: { state: 'valid', message: `Đã thêm ${keysToProcess.length} key thành công!` } 
-            }));
+            if (!isValid) {
+                setValidationStatus(prev => ({ 
+                    ...prev, 
+                    [provider]: { state: 'valid', message: `Đã thêm ${keysToProcess.length} key, nhưng kiểm tra (ping) thất bại (có thể do mạng).` } 
+                }));
+            } else {
+                setValidationStatus(prev => ({ 
+                    ...prev, 
+                    [provider]: { state: 'valid', message: `Đã thêm ${keysToProcess.length} key thành công!` } 
+                }));
+            }
 
             setNewKeyInputs(prev => ({ ...prev, [provider]: '' }));
 
-            setTimeout(() => setValidationStatus(prev => ({ ...prev, [provider]: { state: 'idle', message: null } })), 2500);
+            setTimeout(() => setValidationStatus(prev => ({ ...prev, [provider]: { state: 'idle', message: null } })), 4000);
 
         } catch (error) {
+            // Force add even if it throws
+            setLocalApiKeys(prev => {
+                const updatedKeys = [...prev[provider], ...keysToProcess];
+                return { ...prev, [provider]: updatedKeys };
+            });
+            
             setValidationStatus(prev => ({
                 ...prev,
-                [provider]: { state: 'invalid', message: error instanceof Error ? error.message : "Lỗi xác thực key đầu tiên." }
+                [provider]: { state: 'valid', message: `Đã thêm ${keysToProcess.length} key, nhưng kiểm tra lỗi: ${error instanceof Error ? error.message : "Không xác định"}.` }
             }));
+            
+            setNewKeyInputs(prev => ({ ...prev, [provider]: '' }));
+            setTimeout(() => setValidationStatus(prev => ({ ...prev, [provider]: { state: 'idle', message: null } })), 4000);
         }
     };
 
