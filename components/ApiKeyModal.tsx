@@ -46,8 +46,12 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
 
     useEffect(() => {
         if (isOpen) {
-            setLocalApiKeys(JSON.parse(JSON.stringify(currentApiKeys)));
-            setNewKeyInputs({ kyma: currentApiKeys.kyma[0] || '', openai: '' });
+            const safeCurrentKeys = {
+                kyma: currentApiKeys?.kyma || [],
+                openai: currentApiKeys?.openai || []
+            };
+            setLocalApiKeys(JSON.parse(JSON.stringify(safeCurrentKeys)));
+            setNewKeyInputs({ kyma: safeCurrentKeys.kyma[0] || '', openai: '' });
             setValidationStatus({
                 kyma: { state: 'idle', message: null },
                 openai: { state: 'idle', message: null }
@@ -62,7 +66,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
     }, [isOpen, currentApiKeys]);
 
     const handleAddKey = async (provider: AiProvider) => {
-        const rawInput = newKeyInputs[provider].trim();
+        const rawInput = (newKeyInputs[provider] || '').trim();
         if (!rawInput) return;
 
         const keysToProcess = rawInput
@@ -146,17 +150,17 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
         const finalKeys = { ...localApiKeys };
         
         (['openai'] as AiProvider[]).forEach(provider => {
-            const raw = newKeyInputs[provider].trim();
+            const raw = (newKeyInputs[provider] || '').trim();
             if (raw) {
                 const keysToProcess = raw.split('\n').map(k => k.trim()).filter(k => k && !finalKeys[provider].includes(k));
                 if (keysToProcess.length > 0) {
-                    finalKeys[provider] = [...finalKeys[provider], ...keysToProcess];
+                    finalKeys[provider] = [...(finalKeys[provider] || []), ...keysToProcess];
                 }
             }
         });
 
         // Always save Kyma key exactly as it is in the input
-        const kymaVal = newKeyInputs.kyma.trim();
+        const kymaVal = (newKeyInputs.kyma || '').trim();
         finalKeys.kyma = kymaVal ? [kymaVal] : [];
         
         onSaveKeys(finalKeys);
@@ -221,7 +225,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
                             />
                             <button
                                 onClick={() => {
-                                    const key = newKeyInputs.kyma.trim();
+                                    const key = (newKeyInputs.kyma || '').trim();
                                     if (!key) return;
                                     setValidationStatus(prev => ({ ...prev, kyma: { state: 'checking', message: null } }));
                                     validateApiKey(key, 'kyma').then(isValid => {
@@ -236,7 +240,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
                                         }));
                                     });
                                 }}
-                                disabled={status.state === 'checking' || !newKeyInputs.kyma.trim()}
+                                disabled={status.state === 'checking' || !(newKeyInputs.kyma || '').trim()}
                                 className="bg-accent hover:brightness-110 text-white font-bold py-2 px-3 rounded-md transition disabled:opacity-50 min-w-[120px] text-xs"
                             >
                                 {status.state === 'checking' ? '...' : 'Kiểm tra & Lưu'}
@@ -255,7 +259,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
                         </div>
                         <button
                             onClick={() => handleAddKey(provider)}
-                            disabled={status.state === 'checking' || !newKeyInputs[provider].trim()}
+                            disabled={status.state === 'checking' || !(newKeyInputs[provider] || '').trim()}
                             className="w-full bg-accent hover:brightness-110 text-white font-bold py-2 px-3 rounded-md transition disabled:opacity-50 flex items-center justify-center gap-2 text-xs"
                         >
                             {status.state === 'checking' ? (
