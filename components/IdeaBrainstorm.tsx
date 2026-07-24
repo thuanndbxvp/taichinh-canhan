@@ -43,13 +43,14 @@ export const IdeaBrainstorm: React.FC<IdeaBrainstormProps> = ({ setTitle, setOut
     const isMounted = useRef(true);
 
     const initializeChat = useCallback(() => {
-        if (aiProvider !== 'gemini') {
+        // Phase 0: Brainstorm hiện chỉ hoạt động với provider Kyma (giao thức OpenAI-compatible).
+        if (aiProvider !== 'kyma') {
             chatRef.current = null;
             if (isMounted.current) setError(null);
             return;
         }
         try {
-            const apiKey = getApiKey('gemini');
+            const apiKey = getApiKey('kyma');
             const ai = new GoogleGenAI({ apiKey });
             chatRef.current = ai.chats.create({
                 model: selectedModel,
@@ -100,16 +101,16 @@ export const IdeaBrainstorm: React.FC<IdeaBrainstormProps> = ({ setTitle, setOut
         try {
             let modelResponseText: string;
             
-            if (aiProvider === 'gemini') {
+            if (aiProvider === 'kyma') {
                 if (!chatRef.current) {
                     initializeChat();
                     if (!chatRef.current) {
-                        throw new Error("Failed to reconnect chat session. Please check your Gemini API key.");
+                        throw new Error("Failed to reconnect chat session. Please check your Kyma API key.");
                     }
                 }
                 const response = await chatRef.current.sendMessage({ message: userInput });
                 modelResponseText = response.text;
-            } else { // OpenAI
+            } else { // openai
                 const apiKey = getApiKey('openai');
                 const messagesForApi = [
                     { role: 'system', content: systemPrompt },

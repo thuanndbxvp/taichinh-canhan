@@ -118,7 +118,7 @@ export const VisualPromptModal: React.FC<VisualPromptModalProps> = ({ isOpen, on
       >
         <div className="flex justify-between items-center p-5 border-b border-border bg-secondary/50 rounded-t-xl">
           <div>
-            <h2 className="text-xl font-bold text-accent">Gợi ý hình ảnh kinh dị dã sử</h2>
+            <h2 className="text-xl font-bold text-accent">Gợi ý hình ảnh minh hoạ</h2>
             <p className="text-xs text-text-secondary mt-1">AI đã phân tích đoạn kịch bản và tạo 4 bối cảnh trực quan nhất.</p>
           </div>
           <button onClick={onClose} className="text-text-secondary hover:text-text-primary text-3xl font-light transition-colors leading-none">&times;</button>

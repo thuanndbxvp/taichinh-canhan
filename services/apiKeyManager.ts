@@ -66,10 +66,17 @@ class ApiKeyManager {
             }
 
             // Phát sự kiện thông báo key đã được xoay
-            window.dispatchEvent(new CustomEvent('apiKeyRotated', { 
-                detail: { provider, failedKey } 
+            window.dispatchEvent(new CustomEvent('apiKeyRotated', {
+                detail: { provider, failedKey }
             }));
         }
+    }
+
+    /**
+     * Alias ngữ nghĩa: key bị provider từ chối (401/403) -> rotate.
+     */
+    public reportInvalidKey(provider: AiProvider, failedKey: string) {
+        this.reportError(provider, failedKey);
     }
 
     private processQueue(provider: AiProvider) {

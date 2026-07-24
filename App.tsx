@@ -13,12 +13,15 @@ import { SideToolsPanel } from './components/SideToolsPanel';
 import { ScoreModal } from './components/ScoreModal';
 import { generateScript, generateScriptOutline, generateTopicSuggestions, reviseScript, generateScriptPart, extractDialogue, generateKeywordSuggestions, validateApiKey, generateVisualPrompt, generateAllVisualPrompts, summarizeScriptForScenes, suggestStyleOptions, parseIdeasFromFile, scoreScript, generateSingleVideoPrompt, parseOutlineIntoSegments } from './services/aiService';
 import type { StyleOptions, FormattingOptions, LibraryItem, GenerationParams, VisualPrompt, AllVisualPromptsResult, ScriptPartSummary, ScriptType, NumberOfSpeakers, CachedData, TopicSuggestionItem, SavedIdea, AiProvider, WordCountStats, SummarizeConfig, SceneSummary } from './types';
-import { STYLE_OPTIONS, LANGUAGE_OPTIONS, DEFAULT_KYMA_MODELS } from './constants';
+import { STYLE_OPTIONS, LANGUAGE_OPTIONS, DEFAULT_KYMA_MODELS, APP_BRAND } from './constants';
 import { CogIcon } from './components/icons/CogIcon';
 import { Tooltip } from './components/Tooltip';
 import { CheckIcon } from './components/icons/CheckIcon';
 import { apiKeyManager } from './services/apiKeyManager';
 import { BoltIcon } from './components/icons/BoltIcon';
+import { stripMarkdownForWordCount, countWords } from './src/lib/markdown';
+import { downloadLibrary, parseLibraryImport } from './src/lib/libraryIo';
+import { AppError } from './src/lib/errors';
 
 // Make TypeScript aware of the global XLSX object from the CDN
 declare const XLSX: any;
@@ -374,24 +377,7 @@ const App: React.FC = () => {
 
   // Helper function to clean text for word counting and TTS readiness
   const cleanTextForCount = (text: string): string => {
-    return text
-        .replace(/\*\*\*+/g, '') // Remove visual separators like ***
-        .replace(/\[.*?\]/g, '') // Remove technical notes [SFX], [Scene]
-        .replace(/\*\*\s*#+.*?\*\*/g, '') // Remove bolded headers like **## Title**
-        .replace(/^\s*\*\*#+.*?\*\*/gm, '') // Remove bolded headers starting lines
-        .replace(/\*\*\s*\(.*?\)\s*\*\*/g, '') // Remove bold tone instructions like **(Narrator Voice)**
-        .replace(/\*\s*\(.*?\)\s*\*/g, '') // Remove italic tone instructions like *(Acting instructions)*
-        .replace(/\(.*?Voice.*?\)/gi, '') // Remove non-markdown voice notes in parentheses
-        .replace(/\*\*.*?\*\*/g, (match) => match.slice(2, -2)) // Unbold remaining actual text
-        .replace(/\*.*?\*/g, (match) => match.slice(1, -1)) // Unitalic remaining actual text
-        .replace(/^Visual:.*$/gim, '') // Remove Visual: lines
-        .replace(/^Audio:.*$/gim, '') // Remove Audio: lines
-        .replace(/^SFX:.*$/gim, '') // Remove SFX: lines
-        .replace(/^Scene:.*$/gim, '') // Remove Scene: lines
-        .replace(/#+.*$/gm, '') // Remove header lines
-        .replace(/\n\s*\n/g, '\n') // Remove excessive empty lines
-        .replace(/\n+/g, ' ') // Replace newlines with spaces for an accurate word count flow
-        .trim();
+    return stripMarkdownForWordCount(text);
   };
 
   const handleExtractDialogue = useCallback(async () => {
@@ -460,13 +446,10 @@ const App: React.FC = () => {
         setExtractedDialogue(dialogue);
         
         // Calculate stats accurately
-        const statsSections = Object.entries(dialogue).map(([title, text]) => {
-            const cleanText = cleanTextForCount(text);
-            return {
-                title,
-                count: cleanText.split(/\s+/).filter(Boolean).length
-            };
-        });
+        const statsSections = Object.entries(dialogue).map(([title, text]) => ({
+            title,
+            count: countWords(text),
+        }));
         const total = statsSections.reduce((sum, s) => sum + s.count, 0);
         setWordCountStats({ sections: statsSections, total });
         setHasExtractedDialogue(true);
@@ -670,19 +653,15 @@ const App: React.FC = () => {
 
 
   const handleGenerateVideoPromptLocal = async (scene: SceneSummary, partIndex: number, config: SummarizeConfig) => {
-    try {
-        const videoPrompt = await generateSingleVideoPrompt(scene, config, aiProvider, selectedModel);
-        setSummarizedScript(prev => {
-            if (!prev) return null;
-            const next = [...prev];
-            next[partIndex].scenes = next[partIndex].scenes.map(s => 
-                s.sceneNumber === scene.sceneNumber ? { ...s, videoPrompt } : s
-            );
-            return next;
-        });
-    } catch (err) {
-        throw err;
-    }
+    const videoPrompt = await generateSingleVideoPrompt(scene, config, aiProvider, selectedModel);
+    setSummarizedScript(prev => {
+        if (!prev) return null;
+        const next = [...prev];
+        next[partIndex].scenes = next[partIndex].scenes.map(s =>
+            s.sceneNumber === scene.sceneNumber ? { ...s, videoPrompt } : s
+        );
+        return next;
+    });
   };
 
   const handleSaveApiKeys = (keysToSave: Record<AiProvider, string[]>) => setApiKeys(keysToSave);
@@ -737,20 +716,21 @@ const App: React.FC = () => {
         )}
       <header className={`bg-secondary/60 border-b border-border p-4 shadow-sm flex justify-between items-center sticky top-0 z-20 backdrop-blur-sm ${isFinanceMode ? 'border-amber-900/30' : ''}`}>
         <div className="flex-1 flex gap-4 items-center">
-            <button 
+            <button
                 onClick={() => {
                     const newState = !isFinanceMode;
                     setisFinanceMode(newState);
                     if (newState) {
+                        // Bật Chú Que Tài Chính: thiết lập cấu hình tối ưu cho kênh tài chính cá nhân.
                         setThemeColor('#f59e0b');
-                        setStyleOptions({ expression: 'Ominous', style: 'Cinematic Horror' });
-                        setTargetAudience('English');
-                        setFormattingOptions(prev => ({ ...prev, bullets: false, bold: false }));
-                        setWordCount('5000');
-                        setVideoDuration('30');
+                        setStyleOptions({ expression: 'Empathetic', style: 'Storytelling' });
+                        setTargetAudience('Vietnamese');
+                        setFormattingOptions(prev => ({ ...prev, bullets: true, bold: true }));
+                        setWordCount('1200');
+                        setVideoDuration('8');
                     } else {
                         setThemeColor('#ef4444');
-                        setTargetAudience(LANGUAGE_OPTIONS[0].value);
+                        setTargetAudience('Vietnamese');
                         setFormattingOptions(prev => ({ ...prev, bullets: true, bold: true }));
                         setWordCount('800');
                         setVideoDuration('5');
@@ -759,14 +739,14 @@ const App: React.FC = () => {
                 className={`px-4 py-2 rounded-lg font-bold text-xs transition-all flex items-center gap-2 border ${isFinanceMode ? 'bg-amber-900/40 text-amber-500 border-amber-500 shadow-lg shadow-amber-900/20' : 'bg-secondary text-text-secondary border-border hover:text-text-primary'}`}
             >
                 <BoltIcon className="w-4 h-4" />
-                {isFinanceMode ? 'DARK FRONTIERS: ON' : 'DARK FRONTIERS: OFF'}
+                {isFinanceMode ? 'CHÚ QUE TÀI CHÍNH: ON' : 'CHÚ QUE TÀI CHÍNH: OFF'}
             </button>
         </div>
         <div className="flex-1 text-center">
             <a href="/" className="inline-flex justify-center items-center gap-3 no-underline">
               <YoutubeLogoIcon />
               <h1 className="text-2xl font-bold" style={{color: 'var(--color-accent)'}}>
-                {isFinanceMode ? 'Dark Frontiers AI' : 'Youtube Script Generator'}
+                {isFinanceMode ? APP_BRAND.name : 'YouTube Script Generator'}
               </h1>
             </a>
         </div>
@@ -851,7 +831,29 @@ const App: React.FC = () => {
       </main>
       
       <ApiKeyModal isOpen={isApiKeyModalOpen} onClose={() => setIsApiKeyModalOpen(false)} currentApiKeys={apiKeys} onSaveKeys={handleSaveApiKeys} />
-      <LibraryModal isOpen={isLibraryOpen} onClose={() => setIsLibraryOpen(false)} library={library} onLoad={handleLoadScript} onDelete={handleDeleteScript} onExport={() => {}} onImport={() => {}} />
+      <LibraryModal
+        isOpen={isLibraryOpen}
+        onClose={() => setIsLibraryOpen(false)}
+        library={library}
+        onLoad={handleLoadScript}
+        onDelete={handleDeleteScript}
+        onExport={() => downloadLibrary(library)}
+        onImport={(content) => {
+            try {
+                const result = parseLibraryImport(content);
+                setLibrary(prev => [...result.items, ...prev]);
+                setHasSavedToLibrary(true);
+                if (result.warnings.length > 0) {
+                    setNotification(`Đã nhập ${result.items.length} mục. Cảnh báo: ${result.warnings.join(' ')}`);
+                } else {
+                    setNotification(`Đã nhập ${result.items.length} mục vào thư viện.`);
+                }
+            } catch (err) {
+                const message = err instanceof AppError ? err.message : 'Không thể đọc file thư viện.';
+                setError(message);
+            }
+        }}
+      />
       <SavedIdeasModal isOpen={isSavedIdeasModalOpen} onClose={() => setIsSavedIdeasModalOpen(false)} ideas={savedIdeas} onLoad={(i) => { setTitle(i.title); setOutlineContent(i.outline); setIsSavedIdeasModalOpen(false); }} onDelete={(id) => setSavedIdeas(prev => prev.filter(i => i.id !== id))} />
       <DialogueModal 
           isOpen={isDialogueModalOpen} 

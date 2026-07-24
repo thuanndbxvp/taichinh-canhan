@@ -1,7 +1,25 @@
 
-// Literal types from constants
-export type Expression = 'Formal' | 'Informative' | 'Conversational' | 'Persuasive' | 'Humorous' | 'Empathetic' | 'Inspirational' | 'Authoritative' | 'Personal' | 'Professional' | 'Ominous' | 'Gritty' | 'Melancholic';
-export type Style = 'Narrative' | 'Descriptive' | 'Expository' | 'Persuasive' | 'Technical' | 'Academic' | 'Business' | 'Cinematic Horror' | 'Survival Memoir';
+// Ngôn ngữ/giọng điệu mặc định cho Finance Content Studio (Chú Que persona).
+export type Expression =
+  | 'Empathetic'
+  | 'Professional'
+  | 'Conversational'
+  | 'Informative'
+  | 'Authoritative'
+  | 'Inspirational'
+  | 'Persuasive'
+  | 'Humorous'
+  | 'Personal'
+  | 'Formal';
+
+export type Style =
+  | 'Narrative'
+  | 'Expository'
+  | 'Persuasive'
+  | 'Analytical'
+  | 'Conversational'
+  | 'Storytelling'
+  | 'Educational';
 export type ScriptType = 'Video' | 'Podcast';
 export type NumberOfSpeakers = 'Auto' | '2' | '3' | '4' | '5';
 export type AiProvider = 'kyma' | 'openai';
