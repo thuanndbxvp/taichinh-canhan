@@ -8,7 +8,7 @@ interface SavedIdeasModalProps {
   onClose: () => void;
   ideas: SavedIdea[];
   onLoad: (idea: SavedIdea) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: number) => void | Promise<void>;
 }
 
 export const SavedIdeasModal: React.FC<SavedIdeasModalProps> = ({ isOpen, onClose, ideas, onLoad, onDelete }) => {

@@ -56,7 +56,7 @@ interface ControlPanelProps {
   videoDuration: string;
   setVideoDuration: (duration: string) => void;
   savedIdeas: SavedIdea[];
-  onSaveIdea: (idea: TopicSuggestionItem) => void;
+  onSaveIdea: (idea: TopicSuggestionItem) => void | Promise<void>;
   onOpenSavedIdeasModal: () => void;
   onParseFile: (content: string) => void;
   isParsingFile: boolean;

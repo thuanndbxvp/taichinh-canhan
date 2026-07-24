@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AiProvider, SavedIdea, TopicSuggestionItem } from '../../../types';
 import { generateKeywordSuggestions, generateTopicSuggestions, parseIdeasFromFile, suggestStyleOptions } from '../../../services/aiService';
+import type { SettingsRepository } from '../../domain/Repository';
+import { getRepositoryBundle } from '../../domain/repositoryBundle';
 
-const STORAGE_KEY = 'yt-script-saved-ideas';
+const LEGACY_STORAGE_KEY = 'yt-script-saved-ideas';
 
 export interface UseIdeaWorkflowArgs {
   aiProvider: AiProvider;
@@ -29,13 +31,23 @@ export interface UseIdeaWorkflowReturn {
   parseFile: (content: string) => Promise<void>;
   generateKeywordSuggestions: (title: string) => Promise<void>;
   suggestStyle: (title: string) => Promise<void>;
-  saveIdea: (idea: TopicSuggestionItem) => void;
-  deleteSavedIdea: (id: number) => void;
+  saveIdea: (idea: TopicSuggestionItem) => Promise<void>;
+  deleteSavedIdea: (id: number) => Promise<void>;
   loadSavedIdea: (idea: SavedIdea) => { title: string; outlineContent: string };
   clearAll: () => void;
+  /**
+   * Phase 3: truy cập SettingsRepository (cho component cần patch).
+   */
+  settings: SettingsRepository;
 }
 
 export function useIdeaWorkflow({ aiProvider, selectedModel }: UseIdeaWorkflowArgs): UseIdeaWorkflowReturn {
+  const settingsRef = useRef<SettingsRepository | null>(null);
+  if (!settingsRef.current) {
+    settingsRef.current = getRepositoryBundle().settings;
+  }
+  const settings = settingsRef.current;
+
   const [topicSuggestions, setTopicSuggestions] = useState<TopicSuggestionItem[]>([]);
   const [isSuggesting, setIsSuggesting] = useState<boolean>(false);
   const [suggestionError, setSuggestionError] = useState<string | null>(null);
@@ -57,17 +69,63 @@ export function useIdeaWorkflow({ aiProvider, selectedModel }: UseIdeaWorkflowAr
   const [savedIdeas, setSavedIdeas] = useState<SavedIdea[]>([]);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setSavedIdeas(JSON.parse(raw));
-    } catch (e) {
-      console.error('Failed to load saved ideas', e);
-    }
-  }, []);
+    let cancelled = false;
+    (async () => {
+      // Phase 3: thử đọc từ SettingsRepository trước (schema mới),
+      // fallback legacy localStorage.
+      try {
+        const appSettings = await settings.get();
+        if (appSettings.savedIdeas && appSettings.savedIdeas.length > 0) {
+          if (!cancelled) {
+            setSavedIdeas(
+              appSettings.savedIdeas.map((s) => ({
+                id: hashIdToNumber(s.id),
+                title: s.title,
+                outline: s.outline,
+              })),
+            );
+          }
+          return;
+        }
+      } catch (e) {
+        console.error('[useIdeaWorkflow] load settings failed:', e);
+      }
+      // Fallback: legacy localStorage.
+      try {
+        const raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+        if (raw && !cancelled) {
+          const parsed: unknown = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            setSavedIdeas(parsed as SavedIdea[]);
+          }
+        }
+      } catch (e) {
+        console.error('[useIdeaWorkflow] legacy load failed:', e);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [settings]);
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(savedIdeas));
-  }, [savedIdeas]);
+  const persistSavedIdeas = useCallback(
+    async (ideas: SavedIdea[]) => {
+      // Phase 3: persist qua SettingsRepository (id là string).
+      try {
+        await settings.patch({
+          savedIdeas: ideas.map((i) => ({
+            id: hashNumberToId(i.id),
+            title: i.title,
+            outline: i.outline,
+            savedAt: Date.now(),
+          })),
+        });
+      } catch (e) {
+        console.error('[useIdeaWorkflow] persist failed:', e);
+      }
+    },
+    [settings],
+  );
 
   const generateSuggestions = useCallback(
     async (title: string) => {
@@ -139,21 +197,35 @@ export function useIdeaWorkflow({ aiProvider, selectedModel }: UseIdeaWorkflowAr
   );
 
   const saveIdea = useCallback(
-    (idea: TopicSuggestionItem) => {
+    async (idea: TopicSuggestionItem) => {
+      let next: SavedIdea[] = [];
       setSavedIdeas((prev) => {
-        if (prev.some((i) => i.title === idea.title)) return prev;
-        return [
+        if (prev.some((i) => i.title === idea.title)) {
+          next = prev;
+          return prev;
+        }
+        next = [
           { id: Date.now(), title: idea.title, vietnameseTitle: idea.vietnameseTitle, outline: idea.outline },
           ...prev,
         ];
+        return next;
       });
+      await persistSavedIdeas(next);
     },
-    [],
+    [persistSavedIdeas],
   );
 
-  const deleteSavedIdea = useCallback((id: number) => {
-    setSavedIdeas((prev) => prev.filter((i) => i.id !== id));
-  }, []);
+  const deleteSavedIdea = useCallback(
+    async (id: number) => {
+      let next: SavedIdea[] = [];
+      setSavedIdeas((prev) => {
+        next = prev.filter((i) => i.id !== id);
+        return next;
+      });
+      await persistSavedIdeas(next);
+    },
+    [persistSavedIdeas],
+  );
 
   const loadSavedIdea = useCallback((idea: SavedIdea) => {
     return { title: idea.title, outlineContent: idea.outline };
@@ -192,5 +264,19 @@ export function useIdeaWorkflow({ aiProvider, selectedModel }: UseIdeaWorkflowAr
     deleteSavedIdea,
     loadSavedIdea,
     clearAll,
+    settings,
   };
+}
+
+// Helper: convert giữa string id (SettingsRepository) và number id (UI cũ).
+function hashIdToNumber(id: string): number {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) {
+    h = (Math.imul(31, h) + id.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h);
+}
+
+function hashNumberToId(num: number): string {
+  return `idea-${num.toString(36)}`;
 }
