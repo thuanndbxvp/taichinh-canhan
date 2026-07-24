@@ -1,10 +1,10 @@
-
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { ControlPanel } from './components/ControlPanel';
 import { OutputDisplay } from './components/OutputDisplay';
 import { LibraryModal } from './components/LibraryModal';
 import { DialogueModal } from './components/DialogueModal';
 import { ApiKeyModal } from './components/ApiKeyModal';
+import GuideModal from './components/GuideModal';
 import { VisualPromptModal } from './components/VisualPromptModal';
 import { AllVisualPromptsModal } from './components/AllVisualPromptsModal';
 import { SummarizeModal } from './components/SummarizeModal';
@@ -101,6 +101,7 @@ const App: React.FC = () => {
   const [extractionError, setExtractionError] = useState<string | null>(null);
   
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState<boolean>(false);
+  const [isGuideModalOpen, setIsGuideModalOpen] = useState<boolean>(false);
   const [apiKeys, setApiKeys] = useState<Record<AiProvider, string[]>>({ kyma: [], openai: [] });
 
   const [isVisualPromptModalOpen, setIsVisualPromptModalOpen] = useState<boolean>(false);
@@ -769,7 +770,13 @@ const App: React.FC = () => {
               </h1>
             </a>
         </div>
-        <div className="flex-1 flex justify-end items-center gap-4">
+        <div className="flex-1 flex justify-end items-center gap-2 md:gap-4">
+            <button onClick={() => setIsGuideModalOpen(true)} className="px-3 md:px-4 py-1.5 text-sm font-semibold rounded-md border border-border text-yellow-400 hover:bg-yellow-400/10 transition-colors flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.82 1.507-2.098a5.981 5.981 0 1 0-7.514 0C9.092 15.988 9.75 16.825 9.75 17.808v.192" />
+                </svg>
+                <span className="hidden md:inline">Hướng dẫn</span>
+            </button>
             <button onClick={() => setIsApiKeyModalOpen(true)} className="px-4 py-1.5 text-sm font-semibold rounded-md border border-border text-text-secondary">API</button>
         </div>
       </header>
