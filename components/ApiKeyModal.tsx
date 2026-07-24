@@ -85,7 +85,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
         setValidationStatus(prev => ({ ...prev, [provider]: { state: 'checking', message: null } }));
         
         try {
-            const isValid = await validateApiKey(keysToProcess[0], provider);
+            const isValid = await validateApiKey(provider, keysToProcess[0]);
             
             setLocalApiKeys(prev => {
                 const updatedKeys = [...prev[provider], ...keysToProcess];
@@ -228,7 +228,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
                                     const key = (newKeyInputs.kyma || '').trim();
                                     if (!key) return;
                                     setValidationStatus(prev => ({ ...prev, kyma: { state: 'checking', message: null } }));
-                                    validateApiKey(key, 'kyma').then(isValid => {
+                                    validateApiKey('kyma', key).then(isValid => {
                                         setValidationStatus(prev => ({ 
                                             ...prev, 
                                             kyma: { state: isValid ? 'valid' : 'invalid', message: isValid ? 'API Key hợp lệ! Đã lưu (Bấm Lưu & Đóng để áp dụng).' : 'API Key không hợp lệ hoặc đã hết hạn.' } 
