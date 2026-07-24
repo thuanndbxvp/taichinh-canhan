@@ -127,7 +127,19 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
         localStorage.setItem('openai-base-url', openAiBaseUrl);
         localStorage.setItem('openai-custom-model', openAiModel);
         
-        onSaveKeys(localApiKeys);
+        const finalKeys = { ...localApiKeys };
+        
+        (['kyma', 'openai'] as AiProvider[]).forEach(provider => {
+            const raw = newKeyInputs[provider].trim();
+            if (raw) {
+                const keysToProcess = raw.split('\n').map(k => k.trim()).filter(k => k && !finalKeys[provider].includes(k));
+                if (keysToProcess.length > 0) {
+                    finalKeys[provider] = [...finalKeys[provider], ...keysToProcess];
+                }
+            }
+        });
+        
+        onSaveKeys(finalKeys);
         onClose();
     };
 
