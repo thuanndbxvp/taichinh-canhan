@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AiProvider, GenerationParams } from '../../../types';
 import {
   generateScriptOutline,
@@ -143,6 +143,8 @@ export function useGenerationWorkflow({
       setFullOutlineText(outline);
       if (!outline || !outline.trim()) {
         setError('AI provider trả về dàn ý rỗng. Vui lòng thử lại hoặc đổi model.');
+      } else if (autoContinue) {
+        startSequential(outline);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi không xác định.');
@@ -242,9 +244,10 @@ export function useGenerationWorkflow({
     autoContinue,
   ]);
 
-  const startSequential = useCallback(() => {
-    if (!generatedScript) return;
-    const parts = parseOutlineIntoSegments(generatedScript);
+  const startSequential = useCallback((providedOutline?: string) => {
+    const textToParse = typeof providedOutline === 'string' ? providedOutline : generatedScript;
+    if (!textToParse) return;
+    const parts = parseOutlineIntoSegments(textToParse);
     if (parts.length === 0) {
       setError('Không tìm thấy cấu trúc phần trong dàn ý. Vui lòng thử lại.');
       return;

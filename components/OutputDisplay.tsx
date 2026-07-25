@@ -207,7 +207,7 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
         event.target.value = '';
     };
     
-    const isOutline = script.includes("### Dàn Ý Chi Tiết");
+    const isOutlineState = script && currentPart === 0 && !isGeneratingSequentially && !script.includes('--- BẮT ĐẦU');
     const showActionControls = !!script;
 
     const getDisplayTitle = () => {
@@ -241,7 +241,7 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
             const sections = script.split(/(?=^#+ .*?$|^#{0,3}\s*\*\*#+ .*?)/m).filter(s => s.trim() !== '' && !s.includes('---') && !s.includes('### Dàn Ý Chi Tiết'));
             
             // If it's just the initial "BẮT ĐẦU" or "DÀN Ý", render as simple text
-            if (isOutline || script.includes('--- BẮT ĐẦU')) {
+            if (isOutlineState || script.trim() === '--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---') {
                 return (
                     <div className="prose prose-invert max-w-none prose-p:text-text-secondary">
                         <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-text-secondary bg-primary/20 p-4 rounded-lg border border-border/50">
@@ -257,7 +257,9 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
                         <thead className="bg-primary/80 text-accent font-bold text-xs uppercase tracking-wider sticky top-0">
                             <tr>
                                 <th className="p-4 border-b border-border w-1/4">Tên phân đoạn</th>
-                                <th className="p-4 border-b border-border w-3/4">Kịch bản (Ready for tts)</th>
+                                <th className="p-4 border-b border-border w-3/4">
+                                    {isOutlineState ? "Dàn ý (Chờ đắp thịt)" : "Kịch bản (Ready for tts)"}
+                                </th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/50">
@@ -315,7 +317,7 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
                 )}
             </h2>
             <div className="flex items-center gap-2 flex-wrap">
-                {script && !isLoading && isOutline && !isGeneratingSequentially && (
+                {script && !isLoading && isOutlineState && (
                     <div className="flex items-center gap-2">
                          <div className="flex items-center gap-2 bg-primary/40 px-3 py-1.5 rounded-md border border-border">
                             <input 
