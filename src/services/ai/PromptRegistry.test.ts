@@ -4,8 +4,8 @@ import { promptRegistry } from './PromptRegistry';
 import './prompts';
 
 describe('PromptRegistry', () => {
-  it('đã đăng ký finance.script', () => {
-    const p = promptRegistry.get('finance.script');
+  it('đã đăng ký finance.script.outline', () => {
+    const p = promptRegistry.get('finance.script.outline');
     expect(p.version.version).toBeDefined();
     const out = p.build({
       params: {

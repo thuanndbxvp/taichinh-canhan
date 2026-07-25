@@ -4,7 +4,6 @@ import { useGenerationWorkflow } from './useGenerationWorkflow';
 import type { ContentBrief } from '../brief/useContentBrief';
 
 vi.mock('../../../services/aiService', () => ({
-  generateScript: vi.fn(),
   generateScriptOutline: vi.fn(),
   generateScriptPart: vi.fn(),
   parseOutlineIntoSegments: vi.fn(),
@@ -44,24 +43,24 @@ describe('useGenerationWorkflow', () => {
     expect(result.current.error).toMatch(/Vui lòng nhập/);
   });
 
-  it('generate script ngắn gọi generateScript', async () => {
-    (aiService.generateScript as unknown as ReturnType<typeof vi.fn>).mockImplementation(
+  it('generate (outline-first flow) gọi generateScriptOutline cho brief default', async () => {
+    (aiService.generateScriptOutline as unknown as ReturnType<typeof vi.fn>).mockImplementation(
       async (_params: unknown, _provider: unknown, _model: unknown, onChunk?: (chunk: string) => void) => {
-        onChunk?.('script ');
-        onChunk?.('content');
-        return 'script content';
+        onChunk?.('## outline');
+        onChunk?.('\n## PHẦN 1: MỞ ĐẦU');
+        return '## outline\n## PHẦN 1: MỞ ĐẦU';
       },
     );
     const { result } = renderHook(() => useGenerationWorkflow({ brief, aiProvider: 'kyma', selectedModel: 'm' }));
     await act(async () => {
       await result.current.generate();
     });
-    expect(result.current.generatedScript).toBe('script content');
+    expect(aiService.generateScriptOutline).toHaveBeenCalled();
+    expect(result.current.generatedScript).toContain('## PHẦN 1: MỞ ĐẦU');
     expect(result.current.error).toBeNull();
-    expect(aiService.generateScript).toHaveBeenCalled();
   });
 
-  it('generate script dài gọi generateScriptOutline', async () => {
+  it('generate script dài gọi generateScriptOutline (cùng flow)', async () => {
     (aiService.generateScriptOutline as unknown as ReturnType<typeof vi.fn>).mockImplementation(
       async (_params: unknown, _provider: unknown, _model: unknown, onChunk?: (chunk: string) => void) => {
         onChunk?.('## outline');
@@ -78,8 +77,8 @@ describe('useGenerationWorkflow', () => {
     expect(result.current.generatedScript).toBe('## outline');
   });
 
-  it('generate chuyển lỗi AppError thành message', async () => {
-    (aiService.generateScript as unknown as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('boom'));
+  it('generate chuyển lỗi AppError thành message (từ outline)', async () => {
+    (aiService.generateScriptOutline as unknown as ReturnType<typeof vi.fn>).mockRejectedValue(new Error('boom'));
     const { result } = renderHook(() => useGenerationWorkflow({ brief, aiProvider: 'kyma', selectedModel: 'm' }));
     await act(async () => {
       await result.current.generate();
@@ -95,7 +94,7 @@ describe('useGenerationWorkflow', () => {
       await result.current.generate();
     });
     expect(result.current.error).toMatch(/số từ lớn hơn 0/);
-    expect(aiService.generateScript).not.toHaveBeenCalled();
+    expect(aiService.generateScriptOutline).not.toHaveBeenCalled();
   });
 
   it('generate lỗi khi videoDuration = 0 (lengthType=duration)', async () => {
@@ -106,16 +105,7 @@ describe('useGenerationWorkflow', () => {
       await result.current.generate();
     });
     expect(result.current.error).toMatch(/thời lượng video lớn hơn 0/);
-    expect(aiService.generateScript).not.toHaveBeenCalled();
-  });
-
-  it('generate script trả rỗng → set error surface cho user', async () => {
-    (aiService.generateScript as unknown as ReturnType<typeof vi.fn>).mockResolvedValue('');
-    const { result } = renderHook(() => useGenerationWorkflow({ brief, aiProvider: 'kyma', selectedModel: 'm' }));
-    await act(async () => {
-      await result.current.generate();
-    });
-    expect(result.current.error).toMatch(/AI provider trả về kịch bản rỗng/);
+    expect(aiService.generateScriptOutline).not.toHaveBeenCalled();
   });
 
   it('generate outline trả rỗng → set error surface cho user', async () => {
@@ -129,19 +119,14 @@ describe('useGenerationWorkflow', () => {
     expect(result.current.error).toMatch(/AI provider trả về dàn ý rỗng/);
   });
 
-  it('generate wordCount = 5 phút (lengthType=duration, videoDuration=5) → ~1035 từ (180 WPM + 15% buffer) → gọi generateScript', async () => {
-    (aiService.generateScript as unknown as ReturnType<typeof vi.fn>).mockImplementation(
-      async (
-        params: unknown,
-        _provider: unknown,
-        _model: unknown,
-        onChunk?: (chunk: string) => void,
-      ) => {
-        onChunk?.('script 5 phút');
+  it('generate wordCount = 5 phút (lengthType=duration, videoDuration=5) → ~1035 từ (180 WPM + 15% buffer) truyền vào outline prompt', async () => {
+    (aiService.generateScriptOutline as unknown as ReturnType<typeof vi.fn>).mockImplementation(
+      async (params: unknown, _provider: unknown, _model: unknown, onChunk?: (chunk: string) => void) => {
         // Verify buffer: 5 phút * 180 * 1.15 = 1035
         const wc = (params as { wordCount: string }).wordCount;
         expect(parseInt(wc, 10)).toBe(1035);
-        return 'script 5 phút';
+        onChunk?.('## outline');
+        return '## outline';
       },
     );
     const { result } = renderHook(() =>
@@ -154,8 +139,8 @@ describe('useGenerationWorkflow', () => {
     await act(async () => {
       await result.current.generate();
     });
-    expect(aiService.generateScript).toHaveBeenCalled();
-    expect(result.current.generatedScript).toBe('script 5 phút');
+    expect(aiService.generateScriptOutline).toHaveBeenCalled();
+    expect(result.current.generatedScript).toBe('## outline');
     expect(result.current.error).toBeNull();
   });
 

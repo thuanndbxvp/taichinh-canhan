@@ -15,9 +15,9 @@ describe('ContentBrief', () => {
     expect(deriveWordCount(480)).toBe('1656');
   });
 
-  it('deriveWordCount: minimum 100', () => {
-    expect(deriveWordCount(0)).toBe('100');
-    expect(deriveWordCount(-100)).toBe('100');
+  it('deriveWordCount: input 0 hoặc âm → 0', () => {
+    expect(deriveWordCount(0)).toBe('0');
+    expect(deriveWordCount(-100)).toBe('0');
   });
 
   it('deriveWordCount: 300s (5 phút) → 1035 từ', () => {

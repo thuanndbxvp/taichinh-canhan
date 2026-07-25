@@ -70,24 +70,6 @@ function arcInstructionFor(partOutline: string): string {
 
 // --- Registrations ---
 
-promptRegistry.register('finance.script', {
-  version: V1,
-  build({ params }) {
-    const { title, targetAudience, wordCount, styleOptions } = params;
-    const numWords = parseInt(wordCount, 10) || 0;
-    const minSpoken = Math.max(numWords, 100);
-    return {
-      messages: [
-        { role: 'system', content: FINANCE_DNA.trim() },
-        {
-          role: 'user',
-          content: `${styleInstruction(styleOptions)}\nVIẾT KỊCH BẢN TÀI CHÍNH CÁ NHÂN THEO CẤU TRÚC: "${title}".\nNGÔN NGỮ: ${targetAudience}. ĐỘ DÀI: ${wordCount} từ spoken (đã bao gồm buffer cho Markdown overhead như heading, bullet, SFX, bold — khi TTS lọc bỏ các ký hiệu này, phần spoken text thực tế phải CÒN LẠI ÍT NHẤT ${minSpoken} từ).`,
-        },
-      ],
-    };
-  },
-});
-
 promptRegistry.register('finance.script.outline', {
   version: V1,
   build({ params }) {

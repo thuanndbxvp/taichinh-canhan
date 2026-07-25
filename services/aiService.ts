@@ -57,27 +57,6 @@ const handleApiError = (error: unknown, action: string): AppError => {
 
 export { validateApiKey };
 
-export const generateScript = async (
-  params: GenerationParams,
-  provider: AiProvider,
-  model: string,
-  onChunk?: (chunk: string) => void,
-): Promise<string> => {
-  try {
-    return await callWithPrompt(
-      provider,
-      model,
-      'finance.script',
-      { params },
-      'tạo kịch bản',
-      undefined,
-      onChunk,
-    );
-  } catch (e) {
-    throw handleApiError(e, 'tạo kịch bản');
-  }
-};
-
 export const generateScriptOutline = async (
   params: GenerationParams,
   provider: AiProvider,

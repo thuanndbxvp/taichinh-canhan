@@ -41,7 +41,8 @@ describe('wordCount', () => {
 
   it('splitWordCountAcrossParts: chia đều + remainder về phần đầu', () => {
     expect(splitWordCountAcrossParts(1000, 4)).toEqual([250, 250, 250, 250]);
-    expect(splitWordCountAcrossParts(1003, 4)).toEqual([251, 250, 251, 251]);
+    // 1003 / 4 = 250 base + 3 remainder → phần 0 nhận +3 = 253
+    expect(splitWordCountAcrossParts(1003, 4)).toEqual([253, 250, 250, 250]);
   });
 
   it('splitWordCountAcrossParts: 0 phần → []', () => {
