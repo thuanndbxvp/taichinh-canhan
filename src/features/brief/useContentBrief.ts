@@ -7,6 +7,7 @@ import type {
   StyleOptions,
 } from '../../../types';
 import { APP_BRAND } from '../../../constants';
+import { minutesToTargetWords } from '../../domain/wordCount';
 
 export interface ContentBrief {
   title: string;
@@ -94,7 +95,7 @@ export function useContentBrief(initial?: ContentBriefPatch) {
   const effectiveTargetWordCount = useMemo(() => {
     if (brief.lengthType === 'duration') {
       const minutes = Math.max(0, parseInt(brief.videoDuration || '0', 10));
-      return (minutes * 150).toString();
+      return minutesToTargetWords(minutes).toString();
     }
     return brief.wordCount;
   }, [brief.lengthType, brief.videoDuration, brief.wordCount]);

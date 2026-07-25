@@ -10,13 +10,19 @@ describe('ContentBrief', () => {
     expect(b.durationSec).toBe(480);
   });
 
-  it('deriveWordCount: 480s → 1200 từ', () => {
-    expect(deriveWordCount(480)).toBe('1200');
+  it('deriveWordCount: 480s (8 phút) → 1656 từ (180 WPM + 15% buffer)', () => {
+    // 8 phút * 180 WPM * 1.15 = 1656 từ
+    expect(deriveWordCount(480)).toBe('1656');
   });
 
   it('deriveWordCount: minimum 100', () => {
     expect(deriveWordCount(0)).toBe('100');
     expect(deriveWordCount(-100)).toBe('100');
+  });
+
+  it('deriveWordCount: 300s (5 phút) → 1035 từ', () => {
+    // 5 phút * 180 WPM * 1.15 = 1035 từ
+    expect(deriveWordCount(300)).toBe('1035');
   });
 
   it('isContentBrief: true/false', () => {

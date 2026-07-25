@@ -22,9 +22,10 @@ describe('useContentBrief', () => {
     expect(result.current.effectiveTargetWordCount).toBe('1200');
   });
 
-  it('effectiveTargetWordCount = duration * 150 khi lengthType=duration', () => {
+  it('effectiveTargetWordCount = duration * 180 + 15% buffer khi lengthType=duration', () => {
     const { result } = renderHook(() => useContentBrief({ videoDuration: '8', lengthType: 'duration' }));
-    expect(result.current.effectiveTargetWordCount).toBe('1200');
+    // 8 phút * 180 WPM * 1.15 = 1656 từ
+    expect(result.current.effectiveTargetWordCount).toBe('1656');
   });
 
   it('setIsFinanceMode luôn ép về finance mode (cố định)', () => {

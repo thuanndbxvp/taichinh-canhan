@@ -33,7 +33,7 @@ const PART_KEYWORDS: { key: string; regex: RegExp }[] = [
 ];
 
 const ARC_KEYWORDS: { key: string; regex: RegExp }[] = [
-  { key: 'PHẦN 1', regex: /\bMỞ\s*ĐẦU\b[^\n]*HOOK|HOK[^\n]*SETUP|\bHOOK\b[^\n]*SETUP/i },
+  { key: 'PHẦN 1', regex: /\bMỞ\s*ĐẦU\b[^\n]*HOOK|\bHOOK\b[^\n]*SETUP/i },
   { key: 'PHẦN 2', regex: /\bBỐI\s*CẢNH\b[^\n]*VẤN\s*ĐỀ|\bVẤN\s*ĐỀ\b|\bPROBLEM\b/i },
   { key: 'PHẦN 3', regex: /\bGIẢI\s*PHẪU\b[^\n]*TOÁN|\bANALYSIS\b/i },
   { key: 'PHẦN 4', regex: /\bGIẢI\s*PHÁP\b[^\n]*THỰC\s*TẾ|\bACTIONABLE\b/i },

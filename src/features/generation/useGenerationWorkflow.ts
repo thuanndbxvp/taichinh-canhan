@@ -9,6 +9,7 @@ import {
 } from '../../../services/aiService';
 import type { ContentBrief } from '../brief/useContentBrief';
 import { AppError } from '../../lib/errors';
+import { minutesToTargetWords } from '../../domain/wordCount';
 
 const PARTS_HEADER = '--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---\n\n';
 
@@ -60,7 +61,7 @@ function buildParams(brief: ContentBrief, finalWordCount: string): GenerationPar
 function effectiveWordCount(brief: ContentBrief): string {
   if (brief.lengthType === 'duration') {
     const minutes = Math.max(0, parseInt(brief.videoDuration || '0', 10));
-    return (minutes * 150).toString();
+    return minutesToTargetWords(minutes).toString();
   }
   return brief.wordCount;
 }
@@ -165,10 +166,12 @@ export function useGenerationWorkflow({
       return;
     }
 
-    // Snapshot index & parts tại thời điểm bắt đầu. Tránh bị state batch update
-    // làm lệch khi effect fire lần thứ 2 trong lúc part trước đang chạy.
+    // Snapshot index, parts, autoContinue tại thời điểm bắt đầu. Tránh bị state batch
+    // update làm lệch khi effect fire lần thứ 2 trong lúc part trước đang chạy,
+    // hoặc user đổi autoContinue giữa chừng.
     const index = currentPartIndex;
     const parts = outlineParts;
+    const shouldAutoContinue = autoContinue;
     if (index >= parts.length) {
       setIsGeneratingSequentially(false);
       return;
@@ -199,6 +202,14 @@ export function useGenerationWorkflow({
       );
       if (isStoppingRef.current) return;
 
+      if (!partContent || !partContent.trim()) {
+        throw AppError.from(
+          'AI_PROVIDER_FAILED',
+          `AI trả về phần ${index + 1} rỗng. Vui lòng thử lại hoặc đổi model.`,
+          { action: 'generateNextPart', partIndex: index },
+        );
+      }
+
       setGeneratedScript((prev) => {
         const next = prev + partContent + '\n\n---\n\n';
         scriptRef.current = next;
@@ -208,7 +219,7 @@ export function useGenerationWorkflow({
       const nextIndex = index + 1;
       setCurrentPartIndex(nextIndex);
 
-      if (autoContinue && nextIndex < parts.length && !isStoppingRef.current) {
+      if (shouldAutoContinue && nextIndex < parts.length && !isStoppingRef.current) {
         setTimeout(() => generateNextPart(), 100);
       } else if (nextIndex >= parts.length) {
         setIsGeneratingSequentially(false);
@@ -278,12 +289,13 @@ export function useGenerationWorkflow({
     setCurrentAiAction('Đang chỉnh sửa kịch bản theo yêu cầu...');
     const params = buildParams(brief, effectiveWordCount(brief));
 
-    // Xóa script hiện tại để stream lại từ đầu, hoặc có thể nối tiếp tùy logic. Ở đây ta replace.
+    // Backup trước khi clear: nếu request fail, restore để user không mất kịch bản gốc.
+    const backupScript = generatedScript;
     setGeneratedScript('');
     scriptRef.current = '';
 
     try {
-      const revised = await reviseScript(generatedScript, revisionPrompt, params, aiProvider, selectedModel, (chunk) => {
+      await reviseScript(backupScript, revisionPrompt, params, aiProvider, selectedModel, (chunk) => {
          setGeneratedScript((prev) => {
            const next = prev + chunk;
            scriptRef.current = next;
@@ -293,6 +305,8 @@ export function useGenerationWorkflow({
       setRevisionCount((prev) => prev + 1);
       setRevisionPrompt('');
     } catch (err) {
+      setGeneratedScript(backupScript);
+      scriptRef.current = backupScript;
       setError(err instanceof Error ? err.message : 'Lỗi khi sửa kịch bản.');
     } finally {
       setIsLoading(false);

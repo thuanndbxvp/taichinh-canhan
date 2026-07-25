@@ -74,12 +74,14 @@ promptRegistry.register('finance.script', {
   version: V1,
   build({ params }) {
     const { title, targetAudience, wordCount, styleOptions } = params;
+    const numWords = parseInt(wordCount, 10) || 0;
+    const minSpoken = Math.max(numWords, 100);
     return {
       messages: [
         { role: 'system', content: FINANCE_DNA.trim() },
         {
           role: 'user',
-          content: `${styleInstruction(styleOptions)}\nVIẾT KỊCH BẢN TÀI CHÍNH CÁ NHÂN THEO CẤU TRÚC: "${title}".\nNGÔN NGỮ: ${targetAudience}. ĐỘ DÀI: ${wordCount} từ.`,
+          content: `${styleInstruction(styleOptions)}\nVIẾT KỊCH BẢN TÀI CHÍNH CÁ NHÂN THEO CẤU TRÚC: "${title}".\nNGÔN NGỮ: ${targetAudience}. ĐỘ DÀI: ${wordCount} từ spoken (đã bao gồm buffer cho Markdown overhead như heading, bullet, SFX, bold — khi TTS lọc bỏ các ký hiệu này, phần spoken text thực tế phải CÒN LẠI ÍT NHẤT ${minSpoken} từ).`,
         },
       ],
     };
@@ -126,11 +128,19 @@ Chủ đề: "${title}". Ngôn ngữ: ${targetAudience}. Phong cách: ${style}.`
 promptRegistry.register('finance.script.part', {
   version: V1,
   build({ params, currentPartOutline, fullOutline, previousPartsScript }) {
-    const { targetAudience, title, styleOptions } = params;
+    const { targetAudience, title, styleOptions, wordCount } = params;
     const style = `DUY TRÌ TÔNG GIỌNG (Tone): ${styleOptions.expression} VÀ PHONG CÁCH (Style): ${styleOptions.style}.`;
     const arc = arcInstructionFor(currentPartOutline);
     void fullOutline;
     void previousPartsScript;
+
+    // Mặc định 5 phần cho cấu trúc DNA. Nếu sau này outline được phân nhánh,
+    // có thể derive từ currentPartOutline để ra tổng số phần.
+    const totalParts = 5;
+    const totalNum = parseInt(wordCount, 10) || 0;
+    const perPart = Math.max(50, Math.round(totalNum / totalParts));
+    const minSpoken = Math.max(50, Math.round(perPart * 0.95));
+
     return {
       messages: [
         { role: 'system', content: FINANCE_DNA.trim() },
@@ -138,11 +148,14 @@ promptRegistry.register('finance.script.part', {
           role: 'user',
           content: `VIẾT TIẾP PHẦN KỊCH BẢN: "${currentPartOutline}".
 CHỦ ĐỀ: ${title}.
+TỔNG VIDEO: ${totalNum} từ spoken (chia đều ${totalParts} phần, mỗi phần ≈ ${perPart} từ).
 
 CHỈ DẪN THEO PHẦN: ${arc}
 
 ${style}
 NGÔN NGỮ: ${targetAudience}.
+
+ĐỘ DÀI PHẦN NÀY: ${perPart} từ spoken (đã bao gồm buffer 15% cho Markdown overhead — khi TTS lọc bỏ heading/bullet/SFX, phần spoken text thực tế phải CÒN LẠI ÍT NHẤT ${minSpoken} từ).
 
 QUY TẮC ĐỊNH DẠNG BẮT BUỘC:
 - Phải viết lại TOÀN BỘ heading "## PHẦN X: ..." (đúng định dạng markdown cấp 2) ở dòng đầu tiên.

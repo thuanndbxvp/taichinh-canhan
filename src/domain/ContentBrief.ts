@@ -10,6 +10,8 @@
  */
 export const CONTENT_BRIEF_SCHEMA_VERSION = 1;
 
+import { minutesToTargetWords } from './wordCount';
+
 export type ExpertiseLevel = 'beginner' | 'intermediate' | 'advanced';
 export type VideoGoal =
   | 'awareness'
@@ -42,8 +44,7 @@ export interface ContentBrief {
    */
   goal: VideoGoal;
   /**
-   * Thời lượng ước lượng (giây). Mapping sang wordCount = duration * 2.5
-   * (150 từ/phút cho narration tiếng Việt).
+   * Thời lượng ước lượng (giây). Mapping sang wordCount xem wordCount.ts.
    */
   durationSec: number;
   /**
@@ -92,10 +93,12 @@ export function createDefaultBrief(): ContentBrief {
 
 /**
  * Derive wordCount từ durationSec.
- * Quy ước: 2.5 từ/giây = 150 từ/phút.
+ * Quy ước xem {@link minutesToTargetWords}:
+ *   180 WPM + 15% buffer cho Markdown overhead (heading/bullet/SFX).
  */
 export function deriveWordCount(durationSec: number): string {
-  return Math.max(100, Math.round(durationSec * 2.5)).toString();
+  const minutes = durationSec / 60;
+  return minutesToTargetWords(minutes).toString();
 }
 
 /**

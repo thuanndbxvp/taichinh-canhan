@@ -129,15 +129,18 @@ describe('useGenerationWorkflow', () => {
     expect(result.current.error).toMatch(/AI provider trả về dàn ý rỗng/);
   });
 
-  it('generate wordCount = 5 phút (lengthType=duration, videoDuration=5) → 750 từ → gọi generateScript', async () => {
+  it('generate wordCount = 5 phút (lengthType=duration, videoDuration=5) → ~1035 từ (180 WPM + 15% buffer) → gọi generateScript', async () => {
     (aiService.generateScript as unknown as ReturnType<typeof vi.fn>).mockImplementation(
       async (
-        _params: unknown,
+        params: unknown,
         _provider: unknown,
         _model: unknown,
         onChunk?: (chunk: string) => void,
       ) => {
         onChunk?.('script 5 phút');
+        // Verify buffer: 5 phút * 180 * 1.15 = 1035
+        const wc = (params as { wordCount: string }).wordCount;
+        expect(parseInt(wc, 10)).toBe(1035);
         return 'script 5 phút';
       },
     );
