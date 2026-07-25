@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+﻿import { describe, it, expect } from 'vitest';
 import { parseAiJson, parseAiJsonOrThrow, SCHEMAS } from './responseParser';
 
 describe('parseAiJson - array schema', () => {

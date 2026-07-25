@@ -1,4 +1,4 @@
-/**
+﻿/**
  * MathReview — kiểm tra narration có khớp calculation không.
  *
  * Phase 5.2: phát hiện

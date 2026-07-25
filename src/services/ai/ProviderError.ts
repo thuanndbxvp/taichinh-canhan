@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ProviderErrorKind — phân loại lỗi mức provider, dùng nội bộ tầng AI gateway.
  * Khác với AppErrorCode: đây là kết quả của provider adapter (HTTP + business).
  * AiGateway sẽ map sang AppErrorCode khi ném ra ngoài.

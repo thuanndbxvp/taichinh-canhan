@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Promise wrapper cho IndexedDB. Đơn giản hoá việc mở DB, transaction.
  *
  * Schema mặc định:

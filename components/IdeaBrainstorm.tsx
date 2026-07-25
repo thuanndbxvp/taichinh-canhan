@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+﻿import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleGenAI, Chat } from "@google/genai";
 import type { ChatMessage, AiProvider } from '../types';
 import { SparklesIcon } from './icons/SparklesIcon';

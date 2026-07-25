@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+﻿import { describe, it, expect } from 'vitest';
 import { runFactReview, STALE_SOURCE_MONTHS } from './FactReview';
 import type { ResearchClaim, ResearchSource } from '../ResearchPack';
 

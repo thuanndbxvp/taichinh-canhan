@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ContentBrief — structured brief cho 1 finance video.
  *
  * Mục tiêu Phase 4: thay vì chỉ lưu title/outline/wordCount, lưu đầy đủ

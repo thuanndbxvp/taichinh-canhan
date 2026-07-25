@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { CheckIcon } from './icons/CheckIcon';
 import { SpeakerWaveIcon } from './icons/SpeakerWaveIcon';
 

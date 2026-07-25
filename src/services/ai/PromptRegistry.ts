@@ -1,4 +1,4 @@
-/**
+﻿/**
  * PromptRegistry — registry các prompt versioned theo use case.
  *
  * Mỗi prompt là 1 builder function nhận input typed và trả string hoàn chỉnh

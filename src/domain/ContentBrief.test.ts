@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+﻿import { describe, it, expect } from 'vitest';
 import { createDefaultBrief, deriveWordCount, isContentBrief } from './ContentBrief';
 
 describe('ContentBrief', () => {

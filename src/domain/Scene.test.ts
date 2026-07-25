@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+﻿import { describe, it, expect } from 'vitest';
 import { createBlankScene, newSceneId } from './Scene';
 
 describe('Scene', () => {

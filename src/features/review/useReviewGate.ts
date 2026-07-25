@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+﻿import { useCallback, useMemo, useState } from 'react';
 import type { ScriptDocument } from '../../domain/ScriptDocument';
 import type { ResearchClaim, ResearchSource } from '../../domain/ResearchPack';
 import type { Calculation } from '../../domain/Calculator';

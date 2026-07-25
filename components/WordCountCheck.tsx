@@ -1,4 +1,4 @@
-
+﻿
 import React from 'react';
 import type { WordCountStats } from '../types';
 import { MicrophoneIcon } from './icons/MicrophoneIcon';

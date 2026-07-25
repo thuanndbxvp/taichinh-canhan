@@ -1,4 +1,4 @@
-/**
+﻿/**
  * AppError — mô hình lỗi chuẩn hoá cho toàn bộ app.
  * Mục tiêu Phase 0: chuẩn hoá provider/action để dễ log, telemetry và retry.
  * Cách dùng:

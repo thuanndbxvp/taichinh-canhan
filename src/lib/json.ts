@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tiện ích trích JSON từ output AI có thể lẫn văn xuôi.
  * Ưu tiên code fence ```json ... ```, fallback quét bracket.
  */

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Repository interface — tách persistence khỏi UI/hook.
  *
  * Mọi adapter (LocalStorage, IndexedDB, future HTTP, ...) phải implement

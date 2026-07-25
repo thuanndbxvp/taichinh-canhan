@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+﻿import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ScriptRepository } from '../../domain/Repository';
 import type { Scene, SceneKind } from '../../domain/Scene';
 import { createBlankScene, newSceneId } from '../../domain/Scene';

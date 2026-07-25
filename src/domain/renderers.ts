@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Render ScriptDocument sang nhiều format khác nhau.
  * Phase 4.6: Markdown, TTS-clean text, JSON backup, Excel, Scene board,
  * Visual prompt file, YouTube metadata.

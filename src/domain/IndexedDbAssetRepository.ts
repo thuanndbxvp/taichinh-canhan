@@ -1,4 +1,4 @@
-/**
+﻿/**
  * IndexedDbAssetRepository — adapter cho AssetRecord + cacheKey lookup.
  *
  * Phase 3.5: cache key ổn định. Tra cứu nhanh qua index 'cacheKey' (non-unique

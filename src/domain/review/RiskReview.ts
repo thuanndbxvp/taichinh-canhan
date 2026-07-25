@@ -1,4 +1,4 @@
-/**
+﻿/**
  * FinancialRiskReview — phát hiện ngôn ngữ rủi ro trong script tài chính.
  *
  * Phase 5.3 (plan1.md):

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+﻿import { useCallback, useState } from 'react';
 import type { AiProvider } from '../../../types';
 import { scoreScript } from '../../../services/aiService';
 

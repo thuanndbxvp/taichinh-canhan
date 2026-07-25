@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Finance Calculator — tính toán chuẩn để AI diễn giải.
  *
  * Nguyên tắc Phase 4.4 (plan1.md):

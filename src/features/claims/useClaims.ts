@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+﻿import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ResearchRepository } from '../../domain/Repository';
 import type { ResearchClaim, ClaimStatus, ClaimRisk } from '../../domain/ResearchPack';
 import { createEmptyResearchPack } from '../../domain/ResearchPack';
