@@ -3,25 +3,16 @@ import type { Expression, Style } from '../types';
 export const EXPRESSION_EXPLANATIONS: Record<Expression, string> = {
   'Empathetic': 'Thể hiện sự đồng cảm, thấu hiểu với cảm xúc và tình huống của khán giả, tạo sự kết nối sâu sắc — phù hợp với kênh Chú Que Tài Chính khi nói về tiền bạc.',
   'Conversational': 'Sử dụng lối nói chuyện thân mật, tự nhiên như đang trò chuyện với bạn bè, giảm khoảng cách với người xem.',
-  'Humorous': 'Lồng ghép các yếu tố hài hước, dí dỏm để tạo sự giải trí và giúp nội dung dễ nhớ hơn.',
   'Authoritative': 'Thể hiện sự tự tin, chắc chắn và am hiểu sâu sắc về chủ đề, tạo cảm giác của một chuyên gia.',
-  'Personal': 'Chia sẻ quan điểm, kinh nghiệm và cảm xúc cá nhân, tạo sự chân thật và gần gũi.',
-  'Professional': 'Diễn đạt một cách chuyên nghiệp, lịch sự, rõ ràng, phù hợp với môi trường công sở, doanh nghiệp.',
-  'Persuasive': 'Dùng lập luận, dẫn chứng và lối diễn đạt mạnh mẽ, quả quyết để thuyết phục người xem đồng ý với một quan điểm hoặc thực hiện một hành động.',
-  'Formal': 'Sử dụng ngôn ngữ trang trọng, học thuật, phù hợp với các chủ đề nghiêm túc, phân tích sâu.',
-  'Informative': 'Tập trung vào việc cung cấp thông tin một cách rõ ràng, trực tiếp, khách quan và dựa trên dữ liệu.',
-  'Inspirational': 'Truyền tải thông điệp tích cực, tạo động lực và truyền cảm hứng cho người xem.',
+  'Analytical': 'Phân tích sắc bén, mổ xẻ vấn đề bằng số liệu và logic — phù hợp với phần Giải phẫu trong kịch bản tài chính.',
 };
 
 
 export const STYLE_EXPLANATIONS: Record<Style, string> = {
   'Narrative': 'Kể lại một câu chuyện có đầu có cuối, với nhân vật, bối cảnh và diễn biến sự việc.',
   'Storytelling': 'Kể chuyện qua một nhân vật cụ thể (Tên + Tuổi + Mức lương + Vấn đề) minh hoạ xuyên suốt video — phù hợp với phong cách Chú Que Tài Chính.',
-  'Expository': 'Giải thích một khái niệm, quy trình hoặc vấn đề một cách logic, có hệ thống và dễ hiểu.',
-  'Persuasive': 'Xây dựng kịch bản với mục đích chính là thuyết phục, kêu gọi hành động từ phía khán giả.',
   'Educational': 'Dạy học theo từng bước, có ví dụ và bài tập để khán giả áp dụng ngay.',
   'Analytical': 'Phân tích số liệu, bóc tách chi phí ẩn, chi phí cơ hội bằng toán học (cộng/trừ/nhân/chia) — phù hợp với phần Giải phẫu trong kịch bản tài chính.',
-  'Conversational': 'Đối thoại tự nhiên giữa hai người (hoặc giữa MC và khán giả), phù hợp với video Q&A hoặc podcast.',
 };
 
 export const FORMATTING_EXPLANATIONS = {

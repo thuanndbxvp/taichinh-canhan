@@ -1,13 +1,16 @@
 /**
- * Finance prompt library — tập trung toàn bộ prompt của Chú Que Tài Chính.
- * Mỗi prompt có version riêng, bump khi sửa lớn.
+ * Prompt registry cho kênh "Chú Que Tài Chính".
  *
- * DNA lõi (FINANCE_DNA) được giữ nguyên từ code cũ để không phá output hiện tại.
+ * Side-effect import: đăng ký toàn bộ finance.* prompts.
+ * App cá nhân hoá — chỉ phục vụ nhân vật Chú Que, không còn default.*
+ * hay horror/space/scifi prompts.
+ *
+ * DNA lõi (FINANCE_DNA) là triết lý bất biến của kênh.
  */
 import { promptRegistry } from '../PromptRegistry';
 import type { StyleOptions } from '../../../../types';
 
-const V1 = { version: '1.0.0', updatedAt: '2026-07-25', notes: 'Phase 2 baseline' } as const;
+const V1 = { version: '1.0.0', updatedAt: '2026-07-25', notes: 'Phase 5 baseline — Chú Que Tài Chính only' } as const;
 
 const FINANCE_DNA = `
 BẠN LÀ CHÚ QUE TÀI CHÍNH — CHUYÊN GIA TÀI CHÍNH CÁ NHÂN VÀ CONTENT CREATOR KÊNH YOUTUBE "CHÚ QUE TÀI CHÍNH".
@@ -386,66 +389,6 @@ promptRegistry.register('finance.ideas.fromFile', {
         {
           role: 'user',
           content: `Trích xuất ý tưởng video tài chính cá nhân từ nội dung file. JSON: { title, outline }.\n\nNỘI DUNG:\n${content}`,
-        },
-      ],
-    };
-  },
-});
-
-promptRegistry.register('default.script', {
-  version: V1,
-  build({ params }) {
-    const { title, targetAudience, wordCount, styleOptions } = params;
-    return {
-      messages: [
-        {
-          role: 'system',
-          content:
-            'Bạn là trợ lý viết kịch bản YouTube tiếng Việt. Chia phần rõ ràng bằng tiêu đề ##.',
-        },
-        {
-          role: 'user',
-          content: `Viết kịch bản YouTube về "${title}".\n${styleInstruction(styleOptions)}\nNgôn ngữ: ${targetAudience}.\nĐộ dài ước lượng: ${wordCount} từ.\nKỊCH BẢN SẠCH, HẤP DẪN, GIỮ CHÂN NGƯỜI XEM.`,
-        },
-      ],
-    };
-  },
-});
-
-promptRegistry.register('default.script.outline', {
-  version: V1,
-  build({ params }) {
-    const { title, targetAudience, styleOptions } = params;
-    const style = `Tone: ${styleOptions.expression}, Style: ${styleOptions.style}`;
-    return {
-      messages: [
-        {
-          role: 'system',
-          content: 'Bạn là trợ lý tạo dàn ý YouTube.',
-        },
-        {
-          role: 'user',
-          content: `Tạo dàn ý chi tiết cho kịch bản YouTube: "${title}".\nPhong cách & Tông giọng: ${style}.\nNgôn ngữ: ${targetAudience}.\nYêu cầu: Chia thành các phần rõ ràng bắt đầu bằng ##.`,
-        },
-      ],
-    };
-  },
-});
-
-promptRegistry.register('default.script.part', {
-  version: V1,
-  build({ params, currentPartOutline, title }) {
-    const { targetAudience, styleOptions } = params;
-    const style = `DUY TRÌ TÔNG GIỌNG (Tone): ${styleOptions.expression} VÀ PHONG CÁCH (Style): ${styleOptions.style}.`;
-    return {
-      messages: [
-        {
-          role: 'system',
-          content: 'Bạn viết tiếp phần kịch bản YouTube theo dàn ý. Luôn bắt đầu bằng ##.',
-        },
-        {
-          role: 'user',
-          content: `Viết tiếp phần kịch bản này dựa trên dàn ý: "${currentPartOutline}".\nChủ đề video: "${title}".\n${style}\nNgôn ngữ: ${targetAudience}.\nBẮT BUỘC bắt đầu bằng tiêu đề ##. Viết nội dung chi tiết, hấp dẫn.`,
         },
       ],
     };

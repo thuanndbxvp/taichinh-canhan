@@ -246,10 +246,7 @@ export const SummarizeModal: React.FC<SummarizeModalProps> = ({ isOpen, onClose,
                             onChange={(e) => setScenarioType(e.target.value as ScenarioType)}
                             className="w-full bg-primary border border-border rounded-md p-2 text-text-primary focus:ring-2 focus:ring-accent focus:border-accent transition"
                         >
-                            <option value="finance">1-Finance (Professional)</option>
-                            <option value="general">2-Kịch bản chung</option>
-                            <option value="ww2">3-Kịch bản WW2</option>
-                            <option value="finance">4-Kịch bản Finance</option>
+                            <option value="finance">Finance (Chú Que Tài Chính)</option>
                         </select>
                     </div>
 

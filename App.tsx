@@ -120,28 +120,25 @@ const App: React.FC = () => {
   const hasApiKey = aiSettings.hasApiKey;
 
   return (
-    <div className={`min-h-screen ${brief.brief.isFinanceMode ? 'bg-black text-slate-300' : 'bg-primary text-text-primary'}`}>
+    <div className="min-h-screen bg-black text-slate-300">
       {aiSettings.notification && (
         <div className="fixed top-5 right-5 bg-secondary border border-accent text-text-primary p-4 rounded-lg shadow-lg z-[100] flex items-center gap-4">
           <CheckIcon className="w-6 h-6 text-green-400" />
           <p className="text-sm">{aiSettings.notification}</p>
         </div>
       )}
-      <header className={`bg-secondary/60 border-b border-border p-4 shadow-sm flex justify-between items-center sticky top-0 z-20 backdrop-blur-sm ${brief.brief.isFinanceMode ? 'border-amber-900/30' : ''}`}>
-        <div className="flex-1 flex gap-4 items-center">
-          <button
-            onClick={() => brief.setIsFinanceMode(!brief.brief.isFinanceMode)}
-            className={`px-4 py-2 rounded-lg font-bold text-xs transition-all flex items-center gap-2 border ${brief.brief.isFinanceMode ? 'bg-amber-900/40 text-amber-500 border-amber-500 shadow-lg shadow-amber-900/20' : 'bg-secondary text-text-secondary border-border hover:text-text-primary'}`}
-          >
+      <header className="bg-secondary/60 border-b border-amber-900/30 p-4 shadow-sm flex justify-between items-center sticky top-0 z-20 backdrop-blur-sm">
+        <div className="flex-1 flex gap-3 items-center">
+          <div className="px-3 py-1.5 rounded-md font-bold text-xs bg-amber-900/40 text-amber-500 border border-amber-500 flex items-center gap-2">
             <BoltIcon className="w-4 h-4" />
-            {brief.brief.isFinanceMode ? 'CHÚ QUE TÀI CHÍNH: ON' : 'CHÚ QUE TÀI CHÍNH: OFF'}
-          </button>
+            CHÚ QUE TÀI CHÍNH
+          </div>
         </div>
         <div className="flex-1 text-center">
           <a href="/" className="inline-flex justify-center items-center gap-3 no-underline">
             <YoutubeLogoIcon />
             <h1 className="text-2xl font-bold" style={{ color: 'var(--color-accent)' }}>
-              {brief.brief.isFinanceMode ? APP_BRAND.name : 'YouTube Script Generator'}
+              {APP_BRAND.name}
             </h1>
           </a>
         </div>
@@ -210,7 +207,6 @@ const App: React.FC = () => {
             setAiProvider={aiSettings.setAiProvider}
             selectedModel={aiSettings.selectedModel}
             setSelectedModel={aiSettings.setSelectedModel}
-            isFinanceMode={brief.brief.isFinanceMode}
             apiKeys={aiSettings.apiKeys}
           />
         </div>

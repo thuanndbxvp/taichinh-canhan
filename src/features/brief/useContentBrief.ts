@@ -41,14 +41,14 @@ export interface ContentBriefPatch {
   isFinanceMode?: boolean;
 }
 
+// Chú Que Tài Chính — chỉ một style mặc định phục vụ nhân vật.
 const FINANCE_STYLE: StyleOptions = { expression: 'Empathetic', style: 'Storytelling' };
-const DEFAULT_STYLE: StyleOptions = { expression: 'Conversational', style: 'Narrative' };
 
 const DEFAULT_BRIEF: ContentBrief = {
   title: '',
   outlineContent: '',
   targetAudience: APP_BRAND.defaultLanguage,
-  styleOptions: DEFAULT_STYLE,
+  styleOptions: FINANCE_STYLE,
   keywords: '',
   formattingOptions: {
     headings: true,
@@ -57,13 +57,13 @@ const DEFAULT_BRIEF: ContentBrief = {
     includeIntro: false,
     includeOutro: false,
   },
-  wordCount: '800',
+  wordCount: '1200',
   scriptParts: 'Auto',
   scriptType: 'Video',
   numberOfSpeakers: 'Auto',
   lengthType: 'words',
-  videoDuration: '5',
-  isFinanceMode: false,
+  videoDuration: '8',
+  isFinanceMode: true,
 };
 
 /**
@@ -91,29 +91,18 @@ export function useContentBrief(initial?: ContentBriefPatch) {
   const setNumberOfSpeakers = useCallback((numberOfSpeakers: NumberOfSpeakers) => patch({ numberOfSpeakers }), [patch]);
   const setLengthType = useCallback((lengthType: 'words' | 'duration') => patch({ lengthType }), [patch]);
   const setVideoDuration = useCallback((videoDuration: string) => patch({ videoDuration }), [patch]);
-  const setIsFinanceMode = useCallback((isFinanceMode: boolean) => {
-    setBrief((prev) => {
-      if (isFinanceMode) {
-        return {
-          ...prev,
-          isFinanceMode: true,
-          styleOptions: FINANCE_STYLE,
-          targetAudience: 'Vietnamese',
-          formattingOptions: { ...prev.formattingOptions, bullets: true, bold: true },
-          wordCount: '1200',
-          videoDuration: '8',
-        };
-      }
-      return {
-        ...prev,
-        isFinanceMode: false,
-        styleOptions: DEFAULT_STYLE,
-        targetAudience: 'Vietnamese',
-        formattingOptions: { ...prev.formattingOptions, bullets: true, bold: true },
-        wordCount: '800',
-        videoDuration: '5',
-      };
-    });
+  const setIsFinanceMode = useCallback(() => {
+    // App chỉ phục vụ "Chú Que Tài Chính" — finance mode là cố định.
+    // Giữ API để tương thích component cũ nhưng luôn ép về true.
+    setBrief((prev) => ({
+      ...prev,
+      isFinanceMode: true,
+      styleOptions: FINANCE_STYLE,
+      targetAudience: 'Vietnamese',
+      formattingOptions: { ...prev.formattingOptions, bullets: true, bold: true },
+      wordCount: '1200',
+      videoDuration: '8',
+    }));
   }, []);
 
   const reset = useCallback(() => setBrief(DEFAULT_BRIEF), []);

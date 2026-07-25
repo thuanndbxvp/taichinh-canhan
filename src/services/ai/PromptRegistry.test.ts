@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { promptRegistry } from './PromptRegistry';
 // Side-effect import: đăng ký prompt finance-*
-import './prompts/finance';
+import './prompts';
 
 describe('PromptRegistry', () => {
   it('đã đăng ký finance.script', () => {

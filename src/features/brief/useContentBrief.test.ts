@@ -3,11 +3,12 @@ import { renderHook, act } from '@testing-library/react';
 import { useContentBrief } from './useContentBrief';
 
 describe('useContentBrief', () => {
-  it('mặc định có brief hợp lệ', () => {
+  it('mặc định là Chú Que Tài Chính mode', () => {
     const { result } = renderHook(() => useContentBrief());
     expect(result.current.brief.title).toBe('');
     expect(result.current.brief.targetAudience).toBe('Vietnamese');
-    expect(result.current.brief.isFinanceMode).toBe(false);
+    expect(result.current.brief.isFinanceMode).toBe(true);
+    expect(result.current.brief.styleOptions).toEqual({ expression: 'Empathetic', style: 'Storytelling' });
   });
 
   it('setTitle cập nhật title', () => {
@@ -26,21 +27,14 @@ describe('useContentBrief', () => {
     expect(result.current.effectiveTargetWordCount).toBe('1200');
   });
 
-  it('toggling sang finance mode đặt style phù hợp', () => {
-    const { result } = renderHook(() => useContentBrief());
-    act(() => result.current.setIsFinanceMode(true));
+  it('setIsFinanceMode luôn ép về finance mode (cố định)', () => {
+    const { result } = renderHook(() => useContentBrief({ isFinanceMode: false }));
+    expect(result.current.brief.isFinanceMode).toBe(false);
+    act(() => result.current.setIsFinanceMode());
     expect(result.current.brief.isFinanceMode).toBe(true);
     expect(result.current.brief.styleOptions).toEqual({ expression: 'Empathetic', style: 'Storytelling' });
     expect(result.current.brief.wordCount).toBe('1200');
     expect(result.current.brief.targetAudience).toBe('Vietnamese');
-  });
-
-  it('toggling tắt finance mode trở về default', () => {
-    const { result } = renderHook(() => useContentBrief({ isFinanceMode: true }));
-    act(() => result.current.setIsFinanceMode(false));
-    expect(result.current.brief.isFinanceMode).toBe(false);
-    expect(result.current.brief.styleOptions).toEqual({ expression: 'Conversational', style: 'Narrative' });
-    expect(result.current.brief.wordCount).toBe('800');
   });
 
   it('reset trả về default', () => {

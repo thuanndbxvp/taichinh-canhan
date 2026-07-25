@@ -1,4 +1,4 @@
-
+﻿
 import React, { useEffect, useState } from 'react';
 import { OptionSelector } from './OptionSelector';
 import { SparklesIcon } from './icons/SparklesIcon';
@@ -66,7 +66,6 @@ interface ControlPanelProps {
   setAiProvider: (provider: AiProvider) => void;
   selectedModel: string;
   setSelectedModel: (model: string) => void;
-  isFinanceMode?: boolean;
   apiKeys?: Record<AiProvider, string[]>;
 }
 
@@ -96,7 +95,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   savedIdeas, onSaveIdea, onOpenSavedIdeasModal,
   onParseFile, isParsingFile, parsingFileError, uploadedIdeas,
   aiProvider, setAiProvider, selectedModel, setSelectedModel,
-  isFinanceMode, apiKeys
+  apiKeys
 }) => {
   const [kymaModels, setKymaModels] = useState<{value: string, label: string}[]>([]);
   const [openAiModels, setOpenAiModels] = useState<{value: string, label: string}[]>([]);
@@ -177,17 +176,17 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             {ideaList.length > 0 && (
                 <button 
                     onClick={() => handleSaveAll(ideaList)}
-                    className={`flex items-center gap-1 text-xs px-2 py-1 rounded-md transition ${isFinanceMode ? 'bg-emerald-900/20 text-emerald-500 hover:bg-emerald-900/40' : 'bg-secondary hover:bg-border text-text-secondary hover:text-text-primary'}`}
+                    className={`flex items-center gap-1 text-xs px-2 py-1 rounded-md transition bg-emerald-900/20 text-emerald-500 hover:bg-emerald-900/40`}
                 >
                     <BookmarkIcon className="w-3 h-3"/>
-                    <span>Lưu tất cả</span>
+                    <span>LÆ°u táº¥t cáº£</span>
                 </button>
             )}
         </div>
-        <div className={`h-48 min-h-[10rem] resize-y overflow-auto border rounded-md space-y-2 p-2 ${isFinanceMode ? 'bg-black border-emerald-900/50' : 'bg-primary border-border'}`}>
+        <div className={`h-48 min-h-[10rem] resize-y overflow-auto border rounded-md space-y-2 p-2 bg-black border-emerald-900/50`}>
             {ideaList.map((idea, index) => (
-                <div key={`${listTitle}-${idea.title}-${index}`} className={`text-left text-sm w-full p-3 rounded-md ${isFinanceMode ? 'bg-zinc-900/50 border border-emerald-900/20' : 'bg-secondary'}`}>
-                  <strong className={`${isFinanceMode ? 'text-emerald-100' : 'text-text-primary'} block`}>{idea.title}</strong>
+                <div key={`${listTitle}-${idea.title}-${index}`} className={`text-left text-sm w-full p-3 rounded-md bg-zinc-900/50 border border-emerald-900/20`}>
+                  <strong className={`text-emerald-100 block`}>{idea.title}</strong>
                   {idea.vietnameseTitle && idea.vietnameseTitle !== idea.title && <span className="text-xs mt-1 block text-accent/80">{idea.vietnameseTitle}</span>}
                   <span className="text-xs mt-1 block text-text-secondary">{idea.outline}</span>
                   <div className="flex items-center gap-2 mt-2">
@@ -196,24 +195,24 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                         setTitle(idea.title);
                         setOutlineContent(idea.outline);
                       }}
-                      className={`text-xs px-2 py-1 rounded-md transition ${isFinanceMode ? 'bg-emerald-700 text-white hover:bg-emerald-600' : 'bg-accent/80 hover:bg-accent text-white'}`}
+                      className={`text-xs px-2 py-1 rounded-md transition bg-emerald-700 text-white hover:bg-emerald-600`}
                     >
-                        Sử dụng
+                        Sá»­ dá»¥ng
                     </button>
                     <button 
                         onClick={() => onSaveIdea(idea)}
                         disabled={isIdeaSaved(idea)}
-                        className={`flex items-center gap-1 text-xs px-2 py-1 rounded-md transition disabled:opacity-50 disabled:cursor-not-allowed ${isFinanceMode ? 'bg-zinc-800 text-emerald-500 hover:bg-zinc-700' : 'bg-primary hover:bg-secondary text-text-secondary'}`}
+                        className={`flex items-center gap-1 text-xs px-2 py-1 rounded-md transition disabled:opacity-50 disabled:cursor-not-allowed bg-zinc-800 text-emerald-500 hover:bg-zinc-700`}
                       >
                           {isIdeaSaved(idea) ? (
                               <>
                                   <CheckIcon className="w-3.5 h-3.5 text-green-400" />
-                                  <span className="text-text-secondary">Đã lưu</span>
+                                  <span className="text-text-secondary">ÄÃ£ lÆ°u</span>
                               </>
                           ) : (
                               <>
                                   <BookmarkIcon className="w-3 h-3"/>
-                                  <span>Lưu</span>
+                                  <span>LÆ°u</span>
                               </>
                           )}
                       </button>
@@ -226,25 +225,25 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
 
   return (
     <div className="space-y-6">
-        <ControlSection title="1. Ý tưởng chính" isDark={isFinanceMode}>
+        <ControlSection title="1. Ã tÆ°á»Ÿng chÃ­nh" isDark>
             <input
               id="title"
               type="text"
-              className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
-              placeholder="Nhập Tiêu đề Video, VD: 'Tương lai của du hành vũ trụ'"
+              className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
+              placeholder="Nháº­p TiÃªu Ä‘á» Video, VD: 'TÆ°Æ¡ng lai cá»§a du hÃ nh vÅ© trá»¥'"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
             <textarea
               id="outline"
               rows={4}
-              className={`mt-2 w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
-              placeholder="Phác họa nội dung (tùy chọn), VD: 'Đề cập đến lãi kép, quỹ dự phòng, bẫy tâm lý chi tiêu. Tầm nhìn 5 năm tới.'"
+              className={`mt-2 w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
+              placeholder="PhÃ¡c há»a ná»™i dung (tÃ¹y chá»n), VD: 'Äá» cáº­p Ä‘áº¿n lÃ£i kÃ©p, quá»¹ dá»± phÃ²ng, báº«y tÃ¢m lÃ½ chi tiÃªu. Táº§m nhÃ¬n 5 nÄƒm tá»›i.'"
               value={outlineContent}
               onChange={(e) => setOutlineContent(e.target.value)}
             />
             
-            <Tooltip text="Sử dụng AI để thảo luận và phát triển ý tưởng của bạn một cách tương tác.">
+            <Tooltip text="Sá»­ dá»¥ng AI Ä‘á»ƒ tháº£o luáº­n vÃ  phÃ¡t triá»ƒn Ã½ tÆ°á»Ÿng cá»§a báº¡n má»™t cÃ¡ch tÆ°Æ¡ng tÃ¡c.">
               <IdeaBrainstorm 
                   setTitle={setTitle} 
                   setOutlineContent={setOutlineContent}
@@ -253,24 +252,22 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               />
             </Tooltip>
 
-            {isFinanceMode && (
-                <div className="mt-3 bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-3">
+            <div className="mt-3 bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-3">
                     <label className="flex items-center gap-2 text-xs font-bold text-emerald-500 mb-2 uppercase tracking-wider">
                         <BoltIcon className="w-4 h-4" />
-                        Chủ đề Tài chính Cá nhân Gợi ý
+                        Chúố đè Tài chính Cá nhân Gợi ý
                     </label>
                     <select
                         onChange={handleSelectDarkFrontiersIdea}
                         className="w-full bg-black border border-emerald-500/50 rounded-md p-2 text-emerald-200 text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
                         defaultValue=""
                     >
-                        <option value="" disabled>-- Chọn chủ đề tài chính --</option>
+                        <option value="" disabled>-- Chọn chúố đè tài chính --</option>
                         {FINANCE_IDEAS.map(idea => (
                             <option key={idea.title} value={idea.title}>{idea.title}</option>
                         ))}
                     </select>
                 </div>
-            )}
 
             <Tooltip text="Tải lên một file .txt chứa danh sách các ý tưởng để AI tự động phân tích và thêm vào danh sách gợi ý.">
               <IdeaFileUploader 
@@ -280,11 +277,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               />
             </Tooltip>
             <div className="grid grid-cols-2 gap-2 mt-4">
-                <Tooltip text="Dựa trên tiêu đề bạn nhập, AI sẽ đề xuất 5 ý tưởng video khác nhau với tiêu đề và dàn ý sơ bộ.">
+                <Tooltip text="Dá»±a trÃªn tiÃªu Ä‘á» báº¡n nháº­p, AI sáº½ Ä‘á» xuáº¥t 5 Ã½ tÆ°á»Ÿng video khÃ¡c nhau vá»›i tiÃªu Ä‘á» vÃ  dÃ n Ã½ sÆ¡ bá»™.">
                   <button 
                     onClick={onGenerateSuggestions} 
                     disabled={isSuggesting || !title}
-                    className={`w-full flex items-center justify-center font-bold py-2 px-4 rounded-lg transition border ${isFinanceMode ? 'bg-emerald-900/20 border-emerald-900/40 text-emerald-500 hover:bg-emerald-900/40' : 'bg-secondary hover:bg-secondary/70 text-text-primary border-border'} disabled:opacity-40 disabled:cursor-not-allowed`}
+                    className={`w-full flex items-center justify-center font-bold py-2 px-4 rounded-lg transition border bg-emerald-900/20 border-emerald-900/40 text-emerald-500 hover:bg-emerald-900/40 disabled:opacity-40 disabled:cursor-not-allowed`}
                   >
                     {isSuggesting ? (
                       <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -294,37 +291,37 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                     ) : (
                       <>
                         <SparklesIcon className="w-5 h-5 mr-2" />
-                        <span>Gợi ý AI</span>
+                        <span>Gá»£i Ã½ AI</span>
                         {!isSuggesting && hasGeneratedTopicSuggestions && <CheckIcon className="w-5 h-5 ml-2 text-green-400" />}
                       </>
                     )}
                   </button>
                 </Tooltip>
-                <Tooltip text="Xem và quản lý tất cả các ý tưởng video bạn đã lưu trước đó.">
+                <Tooltip text="Xem vÃ  quáº£n lÃ½ táº¥t cáº£ cÃ¡c Ã½ tÆ°á»Ÿng video báº¡n Ä‘Ã£ lÆ°u trÆ°á»›c Ä‘Ã³.">
                   <button 
                     onClick={onOpenSavedIdeasModal} 
-                    className={`w-full flex items-center justify-center font-bold py-2 px-4 rounded-lg transition border ${isFinanceMode ? 'bg-emerald-900/20 border-emerald-900/40 text-emerald-500 hover:bg-emerald-900/40' : 'bg-secondary hover:bg-secondary/70 text-text-primary border-border'}`}
+                    className={`w-full flex items-center justify-center font-bold py-2 px-4 rounded-lg transition border bg-emerald-900/20 border-emerald-900/40 text-emerald-500 hover:bg-emerald-900/40`}
                   >
-                    Kho Ý Tưởng
+                    Kho Ã TÆ°á»Ÿng
                   </button>
                 </Tooltip>
             </div>
 
             {suggestionError && <p className="text-red-400 text-sm mt-2">{suggestionError}</p>}
-            {suggestions.length > 0 && <IdeaList ideaList={suggestions} listTitle="Gợi ý từ AI" />}
-            {uploadedIdeas.length > 0 && <IdeaList ideaList={uploadedIdeas} listTitle="Ý tưởng từ File của bạn" />}
+            {suggestions.length > 0 && <IdeaList ideaList={suggestions} listTitle="Gá»£i Ã½ tá»« AI" />}
+            {uploadedIdeas.length > 0 && <IdeaList ideaList={uploadedIdeas} listTitle="Ã tÆ°á»Ÿng tá»« File cá»§a báº¡n" />}
         </ControlSection>
 
-        <ControlSection title="2. Nhà cung cấp AI & Model" isDark={isFinanceMode}>
-            <div className={`flex rounded-lg p-1 mb-3 ${isFinanceMode ? 'bg-black' : 'bg-primary'}`}>
+        <ControlSection title="2. NhÃ  cung cáº¥p AI & Model" isDark>
+            <div className={`flex rounded-lg p-1 mb-3 bg-black`}>
                 {AI_PROVIDER_OPTIONS.map(option => (
                     <button
                         key={option.value}
                         onClick={() => handleProviderChange(option.value)}
                         className={`w-full py-2 text-sm font-semibold rounded-md transition-colors ${
                             aiProvider === option.value 
-                            ? (isFinanceMode ? 'bg-emerald-700 text-white shadow-sm' : 'bg-accent text-white shadow-sm') 
-                            : (isFinanceMode ? 'text-emerald-500/60 hover:text-emerald-500' : 'text-text-primary hover:bg-secondary')
+                            ? 'bg-emerald-700 text-white shadow-sm' 
+                            : 'text-emerald-500/60 hover:text-emerald-500'
                         }`}
                     >
                         {option.label}
@@ -335,7 +332,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               id="model"
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
-              className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
+              className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
             >
               {modelOptions.map(model => (
                 <option key={model.value} value={model.value}>{model.label}</option>
@@ -343,20 +340,20 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             </select>
         </ControlSection>
 
-        <ControlSection title="3. Từ khóa SEO (Tùy chọn)" isDark={isFinanceMode}>
+        <ControlSection title="3. Tá»« khÃ³a SEO (TÃ¹y chá»n)" isDark>
             <input
               id="keywords"
               type="text"
-              className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
-              placeholder="VD: AI, sáng tạo, tương lai"
+              className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
+              placeholder="VD: AI, sÃ¡ng táº¡o, tÆ°Æ¡ng lai"
               value={keywords}
               onChange={(e) => setKeywords(e.target.value)}
             />
-            <Tooltip text="AI sẽ gợi ý các từ khóa SEO liên quan đến chủ đề của bạn để tăng khả năng được tìm thấy.">
+            <Tooltip text="AI sáº½ gá»£i Ã½ cÃ¡c tá»« khÃ³a SEO liÃªn quan Ä‘áº¿n chá»§ Ä‘á» cá»§a báº¡n Ä‘á»ƒ tÄƒng kháº£ nÄƒng Ä‘Æ°á»£c tÃ¬m tháº¥y.">
               <button 
                 onClick={onGenerateKeywordSuggestions} 
                 disabled={isSuggestingKeywords || !title}
-                className={`w-full mt-2 flex items-center justify-center transition text-sm py-2 px-4 rounded-lg border ${isFinanceMode ? 'bg-emerald-900/10 border-emerald-900/30 text-emerald-500 hover:bg-emerald-900/20' : 'bg-secondary/70 hover:bg-secondary text-text-primary border-border'} disabled:opacity-40 disabled:cursor-not-allowed`}
+                className={`w-full mt-2 flex items-center justify-center transition text-sm py-2 px-4 rounded-lg border bg-emerald-900/10 border-emerald-900/30 text-emerald-500 hover:bg-emerald-900/20 disabled:opacity-40 disabled:cursor-not-allowed`}
               >
                 {isSuggestingKeywords ? (
                   <>
@@ -364,12 +361,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Đang gợi ý...
+                    Äang gá»£i Ã½...
                   </>
                 ) : (
                   <>
                     <SparklesIcon className="w-4 h-4 mr-2" />
-                    <span>Gợi ý từ khóa</span>
+                    <span>Gá»£i Ã½ tá»« khÃ³a</span>
                     {!isSuggestingKeywords && hasGeneratedKeywordSuggestions && <CheckIcon className="w-4 h-4 ml-2 text-green-400" />}
                   </>
                 )}
@@ -378,10 +375,10 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             {keywordSuggestionError && <p className="text-red-400 text-sm mt-2">{keywordSuggestionError}</p>}
             {keywordSuggestions.length > 0 && (
                 <div className="mt-3">
-                    <p className="text-xs font-medium text-text-secondary mb-2">Gợi ý:</p>
+                    <p className="text-xs font-medium text-text-secondary mb-2">Gá»£i Ã½:</p>
                     <div className="flex flex-wrap gap-2">
                         {keywordSuggestions.map((suggestion, index) => (
-                            <button key={index} onClick={() => handleAddKeyword(suggestion)} className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${isFinanceMode ? 'bg-emerald-900/20 text-emerald-500 hover:bg-emerald-900/40' : 'bg-secondary hover:bg-primary/50 text-text-primary'}`}>
+                            <button key={index} onClick={() => handleAddKeyword(suggestion)} className={`px-3 py-1 text-xs font-medium rounded-full transition-colors bg-emerald-900/20 text-emerald-500 hover:bg-emerald-900/40`}>
                                 {suggestion}
                             </button>
                         ))}
@@ -390,16 +387,16 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             )}
         </ControlSection>
 
-        <ControlSection title="4. Định dạng Kịch bản" isDark={isFinanceMode}>
-            <div className={`flex rounded-lg p-1 ${isFinanceMode ? 'bg-black' : 'bg-primary'}`}>
+        <ControlSection title="4. Äá»‹nh dáº¡ng Ká»‹ch báº£n" isDark>
+            <div className={`flex rounded-lg p-1 bg-black`}>
                 {SCRIPT_TYPE_OPTIONS.map(option => (
                     <button
                         key={option.value}
                         onClick={() => setScriptType(option.value)}
                         className={`w-full py-2 text-sm font-semibold rounded-md transition-colors ${
                             scriptType === option.value 
-                            ? (isFinanceMode ? 'bg-emerald-700 text-white shadow-sm' : 'bg-accent text-white shadow-sm') 
-                            : (isFinanceMode ? 'text-emerald-500/60 hover:text-emerald-500' : 'text-text-primary hover:bg-secondary')
+                            ? 'bg-emerald-700 text-white shadow-sm' 
+                            : 'text-emerald-500/60 hover:text-emerald-500'
                         }`}
                     >
                         {option.label}
@@ -409,7 +406,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         </ControlSection>
 
         {scriptType === 'Podcast' && (
-          <ControlSection title="5. Số lượng người nói" isDark={isFinanceMode}>
+          <ControlSection title="5. Sá»‘ lÆ°á»£ng ngÆ°á»i nÃ³i" isDark>
             <OptionSelector<NumberOfSpeakers>
                 options={NUMBER_OF_SPEAKERS_OPTIONS}
                 selectedOption={numberOfSpeakers}
@@ -418,12 +415,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           </ControlSection>
         )}
 
-        <ControlSection title={`${scriptType === 'Podcast' ? '6' : '5'}. Ngôn ngữ`} isDark={isFinanceMode}>
+        <ControlSection title={`${scriptType === 'Podcast' ? '6' : '5'}. NgÃ´n ngá»¯`} isDark>
             <select
               id="language"
               value={targetAudience}
               onChange={(e) => setTargetAudience(e.target.value)}
-              className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`}
+              className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
             >
               {LANGUAGE_OPTIONS.map(lang => (
                 <option key={lang.value} value={lang.value}>{lang.label}</option>
@@ -431,27 +428,27 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             </select>
         </ControlSection>
 
-        <ControlSection title={`${scriptType === 'Podcast' ? '7' : '6'}. Cấu trúc & Định dạng`} isDark={isFinanceMode}>
-            <div className={`flex rounded-lg p-1 mb-4 ${isFinanceMode ? 'bg-black' : 'bg-primary'}`}>
+        <ControlSection title={`${scriptType === 'Podcast' ? '7' : '6'}. Cáº¥u trÃºc & Äá»‹nh dáº¡ng`} isDark>
+            <div className={`flex rounded-lg p-1 mb-4 bg-black`}>
                 <button
                     onClick={() => setLengthType('words')}
                     className={`w-full py-2 text-sm font-semibold rounded-md transition-colors ${
                         lengthType === 'words' 
-                        ? (isFinanceMode ? 'bg-emerald-700 text-white shadow-sm' : 'bg-accent text-white shadow-sm') 
-                        : (isFinanceMode ? 'text-emerald-500/60 hover:text-emerald-500' : 'text-text-primary hover:bg-secondary')
+                        ? 'bg-emerald-700 text-white shadow-sm' 
+                        : 'text-emerald-500/60 hover:text-emerald-500'
                     }`}
                 >
-                    Theo số từ
+                    Theo sá»‘ tá»«
                 </button>
                 <button
                     onClick={() => setLengthType('duration')}
                     className={`w-full py-2 text-sm font-semibold rounded-md transition-colors ${
                         lengthType === 'duration' 
-                        ? (isFinanceMode ? 'bg-emerald-700 text-white shadow-sm' : 'bg-accent text-white shadow-sm') 
-                        : (isFinanceMode ? 'text-emerald-500/60 hover:text-emerald-500' : 'text-text-primary hover:bg-secondary')
+                        ? 'bg-emerald-700 text-white shadow-sm' 
+                        : 'text-emerald-500/60 hover:text-emerald-500'
                     }`}
                 >
-                    Theo thời lượng
+                    Theo thá»i lÆ°á»£ng
                 </button>
             </div>
 
@@ -459,15 +456,15 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 {lengthType === 'words' ? (
                     <Tooltip text={FORMATTING_EXPLANATIONS.wordCount}>
                         <div>
-                            <label htmlFor="wordCount" className="block text-xs font-medium text-text-secondary mb-1">Tổng số từ</label>
-                            <input id="wordCount" type="number" value={wordCount} onChange={e => setWordCount(e.target.value)} className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`} placeholder="VD: 800"/>
+                            <label htmlFor="wordCount" className="block text-xs font-medium text-text-secondary mb-1">Tá»•ng sá»‘ tá»«</label>
+                            <input id="wordCount" type="number" value={wordCount} onChange={e => setWordCount(e.target.value)} className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`} placeholder="VD: 800"/>
                         </div>
                     </Tooltip>
                 ) : (
                     <Tooltip text={FORMATTING_EXPLANATIONS.videoDuration}>
                         <div>
-                            <label htmlFor="videoDuration" className="block text-xs font-medium text-text-secondary mb-1">Thời lượng video (phút)</label>
-                            <input id="videoDuration" type="number" value={videoDuration} onChange={e => setVideoDuration(e.target.value)} className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent'}`} placeholder="VD: 5"/>
+                            <label htmlFor="videoDuration" className="block text-xs font-medium text-text-secondary mb-1">Thá»i lÆ°á»£ng video (phÃºt)</label>
+                            <input id="videoDuration" type="number" value={videoDuration} onChange={e => setVideoDuration(e.target.value)} className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`} placeholder="VD: 5"/>
                         </div>
                     </Tooltip>
                 )}
@@ -475,7 +472,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 {scriptType === 'Video' && (
                   <Tooltip text={FORMATTING_EXPLANATIONS.scriptParts}>
                       <div>
-                          <label htmlFor="scriptParts" className="block text-xs font-medium text-text-secondary mb-1">Số phần</label>
+                          <label htmlFor="scriptParts" className="block text-xs font-medium text-text-secondary mb-1">Sá»‘ pháº§n</label>
                           <div className="flex items-center space-x-2">
                               <input 
                                   id="scriptParts" 
@@ -483,17 +480,17 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                                   value={scriptParts === 'Auto' ? '' : scriptParts} 
                                   onChange={e => setScriptParts(e.target.value)} 
                                   disabled={scriptParts === 'Auto'}
-                                  className={`w-full border rounded-md p-2 transition focus:ring-2 ${isFinanceMode ? 'bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500 disabled:opacity-40' : 'bg-primary border-border text-text-primary focus:ring-accent focus:border-accent disabled:bg-primary/50'} disabled:cursor-not-allowed`} 
+                                  className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed`} 
                                   placeholder="3"
                               />
                               <label className="flex items-center space-x-2 cursor-pointer whitespace-nowrap">
                                   <input 
                                       type="checkbox" 
-                                      className={`h-4 w-4 rounded border-border focus:ring-accent ${isFinanceMode ? 'text-emerald-600 bg-zinc-900' : 'text-accent bg-secondary'}`} 
+                                      className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} 
                                       checked={scriptParts === 'Auto'} 
                                       onChange={(e) => setScriptParts(e.target.checked ? 'Auto' : '3')} 
                                   />
-                                  <span className={`text-sm ${isFinanceMode ? 'text-emerald-200/80' : 'text-text-primary'}`}>Tự động</span>
+                                  <span className={`text-sm text-emerald-200/80`}>Tá»± Ä‘á»™ng</span>
                               </label>
                           </div>
                       </div>
@@ -503,41 +500,41 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             <div className="grid grid-cols-2 gap-y-2 gap-x-4 mt-4">
                 <Tooltip text={FORMATTING_EXPLANATIONS.includeIntro} className="block">
                     <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isFinanceMode ? 'text-emerald-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.includeIntro} onChange={(e) => handleCheckboxChange('includeIntro', e.target.checked)} />
-                        <span className={`${isFinanceMode ? 'text-emerald-200/80' : 'text-text-primary'}`}>Intro</span>
+                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} checked={formattingOptions.includeIntro} onChange={(e) => handleCheckboxChange('includeIntro', e.target.checked)} />
+                        <span className={`text-emerald-200/80`}>Intro</span>
                     </label>
                 </Tooltip>
                  <Tooltip text={FORMATTING_EXPLANATIONS.includeOutro} className="block">
                     <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isFinanceMode ? 'text-emerald-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.includeOutro} onChange={(e) => handleCheckboxChange('includeOutro', e.target.checked)} />
-                        <span className={`${isFinanceMode ? 'text-emerald-200/80' : 'text-text-primary'}`}>Outro</span>
+                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} checked={formattingOptions.includeOutro} onChange={(e) => handleCheckboxChange('includeOutro', e.target.checked)} />
+                        <span className={`text-emerald-200/80`}>Outro</span>
                     </label>
                 </Tooltip>
                 <Tooltip text={FORMATTING_EXPLANATIONS.headings} className="block">
                     <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isFinanceMode ? 'text-emerald-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.headings} onChange={(e) => handleCheckboxChange('headings', e.target.checked)} />
-                        <span className={`${isFinanceMode ? 'text-emerald-200/80' : 'text-text-primary'}`}>Tiêu đề</span>
+                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} checked={formattingOptions.headings} onChange={(e) => handleCheckboxChange('headings', e.target.checked)} />
+                        <span className={`text-emerald-200/80`}>TiÃªu Ä‘á»</span>
                     </label>
                 </Tooltip>
                 <Tooltip text={FORMATTING_EXPLANATIONS.bullets} className="block">
                     <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isFinanceMode ? 'text-emerald-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.bullets} onChange={(e) => handleCheckboxChange('bullets', e.target.checked)} />
-                        <span className={`${isFinanceMode ? 'text-emerald-200/80' : 'text-text-primary'}`}>Gạch đầu dòng</span>
+                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} checked={formattingOptions.bullets} onChange={(e) => handleCheckboxChange('bullets', e.target.checked)} />
+                        <span className={`text-emerald-200/80`}>Gáº¡ch Ä‘áº§u dÃ²ng</span>
                     </label>
                 </Tooltip>
                  <Tooltip text={FORMATTING_EXPLANATIONS.bold} className="block">
                     <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent ${isFinanceMode ? 'text-emerald-600 bg-zinc-900' : 'text-accent bg-secondary'}`} checked={formattingOptions.bold} onChange={(e) => handleCheckboxChange('bold', e.target.checked)} />
-                        <span className={`${isFinanceMode ? 'text-emerald-200/80' : 'text-text-primary'}`}>In đậm/nghiêng</span>
+                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} checked={formattingOptions.bold} onChange={(e) => handleCheckboxChange('bold', e.target.checked)} />
+                        <span className={`text-emerald-200/80`}>In Ä‘áº­m/nghiÃªng</span>
                     </label>
                 </Tooltip>
             </div>
         </ControlSection>
-        <Tooltip text="Tạo ra kịch bản hoàn chỉnh dựa trên tất cả các thiết lập bạn đã chọn ở trên.">
+        <Tooltip text="Táº¡o ra ká»‹ch báº£n hoÃ n chá»‰nh dá»±a trÃªn táº¥t cáº£ cÃ¡c thiáº¿t láº­p báº¡n Ä‘Ã£ chá»n á»Ÿ trÃªn.">
           <button
               onClick={onGenerate}
               disabled={isLoading || !title}
-              className={`w-full flex items-center justify-center font-bold py-3 px-4 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 shadow-lg ${isFinanceMode ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/40 text-white' : 'bg-accent hover:brightness-110 shadow-accent/20 text-white'} disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`w-full flex items-center justify-center font-bold py-3 px-4 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 shadow-lg bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/40 text-white disabled:opacity-50 disabled:cursor-not-allowed`}
           >
               {isLoading ? (
                 <>
@@ -545,12 +542,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Đang tạo...
+                  Äang táº¡o...
                 </>
               ) : (
                 <>
                   <SparklesIcon className="w-5 h-5 mr-2" />
-                  Tạo kịch bản
+                  Táº¡o ká»‹ch báº£n
                 </>
               )}
           </button>
@@ -558,3 +555,5 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     </div>
   );
 };
+
+

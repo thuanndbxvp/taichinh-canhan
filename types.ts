@@ -1,29 +1,22 @@
 
 // Ngôn ngữ/giọng điệu mặc định cho Finance Content Studio (Chú Que persona).
+// Chú Que Tài Chính — chỉ giữ 4 tông giọng cốt lõi phục vụ nhân vật.
 export type Expression =
   | 'Empathetic'
-  | 'Professional'
   | 'Conversational'
-  | 'Informative'
   | 'Authoritative'
-  | 'Inspirational'
-  | 'Persuasive'
-  | 'Humorous'
-  | 'Personal'
-  | 'Formal';
+  | 'Analytical';
 
+// Chú Que Tài Chính — 4 phong cách viết gắn với DNA kênh.
 export type Style =
   | 'Narrative'
-  | 'Expository'
-  | 'Persuasive'
   | 'Analytical'
-  | 'Conversational'
   | 'Storytelling'
   | 'Educational';
 export type ScriptType = 'Video' | 'Podcast';
 export type NumberOfSpeakers = 'Auto' | '2' | '3' | '4' | '5';
 export type AiProvider = 'kyma' | 'openai';
-export type ScenarioType = 'general' | 'ww2' | 'finance';
+export type ScenarioType = 'finance';
 
 // Options interfaces
 export interface StyleOptions {

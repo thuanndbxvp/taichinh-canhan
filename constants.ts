@@ -41,24 +41,15 @@ export const NUMBER_OF_SPEAKERS_OPTIONS: LabeledOption<NumberOfSpeakers>[] = [
 export const EXPRESSION_OPTIONS: LabeledOption<Expression>[] = [
   { value: 'Empathetic', label: 'Đồng cảm' },
   { value: 'Conversational', label: 'Thân mật' },
-  { value: 'Informative', label: 'Cung cấp thông tin' },
-  { value: 'Professional', label: 'Chuyên nghiệp' },
   { value: 'Authoritative', label: 'Chuyên gia' },
-  { value: 'Inspirational', label: 'Truyền cảm hứng' },
-  { value: 'Persuasive', label: 'Thuyết phục' },
-  { value: 'Humorous', label: 'Hài hước' },
-  { value: 'Personal', label: 'Cá nhân' },
-  { value: 'Formal', label: 'Trang trọng' },
+  { value: 'Analytical', label: 'Phân tích sắc bén' },
 ];
 
 export const STYLE_OPTIONS: LabeledOption<Style>[] = [
   { value: 'Narrative', label: 'Kể chuyện' },
-  { value: 'Storytelling', label: 'Kể chuyện có nhân vật' },
-  { value: 'Expository', label: 'Giải thích' },
-  { value: 'Educational', label: 'Dạy học theo bước' },
   { value: 'Analytical', label: 'Phân tích số liệu' },
-  { value: 'Conversational', label: 'Đối thoại' },
-  { value: 'Persuasive', label: 'Thuyết phục' },
+  { value: 'Storytelling', label: 'Kể chuyện có nhân vật' },
+  { value: 'Educational', label: 'Dạy học theo bước' },
 ];
 
 export const LANGUAGE_OPTIONS: { value: string, label: string }[] = [

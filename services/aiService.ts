@@ -13,8 +13,8 @@ import { AppError } from '../src/lib/errors';
 import { aiGateway, validateApiKey } from '../src/services/ai';
 import { promptRegistry } from '../src/services/ai/PromptRegistry';
 import { parseAiJsonOrThrow, SCHEMAS } from '../src/services/ai/responseParser';
-// Side-effect import: đăng ký tất cả prompt finance-* và default-* vào registry.
-import '../src/services/ai/prompts/finance';
+// Side-effect import: đăng ký tất cả prompt finance-* vào registry.
+import '../src/services/ai/prompts';
 
 /**
  * Helper: gọi gateway với messages từ prompt registry, map lỗi về AppError.
@@ -65,7 +65,7 @@ export const generateScript = async (
     return await callWithPrompt(
       provider,
       model,
-      params.isFinanceMode ? 'finance.script' : 'default.script',
+      'finance.script',
       { params },
       'tạo kịch bản',
     );
@@ -83,7 +83,7 @@ export const generateScriptOutline = async (
     const outline = await callWithPrompt(
       provider,
       model,
-      params.isFinanceMode ? 'finance.script.outline' : 'default.script.outline',
+      'finance.script.outline',
       { params },
       'tạo dàn ý',
     );
@@ -102,25 +102,16 @@ export const generateScriptPart = async (
   model: string,
 ): Promise<string> => {
   try {
-    if (params.isFinanceMode) {
-      return await callWithPrompt(
-        provider,
-        model,
-        'finance.script.part',
-        {
-          params,
-          fullOutline,
-          previousPartsScript,
-          currentPartOutline,
-        },
-        'tạo phần kịch bản',
-      );
-    }
     return await callWithPrompt(
       provider,
       model,
-      'default.script.part',
-      { params, currentPartOutline, title: params.title },
+      'finance.script.part',
+      {
+        params,
+        fullOutline,
+        previousPartsScript,
+        currentPartOutline,
+      },
       'tạo phần kịch bản',
     );
   } catch (e) {
@@ -162,7 +153,7 @@ export const reviseScript = async (
       {
         script,
         revisionPrompt,
-        style: params.isFinanceMode ? params.styleOptions : null,
+        style: params.styleOptions,
       },
       'sửa kịch bản',
     );
