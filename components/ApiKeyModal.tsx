@@ -285,9 +285,9 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                                     className="w-full bg-primary border border-border rounded-md p-1.5 text-text-primary text-xs focus:border-accent"
                                     value={localModels.openai}
                                     onChange={(e) => setLocalModels(prev => ({ ...prev, openai: e.target.value }))}
-                                    placeholder="anthropic/claude-3.5-sonnet"
+                                    placeholder="anthropic/claude-4.5-sonnet"
                                 />
-                                <p className="text-[10px] text-text-secondary/60 mt-1">Ví dụ: <b>anthropic/claude-3.5-sonnet</b></p>
+                                <p className="text-[10px] text-text-secondary/60 mt-1">Ví dụ: <b>anthropic/claude-4.5-sonnet</b></p>
                             </div>
                         </>
                     )}

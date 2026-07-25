@@ -36,7 +36,7 @@ export function useAiSettings(): UseAiSettingsReturn {
   const [activeProviders, setActiveProviders] = useState<AiProvider[]>(['kyma']);
   const [models, setModels] = useState<Record<AiProvider, string>>({
     kyma: DEFAULT_KYMA_MODELS[0].value,
-    openai: 'anthropic/claude-3.5-sonnet'
+    openai: 'anthropic/claude-4.5-sonnet'
   });
   const [themeColor, setThemeColor] = useState<string>(DEFAULT_THEME);
   const [notification, setNotification] = useState<string | null>(null);
@@ -69,7 +69,7 @@ export function useAiSettings(): UseAiSettingsReturn {
         const parsedModels = JSON.parse(savedModels);
         setModels({
           kyma: (parsedModels.kyma || DEFAULT_KYMA_MODELS[0].value).trim(),
-          openai: (parsedModels.openai || 'anthropic/claude-3.5-sonnet').trim()
+          openai: (parsedModels.openai || 'anthropic/claude-4.5-sonnet').trim()
         });
       } else {
           // Backward compatibility for openai model
