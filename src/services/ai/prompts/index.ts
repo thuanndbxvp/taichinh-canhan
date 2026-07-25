@@ -118,9 +118,9 @@ promptRegistry.register('finance.script.part', {
     void fullOutline;
     void previousPartsScript;
 
-    // Mặc định 5 phần cho cấu trúc DNA. Nếu sau này outline được phân nhánh,
-    // có thể derive từ currentPartOutline để ra tổng số phần.
-    const totalParts = 5;
+    // Đếm số lượng phần thực tế trong dàn ý (để chia số từ chính xác)
+    const matchParts = fullOutline.match(/## PHẦN \d+/gi);
+    const totalParts = matchParts ? Math.max(1, matchParts.length) : 5;
     const totalNum = parseInt(wordCount, 10) || 0;
     const perPart = Math.max(50, Math.round(totalNum / totalParts));
     const minSpoken = Math.max(50, Math.round(perPart * 0.95));

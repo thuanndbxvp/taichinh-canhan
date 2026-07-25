@@ -1,4 +1,4 @@
-﻿
+
 import React, { useState } from 'react';
 import { OptionSelector } from './OptionSelector';
 import { SparklesIcon } from './icons/SparklesIcon';
@@ -311,48 +311,8 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             )}
         </ControlSection>
 
-        <ControlSection title="4. Định dạng Kịch bản" isDark>
-            <div className={`flex rounded-lg p-1 bg-black`}>
-                {SCRIPT_TYPE_OPTIONS.map(option => (
-                    <button
-                        key={option.value}
-                        onClick={() => setScriptType(option.value)}
-                        className={`w-full py-2 text-sm font-semibold rounded-md transition-colors ${
-                            scriptType === option.value 
-                            ? 'bg-emerald-700 text-white shadow-sm' 
-                            : 'text-emerald-500/60 hover:text-emerald-500'
-                        }`}
-                    >
-                        {option.label}
-                    </button>
-                ))}
-            </div>
-        </ControlSection>
 
-        {scriptType === 'Podcast' && (
-          <ControlSection title="5. Số lượng người nói" isDark>
-            <OptionSelector<NumberOfSpeakers>
-                options={NUMBER_OF_SPEAKERS_OPTIONS}
-                selectedOption={numberOfSpeakers}
-                onSelect={setNumberOfSpeakers}
-            />
-          </ControlSection>
-        )}
-
-        <ControlSection title={`${scriptType === 'Podcast' ? '6' : '5'}. Ngôn ngữ`} isDark>
-            <select
-              id="language"
-              value={targetAudience}
-              onChange={(e) => setTargetAudience(e.target.value)}
-              className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
-            >
-              {LANGUAGE_OPTIONS.map(lang => (
-                <option key={lang.value} value={lang.value}>{lang.label}</option>
-              ))}
-            </select>
-        </ControlSection>
-
-        <ControlSection title={`${scriptType === 'Podcast' ? '7' : '6'}. Cấu trúc & Định dạng`} isDark>
+        <ControlSection title="4. Cấu trúc & Định dạng" isDark>
             <div className={`flex rounded-lg p-1 mb-4 bg-black`}>
                 <button
                     onClick={() => setLengthType('words')}
