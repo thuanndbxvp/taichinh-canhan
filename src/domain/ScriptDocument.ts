@@ -5,13 +5,17 @@
  *   - Thêm metadata (tags, language, audience, wordCount).
  *   - Thêm cache slots gắn với cacheKey ổn định (Phase 3.5).
  *   - Lưu được cả ScriptDocument lớn trong IndexedDB.
+ *   - Phase 4: thêm brief (ContentBrief), scenes (Scene[]), claims (link),
+ *     calculations (link), research (link).
  *
  * Migration: LibraryItem cũ → ScriptDocument qua `migrateLibraryItemToDocument`.
  * Không phá tương thích: load file JSON cũ vẫn đọc được.
  */
 import type { CachedData, StyleOptions } from '../../types';
+import type { ContentBrief } from './ContentBrief';
+import type { Scene } from './Scene';
 
-export const SCRIPT_DOCUMENT_SCHEMA_VERSION = 2;
+export const SCRIPT_DOCUMENT_SCHEMA_VERSION = 3;
 
 /**
  * Domain id: dùng crypto.randomUUID() trong browser, fallback Date.now() cho test.
@@ -76,6 +80,15 @@ export interface ScriptDocument {
    * Metadata tuỳ chọn.
    */
   metadata?: ScriptDocumentMetadata;
+  /**
+   * Phase 4: ContentBrief có cấu trúc. Optional để giữ tương thích với
+   * LibraryItem cũ không có brief.
+   */
+  brief?: ContentBrief;
+  /**
+   * Phase 4: danh sách scene có cấu trúc. Optional.
+   */
+  scenes?: Scene[];
   createdAt: number;
   updatedAt: number;
 }
@@ -100,6 +113,8 @@ export function createScriptDocument(input: {
   script: string;
   metadata?: ScriptDocumentMetadata;
   cachedData?: CachedData;
+  brief?: ContentBrief;
+  scenes?: Scene[];
 }): ScriptDocument {
   const now = Date.now();
   return {
@@ -111,6 +126,8 @@ export function createScriptDocument(input: {
     cachedData: input.cachedData,
     assets: [],
     metadata: input.metadata,
+    brief: input.brief,
+    scenes: input.scenes,
     createdAt: now,
     updatedAt: now,
   };
@@ -168,6 +185,8 @@ export function migrateLibraryItemToDocument(
     cachedData: legacy.cachedData,
     assets: [],
     metadata: undefined,
+    brief: undefined,
+    scenes: undefined,
     createdAt,
     updatedAt: createdAt,
   };

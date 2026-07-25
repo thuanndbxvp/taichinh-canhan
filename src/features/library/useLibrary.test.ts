@@ -90,7 +90,7 @@ describe('useLibrary', () => {
     const stored = JSON.parse(localStorage.getItem('yt-script-library-v2') || '[]');
     expect(stored).toHaveLength(1);
     expect(stored[0].title).toBe('T');
-    expect(stored[0].schemaVersion).toBe(2);
+    expect(stored[0].schemaVersion).toBe(3);
   });
 
   it('migrate từ legacy key (yt-script-library) sang v2', async () => {
