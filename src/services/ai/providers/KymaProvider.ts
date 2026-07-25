@@ -59,6 +59,17 @@ export const KymaProvider: ProviderAdapter = {
     }
 
     if (ctx.onChunk && res.body) {
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('text/event-stream')) {
+        const text = await res.text().catch(() => '');
+        throw new ProviderError({
+          kind: 'http',
+          message: `Kyma không trả về stream. Response: ${text.slice(0, 500)}`,
+          retryable: false,
+          statusCode: res.status,
+          raw: text,
+        });
+      }
       const reader = res.body.getReader();
       const decoder = new TextDecoder('utf-8');
       let fullContent = '';
@@ -76,12 +87,24 @@ export const KymaProvider: ProviderAdapter = {
             if (data === '[DONE]') continue;
             try {
               const parsed = JSON.parse(data);
-              const delta = parsed.choices?.[0]?.delta?.content;
+              if (parsed.error) {
+                throw new ProviderError({
+                  kind: 'provider',
+                  message: parsed.error.message || JSON.stringify(parsed.error),
+                  retryable: false,
+                  raw: parsed,
+                });
+              }
+              const delta = parsed.choices?.[0]?.delta;
               if (delta) {
-                fullContent += delta;
-                ctx.onChunk(delta);
+                const text = delta.content || delta.reasoning_content || '';
+                if (text) {
+                  fullContent += text;
+                  ctx.onChunk(text);
+                }
               }
             } catch (e) {
+              if (e instanceof ProviderError) throw e;
               // Ignore invalid JSON chunks
             }
           }
