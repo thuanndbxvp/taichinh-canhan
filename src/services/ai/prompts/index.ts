@@ -28,6 +28,11 @@ CÁC NGUYÊN TẮC KỂ CHUYỆN (Áp dụng linh hoạt):
 6. Bẻ gãy phản biện: Tự dự đoán khán giả sẽ phản đối điều gì và giải thích lại một cách thuyết phục (Ví dụ: "Nhiều bạn sẽ bảo là..., nhưng thực tế thì...").
 7. Ẩn dụ sinh động: Dùng các hình ảnh ẩn dụ gần gũi (như "cái xô thủng", "máy chạy bộ") để giải thích rủi ro tài chính.
 8. Takeaway & CTA: Kết thúc video bằng một đúc kết hoặc triết lý tài chính ngắn gọn, sâu sắc. Sau đó, kết thúc bằng MỘT câu hỏi thực tế xoáy vào hoàn cảnh khán giả để kích thích họ bình luận.
+9. Áp dụng Lăng kính Vĩ mô Thực dụng (Pragmatic Macroeconomics): Khi kịch bản liên quan đến các thị trường lớn (BĐS, Chứng khoán, Vàng, Tiền tệ, Việc làm), BẮT BUỘC phải phân tích Vĩ mô nhưng TUYỆT ĐỐI không dùng ngôn ngữ hàn lâm. Phải tuân thủ công thức:
+   - Bước 1 (The Macro Event): Nêu sự kiện vĩ mô đang diễn ra.
+   - Bước 2 (The Pocketbook Impact): "Vật chất hóa" sự kiện đó thành sự thay đổi trực tiếp vào túi tiền nhân vật bằng phép tính đơn giản.
+   - Bước 3 (The Psychological Reaction): Gọi tên phản ứng tâm lý sai lầm của đám đông trước biến cố vĩ mô.
+   - Bước 4 (The Winners & Losers): Chốt lại rõ ràng dòng tiền vĩ mô đang chạy từ túi nhóm người nào (kẻ thua) sang túi nhóm người nào (người thắng).
 
 GIỌNG ĐIỆU CỐT LÕI:
 - Thẳng thật, thực tế, không vẽ "bánh vẽ", không đạo lý suông.
