@@ -66,7 +66,11 @@ export function useAiSettings(): UseAiSettingsReturn {
 
       const savedModels = localStorage.getItem(MODELS_KEY);
       if (savedModels) {
-          setModels(JSON.parse(savedModels));
+        const parsedModels = JSON.parse(savedModels);
+        setModels({
+          kyma: (parsedModels.kyma || DEFAULT_KYMA_MODELS[0].value).trim(),
+          openai: (parsedModels.openai || 'anthropic/claude-3.5-sonnet').trim()
+        });
       } else {
           // Backward compatibility for openai model
           const oldOpenAiModel = localStorage.getItem('openai-custom-model');

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TrashIcon } from './icons/TrashIcon';
 import type { AiProvider } from '../types';
 import { validateApiKey } from '../services/aiService';
@@ -207,7 +207,10 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
 
         onSaveKeys(finalKeys);
         onSaveActiveProviders(localActiveProviders);
-        onSaveModels(localModels);
+        onSaveModels({
+            kyma: (localModels.kyma || '').trim(),
+            openai: (localModels.openai || '').trim()
+        });
         onClose();
     };
 
