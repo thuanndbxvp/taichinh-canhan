@@ -255,14 +255,14 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             <div className="mt-3 bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-3">
                     <label className="flex items-center gap-2 text-xs font-bold text-emerald-500 mb-2 uppercase tracking-wider">
                         <BoltIcon className="w-4 h-4" />
-                        Chúố đè Tài chính Cá nhân Gợi ý
+                        Chủ đề Tài chính Cá nhân Gợi ý
                     </label>
                     <select
                         onChange={handleSelectDarkFrontiersIdea}
                         className="w-full bg-black border border-emerald-500/50 rounded-md p-2 text-emerald-200 text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
                         defaultValue=""
                     >
-                        <option value="" disabled>-- Chọn chúố đè tài chính --</option>
+                        <option value="" disabled>-- Chọn chủ đề tài chính --</option>
                         {FINANCE_IDEAS.map(idea => (
                             <option key={idea.title} value={idea.title}>{idea.title}</option>
                         ))}
