@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleGenAI, Chat } from "@google/genai";
 import type { ChatMessage, AiProvider } from '../types';
 import { SparklesIcon } from './icons/SparklesIcon';
@@ -25,11 +25,10 @@ const getApiKey = (provider: AiProvider): string => {
 interface IdeaBrainstormProps {
     setTitle: (title: string) => void;
     setOutlineContent: (content: string) => void;
-    aiProvider: AiProvider;
-    selectedModel: string;
+    getNextAiConfig: () => { provider: AiProvider; model: string } | null;
 }
 
-export const IdeaBrainstorm: React.FC<IdeaBrainstormProps> = ({ setTitle, setOutlineContent, aiProvider, selectedModel }) => {
+export const IdeaBrainstorm: React.FC<IdeaBrainstormProps> = ({ setTitle, setOutlineContent, getNextAiConfig }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<ChatMessage[]>([
         { role: 'model', content: 'Chào bạn! Bạn đang muốn tìm ý tưởng cho video về chủ đề gì?' }
@@ -62,17 +61,17 @@ export const IdeaBrainstorm: React.FC<IdeaBrainstormProps> = ({ setTitle, setOut
         } catch (e) {
             if (isMounted.current) setError(e instanceof Error ? e.message : "Could not start chat. Check API Key.");
         }
-    }, [aiProvider, selectedModel]);
+    }, [getNextAiConfig]);
     
     useEffect(() => {
         isMounted.current = true;
-        // Reset chat history when component opens or provider changes
+        // Reset chat history when component opens or config changes
         if (isOpen) {
             setMessages([{ role: 'model', content: 'Chào bạn! Bạn đang muốn tìm ý tưởng cho video về chủ đề gì?' }]);
             initializeChat();
         }
         return () => { isMounted.current = false };
-    }, [initializeChat, isOpen, aiProvider]);
+    }, [initializeChat, isOpen, getNextAiConfig]);
 
     useEffect(() => {
         if (chatContainerRef.current) {
@@ -83,6 +82,12 @@ export const IdeaBrainstorm: React.FC<IdeaBrainstormProps> = ({ setTitle, setOut
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!userInput.trim() || isLoading) return;
+
+        const config = getNextAiConfig();
+        if (!config) {
+            setError('Vui lòng cấu hình API Key và kích hoạt AI.');
+            return;
+        }
 
         const newUserMessage: ChatMessage = { role: 'user', content: userInput };
         const currentMessages = [...messages, newUserMessage];
@@ -101,7 +106,7 @@ export const IdeaBrainstorm: React.FC<IdeaBrainstormProps> = ({ setTitle, setOut
         try {
             let modelResponseText: string;
             
-            if (aiProvider === 'kyma') {
+            if (config.provider === 'kyma') {
                 if (!chatRef.current) {
                     initializeChat();
                     if (!chatRef.current) {
@@ -111,10 +116,10 @@ export const IdeaBrainstorm: React.FC<IdeaBrainstormProps> = ({ setTitle, setOut
                 const response = await chatRef.current.sendMessage({ message: userInput });
                 modelResponseText = response.text;
             } else { // openai
-                const apiKey = getApiKey('openai');
+                const apiKey = getApiKey(config.provider);
                 const messagesForApi = [
                     { role: 'system', content: systemPrompt },
-                    ...currentMessages.slice(1).map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.content }))
+                    ...currentMessages.map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.content }))
                 ];
                 
                 const res = await fetch('https://api.openai.com/v1/chat/completions', {

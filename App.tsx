@@ -32,39 +32,64 @@ const YoutubeLogoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 const App: React.FC = () => {
   const brief = useContentBrief();
   const aiSettings = useAiSettings();
+  const [currentAiConfig, setCurrentAiConfig] = useState<{provider: AiProvider, model: string} | null>(null);
+  const [pendingGenerate, setPendingGenerate] = useState(false);
+
+  useEffect(() => {
+      if (!currentAiConfig && aiSettings.activeProviders.length > 0) {
+          const firstProvider = aiSettings.activeProviders[0];
+          setCurrentAiConfig({ provider: firstProvider, model: aiSettings.models[firstProvider] || '' });
+      }
+  }, [aiSettings.activeProviders, aiSettings.models, currentAiConfig]);
+
+  const fallbackProvider = currentAiConfig?.provider || 'kyma';
+  const fallbackModel = currentAiConfig?.model || '';
+
   const generation = useGenerationWorkflow({
     brief: brief.brief,
-    aiProvider: aiSettings.aiProvider,
-    selectedModel: aiSettings.selectedModel,
+    aiProvider: fallbackProvider,
+    selectedModel: fallbackModel,
   });
   const dialogue = useDialogueWorkflow({
-    aiProvider: aiSettings.aiProvider,
-    selectedModel: aiSettings.selectedModel,
+    aiProvider: fallbackProvider,
+    selectedModel: fallbackModel,
   });
   const scenes = useSceneWorkflow({
-    aiProvider: aiSettings.aiProvider,
-    selectedModel: aiSettings.selectedModel,
+    aiProvider: fallbackProvider,
+    selectedModel: fallbackModel,
   });
   const review = useReviewWorkflow({
-    aiProvider: aiSettings.aiProvider,
-    selectedModel: aiSettings.selectedModel,
+    aiProvider: fallbackProvider,
+    selectedModel: fallbackModel,
   });
   const library = useLibrary();
   const ideas = useIdeaWorkflow({
-    aiProvider: aiSettings.aiProvider,
-    selectedModel: aiSettings.selectedModel,
+    aiProvider: fallbackProvider,
+    selectedModel: fallbackModel,
   });
   const modals = useModalState();
 
-  // Khi bắt đầu generate mới, clear các cache downstream
-  const handleGenerate = useCallback(async () => {
+  const handleGenerateClick = useCallback(() => {
     if (!brief.brief.title.trim()) return;
-    scenes.clearAll();
-    dialogue.clear();
-    review.clear();
-    library.setHasSaved(false);
-    await generation.generate();
-  }, [brief.brief.title, scenes, dialogue, review, library, generation]);
+    const config = aiSettings.getNextAiConfig();
+    if (!config) {
+        aiSettings.setLocalNotification("Vui lòng cấu hình API Key và kích hoạt ít nhất một nhà cung cấp AI.");
+        return;
+    }
+    setCurrentAiConfig(config);
+    setPendingGenerate(true);
+  }, [brief.brief.title, aiSettings]);
+
+  useEffect(() => {
+    if (pendingGenerate && currentAiConfig) {
+        setPendingGenerate(false);
+        scenes.clearAll();
+        dialogue.clear();
+        review.clear();
+        library.setHasSaved(false);
+        generation.generate();
+    }
+  }, [pendingGenerate, currentAiConfig, scenes, dialogue, review, library, generation]);
 
   // Load script từ library: cập nhật brief + script + reset caches
   const handleLoadLibraryItem = useCallback(
@@ -115,7 +140,7 @@ const App: React.FC = () => {
     }
   }, [generation.generatedScript, dialogue.dialogue]);
 
-  const hasApiKey = aiSettings.hasApiKey;
+  const hasApiKey = aiSettings.hasAnyApiKey;
 
   return (
     <div className="min-h-screen bg-black text-slate-300">
@@ -171,7 +196,7 @@ const App: React.FC = () => {
             setKeywords={brief.setKeywords}
             wordCount={brief.brief.wordCount}
             setWordCount={brief.setWordCount}
-            onGenerate={handleGenerate}
+            onGenerate={handleGenerateClick}
             isLoading={generation.isLoading || !hasApiKey}
             onGenerateKeywordSuggestions={() => ideas.generateKeywordSuggestions(brief.brief.title)}
             isSuggestingKeywords={ideas.isSuggestingKeywords}
@@ -197,10 +222,7 @@ const App: React.FC = () => {
             isParsingFile={ideas.isParsing}
             parsingFileError={ideas.parsingError}
             uploadedIdeas={ideas.uploadedIdeas}
-            aiProvider={aiSettings.aiProvider}
-            setAiProvider={aiSettings.setAiProvider}
-            selectedModel={aiSettings.selectedModel}
-            setSelectedModel={aiSettings.setSelectedModel}
+            getNextAiConfig={aiSettings.getNextAiConfig}
             apiKeys={aiSettings.apiKeys}
           />
         </div>
@@ -256,10 +278,14 @@ const App: React.FC = () => {
       </main>
 
       <ApiKeyModal
-        isOpen={modals.isOpen('apiKey')}
-        onClose={() => modals.close('apiKey')}
+        isOpen={modals.isOpen('apiKey')} 
+        onClose={() => modals.close('apiKey')} 
         currentApiKeys={aiSettings.apiKeys}
         onSaveKeys={aiSettings.saveApiKeys}
+        activeProviders={aiSettings.activeProviders}
+        onSaveActiveProviders={aiSettings.setActiveProviders}
+        models={aiSettings.models}
+        onSaveModels={aiSettings.setModels}
       />
       <GuideModal
         isOpen={modals.isOpen('guide')}

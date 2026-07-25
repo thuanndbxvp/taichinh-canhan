@@ -54,15 +54,12 @@ interface ControlPanelProps {
   savedIdeas: SavedIdea[];
   onSaveIdea: (idea: TopicSuggestionItem) => void | Promise<void>;
   onOpenSavedIdeasModal: () => void;
-  onParseFile: (content: string) => void;
+  onParseFile: (file: File) => void;
   isParsingFile: boolean;
   parsingFileError: string | null;
   uploadedIdeas: TopicSuggestionItem[];
-  aiProvider: AiProvider;
-  setAiProvider: (provider: AiProvider) => void;
-  selectedModel: string;
-  setSelectedModel: (model: string) => void;
-  apiKeys?: Record<AiProvider, string[]>;
+  apiKeys: Record<AiProvider, string[]>;
+  getNextAiConfig: () => { provider: AiProvider; model: string } | null;
 }
 
 const ControlSection: React.FC<{title: string; children: React.ReactNode; isDark?: boolean}> = ({ title, children, isDark }) => (
@@ -88,32 +85,9 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   lengthType, setLengthType, videoDuration, setVideoDuration,
   savedIdeas, onSaveIdea, onOpenSavedIdeasModal,
   onParseFile, isParsingFile, parsingFileError, uploadedIdeas,
-  aiProvider, setAiProvider, selectedModel, setSelectedModel,
+  getNextAiConfig,
   apiKeys
 }) => {
-  const [kymaModels, setKymaModels] = useState<{value: string, label: string}[]>([]);
-  const [openAiModels, setOpenAiModels] = useState<{value: string, label: string}[]>([]);
-
-  useEffect(() => {
-    if (aiProvider === 'kyma' && apiKeys?.kyma?.[0]) {
-        fetch('https://kymaapi.com/v1/models', { headers: { 'Authorization': `Bearer ${apiKeys.kyma[0]}` } })
-        .then(res => res.json())
-        .then(data => {
-            if (data?.data) {
-                const models = data.data.map((m: any) => ({ value: m.id, label: m.name || m.id }));
-                setKymaModels(models);
-                if (!models.find((m: any) => m.value === selectedModel)) {
-                    setSelectedModel(models[0]?.value || '');
-                }
-            }
-        })
-        .catch(console.error);
-    } else if (aiProvider === 'openai') {
-        const customModel = localStorage.getItem('openai-custom-model') || 'anthropic/claude-3.5-sonnet';
-        setOpenAiModels([{ value: customModel, label: `Custom: ${customModel}` }]);
-        if (selectedModel !== customModel) setSelectedModel(customModel);
-    }
-  }, [aiProvider, apiKeys?.kyma]);
 
   const handleAddKeyword = (keyword: string) => {
     setKeywords(keywords ? `${keywords}, ${keyword}` : keyword);
@@ -131,15 +105,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
       });
   };
 
-  const handleProviderChange = (provider: AiProvider) => {
-    setAiProvider(provider);
-    if (provider === 'kyma') {
-        setSelectedModel(kymaModels.length > 0 ? kymaModels[0].value : DEFAULT_KYMA_MODELS[0].value);
-    } else {
-        const customModel = localStorage.getItem('openai-custom-model') || 'anthropic/claude-3.5-sonnet';
-        setSelectedModel(customModel);
-    }
-  };
 
   const handleSelectDarkFrontiersIdea = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedTitle = e.target.value;
@@ -153,9 +118,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     }
   };
 
-  const modelOptions = aiProvider === 'kyma' 
-    ? (kymaModels.length > 0 ? kymaModels : DEFAULT_KYMA_MODELS)
-    : (openAiModels.length > 0 ? openAiModels : OPENAI_MODELS);
 
   const IdeaList: React.FC<{
     ideaList: TopicSuggestionItem[], 
@@ -238,8 +200,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               <IdeaBrainstorm 
                   setTitle={setTitle} 
                   setOutlineContent={setOutlineContent}
-                  aiProvider={aiProvider}
-                  selectedModel={selectedModel}
+                  getNextAiConfig={getNextAiConfig}
               />
             </Tooltip>
 
@@ -303,35 +264,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             {uploadedIdeas.length > 0 && <IdeaList ideaList={uploadedIdeas} listTitle="Ý tưởng từ File của bạn" />}
         </ControlSection>
 
-        <ControlSection title="2. Nhà cung cấp AI & Model" isDark>
-            <div className={`flex rounded-lg p-1 mb-3 bg-black`}>
-                {AI_PROVIDER_OPTIONS.map(option => (
-                    <button
-                        key={option.value}
-                        onClick={() => handleProviderChange(option.value)}
-                        className={`w-full py-2 text-sm font-semibold rounded-md transition-colors ${
-                            aiProvider === option.value 
-                            ? 'bg-emerald-700 text-white shadow-sm' 
-                            : 'text-emerald-500/60 hover:text-emerald-500'
-                        }`}
-                    >
-                        {option.label}
-                    </button>
-                ))}
-            </div>
-             <select
-              id="model"
-              value={selectedModel}
-              onChange={(e) => setSelectedModel(e.target.value)}
-              className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
-            >
-              {modelOptions.map(model => (
-                <option key={model.value} value={model.value}>{model.label}</option>
-              ))}
-            </select>
-        </ControlSection>
-
-        <ControlSection title="3. Từ khóa SEO (Tùy chọn)" isDark>
+        <ControlSection title="2. Từ khóa SEO (Tùy chọn)" isDark>
             <input
               id="keywords"
               type="text"

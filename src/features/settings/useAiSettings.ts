@@ -4,6 +4,8 @@ import { DEFAULT_KYMA_MODELS } from '../../../constants';
 import { apiKeyManager } from '../../../services/apiKeyManager';
 
 const STORAGE_KEY = 'ai-api-keys';
+const ACTIVE_PROVIDERS_KEY = 'ai-active-providers';
+const MODELS_KEY = 'ai-models';
 const THEME_KEY = 'yt-script-theme';
 
 const DEFAULT_KEYS: Record<AiProvider, string[]> = { kyma: [], openai: [] };
@@ -13,42 +15,64 @@ export interface UseAiSettingsReturn {
   apiKeys: Record<AiProvider, string[]>;
   setApiKeys: (keys: Record<AiProvider, string[]>) => void;
   saveApiKeys: (keys: Record<AiProvider, string[]>) => void;
-  aiProvider: AiProvider;
-  setAiProvider: (provider: AiProvider) => void;
-  selectedModel: string;
-  setSelectedModel: (model: string) => void;
+  activeProviders: AiProvider[];
+  setActiveProviders: (providers: AiProvider[]) => void;
+  models: Record<AiProvider, string>;
+  setModels: (models: Record<AiProvider, string>) => void;
   themeColor: string;
   setThemeColor: (color: string) => void;
-  hasApiKey: boolean;
+  hasAnyApiKey: boolean;
   notification: string | null;
   clearNotification: () => void;
   setLocalNotification: (msg: string) => void;
+  getNextAiConfig: () => { provider: AiProvider; model: string } | null;
 }
 
 /**
- * Quản lý: api keys, provider, model, theme color, notification.
- * - Tự load localStorage + lắng nghe `apiKeyRotated`.
- * - Persist vào localStorage mỗi khi keys/theme đổi.
- * - Public notification cục bộ (không dùng AI thì set thông báo khác).
+ * Quản lý: api keys, active providers, models, theme color, notification.
  */
 export function useAiSettings(): UseAiSettingsReturn {
   const [apiKeys, setApiKeys] = useState<Record<AiProvider, string[]>>(DEFAULT_KEYS);
-  const [aiProvider, setAiProvider] = useState<AiProvider>('kyma');
-  const [selectedModel, setSelectedModel] = useState<string>(DEFAULT_KYMA_MODELS[0].value);
+  const [activeProviders, setActiveProviders] = useState<AiProvider[]>(['kyma']);
+  const [models, setModels] = useState<Record<AiProvider, string>>({
+    kyma: DEFAULT_KYMA_MODELS[0].value,
+    openai: 'anthropic/claude-3.5-sonnet'
+  });
   const [themeColor, setThemeColor] = useState<string>(DEFAULT_THEME);
   const [notification, setNotification] = useState<string | null>(null);
+  
+  const roundRobinIndex = useRef(0);
 
   // Load ban đầu
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      const parsed = saved ? JSON.parse(saved) : DEFAULT_KEYS;
-      setApiKeys(parsed);
-      apiKeyManager.updateKeys(parsed);
+      const savedKeys = localStorage.getItem(STORAGE_KEY);
+      const parsedKeys = savedKeys ? JSON.parse(savedKeys) : DEFAULT_KEYS;
+      setApiKeys(parsedKeys);
+      apiKeyManager.updateKeys(parsedKeys);
       
-      // Tự động chuyển provider nếu người dùng chỉ có key OpenAI
-      if ((parsed.kyma?.length ?? 0) === 0 && (parsed.openai?.length ?? 0) > 0) {
-          setAiProvider('openai');
+      const savedProviders = localStorage.getItem(ACTIVE_PROVIDERS_KEY);
+      let parsedProviders = savedProviders ? JSON.parse(savedProviders) : null;
+      
+      if (!parsedProviders || parsedProviders.length === 0) {
+          // Tự động nhận diện nếu chưa lưu active provider
+          if ((parsedKeys.kyma?.length ?? 0) === 0 && (parsedKeys.openai?.length ?? 0) > 0) {
+              parsedProviders = ['openai'];
+          } else {
+              parsedProviders = ['kyma'];
+          }
+      }
+      setActiveProviders(parsedProviders);
+
+      const savedModels = localStorage.getItem(MODELS_KEY);
+      if (savedModels) {
+          setModels(JSON.parse(savedModels));
+      } else {
+          // Backward compatibility for openai model
+          const oldOpenAiModel = localStorage.getItem('openai-custom-model');
+          if (oldOpenAiModel) {
+              setModels(prev => ({ ...prev, openai: oldOpenAiModel }));
+          }
       }
 
       const theme = localStorage.getItem(THEME_KEY);
@@ -67,19 +91,25 @@ export function useAiSettings(): UseAiSettingsReturn {
     return () => window.removeEventListener('apiKeyRotated', onRotate);
   }, []);
 
-  // Persist apiKeys
+  // Persist settings
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(apiKeys));
     apiKeyManager.updateKeys(apiKeys);
   }, [apiKeys]);
 
-  // Persist theme
+  useEffect(() => {
+    localStorage.setItem(ACTIVE_PROVIDERS_KEY, JSON.stringify(activeProviders));
+  }, [activeProviders]);
+
+  useEffect(() => {
+    localStorage.setItem(MODELS_KEY, JSON.stringify(models));
+  }, [models]);
+
   useEffect(() => {
     localStorage.setItem(THEME_KEY, themeColor);
     document.documentElement.style.setProperty('--color-accent', themeColor);
   }, [themeColor]);
 
-  // Auto-clear notification
   useEffect(() => {
     if (!notification) return;
     const timer = setTimeout(() => setNotification(null), 6000);
@@ -88,34 +118,52 @@ export function useAiSettings(): UseAiSettingsReturn {
 
   const saveApiKeys = useCallback((keys: Record<AiProvider, string[]>) => {
     setApiKeys(keys);
-    setAiProvider(prevProvider => {
-        if ((keys[prevProvider]?.length ?? 0) === 0) {
-            const other = prevProvider === 'kyma' ? 'openai' : 'kyma';
-            if ((keys[other]?.length ?? 0) > 0) {
-                return other;
-            }
+    setActiveProviders(prev => {
+        // Auto enable a provider if we just added a key and the current active ones have no keys
+        const validActive = prev.filter(p => (keys[p]?.length ?? 0) > 0);
+        if (validActive.length === 0) {
+            if ((keys['kyma']?.length ?? 0) > 0) return ['kyma'];
+            if ((keys['openai']?.length ?? 0) > 0) return ['openai'];
         }
-        return prevProvider;
+        return prev;
     });
   }, []);
+
   const clearNotification = useCallback(() => setNotification(null), []);
   const setLocalNotification = useCallback((msg: string) => setNotification(msg), []);
 
-  const hasApiKey = (apiKeys[aiProvider]?.length ?? 0) > 0;
+  const hasAnyApiKey = activeProviders.some(p => (apiKeys[p]?.length ?? 0) > 0);
+
+  const getNextAiConfig = useCallback(() => {
+      // Chỉ lấy các provider đã kích hoạt VÀ có key
+      const availableProviders = activeProviders.filter(p => (apiKeys[p]?.length ?? 0) > 0);
+      
+      if (availableProviders.length === 0) return null;
+      if (availableProviders.length === 1) {
+          const provider = availableProviders[0];
+          return { provider, model: models[provider] };
+      }
+
+      // Round robin
+      const provider = availableProviders[roundRobinIndex.current % availableProviders.length];
+      roundRobinIndex.current += 1;
+      return { provider, model: models[provider] };
+  }, [activeProviders, apiKeys, models]);
 
   return {
     apiKeys,
     setApiKeys,
     saveApiKeys,
-    aiProvider,
-    setAiProvider,
-    selectedModel,
-    setSelectedModel,
+    activeProviders,
+    setActiveProviders,
+    models,
+    setModels,
     themeColor,
     setThemeColor,
-    hasApiKey,
+    hasAnyApiKey,
     notification,
     clearNotification,
     setLocalNotification,
+    getNextAiConfig,
   };
 }

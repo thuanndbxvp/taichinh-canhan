@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { TrashIcon } from './icons/TrashIcon';
-import type { AiProvider } from '../types';
+import type { AiProvider, LabeledOption } from '../types';
 import { validateApiKey } from '../services/aiService';
 import { CheckIcon } from './icons/CheckIcon';
 import { KeyIcon } from './icons/KeyIcon';
+import { DEFAULT_KYMA_MODELS } from '../constants';
 
 interface ApiKeyModalProps {
   isOpen: boolean;
   onClose: () => void;
   currentApiKeys: Record<AiProvider, string[]>;
   onSaveKeys: (keys: Record<AiProvider, string[]>) => void;
+  activeProviders: AiProvider[];
+  onSaveActiveProviders: (providers: AiProvider[]) => void;
+  models: Record<AiProvider, string>;
+  onSaveModels: (models: Record<AiProvider, string>) => void;
 }
 
 const KymaIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
@@ -31,13 +36,24 @@ type ValidationStatus = {
     message: string | null;
 };
 
-export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, currentApiKeys, onSaveKeys }) => {
+export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ 
+    isOpen, 
+    onClose, 
+    currentApiKeys, 
+    onSaveKeys,
+    activeProviders,
+    onSaveActiveProviders,
+    models,
+    onSaveModels
+}) => {
     const [localApiKeys, setLocalApiKeys] = useState<Record<AiProvider, string[]>>(currentApiKeys);
     const [newKeyInputs, setNewKeyInputs] = useState<Record<AiProvider, string>>({ kyma: '', openai: '' });
+    const [localActiveProviders, setLocalActiveProviders] = useState<AiProvider[]>(activeProviders);
+    const [localModels, setLocalModels] = useState<Record<AiProvider, string>>(models);
     
     // Custom settings for OpenAI compatible
     const [openAiBaseUrl, setOpenAiBaseUrl] = useState<string>('https://openrouter.ai/api/v1');
-    const [openAiModel, setOpenAiModel] = useState<string>('anthropic/claude-3.5-sonnet');
+    const [kymaModelOptions, setKymaModelOptions] = useState<LabeledOption<string>[]>([]);
 
     const [validationStatus, setValidationStatus] = useState<Record<AiProvider, ValidationStatus>>({
         kyma: { state: 'idle', message: null },
@@ -51,19 +67,38 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
                 openai: currentApiKeys?.openai || []
             };
             setLocalApiKeys(JSON.parse(JSON.stringify(safeCurrentKeys)));
-            setNewKeyInputs({ kyma: safeCurrentKeys.kyma[0] || '', openai: '' });
+            setNewKeyInputs({ kyma: '', openai: '' });
             setValidationStatus({
                 kyma: { state: 'idle', message: null },
                 openai: { state: 'idle', message: null }
             });
+            setLocalActiveProviders([...activeProviders]);
+            setLocalModels({ ...models });
             
             // Load custom OpenAI settings
             const savedBaseUrl = localStorage.getItem('openai-base-url');
             if (savedBaseUrl) setOpenAiBaseUrl(savedBaseUrl);
-            const savedModel = localStorage.getItem('openai-custom-model');
-            if (savedModel) setOpenAiModel(savedModel);
         }
-    }, [isOpen, currentApiKeys]);
+    }, [isOpen, currentApiKeys, activeProviders, models]);
+
+    useEffect(() => {
+        if (isOpen && localApiKeys.kyma?.[0]) {
+            fetch('https://api.kyma.vn/v1/models', {
+                headers: { 'Authorization': `Bearer ${localApiKeys.kyma[0]}` }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data?.data) {
+                    const fetchedModels = data.data.map((m: any) => ({ value: m.id, label: m.name || m.id }));
+                    setKymaModelOptions(fetchedModels);
+                    if (!fetchedModels.find((m: any) => m.value === localModels.kyma)) {
+                        setLocalModels(prev => ({ ...prev, kyma: fetchedModels[0]?.value || '' }));
+                    }
+                }
+            })
+            .catch(console.error);
+        }
+    }, [isOpen, localApiKeys.kyma]);
 
     const handleAddKey = async (provider: AiProvider) => {
         const rawInput = (newKeyInputs[provider] || '').trim();
@@ -105,31 +140,24 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
             }
 
             setNewKeyInputs(prev => ({ ...prev, [provider]: '' }));
-
             setTimeout(() => setValidationStatus(prev => ({ ...prev, [provider]: { state: 'idle', message: null } })), 4000);
 
         } catch (error) {
-            // Force add even if it throws
             setLocalApiKeys(prev => {
                 const updatedKeys = [...prev[provider], ...keysToProcess];
                 return { ...prev, [provider]: updatedKeys };
             });
-            
             setValidationStatus(prev => ({
                 ...prev,
-                [provider]: { state: 'valid', message: `Đã thêm ${keysToProcess.length} key, nhưng kiểm tra lỗi: ${error instanceof Error ? error.message : "Không xác định"}.` }
+                [provider]: { state: 'valid', message: `Đã thêm ${keysToProcess.length} key, nhưng kiểm tra lỗi.` }
             }));
-            
             setNewKeyInputs(prev => ({ ...prev, [provider]: '' }));
             setTimeout(() => setValidationStatus(prev => ({ ...prev, [provider]: { state: 'idle', message: null } })), 4000);
         }
     };
 
     const handleDeleteKey = (provider: AiProvider, index: number) => {
-        setLocalApiKeys(prev => ({
-            ...prev,
-            [provider]: prev[provider].filter((_, i) => i !== index)
-        }));
+        setLocalApiKeys(prev => ({ ...prev, [provider]: prev[provider].filter((_, i) => i !== index) }));
     };
 
     const handleActivateKey = (provider: AiProvider, index: number) => {
@@ -142,14 +170,22 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
             return { ...prev, [provider]: keys };
         });
     };
+
+    const toggleActiveProvider = (provider: AiProvider) => {
+        setLocalActiveProviders(prev => {
+            if (prev.includes(provider)) {
+                return prev.filter(p => p !== provider);
+            } else {
+                return [...prev, provider];
+            }
+        });
+    };
     
     const handleSave = () => {
         localStorage.setItem('openai-base-url', openAiBaseUrl);
-        localStorage.setItem('openai-custom-model', openAiModel);
         
         const finalKeys = { ...localApiKeys };
-        
-        (['openai'] as AiProvider[]).forEach(provider => {
+        (['kyma', 'openai'] as AiProvider[]).forEach(provider => {
             const raw = (newKeyInputs[provider] || '').trim();
             if (raw) {
                 const keysToProcess = raw.split('\n').map(k => k.trim()).filter(k => k && !finalKeys[provider].includes(k));
@@ -159,11 +195,9 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
             }
         });
 
-        // Always save Kyma key exactly as it is in the input
-        const kymaVal = (newKeyInputs.kyma || '').trim();
-        finalKeys.kyma = kymaVal ? [kymaVal] : [];
-        
         onSaveKeys(finalKeys);
+        onSaveActiveProviders(localActiveProviders);
+        onSaveModels(localModels);
         onClose();
     };
 
@@ -175,101 +209,96 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
         const icon = isKyma ? <KymaIcon className="text-yellow-400"/> : <OpenAIIcon className="text-white"/>;
         const description = isKyma 
             ? "Nhập các API Keys lấy từ hệ thống Kyma."
-            : "Tương thích với bất kỳ hệ thống nào hỗ trợ chuẩn OpenAI.";
+            : "Tương thích với hệ thống chuẩn OpenAI (ví dụ: OpenRouter).";
         
         const status = validationStatus[provider];
         const displayedKeys = localApiKeys[provider] || [];
+        const isActive = localActiveProviders.includes(provider);
 
         return (
-            <div className="bg-primary p-4 rounded-lg border border-border flex flex-col h-full">
-                <div className="flex items-center gap-2 mb-3">
-                    {icon}
-                    <h3 className="font-semibold text-text-primary text-lg">{title}</h3>
-                </div>
-                <p className="text-xs text-text-secondary/80 mb-2">{description}</p>
-                
-                {!isKyma && (
-                    <div className="flex flex-col gap-2 mb-4 p-3 bg-secondary rounded-md border border-border">
-                        <div>
-                            <label className="text-xs font-semibold text-text-secondary block mb-1">Base URL</label>
-                            <input 
-                                type="text"
-                                className="w-full bg-primary border border-border rounded-md p-1.5 text-text-primary text-xs focus:border-accent"
-                                value={openAiBaseUrl}
-                                onChange={(e) => setOpenAiBaseUrl(e.target.value)}
-                                placeholder="https://openrouter.ai/api/v1"
-                            />
-                            <p className="text-[10px] text-text-secondary/60 mt-1">Dùng <b>https://openrouter.ai/api/v1</b> nếu sử dụng OpenRouter.</p>
-                        </div>
-                        <div>
-                            <label className="text-xs font-semibold text-text-secondary block mb-1">Custom Model Name</label>
-                            <input 
-                                type="text"
-                                className="w-full bg-primary border border-border rounded-md p-1.5 text-text-primary text-xs focus:border-accent"
-                                value={openAiModel}
-                                onChange={(e) => setOpenAiModel(e.target.value)}
-                                placeholder="anthropic/claude-3.5-sonnet"
-                            />
-                            <p className="text-[10px] text-text-secondary/60 mt-1">Ví dụ: <b>anthropic/claude-3.5-sonnet</b> hoặc <b>google/gemini-2.5-flash</b>, <b>openai/gpt-4o</b></p>
-                        </div>
+            <div className={`p-4 rounded-lg border flex flex-col h-full transition-colors ${isActive ? 'bg-primary border-accent/50' : 'bg-primary/50 border-border opacity-75 grayscale-[50%]'}`}>
+                <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                        {icon}
+                        <h3 className="font-semibold text-text-primary text-lg">{title}</h3>
                     </div>
-                )}
-                
-                <div className="flex flex-col gap-2">
-                    {isKyma ? (
-                        <div className="flex gap-2">
-                             <input
-                                type="password"
-                                className="flex-1 bg-secondary border border-border rounded-md p-2 text-text-primary focus:ring-2 focus:ring-accent focus:border-accent transition text-xs"
-                                value={newKeyInputs.kyma}
-                                onChange={(e) => setNewKeyInputs(prev => ({ ...prev, kyma: e.target.value }))}
-                                placeholder="Nhập Kyma API Key"
+                    <label className="flex items-center cursor-pointer gap-2">
+                        <span className="text-xs font-semibold text-text-secondary">{isActive ? 'Đang bật' : 'Tắt'}</span>
+                        <div className="relative">
+                            <input 
+                                type="checkbox" 
+                                className="sr-only" 
+                                checked={isActive} 
+                                onChange={() => toggleActiveProvider(provider)} 
                             />
-                            <button
-                                onClick={() => {
-                                    const key = (newKeyInputs.kyma || '').trim();
-                                    if (!key) return;
-                                    setValidationStatus(prev => ({ ...prev, kyma: { state: 'checking', message: null } }));
-                                    validateApiKey('kyma', key).then(isValid => {
-                                        setValidationStatus(prev => ({ 
-                                            ...prev, 
-                                            kyma: { state: isValid ? 'valid' : 'invalid', message: isValid ? 'API Key hợp lệ! Đã lưu (Bấm Lưu & Đóng để áp dụng).' : 'API Key không hợp lệ hoặc đã hết hạn.' } 
-                                        }));
-                                    }).catch(e => {
-                                        setValidationStatus(prev => ({ 
-                                            ...prev, 
-                                            kyma: { state: 'invalid', message: 'Lỗi kết nối khi kiểm tra API Key. (Vẫn lưu tạm)' } 
-                                        }));
-                                    });
-                                }}
-                                disabled={status.state === 'checking' || !(newKeyInputs.kyma || '').trim()}
-                                className="bg-accent hover:brightness-110 text-white font-bold py-2 px-3 rounded-md transition disabled:opacity-50 min-w-[120px] text-xs"
+                            <div className={`block w-10 h-6 rounded-full transition-colors ${isActive ? 'bg-accent' : 'bg-zinc-600'}`}></div>
+                            <div className={`dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${isActive ? 'transform translate-x-4' : ''}`}></div>
+                        </div>
+                    </label>
+                </div>
+                <p className="text-xs text-text-secondary/80 mb-4">{description}</p>
+                
+                <div className="flex flex-col gap-2 mb-4 p-3 bg-secondary rounded-md border border-border">
+                    {isKyma ? (
+                        <div>
+                            <label className="text-xs font-semibold text-text-secondary block mb-1">Chọn Model</label>
+                            <select
+                                className="w-full bg-primary border border-border rounded-md p-1.5 text-text-primary text-xs focus:border-accent"
+                                value={localModels.kyma}
+                                onChange={e => setLocalModels(prev => ({ ...prev, kyma: e.target.value }))}
                             >
-                                {status.state === 'checking' ? '...' : 'Kiểm tra & Lưu'}
-                            </button>
+                                {(kymaModelOptions.length > 0 ? kymaModelOptions : DEFAULT_KYMA_MODELS).map(opt => (
+                                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                ))}
+                            </select>
                         </div>
                     ) : (
                         <>
-                        <div className="relative">
-                            <KeyIcon className="w-4 h-4 absolute left-2.5 top-3 text-text-secondary"/>
-                             <textarea
-                                className="w-full bg-secondary border border-border rounded-md p-2 pl-8 text-text-primary focus:ring-2 focus:ring-accent focus:border-accent transition font-mono text-xs h-24"
-                                value={newKeyInputs[provider]}
-                                onChange={(e) => setNewKeyInputs(prev => ({ ...prev, [provider]: e.target.value }))}
-                                placeholder={"Dán API keys tại đây...\nKey_1\nKey_2"}
-                            />
-                        </div>
-                        <button
-                            onClick={() => handleAddKey(provider)}
-                            disabled={status.state === 'checking' || !(newKeyInputs[provider] || '').trim()}
-                            className="w-full bg-accent hover:brightness-110 text-white font-bold py-2 px-3 rounded-md transition disabled:opacity-50 flex items-center justify-center gap-2 text-xs"
-                        >
-                            {status.state === 'checking' ? (
-                                <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                            ) : 'Thêm danh sách'}
-                        </button>
+                            <div>
+                                <label className="text-xs font-semibold text-text-secondary block mb-1">Base URL</label>
+                                <input 
+                                    type="text"
+                                    className="w-full bg-primary border border-border rounded-md p-1.5 text-text-primary text-xs focus:border-accent"
+                                    value={openAiBaseUrl}
+                                    onChange={(e) => setOpenAiBaseUrl(e.target.value)}
+                                    placeholder="https://openrouter.ai/api/v1"
+                                />
+                                <p className="text-[10px] text-text-secondary/60 mt-1">Dùng <b>https://openrouter.ai/api/v1</b> nếu sử dụng OpenRouter.</p>
+                            </div>
+                            <div>
+                                <label className="text-xs font-semibold text-text-secondary block mb-1">Custom Model Name</label>
+                                <input 
+                                    type="text"
+                                    className="w-full bg-primary border border-border rounded-md p-1.5 text-text-primary text-xs focus:border-accent"
+                                    value={localModels.openai}
+                                    onChange={(e) => setLocalModels(prev => ({ ...prev, openai: e.target.value }))}
+                                    placeholder="anthropic/claude-3.5-sonnet"
+                                />
+                                <p className="text-[10px] text-text-secondary/60 mt-1">Ví dụ: <b>anthropic/claude-3.5-sonnet</b></p>
+                            </div>
                         </>
                     )}
+                </div>
+                
+                <div className="flex flex-col gap-2">
+                    <div className="relative">
+                        <KeyIcon className="w-4 h-4 absolute left-2.5 top-3 text-text-secondary"/>
+                            <textarea
+                            className="w-full bg-secondary border border-border rounded-md p-2 pl-8 text-text-primary focus:ring-2 focus:ring-accent focus:border-accent transition font-mono text-xs h-24"
+                            value={newKeyInputs[provider]}
+                            onChange={(e) => setNewKeyInputs(prev => ({ ...prev, [provider]: e.target.value }))}
+                            placeholder={"Dán API keys tại đây...\nKey_1\nKey_2"}
+                        />
+                    </div>
+                    <button
+                        onClick={() => handleAddKey(provider)}
+                        disabled={status.state === 'checking' || !(newKeyInputs[provider] || '').trim()}
+                        className="w-full bg-accent hover:brightness-110 text-white font-bold py-2 px-3 rounded-md transition disabled:opacity-50 flex items-center justify-center gap-2 text-xs"
+                    >
+                        {status.state === 'checking' ? (
+                            <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        ) : 'Thêm danh sách'}
+                    </button>
                 </div>
                 {status.message && (
                     <p className={`text-xs mt-1.5 ${status.state === 'valid' ? 'text-green-400' : 'text-red-400'}`}>
@@ -277,42 +306,40 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
                     </p>
                 )}
 
-                {!isKyma && (
-                    <div className="mt-4 flex-grow space-y-2 min-h-[8rem] overflow-y-auto pr-1">
-                        <h4 className="text-xs font-semibold text-text-secondary/80">Keys đã lưu:</h4>
-                        {displayedKeys.length === 0 ? (
-                            <div className="text-center text-sm text-text-secondary pt-6">Chưa có key nào.</div>
-                        ) : (
-                            displayedKeys.map((key, index) => (
-                                <div key={`${provider}-${index}`} className="bg-secondary p-2 rounded-md flex justify-between items-center text-sm transition-all group">
-                                    <div className="flex items-center gap-2 overflow-hidden">
-                                         <KeyIcon className="w-4 h-4 text-text-secondary flex-shrink-0"/>
-                                        <span className="font-mono text-text-secondary truncate">{`...${key.slice(-8)}`}</span>
-                                        {index === 0 && <span className="text-[10px] font-bold text-accent bg-primary px-1.5 py-0.5 rounded-full flex-shrink-0">ACTIVE</span>}
-                                    </div>
-                                    <div className="flex items-center gap-1 flex-shrink-0">
-                                        {index > 0 && (
-                                            <button 
-                                                onClick={() => handleActivateKey(provider, index)}
-                                                className="text-xs font-semibold text-text-secondary hover:text-accent opacity-0 group-hover:opacity-100 transition-opacity p-1"
-                                                aria-label="Kích hoạt key"
-                                            >
-                                                Kích hoạt
-                                            </button>
-                                        )}
-                                        <button 
-                                            onClick={() => handleDeleteKey(provider, index)}
-                                            className="text-text-secondary hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-1"
-                                            aria-label="Xóa key"
-                                        >
-                                            <TrashIcon className="w-4 h-4"/>
-                                        </button>
-                                    </div>
+                <div className="mt-4 flex-grow space-y-2 min-h-[8rem] overflow-y-auto pr-1">
+                    <h4 className="text-xs font-semibold text-text-secondary/80">Keys đã lưu:</h4>
+                    {displayedKeys.length === 0 ? (
+                        <div className="text-center text-sm text-text-secondary pt-6">Chưa có key nào.</div>
+                    ) : (
+                        displayedKeys.map((key, index) => (
+                            <div key={`${provider}-${index}`} className="bg-secondary p-2 rounded-md flex justify-between items-center text-sm transition-all group border border-transparent hover:border-border">
+                                <div className="flex items-center gap-2 overflow-hidden">
+                                        <KeyIcon className="w-4 h-4 text-text-secondary flex-shrink-0"/>
+                                    <span className="font-mono text-text-secondary truncate">{`...${key.slice(-8)}`}</span>
+                                    {index === 0 && <span className="text-[10px] font-bold text-accent bg-primary px-1.5 py-0.5 rounded-full flex-shrink-0">ACTIVE</span>}
                                 </div>
-                            ))
-                        )}
-                    </div>
-                )}
+                                <div className="flex items-center gap-1 flex-shrink-0">
+                                    {index > 0 && (
+                                        <button 
+                                            onClick={() => handleActivateKey(provider, index)}
+                                            className="text-xs font-semibold text-text-secondary hover:text-accent opacity-0 group-hover:opacity-100 transition-opacity p-1"
+                                            aria-label="Kích hoạt key"
+                                        >
+                                            Kích hoạt
+                                        </button>
+                                    )}
+                                    <button 
+                                        onClick={() => handleDeleteKey(provider, index)}
+                                        className="text-text-secondary hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-1"
+                                        aria-label="Xóa key"
+                                    >
+                                        <TrashIcon className="w-4 h-4"/>
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
             </div>
         );
     }
@@ -320,9 +347,20 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
     return (
         <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center p-4" onClick={onClose}>
             <div className="bg-secondary rounded-lg shadow-2xl w-full max-w-4xl max-h-[95vh] flex flex-col border border-border" onClick={e => e.stopPropagation()}>
-                <div className="p-5 border-b border-border">
-                    <h2 className="text-xl font-bold text-accent">Quản lý API Keys</h2>
-                    <p className="text-sm text-text-secondary mt-1">Quản lý danh sách Key cho Kyma và các nền tảng dùng chuẩn OpenAI.</p>
+                <div className="p-5 border-b border-border flex justify-between items-start">
+                    <div>
+                        <h2 className="text-xl font-bold text-accent">Quản lý AI & API Keys</h2>
+                        <p className="text-sm text-text-secondary mt-1">Cấu hình nhà cung cấp AI. Nếu chọn cả 2, hệ thống sẽ xoay vòng (Round-Robin) cho mỗi lượt tạo kịch bản.</p>
+                    </div>
+                    {localActiveProviders.length === 2 && (
+                        <div className="flex items-center gap-2 bg-accent/20 border border-accent/50 text-accent px-3 py-1.5 rounded-md">
+                            <span className="flex h-3 w-3 relative">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-3 w-3 bg-accent"></span>
+                            </span>
+                            <span className="text-xs font-bold uppercase tracking-wider">Đang bật Round-Robin</span>
+                        </div>
+                    )}
                 </div>
                 <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto flex-grow">
                     {renderKeyPanel('kyma')}
@@ -340,4 +378,3 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
         </div>
     );
 };
-
