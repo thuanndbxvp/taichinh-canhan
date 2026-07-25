@@ -1,7 +1,5 @@
 import type {
   GenerationParams,
-  VisualPrompt,
-  AllVisualPromptsResult,
   ScriptPartSummary,
   StyleOptions,
   TopicSuggestionItem,
@@ -216,48 +214,6 @@ export const generateKeywordSuggestions = async (
   } catch (e) {
     handleApiError(e, 'gợi ý từ khóa');
     return [];
-  }
-};
-
-export const generateVisualPrompt = async (
-  sceneDescription: string,
-  provider: AiProvider,
-  model: string,
-): Promise<VisualPrompt[]> => {
-  try {
-    const content = await callWithPrompt(
-      provider,
-      model,
-      'finance.visual.single',
-      { sceneDescription },
-      'tạo prompt hình ảnh',
-    );
-    return parseAiJsonOrThrow<VisualPrompt[]>(content, SCHEMAS.visualPrompts, 'tạo prompt hình ảnh');
-  } catch (e) {
-    throw handleApiError(e, 'tạo prompt hình ảnh');
-  }
-};
-
-export const generateAllVisualPrompts = async (
-  script: string,
-  provider: AiProvider,
-  model: string,
-): Promise<AllVisualPromptsResult[]> => {
-  try {
-    const content = await callWithPrompt(
-      provider,
-      model,
-      'finance.visual.bulk',
-      { script },
-      'tạo tất cả prompt',
-    );
-    return parseAiJsonOrThrow<AllVisualPromptsResult[]>(
-      content,
-      SCHEMAS.allVisualPrompts,
-      'tạo tất cả prompt',
-    );
-  } catch (e) {
-    throw handleApiError(e, 'tạo tất cả prompt');
   }
 };
 

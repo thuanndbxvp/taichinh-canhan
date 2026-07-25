@@ -9,7 +9,7 @@ import { CameraIcon } from './icons/CameraIcon';
 import { DownloadIcon } from './icons/DownloadIcon';
 import { FilmIcon } from './icons/FilmIcon';
 import { CheckIcon } from './icons/CheckIcon';
-import type { ScriptType, VisualPrompt } from '../types';
+import type { ScriptType } from '../types';
 import { UploadIcon } from './icons/UploadIcon';
 import { Tooltip } from './Tooltip';
 
@@ -28,13 +28,7 @@ interface OutputDisplayProps {
   currentPart: number;
   totalParts: number;
   revisionCount: number;
-  onGenerateVisualPrompt: (scene: string) => void;
-  onGenerateAllVisualPrompts: () => void;
-  isGeneratingAllVisualPrompts: boolean;
   scriptType: ScriptType;
-  hasGeneratedAllVisualPrompts: boolean;
-  visualPromptsCache: Map<string, VisualPrompt[]>;
-  loadingVisualPromptsParts: Set<string>;
   onImportScript: (file: File) => void;
   autoContinue?: boolean;
   setAutoContinue?: (val: boolean) => void;
@@ -118,12 +112,7 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
     onStopSequentialGenerate,
     isGeneratingSequentially, onGenerateNextPart, currentPart, totalParts,
     revisionCount,
-    onGenerateVisualPrompt,
-    onGenerateAllVisualPrompts, isGeneratingAllVisualPrompts,
     scriptType,
-    hasGeneratedAllVisualPrompts,
-    visualPromptsCache,
-    loadingVisualPromptsParts,
     onImportScript,
     autoContinue,
     setAutoContinue,
@@ -274,35 +263,20 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
                         <tbody className="divide-y divide-border/50">
                             {sections.map((section, index) => {
                                 const lines = section.split('\n');
-                                const rawTitle = lines[0].trim().replace(/^\*\*#+|\*\*|#+\s*/g, '');
-                                const content = lines.slice(1).join('\n');
+                                let rawTitle = '';
+                                let content = section;
+                                if (lines[0].match(/^(#+|\*\*#+)/)) {
+                                    rawTitle = lines[0].trim().replace(/^\*\*#+|\*\*|#+\s*/g, '');
+                                    content = lines.slice(1).join('\n');
+                                }
                                 const cleanedTts = cleanTtsText(content);
                                 
-                                const isPartLoading = loadingVisualPromptsParts.has(section);
-                                const hasCache = visualPromptsCache.has(section);
-
                                 if (!cleanedTts && !rawTitle) return null;
 
                                 return (
                                     <tr key={index} className="group hover:bg-primary/40 transition-colors">
                                         <td className="p-4 align-top border-r border-border/20">
                                             <span className="text-sm font-bold text-text-primary block mb-3">{rawTitle || `Phần ${index + 1}`}</span>
-                                            {cleanedTts.length > 20 && (
-                                                <button
-                                                    onClick={() => onGenerateVisualPrompt(section)}
-                                                    disabled={isPartLoading}
-                                                    className={`inline-flex items-center gap-2 px-2.5 py-1 text-[10px] font-bold rounded shadow-sm transition-all disabled:opacity-50 ${
-                                                        hasCache 
-                                                        ? 'bg-accent text-white' 
-                                                        : 'bg-secondary text-text-secondary border border-border hover:border-accent/50'
-                                                    }`}
-                                                >
-                                                    {isPartLoading ? (
-                                                        <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>
-                                                    ) : <CameraIcon className="w-3 h-3" />}
-                                                    {hasCache ? 'ĐÃ CÓ PROMPT ✓' : 'TẠO ẢNH'}
-                                                </button>
-                                            )}
                                         </td>
                                         <td className="p-4 align-top">
                                             <p className="text-sm text-text-secondary leading-relaxed whitespace-pre-wrap font-sans">

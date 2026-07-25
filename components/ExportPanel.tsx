@@ -1,10 +1,10 @@
-﻿import React, { useState } from 'react';
-import { renderAll, type ScriptDocumentBackup, type VisualPromptFile, type YouTubeMetadata, type SceneBoardItem } from '../src/domain/renderers';
+import React, { useState } from 'react';
+import { renderAll, type ScriptDocumentBackup, type YouTubeMetadata, type SceneBoardItem } from '../src/domain/renderers';
 import type { ScriptDocument } from '../src/domain/ScriptDocument';
 import type { ResearchPack } from '../src/domain/ResearchPack';
 import type { Calculation } from '../src/domain/Calculator';
 
-type ExportFormat = 'markdown' | 'tts' | 'json' | 'csv' | 'visual' | 'youtube' | 'scene-board';
+type ExportFormat = 'markdown' | 'tts' | 'json' | 'csv' | 'youtube' | 'scene-board';
 
 interface ExportPanelProps {
   document: ScriptDocument;
@@ -44,8 +44,6 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
     switch (format) {
       case 'json':
         return JSON.stringify(outputs.jsonBackup as ScriptDocumentBackup, null, 2);
-      case 'visual':
-        return JSON.stringify(outputs.visualPromptFile as VisualPromptFile, null, 2);
       case 'youtube':
         return JSON.stringify(outputs.youtubeMetadata as YouTubeMetadata, null, 2);
       case 'scene-board':
@@ -56,7 +54,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
   })();
 
   const handleDownload = () => {
-    const isJson = format === 'json' || format === 'visual' || format === 'youtube' || format === 'scene-board';
+    const isJson = format === 'json' || format === 'youtube' || format === 'scene-board';
     const ext = isJson ? 'json' : format === 'csv' ? 'csv' : 'md';
     const filename = `${document.title.replace(/\s+/g, '_')}_${format}.${ext}`;
     const content = isJson ? jsonContent : textContent;
@@ -74,7 +72,7 @@ export const ExportPanel: React.FC<ExportPanelProps> = ({
     <div className="export-panel">
       <h3>Export</h3>
       <div className="format-picker">
-        {(['markdown', 'tts', 'json', 'csv', 'visual', 'youtube', 'scene-board'] as ExportFormat[]).map((f) => (
+        {(['markdown', 'tts', 'json', 'csv', 'youtube', 'scene-board'] as ExportFormat[]).map((f) => (
           <button
             key={f}
             type="button"

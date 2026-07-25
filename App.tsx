@@ -5,8 +5,6 @@ import { LibraryModal } from './components/LibraryModal';
 import { DialogueModal } from './components/DialogueModal';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import GuideModal from './components/GuideModal';
-import { VisualPromptModal } from './components/VisualPromptModal';
-import { AllVisualPromptsModal } from './components/AllVisualPromptsModal';
 import { SummarizeModal } from './components/SummarizeModal';
 import { SavedIdeasModal } from './components/SavedIdeasModal';
 import { SideToolsPanel } from './components/SideToolsPanel';
@@ -220,19 +218,7 @@ const App: React.FC = () => {
             currentPart={generation.currentPartIndex}
             totalParts={generation.totalParts}
             revisionCount={generation.revisionCount}
-            onGenerateVisualPrompt={(scene) => {
-              modals.open('visualPrompt');
-              return scenes.generateVisualPromptForScene(scene).then(() => undefined);
-            }}
-            onGenerateAllVisualPrompts={() => {
-              modals.open('allVisualPrompts');
-              return scenes.generateAllVisualPromptsForScript(generation.generatedScript);
-            }}
-            isGeneratingAllVisualPrompts={scenes.isGeneratingAllVisualPrompts}
             scriptType={brief.brief.scriptType}
-            hasGeneratedAllVisualPrompts={!!scenes.allVisualPrompts}
-            visualPromptsCache={scenes.visualPromptsCache}
-            loadingVisualPromptsParts={scenes.loadingVisualPromptsParts}
             onImportScript={(file) => {
               const reader = new FileReader();
               reader.onload = (e) => generation.setGeneratedScript((e.target?.result as string) ?? '');
@@ -263,34 +249,8 @@ const App: React.FC = () => {
             onExtractAndCount={handleOpenDialogue}
             onOpenDialogueModal={() => modals.open('dialogue')}
             wordCountStats={dialogue.stats}
-            isExtracting={dialogue.isExtracting}
             onScoreScript={handleScoreClick}
             isScoring={review.isScoring}
-            onGenerateAllPrompts={() => scenes.generateAllSegmentPrompts(generation.generatedScript)}
-            onDownloadAllPrompts={() => {
-              if (scenes.visualPromptsCache.size === 0) {
-                generation.setExternalError('Chưa có prompt nào được tạo để tải về.');
-                return;
-              }
-              const all: string[] = [];
-              scenes.visualPromptsCache.forEach((prompts) => {
-                prompts.forEach((p) => {
-                  const flat = p.english.replace(/\r?\n|\r/g, ' ').replace(/\s+/g, ' ').trim();
-                  all.push(flat);
-                });
-              });
-              if (all.length === 0) return;
-              const blob = new Blob([all.join('\n')], { type: 'text/plain;charset=utf-8' });
-              const url = URL.createObjectURL(blob);
-              const link = document.createElement('a');
-              link.href = url;
-              link.download = `All_Prompts_${brief.brief.title.replace(/\s+/g, '_')}.txt`;
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-              URL.revokeObjectURL(url);
-            }}
-            isGeneratingAllPrompts={scenes.isGeneratingAllSegmentPrompts}
           />
         </div>
       </main>
@@ -347,20 +307,6 @@ const App: React.FC = () => {
         score={review.score}
         isLoading={review.isScoring}
         error={review.error}
-      />
-      <VisualPromptModal
-        isOpen={modals.isOpen('visualPrompt')}
-        onClose={() => modals.close('visualPrompt')}
-        prompts={scenes.visualPrompts}
-        isLoading={scenes.isGeneratingVisualPrompt}
-        error={scenes.visualPromptError}
-      />
-      <AllVisualPromptsModal
-        isOpen={modals.isOpen('allVisualPrompts')}
-        onClose={() => modals.close('allVisualPrompts')}
-        prompts={scenes.allVisualPrompts}
-        isLoading={scenes.isGeneratingAllVisualPrompts}
-        error={scenes.allVisualPromptsError}
       />
       <SummarizeModal
         isOpen={modals.isOpen('summarize')}

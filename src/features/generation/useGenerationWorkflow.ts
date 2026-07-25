@@ -133,32 +133,17 @@ export function useGenerationWorkflow({
     const params = buildParams(brief, finalWordCount);
 
     try {
-      const isLongScript = parseInt(finalWordCount, 10) >= 1000;
-      if (isLongScript) {
-        setCurrentAiAction('Đang phân tích và lập dàn ý...');
-        const outline = await generateScriptOutline(params, aiProvider, selectedModel, (chunk) => {
-           setGeneratedScript((prev) => {
-             const next = prev + chunk;
-             scriptRef.current = next;
-             return next;
-           });
-        });
-        setFullOutlineText(outline);
-        if (!outline || !outline.trim()) {
-          setError('AI provider trả về dàn ý rỗng. Vui lòng thử lại hoặc đổi model.');
-        }
-      } else {
-        setCurrentAiAction('Đang tạo kịch bản...');
-        const script = await generateScript(params, aiProvider, selectedModel, (chunk) => {
-           setGeneratedScript((prev) => {
-             const next = prev + chunk;
-             scriptRef.current = next;
-             return next;
-           });
-        });
-        if (!script || !script.trim()) {
-          setError('AI provider trả về kịch bản rỗng. Vui lòng thử lại hoặc đổi model.');
-        }
+      setCurrentAiAction('Đang phân tích và lập dàn ý...');
+      const outline = await generateScriptOutline(params, aiProvider, selectedModel, (chunk) => {
+         setGeneratedScript((prev) => {
+           const next = prev + chunk;
+           scriptRef.current = next;
+           return next;
+         });
+      });
+      setFullOutlineText(outline);
+      if (!outline || !outline.trim()) {
+        setError('AI provider trả về dàn ý rỗng. Vui lòng thử lại hoặc đổi model.');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi không xác định.');
