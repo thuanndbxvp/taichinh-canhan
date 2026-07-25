@@ -183,9 +183,10 @@ export function useGenerationWorkflow({
 
     try {
       setCurrentAiAction(`Đang viết phần ${index + 1}/${parts.length}...`);
+      const baseScript = scriptRef.current;
       const partContent = await generateScriptPart(
         fullOutlineText,
-        scriptRef.current,
+        baseScript,
         currentOutlinePart,
         params,
         aiProvider,
@@ -208,8 +209,10 @@ export function useGenerationWorkflow({
         );
       }
 
-      setGeneratedScript((prev) => {
-        const next = prev + partContent + '\n\n---\n\n';
+      // Override the final state using baseScript + partContent to avoid duplication
+      // and to clean up any garbage from failed stream retries.
+      setGeneratedScript(() => {
+        const next = baseScript + partContent + '\n\n---\n\n';
         scriptRef.current = next;
         return next;
       });
