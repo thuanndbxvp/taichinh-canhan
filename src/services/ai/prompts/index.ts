@@ -120,9 +120,6 @@ promptRegistry.register('finance.script.part', {
     const { targetAudience, title, styleOptions, wordCount } = params;
     const style = `DUY TRÌ TÔNG GIỌNG (Tone): ${styleOptions.expression} VÀ PHONG CÁCH (Style): ${styleOptions.style}.`;
     const arc = arcInstructionFor(currentPartOutline);
-    void fullOutline;
-    void previousPartsScript;
-
     // Đếm số lượng phần thực tế trong dàn ý (để chia số từ chính xác)
     const matchParts = fullOutline.match(/## PHẦN \d+/gi);
     const totalParts = matchParts ? Math.max(1, matchParts.length) : 5;
@@ -135,7 +132,16 @@ promptRegistry.register('finance.script.part', {
         { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + FINANCE_DNA.trim() },
         {
           role: 'user',
-          content: `VIẾT TIẾP PHẦN KỊCH BẢN: "${currentPartOutline}".
+          content: `DÀN Ý TỔNG THỂ CỦA VIDEO:
+${fullOutline}
+
+KỊCH BẢN CÁC PHẦN TRƯỚC (Để tiếp nối mạch văn. Bỏ qua nếu đây là phần 1):
+${previousPartsScript || '(Chưa có)'}
+
+=====================
+NHIỆM VỤ: VIẾT TIẾP PHẦN KỊCH BẢN DƯỚI ĐÂY: 
+"${currentPartOutline}"
+
 CHỦ ĐỀ: ${title}.
 TỔNG VIDEO: ${totalNum} từ spoken (chia đều ${totalParts} phần, mỗi phần ≈ ${perPart} từ).
 
@@ -146,11 +152,12 @@ NGÔN NGỮ: ${targetAudience}.
 
 ĐỘ DÀI PHẦN NÀY: ${perPart} từ spoken (đã bao gồm buffer 15% cho Markdown overhead — khi TTS lọc bỏ heading/bullet/SFX, phần spoken text thực tế phải CÒN LẠI ÍT NHẤT ${minSpoken} từ).
 
-QUY TẮC ĐỊNH DẠNG BẮT BUỘC:
-- Phải viết lại TOÀN BỘ heading "## PHẦN X: ..." (đúng định dạng markdown cấp 2) ở dòng đầu tiên.
-- Phần nội dung bắt đầu từ dòng thứ 2.
-- KHÔNG viết tiêu đề cấp 3 (###) hay cấp 1 (#).
-- KHÔNG thêm "## PHẦN" khác ngoài phần được giao.`,
+QUY TẮC ĐỊNH DẠNG TỐI THƯỢNG (Bắt buộc tuân thủ 100%):
+1. TRẢ VỀ TRỰC TIẾP NỘI DUNG KỊCH BẢN. TUYỆT ĐỐI KHÔNG giải thích, KHÔNG dạo đầu, KHÔNG suy luận (ví dụ: "Bắt đầu viết...", "Chúng ta cần viết...").
+2. BẮT ĐẦU NGAY văn bản bằng TOÀN BỘ heading "## PHẦN X: ..." (đúng định dạng markdown cấp 2).
+3. Phần nội dung bắt đầu từ dòng thứ 2.
+4. KHÔNG viết tiêu đề cấp 3 (###) hay cấp 1 (#).
+5. KHÔNG thêm "## PHẦN" khác ngoài phần được giao.`,
         },
       ],
     };
