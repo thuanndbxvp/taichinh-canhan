@@ -18,6 +18,7 @@ export const AI_PROVIDER_OPTIONS: LabeledOption<AiProvider>[] = [
 ];
 
 export const DEFAULT_KYMA_MODELS: LabeledOption<string>[] = [
+    { value: 'qwen-plus', label: 'Qwen 3.6 Plus' },
     { value: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro' },
     { value: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash' },
     { value: 'claude-3-5-sonnet-20241022', label: 'Claude 3.5 Sonnet' },
