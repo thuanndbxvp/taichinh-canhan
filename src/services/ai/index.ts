@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Barrel export cho tầng AI.
  * Các hook/service chỉ import từ đây để dễ refactor internal.
  */

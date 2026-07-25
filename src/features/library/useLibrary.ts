@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { LibraryItem } from '../../../types';
 import { downloadLibrary, parseLibraryImport } from '../../lib/libraryIo';
 import type { ScriptRepository } from '../../domain/Repository';

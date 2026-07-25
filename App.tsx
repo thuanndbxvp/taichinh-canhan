@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { ControlPanel } from './components/ControlPanel';
 import { OutputDisplay } from './components/OutputDisplay';
 import { LibraryModal } from './components/LibraryModal';

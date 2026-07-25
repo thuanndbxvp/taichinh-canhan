@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Provider adapter — interface thống nhất cho mọi AI provider.
  *
  * Mỗi adapter chịu trách nhiệm:

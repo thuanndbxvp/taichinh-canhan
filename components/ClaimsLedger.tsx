@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import type { ResearchClaim, ClaimStatus, ClaimRisk } from '../src/domain/ResearchPack';
 import type { UseClaimsReturn } from '../src/features/claims/useClaims';
 

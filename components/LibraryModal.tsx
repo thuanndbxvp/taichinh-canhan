@@ -1,4 +1,4 @@
-﻿import React, { useRef } from 'react';
+import React, { useRef } from 'react';
 import type { LibraryItem } from '../types';
 import { TrashIcon } from './icons/TrashIcon';
 import { DownloadIcon } from './icons/DownloadIcon';

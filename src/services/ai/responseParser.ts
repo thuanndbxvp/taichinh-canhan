@@ -1,4 +1,4 @@
-﻿/**
+/**
  * responseParser — trích xuất + validate JSON từ AI response.
  *
  * Mục tiêu Phase 2: thay vì tryParseJson (chỉ parse), ta validate theo schema

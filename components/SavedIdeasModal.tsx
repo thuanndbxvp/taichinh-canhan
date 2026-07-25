@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import type { SavedIdea } from '../types';
 import { TrashIcon } from './icons/TrashIcon';
 import { LightbulbIcon } from './icons/LightbulbIcon';

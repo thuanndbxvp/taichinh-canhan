@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AiProvider, SavedIdea, TopicSuggestionItem } from '../../../types';
 import { generateKeywordSuggestions, generateTopicSuggestions, parseIdeasFromFile, suggestStyleOptions } from '../../../services/aiService';
 import type { SettingsRepository } from '../../domain/Repository';

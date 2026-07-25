@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Library I/O — schema-versioned import/export cho LibraryItem.
  * Phase 0 chỉ thêm version field + helper, không thay đổi hành vi gọi.
  * Migration dần ở các phase sau.

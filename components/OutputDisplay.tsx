@@ -1,4 +1,4 @@
-﻿
+
 import React, { useState, useEffect, useRef } from 'react';
 import { ClipboardIcon } from './icons/ClipboardIcon';
 import { SaveIcon } from './icons/SaveIcon';

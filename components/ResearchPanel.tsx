@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import type { ResearchSource, SourceType } from '../src/domain/ResearchPack';
 import type { UseResearchReturn } from '../src/features/research/useResearch';
 

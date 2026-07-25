@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Adapter: convert ScriptDocument → format UI cũ dùng.
  *
  * Phase 4: nếu ScriptDocument có scenes (cấu trúc mới), render Markdown

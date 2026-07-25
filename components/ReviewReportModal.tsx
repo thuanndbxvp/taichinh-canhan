@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import type { UseReviewGateReturn } from '../src/features/review/useReviewGate';
 import type { ReviewSeverity, ReviewIssue } from '../src/domain/review/ReviewReport';
 

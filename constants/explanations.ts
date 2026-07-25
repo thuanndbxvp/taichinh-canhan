@@ -1,4 +1,4 @@
-﻿import type { Expression, Style } from '../types';
+import type { Expression, Style } from '../types';
 
 export const EXPRESSION_EXPLANATIONS: Record<Expression, string> = {
   'Empathetic': 'Thể hiện sự đồng cảm, thấu hiểu với cảm xúc và tình huống của khán giả, tạo sự kết nối sâu sắc — phù hợp với kênh Chú Que Tài Chính khi nói về tiền bạc.',

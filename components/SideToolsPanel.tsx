@@ -1,4 +1,4 @@
-﻿
+
 import React from 'react';
 import { WordCountCheck } from './WordCountCheck';
 import { ScriptTools } from './ScriptTools';

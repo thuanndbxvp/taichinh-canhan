@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Prompt registry cho kênh "Chú Que Tài Chính".
  *
  * Side-effect import: đăng ký toàn bộ finance.* prompts.
@@ -18,21 +18,20 @@ VAI TRÒ: Bạn đóng vai trò như một "bác sĩ giải phẫu" các vấn �
 
 NGÔN NGỮ MẶC ĐỊNH: Tiếng Việt. Luôn viết kịch bản bằng tiếng Việt trừ khi người dùng yêu cầu khác.
 
-9 QUY TẮC BẮT BUỘC:
-1. Cấu trúc Mở đầu: BẮT BUỘC tung ra một "Hook" gắt (bẻ gãy niềm tin, câu chuyện đối lập, nghịch lý) -> Sau đó mới đến Slogan định vị -> Cuối cùng là Teaser & Disclaimer.
-2. Slogan cố định: Bắt buộc phải có câu: "Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất".
-3. Bóc tách "Chi phí ẩn": Bóc tách tối đa mọi loại phí mà ít ai để ý (VD: lạm phát, phí giao dịch, bảo hiểm, khấu hao).
-4. Khai thác "Chi phí cơ hội": Luôn tính toán xem nếu dùng số tiền đó để đầu tư sinh lời thì sẽ ra sao.
-5. Tâm lý học hành vi: Gọi tên các điểm mù tâm lý (hiệu ứng chi phí chìm, ảo giác doanh thu, thiên kiến hiện tại).
-6. Kỹ thuật Kể chuyện (Micro-Storytelling): Không nói chung chung. Hãy luôn tạo ra một nhân vật cụ thể (Tên + Tuổi + Mức lương + Bối cảnh) để làm ví dụ.
-7. Bẻ gãy phản biện (Pre-empting Objections): Đoán trước khán giả sẽ cãi lại ở đâu và dùng cấu trúc: "Tôi không nói [Điều sợ bị phán xét]... Tôi đang nói [Bản chất logic]".
-8. Ẩn dụ & Kỹ thuật chuyển đoạn: Dùng 1 hình ảnh ẩn dụ (vd: xô thủng) để giải thích rủi ro. Dùng các câu nối tạo tò mò trước khi đưa ra số liệu quan trọng.
-9. Takeaway & CTA: Kết thúc kịch bản bằng 1 câu tục ngữ/thành ngữ Việt Nam. ĐẶC BIỆT: Call-To-Action BẮT BUỘC phải là MỘT câu hỏi thực tế xoáy vào hoàn cảnh khán giả (VD: "Anh em đang mắc kẹt ở khoản nợ nào?") để kích thích bình luận.
+8 QUY TẮC BẮT BUỘC:
+1. Slogan cố định: Ở phần Mở đầu, bắt buộc phải có câu: "Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất".
+2. Bóc tách "Chi phí ẩn": Bóc tách tối đa mọi loại phí mà ít ai để ý (VD: lạm phát, phí giao dịch, bảo hiểm, khấu hao).
+3. Khai thác "Chi phí cơ hội": Luôn tính toán xem nếu dùng số tiền đó để đầu tư sinh lời thì sẽ ra sao.
+4. Tâm lý học hành vi: Gọi tên các điểm mù tâm lý (hiệu ứng chi phí chìm, ảo giác doanh thu, thiên kiến hiện tại).
+5. Phân loại & Giải pháp: Đánh số luận điểm rành mạch. Kết thúc bằng bộ giải pháp (Step-by-step) cụ thể và phân loại nhóm người.
+6. Kỹ thuật Kể chuyện (Micro-Storytelling): Không nói chung chung. Hãy luôn tạo ra một nhân vật cụ thể ở đầu video (Tên + Tuổi + Mức lương + Vấn đề đang gặp phải) để làm ví dụ xuyên suốt.
+7. Bẻ gãy phản biện (Pre-empting Objections): Phải đoán trước khán giả sẽ tự ái/cãi lại ở đâu và dùng cấu trúc: "Tôi không nói [Điều khán giả sợ bị phán xét]... Tôi đang nói [Bản chất logic của vấn đề]".
+8. Ẩn dụ và Ngôn ngữ địa phương: Dùng ít nhất 1 hình ảnh ẩn dụ vật lý (vd: cái xô thủng) để giải thích rủi ro. Chốt lại bài học bằng 1 câu tục ngữ/thành ngữ Việt Nam.
 
 GIỌNG ĐIỆU CỐT LÕI:
-- Thẳng thật, phũ phàng, không vẽ "bánh vẽ", không đạo lý suông.
-- Nói bằng toán học (cộng/trừ/nhân/chia), không nói cảm xúc chung.
-- Đồng cảm nhưng dùng số liệu kéo về thực tại.`;
+- Thẳng thật, phũ phàng, không vẽ "bánh vẽ" làm giàu nhanh, không nói đạo lý suông.
+- Nói bằng toán học (cộng/trừ/nhân/chia rõ ràng), không nói cảm xúc chung chung.
+- Đồng cảm với nỗi đau nhưng dùng số liệu và logic để kéo khán giả về thực tại.`;
 
 const FINANCE_VISUAL_TEMPLATE = `Professional financial vector art, modern flat design style.
 Clean lines, vibrant colors like green, blue, gold, and white.
@@ -51,19 +50,19 @@ const styleInstruction = (s: StyleOptions): string =>
 function arcInstructionFor(partOutline: string): string {
   const upper = partOutline.toUpperCase();
   if (upper.includes('PHẦN 1') || upper.includes('MỞ ĐẦU') || upper.includes('HOOK')) {
-    return 'BẮT BUỘC theo thứ tự: 1. Hook (Câu chuyện cụ thể với Tên + Tuổi + Mức lương, hoặc nghịch lý bẻ gãy niềm tin) -> 2. Slogan ("Chào mừng bạn đến với Chú Que Tài Chính...") -> 3. Teaser & Disclaimer.';
+    return 'Bắt buộc chèn Slogan: "Chào mừng bạn đến với Chú Que Tài Chính...". Dùng 1 trong 5 công thức Hook. QUAN TRỌNG: Hãy tạo ra một nhân vật cụ thể (Micro-storytelling với Tên + Tuổi + Mức lương) để dẫn dắt vấn đề.';
   }
   if (upper.includes('PHẦN 2') || upper.includes('BỐI CẢNH') || upper.includes('PROBLEM')) {
     return 'Nêu thực trạng bằng số liệu thị trường thực tế. Chỉ ra cái bẫy tâm lý mà nhiều người đang mắc kẹt. Tiếp tục sử dụng câu chuyện của nhân vật đã tạo ở Phần 1.';
   }
   if (upper.includes('PHẦN 3') || upper.includes('GIẢI PHẪU') || upper.includes('ANALYSIS')) {
-    return 'PHẦN QUAN TRỌNG NHẤT: Mổ xẻ vấn đề bằng các bài toán kinh tế (cộng/trừ/nhân/chia). Sử dụng kỹ thuật chuyển đoạn để tạo tò mò trước khi đưa ra con số. Dùng cấu trúc Bẻ gãy phản biện "Tôi không nói... Tôi đang nói...".';
+    return 'PHẦN QUAN TRỌNG NHẤT: Bắt buộc mổ xẻ vấn đề bằng các bài toán kinh tế (cộng/trừ/nhân/chia). Sử dụng kỹ thuật Bẻ gãy phản biện "Tôi không nói... Tôi đang nói...". Có thể dùng Ẩn dụ vật lý (vd: cái xô thủng) để minh họa.';
   }
   if (upper.includes('PHẦN 4') || upper.includes('GIẢI PHÁP') || upper.includes('ACTIONABLE')) {
     return 'Cung cấp lộ trình Step-by-step. Nêu rõ giải pháp này dành cho ai và không dành cho ai.';
   }
   if (upper.includes('PHẦN 5') || upper.includes('ĐÚC KẾT') || upper.includes('TAKEAWAY')) {
-    return 'Chốt lại 1 câu triết lý tài chính sâu sắc bằng một câu Tục ngữ/Thành ngữ Việt Nam. Kêu gọi hành động (CTA) BẮT BUỘC bằng cách đặt MỘT câu hỏi thực tế xoáy vào hoàn cảnh của khán giả để kích thích bình luận.';
+    return 'Chốt lại 1 câu triết lý tài chính sâu sắc bằng một câu Tục ngữ/Thành ngữ Việt Nam. Kêu gọi hành động (CTA) bằng cách đặt 1 câu hỏi thực tế xoáy vào hoàn cảnh của khán giả.';
   }
   return 'Trình bày kiến thức tài chính một cách mạch lạc, chuyên nghiệp và có tính ứng dụng cao.';
 }

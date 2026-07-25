@@ -1,4 +1,4 @@
-﻿
+
 // Ngôn ngữ/giọng điệu mặc định cho Finance Content Studio (Chú Que persona).
 // Chú Que Tài Chính — chỉ giữ 4 tông giọng cốt lõi phục vụ nhân vật.
 export type Expression =

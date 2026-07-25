@@ -1,4 +1,4 @@
-﻿/**
+/**
  * AiGateway — tầng duy nhất giao tiếp với AI provider.
  *
  * Trách nhiệm:

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * AppSettings — domain model cho cấu hình app.
  * Phase 3 tách riêng khỏi ScriptDocument vì settings là global, không gắn
  * với document cụ thể.

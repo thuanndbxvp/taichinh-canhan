@@ -1,4 +1,4 @@
-﻿/**
+/**
  * IndexedDbScriptRepository — adapter IndexedDB cho ScriptDocument.
  * Phase 3.3: thay thế LocalStorage khi data > 5MB hoặc khi cần cache asset.
  */

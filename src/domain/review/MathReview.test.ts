@@ -1,4 +1,4 @@
-﻿import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { runMathReview } from './MathReview';
 import { createScriptDocument } from '../ScriptDocument';
 import type { Scene } from '../Scene';

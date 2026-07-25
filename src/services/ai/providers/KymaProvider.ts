@@ -1,4 +1,4 @@
-﻿/**
+/**
  * KymaProvider — OpenAI-compatible endpoint tại kymaapi.com.
  * Theo code hiện tại: chat completion trả về JSON chuẩn OpenAI.
  */

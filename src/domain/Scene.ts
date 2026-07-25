@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Scene — cấu trúc 1 scene trong ScriptDocument.
  *
  * Phase 4.5: thay vì chỉ narration + imagePrompt + videoPrompt, mỗi scene

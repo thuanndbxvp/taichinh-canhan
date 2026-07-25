@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { renderAll, type ScriptDocumentBackup, type VisualPromptFile, type YouTubeMetadata, type SceneBoardItem } from '../src/domain/renderers';
 import type { ScriptDocument } from '../src/domain/ScriptDocument';
 import type { ResearchPack } from '../src/domain/ResearchPack';

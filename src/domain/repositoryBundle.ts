@@ -1,4 +1,4 @@
-﻿/**
+/**
  * getRepositoryBundle — trả về aggregate root theo feature flag.
  *
  * Phase 3 chọn LocalStorage làm default để tương thích ngược với dữ liệu

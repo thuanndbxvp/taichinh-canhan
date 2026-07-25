@@ -1,4 +1,4 @@
-﻿/**
+/**
  * LocalStorageSettingsRepository — adapter cho AppSettings.
  * Single value, không list. Key: 'yt-app-settings-v1'.
  */

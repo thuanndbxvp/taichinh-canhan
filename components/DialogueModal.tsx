@@ -1,4 +1,4 @@
-﻿
+
 import React, { useState, useEffect } from 'react';
 import { ClipboardIcon } from './icons/ClipboardIcon';
 import { BoltIcon } from './icons/BoltIcon';

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ScriptDocument — domain model cho 1 kịch bản đã lưu.
  * Đây là superset của LibraryItem cũ:
  *   - Thêm schemaVersion + id dạng string (UUID-friendly).

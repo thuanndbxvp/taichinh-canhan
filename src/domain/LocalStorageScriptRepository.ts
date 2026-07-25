@@ -1,4 +1,4 @@
-﻿/**
+/**
  * LocalStorageScriptRepository — adapter localStorage cho ScriptRepository.
  *
  * Phase 3.2: tách interface trước khi thay backend. LocalStorage đủ cho data
