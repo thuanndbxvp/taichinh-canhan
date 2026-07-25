@@ -1,6 +1,5 @@
-﻿import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
-  parseIdeaFromBrainstorm,
   parseScoringReport,
   stripMarkdownForWordCount,
   countWords,
@@ -9,34 +8,6 @@ import {
   PROMPT_PLACEHOLDER_PREFIX,
   PROMPT_ERROR_PREFIX,
 } from './markdown';
-
-describe('parseIdeaFromBrainstorm', () => {
-  it('trích title + outline khi có marker', () => {
-    const content = '**[Idea]: Tiết kiệm 30% thu nhập**\n- Bước 1\n- Bước 2';
-    const result = parseIdeaFromBrainstorm(content);
-    expect(result).toEqual({
-      title: 'Tiết kiệm 30% thu nhập',
-      outline: '- Bước 1\n- Bước 2',
-    });
-  });
-
-  it('loại bỏ cả dòng trước marker nếu chứa marker', () => {
-    const content = 'Mở đầu: **[Idea]: Quỹ dự phòng**\n- Bước 1\n- Bước 2';
-    const result = parseIdeaFromBrainstorm(content);
-    expect(result).toEqual({
-      title: 'Quỹ dự phòng',
-      outline: '- Bước 1\n- Bước 2',
-    });
-  });
-
-  it('trả về null nếu không có marker', () => {
-    expect(parseIdeaFromBrainstorm('Chào bạn, bạn thế nào?')).toBeNull();
-  });
-
-  it('trả về null nếu input rỗng', () => {
-    expect(parseIdeaFromBrainstorm('')).toBeNull();
-  });
-});
 
 describe('parseScoringReport', () => {
   it('chia thành các section theo heading', () => {

@@ -4,7 +4,7 @@ import { OptionSelector } from './OptionSelector';
 import { SparklesIcon } from './icons/SparklesIcon';
 import type { StyleOptions, ScriptType, NumberOfSpeakers, TopicSuggestionItem, SavedIdea, AiProvider } from '../types';
 import { LANGUAGE_OPTIONS, SCRIPT_TYPE_OPTIONS, NUMBER_OF_SPEAKERS_OPTIONS, FINANCE_IDEAS } from '../constants';
-import { IdeaBrainstorm } from './IdeaBrainstorm';
+
 import { Tooltip } from './Tooltip';
 import { FORMATTING_EXPLANATIONS } from '../constants/explanations';
 import { BookmarkIcon } from './icons/BookmarkIcon';
@@ -195,14 +195,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               value={outlineContent}
               onChange={(e) => setOutlineContent(e.target.value)}
             />
-            
-            <Tooltip text="Sử dụng AI để thảo luận và phát triển ý tưởng của bạn một cách tương tác.">
-              <IdeaBrainstorm 
-                  setTitle={setTitle} 
-                  setOutlineContent={setOutlineContent}
-                  getNextAiConfig={getNextAiConfig}
-              />
-            </Tooltip>
 
             <div className="mt-3 bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-3">
                     <label className="flex items-center gap-2 text-xs font-bold text-emerald-500 mb-2 uppercase tracking-wider">
