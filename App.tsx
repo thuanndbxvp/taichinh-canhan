@@ -308,6 +308,10 @@ const App: React.FC = () => {
         currentApiKeys={aiSettings.apiKeys}
         onSaveKeys={aiSettings.saveApiKeys}
       />
+      <GuideModal
+        isOpen={modals.isOpen('guide')}
+        onClose={() => modals.close('guide')}
+      />
       <LibraryModal
         isOpen={modals.isOpen('library')}
         onClose={() => modals.close('library')}
