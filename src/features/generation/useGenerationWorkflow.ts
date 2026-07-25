@@ -33,7 +33,8 @@ export interface UseGenerationWorkflowReturn {
   autoContinue: boolean;
   setAutoContinue: (v: boolean) => void;
   generate: () => Promise<void>;
-  startSequential: () => void;
+  startSequential: (providedOutline?: string) => void;
+  resumeSequential: () => void;
   stopSequential: () => void;
   generateNextPart: () => Promise<void>;
   revise: () => Promise<void>;
@@ -142,7 +143,7 @@ export function useGenerationWorkflow({
       });
       setFullOutlineText(outline);
       if (!outline || !outline.trim()) {
-        setError('AI provider trả về dàn ý rỗng. Vui lòng thử lại hoặc đổi model.');
+        setError('AI provider trả về dàn ý rỗng. V vui lòng thử lại hoặc đổi model.');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi không xác định.');
@@ -220,9 +221,7 @@ export function useGenerationWorkflow({
       const nextIndex = index + 1;
       setCurrentPartIndex(nextIndex);
 
-      if (shouldAutoContinue && nextIndex < parts.length && !isStoppingRef.current) {
-        setTimeout(() => generateNextPart(), 100);
-      } else if (nextIndex >= parts.length) {
+      if (nextIndex >= parts.length) {
         setIsGeneratingSequentially(false);
       }
     } catch (err) {
@@ -270,19 +269,26 @@ export function useGenerationWorkflow({
     setIsGeneratingSequentially(false);
   }, []);
 
-  // Trigger first part — chỉ fire khi chuyển sang sequential mode lần đầu.
-  // Không còn phụ thuộc `generatedScript` (chunk update gây re-fire).
+  const resumeSequential = useCallback(() => {
+    isStoppingRef.current = false;
+    isGeneratingPartRef.current = false;
+    setIsGeneratingSequentially(true);
+  }, []);
+
+  // Trigger sequential parts automatically if autoContinue is on.
   useEffect(() => {
     if (
       isGeneratingSequentially &&
-      currentPartIndex === 0 &&
-      outlineParts.length > 0 &&
+      currentPartIndex < outlineParts.length &&
       !isGeneratingPartRef.current &&
       !isStoppingRef.current
     ) {
-      generateNextPart();
+      // Only auto-continue for index > 0 if autoContinue is true
+      if (currentPartIndex === 0 || autoContinue) {
+        generateNextPart();
+      }
     }
-  }, [isGeneratingSequentially, currentPartIndex, outlineParts.length, generateNextPart]);
+  }, [isGeneratingSequentially, currentPartIndex, outlineParts.length, generateNextPart, autoContinue]);
 
   const revise = useCallback(async () => {
     if (!generatedScript || !revisionPrompt.trim()) return;
@@ -332,6 +338,7 @@ export function useGenerationWorkflow({
     setAutoContinue,
     generate,
     startSequential,
+    resumeSequential,
     stopSequential,
     generateNextPart,
     revise,

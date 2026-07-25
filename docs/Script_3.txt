@@ -1,0 +1,488 @@
+--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---
+
+Bắt đầu viết phần tiếp theo.
+
+Hook mạnh từ câu hỏi, slogan chèn tự nhiên, vấn đề chính đã nêu. Cần giữ tông empathetic và storytelling, ngôn ngữ nói, không công thức toán học. Độ dài 100 từ spoken, bao gồm phần hook + slogan + vấn đề chính.
+
+Tôi có thể viết: Sau hook, chêm slogan: "Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất." Rồi vào vấn đề: "Hầu hết mọi người chỉ thấy được cái giá hiện tại – tiền mất đi, nhưng lại mù tịt trước những thứ vô hình đang quyết định bạn giàu hay nghèo trong 10 năm tới." Thêm một câu chuyện ngắn: Ví dụ như thằng bạn mua xe 500 triệu nhưng không biết rằng số tiền đó nếu đầu tư sẽ sinh lời ra sao. Giữ số liệu cụ thể, chuyển thành ngôn ngữ nói.
+
+Đảm bảo trên 95 từ spoken khi TTS bỏ heading. Heading là "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" dòng đầu, nội dung từ dòng 2.
+
+Viết.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại – tiền mất đi – mà không nhìn thấy chi phí vô hình, thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới. Ví dụ nhé, thằng bạn tôi mua xe 500 triệu, nhưng 500 triệu đó nếu đầu tư 10% mỗi năm, sau 10 năm là hơn 1,2 tỷ. Nó không thấy mất 700 triệu tiền lãi, chỉ thấy cái xe đẹp trước mắt.
+
+---
+
+Chúng ta cần viết tiếp phần mở đầu dựa trên yêu cầu. Đã có sẵn hook, slogan, vấn đề chính. Nhiệm vụ là viết lại thành một đoạn văn tự nhiên, dạng kể chuyện, khoảng 100 từ spoken. Cần tích hợp các yếu tố: Hook bằng câu chuyện hoặc nghịch lý, slogan chèn tự nhiên, nêu vấn đề chính. Dùng giọng kể, ngôn ngữ đời thường, có nhân vật ví dụ nếu cần. Chú ý không dùng công thức toán, dùng ẩn dụ.
+
+Phần mở đầu đã có sẵn ý: "Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới?" -> mở rộng thành một câu chuyện nhỏ. Sau đó chèn slogan. Rồi nêu vấn đề chính: mọi người chỉ nghĩ chi phí hiện tại, không thấy chi phí vô hình.
+
+Viết thêm một chút để đủ 100 từ. Có thể thêm một câu chuyện micro: "Minh, 30 tuổi, lương 20 triệu, quyết định mua xe thay vì đầu tư." nhưng không bắt buộc. Hoặc giữ nguyên hook hiện tại và triển khai.
+
+Tôi sẽ viết: Bắt đầu bằng hook gốc, phát triển: "Cảm giác đó gọi là 'mù quáng chi phí cơ hội'." -> Rồi tự nhiên chuyển sang slogan: "Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất." -> Sau đó nêu vấn đề: "Hầu hết chúng ta chỉ nhìn thấy số tiền mất đi ngay lúc đó, mà quên mất những thứ mình đánh mất trong tương lai. Đó chính là chi phí cơ hội – thứ quyết định bạn giàu hay nghèo trong 10 năm tới."
+
+Đảm bảo văn nói, không quá dài. Đếm từ: khoảng 100-110 từ. Định dạng heading đúng, nội dung từ dòng 2.
+
+Viết xong.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là "mù quáng chi phí cơ hội". Chúng ta dễ dàng nhìn thấy thứ mình bỏ lỡ khi nó là một con số trên màn hình, nhưng lại mù tịt trước những thứ vô hình mà chúng ta đánh đổi mỗi ngày. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hôm nay, tôi muốn nói về một khái niệm đang âm thầm định hình mọi quyết định tài chính của bạn: chi phí cơ hội. Vấn đề là hầu hết chúng ta chỉ nhìn thấy số tiền mất đi ngay lúc đó, mà quên mất những thứ mình đánh mất trong tương lai. Và chính những thứ vô hình ấy mới quyết định bạn giàu hay nghèo trong 10 năm tới.
+
+---
+
+Chúng ta cần viết tiếp phần 1 của kịch bản, bắt đầu từ hook đã cho. Yêu cầu: viết lại heading "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)", sau đó nội dung từ dòng 2. Nội dung gồm hook, slogan, vấn đề chính. Đảm bảo đúng tone empathetic & storytelling, ngôn ngữ tiếng Việt tự nhiên. Độ dài 100 từ spoken, bao gồm buffer 15% cho markdown overhead. Thực tế phần spoken text phải ít nhất 95 từ. Cần kiểm tra số từ.
+
+Viết xong phần 1, chú ý không thêm phần khác. Sử dụng các nguyên tắc: hook đã có "Bạn có bao giờ thấy tiếc...", slogan "Chào mừng bạn đến với Chú Que Tài Chính...", vấn đề chính. Cần chuyển thành văn nói tự nhiên, có thể thêm chút câu chuyện hoặc ví dụ ngắn để storytelling. Nhưng không quá dài. Tập trung vào 100 từ.
+
+Viết như sau:## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Thực ra, ai cũng từng trải qua: chúng ta dễ dàng nhìn thấy món hời bỏ lỡ trong quá khứ, nhưng lại mù tịt trước những thứ mình đang đánh đổi mỗi ngày. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề chính hôm nay: hầu hết mọi người chỉ nghĩ đến chi phí hiện tại – tiền mất đi – mà không thấy chi phí vô hình, thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới. Hãy cùng tôi mổ xẻ ngay sau đây.
+
+---
+
+Chúng ta cần viết tiếp phần mở đầu cho kịch bản video về chi phí cơ hội. Phần 1 đã có Hook, Slogan, Vấn đề chính. Yêu cầu viết tiếp phần còn lại của phần 1 (khoảng 100 từ spoken, bao gồm cả những phần đã cho? Hay là viết thêm vào sau vấn đề chính? Đọc kỹ: "VIẾT TIẾP PHẦN KỊCH BẢN: '## PHẦN 1: ...'" và sau đó là nội dung đã có sẵn hook, slogan, vấn đề chính. Nhiệm vụ là viết tiếp phần 1, tức là sau vấn đề chính, có thể thêm một đoạn ngắn để hoàn thiện phần mở đầu, nhưng tổng phần 1 phải là 100 từ spoken (bao gồm cả phần đã cho? Có lẽ là tính cả phần đã cho). Tuy nhiên, đoạn đã cho có: Hook (2 câu), Slogan (1 câu), Vấn đề chính (2 câu). Tổng khoảng 70-80 từ. Cần viết thêm khoảng 20-30 từ để đạt 100 từ spoken, nhưng vẫn phải giữ tông giọng empathetic, storytelling. Hoặc có thể viết lại toàn bộ phần 1 với nội dung tương tự nhưng dài hơn để đạt 100 từ? Yêu cầu: "VIẾT TIẾP" nghĩa là bổ sung, không viết lại từ đầu. Vậy ta sẽ thêm một vài câu sau vấn đề chính, dẫn dắt vào phần 2. Cần đảm bảo tổng phần 1 (bao gồm cả phần đã cho) có ít nhất 95 từ spoken sau khi bỏ qua markdown. Ta sẽ viết thêm một đoạn ngắn, ví dụ: "Và hôm nay, tôi sẽ chỉ cho bạn cách nhìn ra cái bẫy đó, để mỗi đồng tiền bạn bỏ ra đều là một khoản đầu tư." Nhưng phải giữ đúng phong cách storytelling, có thể dùng thêm ví dụ. Viết tiếp: sau vấn đề chính, có thể kể một câu chuyện nhỏ, ví dụ: "Tôi có một người bạn, tên Tuấn, 35 tuổi. Anh ấy từng rất tự hào vì mua được căn hộ chung cư, nhưng không hề tính đến số tiền đó nếu đầu tư vào một mảnh đất nhỏ thì 5 năm sau đã tăng gấp đôi. Đó là chi phí cơ hội." Nhưng cần khoảng 20-30 từ thôi. Tốt nhất là viết một câu chuyện siêu ngắn.
+
+Ta sẽ viết: "Lấy ví dụ nhé: Bạn quyết định mua một chiếc điện thoại mới 30 triệu. Nhìn thì có vẻ hợp lý, nhưng 30 triệu đó nếu gửi tiết kiệm 10 năm, với lãi kép, nó sẽ thành hơn 70 triệu. Đấy, thứ bạn bỏ lỡ không phải là 30 triệu, mà là 70 triệu – đó chính là chi phí cơ hội." Khoảng 40 từ. Tổng thể phần 1 sẽ hơi dài, nhưng đảm bảo spoken ít nhất 95 từ. Tốt hơn nên viết một đoạn ngắn gọn, không lặp ý.
+
+Hoặc ta có thể viết: "Và trong video này, tôi sẽ giải thích tại sao tư duy này lại nguy hiểm, và làm thế nào để bạn không còn mắc bẫy 'chi phí cơ hội' nữa. Bắt đầu ngay thôi." Khoảng 20 từ. Nhưng nên có một chút storytelling.
+
+Đáp án: Viết thêm 2-3 câu sau vấn đề chính, dùng nhân vật giả định hoặc lời kêu gọi. Văn phong tự nhiên, như đang nói chuyện.
+
+Tôi sẽ viết: "Hãy nghĩ về một quyết định gần đây: bạn chọn món đồ công nghệ thay vì một khóa học. Kết quả thế nào? Phần lớn chúng ta đều mắc sai lầm này, và hôm nay tôi sẽ chỉ ra cái bẫy vô hình đó."
+
+Đảm bảo tổng thể.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại (tiền mất đi) mà không nhìn thấy chi phí vô hình — thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới. Lấy ví dụ nhỏ: thay vì mua ly cà phê 50 nghìn mỗi ngày, bạn đầu tư số tiền đó vào một quỹ chỉ số cơ bản. Sau 20 năm, bạn có thể có hơn một tỷ đồng. Nhưng vì không nhìn thấy được số tiền đó, chúng ta cứ vô tình đốt nó mà không hay. Đó chính là cái bẫy tinh vi nhất của dòng tiền.
+
+---
+
+Chúng ta cần viết tiếp phần kịch bản, cụ thể là viết nội dung cho "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" dựa trên các chỉ dẫn đã cho. Đầu vào đã bao gồm Hook, Slogan, Vấn đề chính. Nhiệm vụ của tôi là viết lại toàn bộ phần này thành một đoạn văn tự nhiên, storytelling, với giọng điệu empathetic, độ dài khoảng 100 từ spoken (sau khi lọc markdown). Cần đảm bảo bao gồm các yếu tố: Hook thu hút, giới thiệu Slogan tự nhiên, nêu vấn đề chính. Tôi sẽ viết bằng tiếng Việt, văn nói, không dùng bullet hay heading trong nội dung, chỉ dùng ở tiêu đề phần.
+
+Tôi sẽ tạo một đoạn văn mở đầu, bắt đầu bằng Hook "Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010..." Sau đó dẫn dắt tự nhiên vào slogan "Chào mừng bạn đến với Chú Que Tài Chính..." và kết nối với vấn đề chính về chi phí cơ hội. Giữ ngôn ngữ đời thường, có thể thêm một chút câu chuyện cá nhân hóa để tăng tính storytelling.
+
+Chú ý: Không thêm các phần khác, chỉ viết phần nội dung cho PHẦN 1. Độ dài khoảng 100 từ spoken. Tôi sẽ ước lượng từ ngữ.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Hồi đó tôi cũng vậy, cứ nghĩ mua xe là quyết định sáng suốt vì có xài được, nhưng không nhìn thấy cái giá phải trả là số tiền đó nếu để dành đầu tư thì giờ đã là cả gia tài. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hôm nay, tôi muốn nói về một thứ vô hình nhưng quyết định bạn giàu hay nghèo trong 10 năm tới: chi phí cơ hội. Hầu hết chúng ta chỉ thấy tiền mất đi khi mua một món đồ, mà quên mất giá trị thực sự của những lựa chọn khác bị bỏ qua — đó chính là cái bẫy giữ ta mãi trong vòng luẩn quẩn tài chính.
+
+---
+
+Chúng ta cần viết tiếp phần Mở đầu dựa trên các chỉ dẫn. Đã có hook, slogan và vấn đề chính. Nhiệm vụ là viết thành văn nói tự nhiên, khoảng 100 từ spoken, giọng Empathetic + Storytelling. Phải đảm bảo sau khi loại bỏ markdown (heading, bullet, SFX), còn ít nhất 95 từ. Cần viết lại heading "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" đúng format. Sau đó nội dung bắt đầu dòng 2.
+
+Các yếu tố: Hook đã cho (câu hỏi về bitcoin và xe hơi), Slogan, vấn đề chính. Cần kết nối tự nhiên, thêm một chút storytelling: có thể dùng nhân vật giả định. Tone empathetic: hiểu cảm giác của người nghe. Style storytelling: kể một câu chuyện nhỏ. Không thêm phần khác.
+
+Viết khoảng 100 từ spoken. Buffer 15% cho markdown overhead, nhưng thực tế phần markdown chỉ có heading, nên overhead rất nhỏ. Vẫn cần đảm bảo từ spoken >=95.
+
+Bắt đầu với heading, xuống dòng. Viết hook dưới dạng câu nói chuyện. Sau đó chèn slogan một cách tự nhiên. Rồi vấn đề chính.
+
+Ví dụ: "Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại chẳng tiếc khi chi 500 triệu mua xe hơi? Cảm giác đó gọi là mù quáng chi phí cơ hội. Hôm nay, Chú Que Tài Chính sẽ giúp bạn nhìn ra thứ vô hình đang ngấm ngầm quyết định giàu nghèo. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là: hầu hết mọi người chỉ tính tiền mất đi, mà không thấy chi phí vô hình – thứ quyết định bạn giàu hay nghèo trong 10 năm tới."
+
+Tôi sẽ viết lại cho mượt hơn, thêm một câu chuyện ngắn: "Hôm nọ có bạn Minh, 30 tuổi, lương 20 triệu, khoe vừa tậu xe hơi. Tôi hỏi: 'Bạn có tính chi phí cơ hội chưa?' Cậu ấy ngớ người. Đó chính là cái bẫy." Rồi dẫn vào slogan và vấn đề. Nhưng phải giữ tự nhiên, không quá dài.
+
+Đảm bảo độ dài: Khoảng 100 từ. Tôi sẽ đếm sau.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại chẳng hề tiếc khi chi 500 triệu mua chiếc xe hơi mới? Cảm giác đó gọi là "mù quáng chi phí cơ hội". Hôm nọ, thằng bạn tôi – Minh, 30 tuổi, lương 20 triệu – hí hửng khoe vừa xuống tiền mua xe. Tôi hỏi: "Mày có tính xem 500 triệu đó nếu đầu tư 10 năm nữa sẽ ra sao không?" Nó im re. Đó chính là cái bẫy tài chính lớn nhất mà ai cũng mắc. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là: hầu hết mọi người chỉ thấy tiền mất đi, không thấy thứ vô hình đang quyết định bạn giàu hay nghèo trong 10 năm tới.
+
+---
+
+Chúng ta cần viết tiếp phần mở đầu (PHẦN 1) dựa trên hướng dẫn. Yêu cầu: hook, slogan, vấn đề chính. Đã có sẵn hook và slogan, cần nêu vấn đề chính và đảm bảo độ dài ~100 từ spoken (buffer 15% cho markdown). Phải giữ tông giọng empathetic, phong cách storytelling.
+
+Phần đã cho: "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+- Hook: "Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'."
+- Slogan: "Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất."
+- Vấn đề chính: Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại (tiền mất đi) mà không nhìn thấy chi phí vô hình — thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới."
+
+Chúng ta cần viết lại thành một đoạn văn nói tự nhiên, kết hợp hook, slogan, vấn đề chính. Không dùng bullet point trong phần nội dung. Có thể dùng dấu gạch đầu dòng trong markdown nhưng khi TTS sẽ đọc như văn bản? Hướng dẫn bảo "KHÔNG dùng bullet point trong phần nội dung" nhưng trong phần mẫu họ có bullet. Tốt nhất nên viết dạng văn xuôi.
+
+Viết lại: Bắt đầu bằng hook để thu hút, sau đó chèn slogan một cách tự nhiên, rồi nêu vấn đề. Đảm bảo độ dài ~100 từ. Dễ dàng kiểm tra: 100 từ spoken (thường ~130-150 ký tự tiếng Việt). Cần đếm từ. Viết thử.
+
+Ví dụ: "Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. (khoảng 30 từ). Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. (thêm ~15 từ). Vấn đề chính là: hầu hết mọi người chỉ nghĩ đến chi phí hiện tại – tiền mất đi – mà không nhìn thấy chi phí vô hình, thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới. (thêm ~25 từ). Tổng ~70 từ. Cần thêm để đạt 95-100 từ. Có thể thêm một câu dẫn dắt: "Hôm nay chúng ta sẽ mổ xẻ khái niệm chi phí cơ hội, thứ âm thầm định hình mọi quyết định tài chính của bạn." (thêm 15 từ). Tổng 85 từ. Vẫn thiếu.
+
+Viết lại mượt hơn: Sau slogan, có thể nói "Trong video này, tôi sẽ giúp bạn hiểu rõ vì sao chi phí cơ hội là khái niệm định hình mọi quyết định tài chính, và cách bạn có thể nhìn ra những cái bẫy vô hình đang ngốn mất tương lai của mình." (thêm ~20 từ). Tổng 105 từ (spoke). OK.
+
+Cần đảm bảo tông giọng empathetic: đồng cảm với người mua xe, nhưng chỉ ra cái bẫy. Ví dụ: "Tôi hiểu cảm giác sở hữu một chiếc xe mới thật tuyệt, nhưng nếu bạn không nhìn thấy 500 triệu đó có thể sinh ra bao nhiêu tiền trong 10 năm, bạn đang tự đánh mất cơ hội trở nên giàu có." Đó là storytelling.
+
+Viết phần hoàn chỉnh.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là "mù quáng chi phí cơ hội". Tôi hiểu mà – cảm giác cầm chìa khóa xe mới thật phấn khích, nhưng phần não bộ xử lý tiền tương lai lại ngủ quên. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Trong video này, tôi sẽ mổ xẻ khái niệm chi phí cơ hội – thứ âm thầm định hình mọi quyết định tài chính của bạn. Vấn đề là: hầu hết mọi người chỉ nghĩ đến chi phí hiện tại – tiền mất đi – mà không nhìn thấy chi phí vô hình, thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới. Nếu không hiểu cái bẫy này, bạn mãi mãi chạy trên máy chạy bộ tài chính.
+
+---
+
+Chúng ta có phần mở đầu đã được viết sẵn: Hook, slogan, vấn đề chính. Yêu cầu viết tiếp phần 1 (mở đầu) với độ dài 100 từ spoken, đã bao gồm buffer. Cần viết lại toàn bộ heading "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" ở dòng đầu. Nội dung bắt đầu từ dòng thứ 2.
+
+Cần duy trì tone empathetic và style storytelling. Viết bằng tiếng Việt tự nhiên, không cứng nhắc.
+
+Phần mở đầu đã có hook, slogan, vấn đề chính. Có thể diễn giải lại hook bằng một câu chuyện ngắn hơn, tự nhiên hơn. Slogan chèn tự nhiên. Vấn đề chính cũng cần diễn đạt bằng lời nói.
+
+Chú ý: Độ dài 100 từ spoken. Đếm từ sau khi viết. Buffer 15% nghĩa là phần spoken thực tế ít nhất 95 từ, nhưng viết 100 từ là ổn.
+
+Viết theo định dạng:
+
+## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+[ Nội dung ... ]
+
+Không thêm heading khác. Dùng ngôn ngữ nói, có thể có dấu ba chấm, từ ngữ tự nhiên.
+
+Viết xong kiểm tra số từ.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã bỏ ra 500 triệu cho chiếc xe mới? Cảm giác đó gọi là "mù quáng chi phí cơ hội". Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là: hầu hết chúng ta chỉ thấy đồng tiền mất đi trước mắt, mà không nhìn thấy thứ vô hình đang quyết định bạn giàu hay nghèo trong 10 năm tới.
+
+---
+
+Chúng ta cần viết tiếp phần kịch bản dựa trên yêu cầu. Cụ thể, đã có phần mở đầu sẵn: Hook, Slogan, Vấn đề chính. Nhiệm vụ là viết tiếp "PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" với đúng nội dung đó, nhưng phải đảm bảo độ dài ~100 từ spoken (sau khi loại bỏ markdown). User đã cho sẵn Hook, Slogan, Vấn đề chính, nhưng chúng ta cần viết lại thành một đoạn văn tự nhiên, storytelling, giọng empathetic, đúng phong cách của Chú Que Tài Chính.
+
+Cần lưu ý: Hook phải là một câu chuyện hoặc nghịch lý. User đã cho một Hook dạng câu hỏi: "Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'." Chúng ta có thể dùng lại chính xác hook đó hoặc paraphrase một chút. Slogan cố định: "Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất." Vấn đề chính: "Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại (tiền mất đi) mà không nhìn thấy chi phí vô hình — thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới."
+
+Viết thành một đoạn văn mạch lạc, giọng nói chuyện tự nhiên, có thể thêm một chút chi tiết câu chuyện mini nếu cần. Độ dài: 95-105 từ spoken. Kiểm tra số từ sau khi loại bỏ heading (## PHẦN 1: ...) và các markdown khác. Chỉ có heading ở đầu dòng, phần nội dung từ dòng thứ 2.
+
+Đảm bảo không thêm phần khác (chỉ phần 1). Viết bằng tiếng Việt chuẩn văn nói.
+
+Kết quả: Bắt đầu bằng "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" (định dạng markdown cấp 2). Dòng tiếp theo là nội dung.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là "mù quáng chi phí cơ hội". Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại – tiền mất đi – mà không nhìn thấy chi phí vô hình, thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới. Hôm nay, tôi sẽ giúp bạn nhận ra những lựa chọn vô hình đó, và tại sao chúng quan trọng hơn bất kỳ con số nào trong tài khoản ngân hàng của bạn.
+
+---
+
+Chúng ta cần viết tiếp phần 1 mở đầu dựa trên các yếu tố đã cho. Đã có hook, slogan, vấn đề chính. Nhiệm vụ là viết thành đoạn văn tự nhiên, khoảng 100 từ spoken (sau khi loại bỏ markdown). Phải giữ tông giọng empathetic + storytelling, ngôn ngữ tiếng Việt.
+
+Cấu trúc: Bắt đầu bằng "## PH�ần 1: MỞ ĐẦU (HOOK & SETUP)" ở dòng 1, nội dung từ dòng 2.
+
+Cần viết lại hook và slogan một cách mượt mà, kết hợp với vấn đề chính. Đảm bảo đủ ít nhất 95 từ spoken. Hãy viết thành một đoạn hội thoại tự nhiên, như đang nói chuyện với khán giả.
+
+Có thể mở đầu: "Bạn có bao giờ... nhưng lại không hề tiếc..." rồi dẫn dắt: "Đó chính là cái bẫy tâm lý gọi là mù quáng chi phí cơ hội. Hôm nay, Chú Que Tài Chính sẽ giúp bạn nhìn thấu thứ vô hình này." Chèn slogan một cách tự nhiên.
+
+Viết xong rồi đếm số từ spoken (bỏ qua các ký hiệu markdown). Đảm bảo từ 95 trở lên.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là "mù quáng chi phí cơ hội". Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại – tiền mất đi – mà không thấy thứ vô hình đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới. Hôm nay, mình sẽ kể cho bạn nghe câu chuyện của một người bạn tên Minh, để thấy rõ chi phí cơ hội không phải là lý thuyết suông, mà là thứ đang ngấm vào từng quyết định hàng ngày của bạn.
+
+---
+
+Hmm, user yêu cầu viết tiếp phần kịch bản video, cụ thể là "PHẦN 1: MỞ ĐẦU". Họ đã cho sẵn các yếu tố: hook, slogan và vấn đề chính. Nhiệm vụ của tôi là hoàn thiện đoạn text khoảng 100 từ spoken, giữ đúng tông giọng empathetic và phong cách storytelling, đồng thời tuân thủ quy tắc định dạng markdown.
+
+Okay, trước hết cần đọc kỹ phần user đã viết. Họ đã đưa ra một hook rất hay, so sánh việc tiếc không mua Bitcoin với việc không tiếc khi tiêu tiền vào xe. Đó là một nghịch lý tâm lý thú vị. Slogan đã có sẵn. Vấn đề chính là về "mù quáng chi phí cơ hội".
+
+Tôi cần viết phần mở đầu sao cho thật tự nhiên, như đang nói chuyện. Bắt đầu bằng hook đó, rồi dẫn dắt đến slogan, sau đó nêu vấn đề. Quan trọng là giữ cho câu văn mượt, không cứng nhắc, và đảm bảo độ dài khoảng 100 từ spoken. Có thể thêm một chút buffer cho markdown overhead, nhưng phần text chính phải ít nhất 95 từ.
+
+Tôi sẽ dùng câu chuyện ngắn về Minh, 28 tuổi, như một ví dụ điển hình. Giọng điệu cần thể hiện sự đồng cảm, không phán xét, nhưng cũng phải làm rõ sự thật phũ phàng về chi phí cơ hội. Kết thúc đoạn bằng cách mở ra câu hỏi lớn: "sự mù quáng này ngốn mất vài tỷ đồng", để kích thích suy nghĩ.
+
+Cần chú ý không thêm phần, không dùng heading khác, và chỉ viết đúng phần 1 này. Định dạng bắt buộc là dòng đầu là "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)", từ dòng thứ hai mới là nội dung. Tôi sẽ viết như vậy.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ ngồi tiếc vì lỡ không mua Bitcoin năm 2010, nhưng lại thấy hoàn toàn bình thường khi tiêu 500 triệu vào con xe mới về bảo dưỡng mỗi tháng đắt hơn cả tiền xăng? Đó không phải là bạn ngu, mà là mắt bạn bị che bởi thứ gọi là "mù quáng chi phí cơ hội" — cái cảm giác chỉ nhìn thấy thứ mình mất đi trước mắt mà quên mất thứ mình đã đánh mất trong tương lai. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề ở đây là: chúng ta cứ lao đầu vào những quyết định chỉ vì thấy nó "rẻ" hôm nay, nhưng không hề đo lường được cái giá phải trả — thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới. Hôm nay, tôi sẽ mổ xẻ cái khái niệm tưởng khô khan mà thực ra đang điều khiển từng đồng tiền trong túi bạn.
+
+---
+
+Chúng ta cần viết tiếp phần mở đầu (PHẦN 1) dựa trên các yếu tố đã cho: Hook, Slogan, Vấn đề chính. Yêu cầu là viết lại toàn bộ phần này với độ dài 100 từ spoken (đã tính buffer). Phải giữ tông giọng empathetic, style storytelling, và tuân thủ quy tắc định dạng.
+
+Đầu tiên, viết lại heading "## PH�N 1: MỞ ĐẦU (HOOK & SETUP)". Sau đó nội dung bắt đầu từ dòng 2.
+
+Hook đã cho: "Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'." Có thể triển khai thêm một chút thành câu chuyện ngắn, nhưng giữ nguyên ý.
+
+Slogan: "Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất." Phải chèn tự nhiên.
+
+Vấn đề chính: "Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại (tiền mất đi) mà không nhìn thấy chi phí vô hình — thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới." Có thể diễn đạt lại.
+
+Tổng thể cần 100 từ spoken. Hiện tại hook + slogan + vấn đề đã có khoảng 70-80 từ, cần thêm một ít để làm mượt và đạt độ dài. Có thể thêm một câu chuyện nhỏ hoặc một câu chuyển tiếp.
+
+Viết bằng tiếng Việt tự nhiên, văn nói. Không dùng từ ngữ học thuật.
+
+Ví dụ triển khai:
+
+"Mở đầu: 'Các bạn biết không, có một nghịch lý rất hay trong tài chính cá nhân. Đó là chúng ta thường dễ dàng chi 500 triệu mua xe hơi mà không chớp mắt, nhưng lại tiếc đứt ruột vì không mua Bitcoin khi nó còn rẻ. Cảm giác đó gọi là "mù quáng chi phí cơ hội". Và đó cũng chính là lý do vì sao hôm nay tôi muốn nói với các bạn về khái niệm này. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là: Đa số chúng ta chỉ nhìn thấy cái giá phải trả ngay trước mắt, mà quên mất những cơ hội đầu tư hay tiết kiệm mà mình đã đánh mất. Và chính những thứ vô hình ấy mới là thứ quyết định bạn sẽ giàu hay nghèo trong 10 năm tới.'
+
+Đếm từ: "Các bạn biết không, có một nghịch lý rất hay trong tài chính cá nhân. Đó là chúng ta thường dễ dàng chi 500 triệu mua xe hơi mà không chớp mắt, nhưng lại tiếc đứt ruột vì không mua Bitcoin khi nó còn rẻ. Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Và đó cũng chính là lý do vì sao hôm nay tôi muốn nói với các bạn về khái niệm này. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là: Đa số chúng ta chỉ nhìn thấy cái giá phải trả ngay trước mắt, mà quên mất những cơ hội đầu tư hay tiết kiệm mà mình đã đánh mất. Và chính những thứ vô hình ấy mới là thứ quyết định bạn sẽ giàu hay nghèo trong 10 năm tới."
+
+Đếm từ: khoảng 120-130 từ, hơi dài. Cần rút gọn. Buffer 15% cho 100 từ nghĩa là spoken text thực tế tối thiểu 95 từ, tối đa khoảng 115 từ? Thực ra yêu cầu: "ĐỘ DÀI PHẦN NÀY: 100 từ spoken (đã bao gồm buffer 15% cho Markdown overhead — khi TTS lọc bỏ heading/bullet/SFX, phần spoken text thực tế phải CÒN LẠI ÍT NHẤT 95 từ)." Nghĩa là phần spoken (sau khi loại bỏ định dạng) phải có ít nhất 95 từ. Vậy mình cần viết khoảng 95-105 từ spoken.
+
+Đoạn trên dài, phải cắt bớt. Có thể viết gọn hơn:
+
+"Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc khi chi 500 triệu mua xe hơi? Đó là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết chúng ta chỉ nghĩ đến tiền đã mất đi, mà quên mất những cơ hội đầu tư mình đã bỏ lỡ. Và chính những thứ vô hình đó quyết định bạn giàu hay nghèo trong 10 năm tới."
+
+Đếm từ: 105 từ (kể cả dấu?). Tạm ổn. Nhưng có thể thêm một chút storytelling. Thêm một câu chuyện nhỏ: "Hãy tưởng tượng bạn có 500 triệu. Một bên là chiếc xe mới, một bên là đầu tư vào quỹ chỉ số. Nhiều người chọn xe ngay lập tức mà không nghĩ tới 10 năm sau."
+
+Nhưng cần giữ đúng hook đã cho. Tốt nhất viết lại hook y hệt hoặc paraphrase sát.
+
+Kết hợp:
+
+"Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là: Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại – tiền mất đi – mà không nhìn thấy chi phí vô hình. Thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới chính là những cơ hội bạn đã đánh mất."
+
+Đếm: 112 từ (bao gồm dấu câu). Hơi dài, nhưng trong buffer 100 từ +15% = tối đa 115 từ? Thực tế 100 từ spoken đã bao gồm buffer, nghĩa là mục tiêu là 100 từ, và có thể thêm 15% nữa? Câu từ: "ĐỘ DÀI PHẦN NÀY: 100 từ spoken (đã bao gồm buffer 15% cho Markdown overhead..." Có nghĩa là tổng độ dài phần này nên là 100 từ spoken, và đã tính dư 15% cho markdown (tức là markdown chiếm thêm ký tự, nhưng spoken text vẫn là 100 từ). Tuy nhiên, họ nói "phần spoken text thực tế phải CÒN LẠI ÍT NHẤT 95 từ". Vậy mình có thể viết spoken text từ 95 đến 100 từ.
+
+Đoạn trên 112 từ, hơi quá. Cắt bớt: Bỏ "Cảm giác đó gọi là" -> "Đó là 'mù quáng chi phí cơ hội'." Và bỏ "Vấn đề là:" -> "Hầu hết..." Có thể viết:
+
+"Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Đó là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến tiền mất đi, mà quên mất những cơ hội vô hình – thứ quyết định bạn giàu hay nghèo trong 10 năm tới."
+
+Đếm: 95 từ (tính cả dấu? Không tính dấu, từ là các từ riêng biệt). "Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010 nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới Đó là mù quáng chi phí cơ hội Chào mừng bạn đến với Chú Que Tài Chính nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất Hầu hết mọi người chỉ nghĩ đến tiền mất đi mà quên mất những cơ hội vô hình thứ quyết định bạn giàu hay nghèo trong 10 năm tới" -> khoảng 50-55 từ? Tính lại: 1 bạn,2 có,3 bao,4 giờ,5 thấy,6 tiếc,7 vì,8 không,9 mua,10 Bitcoin,11 năm,12 2010,13 nhưng,14 lại,15 không,16 hề,17 tiếc,18 vì,19 đã,20 tiêu,21 500,22 triệu,23 vào,24 chiếc,25 xe,26 hơi,27 mới,28 Đó,29 là,30 mù,31 quáng,32 chi,33 phí,34 cơ,35 hội,36 Chào,37 mừng,38 bạn,39 đến,40 với,41 Chú,42 Que,43 Tài,44 Chính,45 nơi,46 chúng,47 ta,48 nói,49 về,50 tiền,51 bạc,52 theo,53 cách,54 thẳng,55 thật,56 và,57 dễ,58 hiểu,59 nhất,60 Hầu,61 hết,62 mọi,63 người,64 chỉ,65 nghĩ,66 đến,67 tiền,68 mất,69 đi,70 mà,71 quên,72 mất,73 những,74 cơ,75 hội,76 vô,77 hình,78 thứ,79 quyết,80 định,81 bạn,82 giàu,83 hay,84 nghèo,85 trong,86 10,87 năm,88 tới. 88 từ. Gần 95, có thể thêm một vài từ. Thêm "Cảm giác đó" trước "Đó là" -> "Cảm giác đó là 'mù quáng...'" thêm 2 từ. Hoặc thêm "của mình" sau "quyết định" -> "quyết định sự giàu hay nghèo của bạn" thêm 3 từ. Hoặc thêm "thực sự" trước "quyết định". Để đạt 95-100.
+
+Viết lại:
+
+"Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến tiền mất đi, mà quên mất những cơ hội vô hình – thứ thực sự quyết định bạn giàu hay nghèo trong 10 năm tới."
+
+Đếm: thêm "cảm giác" + "đó" + "thực sự" => 91 từ? Tính lại: câu đầu 28 từ (từ 1 đến 28: "Bạn ... mới?"), "Cảm giác đó là" (3), "mù quáng chi phí cơ hội" (4) => đến "hội" là 35. "Chào mừng ... nhất" (24 từ: chào mừng bạn đến với Chú Que Tài Chính nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất) => 35+24=59. "Hầu hết ... tới" (32 từ: Hầu hết mọi người chỉ nghĩ đến tiền mất đi mà quên mất những cơ hội vô hình thứ thực sự quyết định bạn giàu hay nghèo trong 10 năm tới) => 59+32=91. Vẫn thiếu. Có thể thêm "chính" trước "những cơ hội": "chính những cơ hội vô hình". Thêm 1 từ. Hoặc thêm "đã" trước "quên mất" không tăng. Thêm "của bản thân" sau "quyết định" -> "quyết định sự giàu nghèo của bản thân bạn" thêm 3 từ. Tổng 95. Được.
+
+Hoặc đơn giản là viết lại vấn đề chính dài hơn một chút: "thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới". Thêm "đang âm thầm" 2 từ.
+
+Vậy:
+
+"Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến tiền mất đi, mà quên mất chính những cơ hội vô hình – thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới."
+
+Đếm: câu 1: 28 từ, câu 2: 5 từ (Cảm giác đó là), 4 từ (mù quáng chi phí cơ hội) => 37, câu 3: 24 từ => 61, câu 4: 34 từ (Hầu hết... tới: Hầu hết mọi người chỉ nghĩ đến tiền mất đi mà quên mất chính những cơ hội vô hình thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới) => 61+34=95. Perfect.
+
+Vậy nội dung spoken là 95 từ. Markdown overhead chỉ gồm heading "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" và dòng trắng? Không có bullet hay SFX. Vậy đáp ứng yêu cầu.
+
+Viết heading đúng markdown. Sau đó nội dung.
+
+Như vậy, output cho phần này sẽ là:
+
+## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến tiền mất đi, mà quên mất chính những cơ hội vô hình – thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới.
+
+Kiểm tra lại: 95 từ spoken. OK.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến tiền mất đi, mà quên mất chính những cơ hội vô hình – thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới.
+
+---
+
+Chúng ta cần viết tiếp phần mở đầu cho kịch bản, nhưng yêu cầu là "VIẾT TIẾP PHẦN KỊCH BẢN: ## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" với nội dung đã cho trước. Nghĩa là đã có sẵn các thành phần: Hook, Slogan, Vấn đề chính. Nhiệm vụ là viết lại thành một đoạn văn mạch lạc, tự nhiên, 100 từ spoken, đảm bảo tone empathetic và style storytelling, sử dụng ngôn ngữ tiếng Việt tự nhiên.
+
+Kiểm tra: Đã có Hook: "Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'." -> Cần chuyển thành một câu chuyện hoặc diễn đạt tự nhiên hơn, theo style storytelling. Có thể mở đầu bằng câu chuyện ngắn: "Hồi 2010, bạn tôi có 500 triệu...". Nhưng để không phá vỡ hook sẵn, ta có thể viết lại Hook như một câu hỏi trực tiếp rồi dẫn vào Slogan.
+
+Slogan: "Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất." -> Phải chèn tự nhiên sau hook.
+
+Vấn đề chính: "Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại (tiền mất đi) mà không nhìn thấy chi phí vô hình — thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới." -> Cần mở rộng bằng một câu chuyện nhỏ hoặc ví dụ để storytelling.
+
+Độ dài 100 từ spoken, có buffer 15%, nên khoảng 95-115 từ. Viết xong phải kiểm tra đếm từ.
+
+Định dạng: Dòng đầu: "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)". Dòng thứ hai bắt đầu nội dung. Không thêm heading khác.
+
+Tone: Empathetic – thể hiện sự thấu hiểu, không phán xét. Style: Kể chuyện.
+
+Viết như một người đang nói chuyện trực tiếp với khán giả. Sử dụng câu ngắn, tự nhiên. Thêm các từ đệm như "thử nghĩ xem", "đúng không?", "tôi biết cảm giác đó".
+
+Cố gắng kết nối hook với slogan một cách mượt mà. Ví dụ: sau hook, tôi có thể nói "Đó là lý do hôm nay tôi muốn chia sẻ với các bạn về một khái niệm... Chào mừng bạn đến với Chú Que Tài Chính..." -> Tuy nhiên nên để slogan xuất hiện trước khi nêu vấn đề chính, như trong cấu trúc mẫu.
+
+Cụ thể: Hook -> câu chuyện nhỏ -> "Chào mừng bạn đến với Chú Que Tài Chính..." -> "Vấn đề là..."
+
+Hoặc: Hook trực tiếp -> Slogan -> Mở rộng vấn đề.
+
+Tôi sẽ viết: 
+
+"Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Thực tế, hầu hết chúng ta chỉ nhìn thấy số tiền mình bỏ ra, mà quên mất những cơ hội đầu tư mà số tiền đó có thể sinh lời. Một chiếc xe mới, nếu thay vì mua, bạn đầu tư số tiền đó vào quỹ chỉ số, sau 10 năm có thể biến thành 1 tỷ. Đó là chi phí vô hình đang quyết định tương lai tài chính của bạn."
+
+Đếm từ: khoảng 120 từ. Hơi dài. Cần rút gọn.
+
+Có thể bỏ bớt ví dụ đầu tư quỹ chỉ số vì thuộc phần sau. Chỉ cần nêu vấn đề chính. Sửa:
+
+"Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng chẳng tiếc khi tiêu 500 triệu vào chiếc xe mới? Đó là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc thẳng thật và dễ hiểu. Vấn đề là: hầu hết mọi người chỉ thấy tiền mất đi, mà không thấy chi phí vô hình – thứ quyết định bạn giàu hay nghèo trong 10 năm tới."
+
+Đếm: 80 từ. Cần thêm một chút storytelling. Thêm một câu chuyện ngắn: "Hồi 2010, anh bạn tôi có 500 triệu. Anh ấy mua xe, giờ xe chỉ còn 200 triệu. Nếu mua Bitcoin, giờ đã là tỷ phú. Nhưng lúc đó ai nghĩ được? Đó là bài học về chi phí cơ hội." -> Tuy nhiên phải đảm bảo hook đã có. Hook đã nêu tình huống đó rồi, nên không cần lặp.
+
+Tôi sẽ giữ nguyên cấu trúc: Hook (dưới dạng câu hỏi) -> Slogan -> Vấn đề chính. Thêm một câu chuyện ngắn sau vấn đề chính để làm rõ, nhưng cần đảm bảo độ dài.
+
+Viết lại:
+
+"Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng không hề tiếc khi tiêu 500 triệu vào chiếc xe mới? Đó là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc thẳng thật và dễ hiểu nhất. Hầu hết chúng ta chỉ tính đến tiền mất đi, mà quên mất thứ vô hình đang âm thầm quyết định tương lai tài chính của mình: chi phí cơ hội. Cái giá của việc không đầu tư, không để tiền sinh lời."
+
+Đếm: 95 từ. Ok. Thêm một chút cảm xúc: "tôi biết cảm giác đó, ai cũng từng mắc phải."
+
+Hoàn chỉnh:
+
+## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại chẳng tiếc khi tiêu 500 triệu vào chiếc xe mới? Cảm giác đó gọi là mù quáng chi phí cơ hội. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là: hầu hết mọi người chỉ nhìn thấy số tiền mình mất đi ngay lúc đó, mà không thấy chi phí vô hình – thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới. Tôi biết, ai trong chúng ta cũng từng mắc phải.
+
+Đếm: 107 từ (đã bao gồm dấu câu, từ). Trong khoảng cho phép (95-115). Đảm bảo style kể chuyện, empathetic.
+
+Kiểm tra: Không có lỗi chính tả, ngữ pháp. Phù hợp yêu cầu.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại chẳng tiếc khi tiêu 500 triệu vào chiếc xe mới? Cảm giác đó gọi là mù quáng chi phí cơ hội. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là: hầu hết mọi người chỉ nhìn thấy số tiền mình mất đi ngay lúc đó, mà không thấy chi phí vô hình – thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới. Tôi biết, ai trong chúng ta cũng từng mắc phải.
+
+---
+
+Chúng ta cần viết tiếp phần mở đầu đã cho. Đề bài yêu cầu viết lại toàn bộ heading "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" và nội dung từ dòng thứ 2. Đã có sẵn Hook, Slogan, Vấn đề chính. Nhiệm vụ là viết thành một đoạn văn nói tự nhiên, khoảng 100 từ spoken (sau khi bỏ markdown). Cần duy trì tông giọng empathetic và storytelling. 
+
+Phần đã cho: Hook, Slogan, Vấn đề. Mình sẽ viết thành một đoạn liền mạch, sử dụng ngôn ngữ nói, có thể thêm một chút dẫn dắt. Chú ý không thêm các phần khác, chỉ viết phần 1 này.
+
+Đảm bảo số từ spoken khoảng 100 từ. Mình sẽ đếm sau.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là "mù quáng chi phí cơ hội". Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hôm nay, tôi muốn nói về thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới: chi phí cơ hội. Hầu hết mọi người chỉ nhìn thấy tiền mất đi khi mua một thứ gì đó, nhưng lại mù tịt trước những cơ hội mà họ đánh đổi. Và chính cái vô hình ấy mới là thứ tạo ra khoảng cách giàu nghèo.
+
+---
+
+Chúng ta cần viết tiếp phần kịch bản cho PHẦN 1: MỞ ĐẦU (HOOK & SETUP) dựa trên các yếu tố đã cho: Hook, Slogan, Vấn đề chính. Yêu cầu độ dài khoảng 100 từ spoken, bao gồm buffer 15%. Cần viết tự nhiên, giọng storytelling, empathetic.
+
+Đã có sẵn các thành phần: Hook câu hỏi về Bitcoin và xe hơi, Slogan "Chào mừng bạn đến với Chú Que Tài Chính...", và vấn đề chính về chi phí cơ hội vô hình. Chúng ta cần kết nối chúng thành một đoạn văn tự nhiên, không cứng nhắc, có thể thêm một chút dẫn dắt.
+
+Hãy viết lại toàn bộ phần mở đầu, bắt đầu bằng heading "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" và nội dung từ dòng 2.
+
+Chú ý: Phải đảm bảo spoken text thực tế sau khi loại bỏ markdown (heading, bullet, SFX) còn ít nhất 95 từ. Nội dung này chỉ gồm heading và một đoạn văn. Heading không tính vào spoken text. Spoken text là phần nội dung sau heading. Vậy cần viết đoạn văn dài khoảng 95-100 từ.
+
+Viết theo phong cách nói chuyện, có thể dùng dấu ba chấm, câu hỏi tu từ. Sử dụng nhân vật ví dụ? Có thể lồng ghép "Minh, 30 tuổi" như hướng dẫn? Nhưng phần này chỉ là mở đầu, nên tập trung vào hook và slogan.
+
+Hãy viết: Hook (câu hỏi), sau đó dẫn đến slogan, rồi nêu vấn đề. Đảm bảo tự nhiên, như đang nói với bạn.
+
+Ví dụ: "Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Và đó chính là lý do hôm nay chúng ta ngồi đây. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là hầu hết mọi người chỉ nghĩ đến chi phí hiện tại... mà không nhìn thấy chi phí vô hình — thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới."
+
+Đếm từ: Khoảng 80-90 từ. Cần thêm chút để đạt 95 từ. Có thể mở rộng một chút, thêm ví dụ hoặc giải thích ngắn.
+
+Viết lại thành một đoạn liền mạch.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Nó giống như bạn đang đứng trước hai cánh cửa, nhưng chỉ nhìn thấy cánh cửa trước mắt. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề chính là đây: hầu hết mọi người chỉ nghĩ đến chi phí hiện tại, cái giá phải trả ngay lập tức, mà không nhìn thấy chi phí vô hình — thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới. Và hôm nay, chúng ta sẽ mổ xẻ nó.
+
+---
+
+Chúng ta cần viết tiếp phần 1 mở đầu dựa trên gợi ý đã cho: Hook, Slogan, và vấn đề chính. Phải đảm bảo format markdown đúng: dòng đầu là "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)", nội dung từ dòng 2, không thêm heading khác. Độ dài khoảng 100 từ spoken, nhưng thực tế sau khi TTS bỏ heading thì còn ít nhất 95 từ.
+
+Cần viết tự nhiên, storytelling, empathetic tone. Dùng câu chuyện ngắn về chiếc xe và Bitcoin để hook. Sau đó chèn slogan. Rồi nêu vấn đề chính về chi phí cơ hội vô hình.
+
+Chú ý: Buffer 15% cho Markdown overhead, nhưng phần spoken thực tế (sau khi lọc heading) phải >=95 từ. Heading là 1 dòng, không tính vào từ đếm spoken. Vậy nội dung spoken cần ít nhất 95 từ, và tổng text trong phần này (heading + body) có thể nhiều hơn một chút. Viết body khoảng 95-110 từ là an toàn.
+
+Viết bằng tiếng Việt, giọng nói tự nhiên, không công thức toán.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là "mù quáng chi phí cơ hội". Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là hầu hết chúng ta chỉ nhìn thấy số tiền mất đi trước mắt, chứ không thấy được thứ vô hình đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới: đó là thu nhập và cơ hội mà bạn đã đánh đổi.
+
+---
+
+Chúng ta cần viết tiếp phần mở đầu cho kịch bản. Chủ đề là "Chi phí cơ hội". Đã có Hook và Slogan, cần viết thành một đoạn văn tự nhiên, khoảng 100 từ spoken. Phải bao gồm: Hook (câu đầu), Slogan (tự nhiên), vấn đề chính. Định dạng: heading "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" rồi nội dung.
+
+Cần đảm bảo ngôn ngữ nói, storytelling, empathetic. Tránh đọc kịch bản khô.
+
+Tôi sẽ viết như sau: bắt đầu với Hook, sau đó chuyển sang Slogan, rồi dẫn vào vấn đề. Dùng giọng kể chuyện, có thể nhắc đến "Minh" hoặc ai đó. Nhưng phải giữ đúng 100 từ spoken (đã có buffer). Tôi sẽ đếm sau.
+
+Viết:
+
+## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại – tiền mất đi – mà không nhìn thấy chi phí vô hình. Thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới chính là những thứ bạn không làm, chứ không phải những thứ bạn làm.
+
+Kiểm tra số từ: câu 1: 22 từ, câu 2: 10 từ, câu 3: 22 từ, câu 4: 12 từ, câu 5: 18 từ, câu 6: 15 từ. Tổng khoảng 99 từ. Ok.
+
+Cần đảm bảo tự nhiên: có thể thêm "đấy" hoặc "thì". Nhưng ổn. Không có Markdown thừa.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại – tiền mất đi – mà không nhìn thấy chi phí vô hình. Thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới chính là những thứ bạn không làm, chứ không phải những thứ bạn làm.
+
+---
+
+Chúng ta cần viết tiếp phần 1 mở đầu dựa trên yêu cầu. Đã có sẵn hook, slogan và vấn đề chính. Mình cần viết bằng tiếng Việt, phong cách storytelling, tự nhiên, dễ hiểu, khoảng 100 từ spoken (tức văn nói). Phải bao gồm đúng cấu trúc heading "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" ở dòng đầu, nội dung từ dòng 2. Không thêm phần khác. Đảm bảo giọng điệu empathetic, thẳng thật.
+
+Từ khoá: hook, slogan, vấn đề chính. Mình cần viết thành một đoạn văn mạch lạc, tự nhiên, như đang nói chuyện.
+
+Chú ý: Nội dung gợi ý đã có sẵn hook và slogan, mình chỉ cần viết thành lời nói, có thể thêm vài câu dẫn dắt. Độ dài phải khoảng 100 từ spoken, đã tính buffer 15% nên phần markdown (heading) không tính. Thực tế heading chiếm 1 dòng, còn lại ít nhất 95 từ spoken.
+
+Viết bằng tiếng Việt, không chêm tiếng Anh không cần thiết, nhưng có thể giữ "Bitcoin", "chi phí cơ hội" (thuật ngữ). Viết liền mạch, không xuống dòng.
+
+Tôi sẽ viết: Bắt đầu bằng hook "Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010... nhưng không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới?" -> giải thích ngắn -> chèn slogan tự nhiên -> nêu vấn đề chính. Có thể thêm một chút cảm xúc đồng cảm. Dùng ngôi "bạn" để gần gũi.
+
+Viết xong kiểm tra số lượng từ (spoken). Dùng công cụ đếm từ.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là "mù quáng chi phí cơ hội". Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại – tiền mất đi – mà không nhìn thấy chi phí vô hình. Thứ đó âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới. Để tôi kể bạn nghe câu chuyện của anh Minh, 30 tuổi, lương 20 triệu, vừa mua một chiếc xe trị giá 600 triệu...
+
+---
+
+Chúng ta cần viết tiếp phần mở đầu dựa trên yêu cầu. Nội dung đã có Hook, Slogan, vấn đề chính. Cần viết thành một đoạn văn tự nhiên, khoảng 100 từ spoken, giọng kể chuyện, đồng cảm. Phải đảm bảo đúng định dạng: heading "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" rồi xuống dòng viết nội dung. Dùng ngôn ngữ nói, có thể thêm một chút chi tiết để kể chuyện, giữ nguyên ý hook, slogan và vấn đề. Không thêm phần khác. Tính toán số từ: 100 từ, có buffer 15% nên có thể hơn một chút nhưng đừng quá dài. Tôi sẽ viết một đoạn hoàn chỉnh.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là "mù quáng chi phí cơ hội". Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại – tiền mất đi – mà không nhìn thấy chi phí vô hình: thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới. Hôm nay, tôi sẽ kể cho bạn nghe câu chuyện về Minh, một anh bạn 30 tuổi, lương 20 triệu, và cách một chiếc xe hơi đã cướp đi của anh ấy cả tỷ đồng mà không một ai nói cho anh biết.
+
+---
+
+Chúng ta cần viết tiếp phần mở đầu cho kịch bản video, dựa trên các yêu cầu đã cho. Chủ đề là chi phí cơ hội. Phần này gồm hook, slogan, vấn đề chính. Đã có sẵn hook và slogan trong yêu cầu, nhưng cần viết lại thành văn nói tự nhiên. Độ dài 100 từ spoken (đã bao gồm buffer 15% cho markdown overhead). Cụ thể: phần spoken text thực tế phải còn lại ít nhất 95 từ. Chúng ta cần viết phần mở đầu hoàn chỉnh, bắt đầu bằng "## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)" rồi xuống dòng, nội dung.
+
+Phải giữ giọng kể chuyện (storytelling), empathetic. Không dùng công thức toán, dùng ẩn dụ, số liệu so sánh. Phần này chỉ là mở đầu nên chưa cần đi sâu.
+
+Viết như sau:
+
+- Hook: "Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'." -> Viết lại thành câu nói tự nhiên, có thể thêm một chút dẫn dắt.
+
+- Sau đó chèn slogan: "Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất." -> Đặt sau hook, trước vấn đề chính.
+
+- Vấn đề chính: "Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại (tiền mất đi) mà không nhìn thấy chi phí vô hình — thứ đang quyết định bạn giàu hay nghèo trong 10 năm tới." -> Diễn giải.
+
+Cần đảm bảo tổng số từ spoken (sau khi loại bỏ markdown) khoảng 95-100 từ. Ta sẽ viết một đoạn văn ngắn.
+
+Ví dụ:
+
+## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại, tiền mất đi, mà không nhìn thấy chi phí vô hình — thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới.
+
+Đếm từ: "Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại không hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại, tiền mất đi, mà không nhìn thấy chi phí vô hình — thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới." -> Đếm: câu 1: 25 từ, câu 2: 12 từ, câu 3: 12 từ, câu 4: 22 từ? Tổng khoảng 71 từ. Cần thêm để đạt tối thiểu 95 từ spoken. Có thể thêm một câu dẫn dắt nữa, hoặc mở rộng hook. Nhưng đã có buffer 15% cho markdown overhead, phần spoken thực tế phải ít nhất 95 từ, markdown chỉ là heading nên overhead không nhiều. Ta nên viết dài hơn một chút.
+
+Hoặc viết lại hook dài hơn, thêm chi tiết. Ví dụ: "Bạn có bao giờ nhìn lại, thấy tiếc vì ngày xưa không mua Bitcoin năm 2010, lúc nó chỉ vài xu? Nhưng mà bạn lại chẳng hề tiếc vì đã tiêu 500 triệu đồng vào chiếc xe hơi mới, dù nó mất giá ngay khi lăn bánh. Cảm giác đó gọi là 'mù quáng chi phí cơ hội'." Như vậy khoảng 40-50 từ. Thêm slogan, thêm vấn đề chính, tổng có thể 100+.
+
+Cần viết tự nhiên, giọng kể. Thêm từ "các bạn" cho thân thiện.
+
+Viết hoàn chỉnh:
+
+## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Các bạn có bao giờ nhìn lại, thấy tiếc vì ngày xưa không mua Bitcoin năm 2010, lúc nó chỉ vài xu không? Nhưng mà các bạn lại chẳng hề tiếc vì đã tiêu 500 triệu đồng vào chiếc xe hơi mới, dù nó mất giá ngay khi lăn bánh. Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là hầu hết mọi người chỉ nghĩ đến chi phí hiện tại — tiền mất đi — mà không nhìn thấy chi phí vô hình, thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới. Chúng ta cùng khám phá điều đó nhé.
+
+Đếm từ: "Các bạn có bao giờ nhìn lại, thấy tiếc vì ngày xưa không mua Bitcoin năm 2010, lúc nó chỉ vài xu không? Nhưng mà các bạn lại chẳng hề tiếc vì đã tiêu 500 triệu đồng vào chiếc xe hơi mới, dù nó mất giá ngay khi lăn bánh. Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là hầu hết mọi người chỉ nghĩ đến chi phí hiện tại — tiền mất đi — mà không nhìn thấy chi phí vô hình, thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới. Chúng ta cùng khám phá điều đó nhé."
+
+Đếm: khoảng 130 từ, hơi dài nhưng trong giới hạn cho phép (buffer 15% cho markdown, nhưng markdown chỉ có heading nên thực tế spoken text là 130 từ, vẫn ổn). Tuy nhiên yêu cầu "TỔNG VIDEO: 500 từ spoken (chia đều 5 phần, mỗi phần ≈ 100 từ)". Phần 1 nên khoảng 100 từ. Ta có thể rút bớt. Ví dụ bỏ câu cuối "Chúng ta cùng khám phá điều đó nhé" hoặc viết gọn hơn.
+
+Viết lại:
+
+## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại chẳng hề tiếc vì đã tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Hầu hết mọi người chỉ nghĩ đến chi phí hiện tại mà không nhìn thấy chi phí vô hình — thứ quyết định bạn giàu hay nghèo trong 10 năm tới.
+
+Đếm từ: câu1: 13 từ, câu2: 12, câu3: 22, câu4: 16? Tổng 63 từ. Thiếu. Cần thêm.
+
+Thêm: "Bạn có bao giờ nhìn lại và thấy tiếc vì ngày xưa không mua Bitcoin năm 2010, lúc nó chỉ vài xu? Nhưng bạn lại chẳng hề tiếc vì đã tiêu 500 triệu đồng vào chiếc xe hơi mới, dù nó mất giá ngay khi lăn bánh. Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là hầu hết mọi người chỉ tập trung vào chi phí hiện tại, tiền mất đi, mà không thấy được chi phí vô hình — thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới."
+
+Đếm: câu1: 16, câu2: 18, câu3: 12, câu4: 22, câu5: 26? Tổng khoảng 94 từ. Gần chuẩn. Có thể thêm một chút để chắc chắn trên 95 spoken. Thêm "Đó là lý do hôm nay chúng ta sẽ nói về nó." -> thêm 7 từ, tổng 101. Ok.
+
+Vậy nội dung cuối:
+
+## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ nhìn lại và thấy tiếc vì ngày xưa không mua Bitcoin năm 2010, lúc nó chỉ vài xu? Nhưng bạn lại chẳng hề tiếc vì đã tiêu 500 triệu đồng vào chiếc xe hơi mới, dù nó mất giá ngay khi lăn bánh. Cảm giác đó gọi là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là hầu hết mọi người chỉ tập trung vào chi phí hiện tại, tiền mất đi, mà không thấy được chi phí vô hình — thứ đang âm thầm quyết định bạn giàu hay nghèo trong 10 năm tới. Đó là lý do hôm nay chúng ta sẽ nói về nó.
+
+Kiểm tra: có đúng 100 từ spoken? Tôi sẽ đếm kỹ:
+
+1. Bạn (1) có (2) bao (3) giờ (4) nhìn (5) lại (6) và (7) thấy (8) tiếc (9) vì (10) ngày (11) xưa (12) không (13) mua (14) Bitcoin (15) năm (16) 2010 (17), lúc (18) nó (19) chỉ (20) vài (21) xu (22)? (từ "xu?" tính là một từ)
+2. Nhưng (23) bạn (24) lại (25) chẳng (26) hề (27) tiếc (28) vì (29) đã (30) tiêu (31) 500 (32) triệu (33) đồng (34) vào (35) chiếc (36) xe (37) hơi (38) mới (39), dù (40) nó (41) mất (42) giá (43) ngay (44) khi (45) lăn (46) bánh (47). (câu này 25 từ, tổng 47)
+3. Cảm (48) giác (49) đó (50) gọi (51) là (52) 'mù (53) quáng (54) chi (55) phí (56) cơ (57) hội (58)'. (11 từ, tổng 58)
+4. Chào (59) mừng (60) bạn (61) đến (62) với (63) Chú (64) Que (65) Tài (66) Chính (67), nơi (68) chúng (69) ta (70) nói (71) về (72) tiền (73) bạc (74) theo (75) cách (76) thẳng (77) thật (78) và (79) dễ (80) hiểu (81) nhất (82). (24 từ, tổng 82)
+5. Vấn (83) đề (84) là (85) hầu (86) hết (87) mọi (88) người (89) chỉ (90) tập (91) trung (92) vào (93) chi (94) phí (95) hiện (96) tại (97), tiền (98) mất (99) đi (100), mà (101) không (102) thấy (103) được (104) chi (105) phí (106) vô (107) hình (108) — (dấu gạch ngang không tính) thứ (109) đang (110) âm (111) thầm (112) quyết (113) định (114) bạn (115) giàu (116) hay (117) nghèo (118) trong (119) 10 (120) năm (121) tới (122). (câu này 40 từ, tổng 122)
+6. Đó (123) là (124) lý (125) do (126) hôm (127) nay (128) chúng (129) ta (130) sẽ (131) nói (132) về (133) nó (134). (12 từ, tổng 134)
+
+Vậy 134 từ spoken, hơi dài. Có thể cắt bớt. Giới hạn 100 từ + buffer 15% (tức tối đa 115 từ spoken nếu buffer tính trên 100? Thực tế yêu cầu: "ĐỘ DÀI PHẦN NÀY: 100 từ spoken (đã bao gồm buffer 15% cho Markdown overhead — khi TTS lọc bỏ heading/bullet/SFX, phần spoken text thực tế phải CÒN LẠI ÍT NHẤT 95 từ)." Nghĩa là spoken text còn lại ít nhất 95 từ, và tổng số từ spoken (sau khi loại bỏ markdown) nên khoảng 100, có thể dao động 95-115. 134 là quá nhiều. Cần rút gọn.
+
+Viết gọn hơn:
+
+## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có thấy tiếc vì không mua Bitcoin năm 2010? Nhưng lại chẳng tiếc khi tiêu 500 triệu mua xe hơi mới? Đó là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc thẳng thật và dễ hiểu. Hầu hết mọi người chỉ nhìn chi phí hiện tại, mà bỏ qua chi phí vô hình — thứ quyết định bạn giàu hay nghèo trong 10 năm tới. Hãy cùng tìm hiểu.
+
+Đếm: câu1: 5 từ, câu2: 5, câu3: 4, câu4: 16, câu5: 16? Tổng 46 từ. Quá ngắn. Cần thêm.
+
+Thêm chi tiết: "Bạn có từng nhìn lại và thấy tiếc vì không mua Bitcoin năm 2010, lúc nó chỉ vài xu? Nhưng bạn lại chẳng hề tiếc vì đã tiêu 500 triệu đồng vào chiếc xe hơi mới, dù nó mất giá ngay khi lăn bánh. Đó là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là hầu hết mọi người chỉ tập trung vào chi phí hiện tại mà không thấy chi phí vô hình — thứ quyết định bạn giàu hay nghèo trong 10 năm tới."
+
+Đếm: câu1: 13 từ, câu2: 13, câu3: 4, câu4: 22, câu5: 20? Tổng 72 từ. Vẫn thiếu. Thêm "Đó là lý do hôm nay tôi muốn nói về nó." -> 8 từ, tổng 80. Còn thiếu 15-20 từ nữa. Có thể thêm một câu chuyện ngắn: "Hãy tưởng tượng bạn có 500 triệu, thay vì mua xe, bạn đầu tư vào một quỹ chỉ số. Sau 10 năm, số tiền đó có thể là bao nhiêu? Nhưng vì không nhìn thấy chi phí cơ hội, bạn đã mất đi cơ hội đó." Như vậy thêm khoảng 30 từ, tổng 110, vừa.
+
+Viết hoàn chỉnh:
+
+## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có từng nhìn lại và thấy tiếc vì không mua Bitcoin năm 2010, lúc nó chỉ vài xu? Nhưng bạn lại chẳng hề tiếc vì đã tiêu 500 triệu đồng vào chiếc xe hơi mới, dù nó mất giá ngay khi lăn bánh. Đó là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là hầu hết mọi người chỉ tập trung vào chi phí hiện tại mà không thấy chi phí vô hình. Hãy tưởng tượng: nếu bạn dùng 500 triệu đó để đầu tư, sau 10 năm nó có thể sinh lời gấp đôi. Nhưng vì không nhìn thấy chi phí cơ hội, bạn đã đánh mất cơ hội đó. Đó chính là thứ quyết định bạn giàu hay nghèo trong tương lai.
+
+Đếm từ: khoảng 110-115 spoken, ổn.
+
+Vậy tôi sẽ viết như trên. Đảm bảo tự nhiên, giọng kể chuyện, empathetic.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có từng nhìn lại và thấy tiếc vì không mua Bitcoin năm 2010, lúc nó chỉ vài xu? Nhưng bạn lại chẳng hề tiếc vì đã tiêu 500 triệu đồng vào chiếc xe hơi mới, dù nó mất giá ngay khi lăn bánh. Đó là 'mù quáng chi phí cơ hội'. Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là hầu hết mọi người chỉ tập trung vào chi phí hiện tại mà không thấy chi phí vô hình. Hãy tưởng tượng: nếu bạn dùng 500 triệu đó để đầu tư, sau 10 năm nó có thể sinh lời gấp đôi. Nhưng vì không nhìn thấy chi phí cơ hội, bạn đã đánh mất cơ hội đó. Đó chính là thứ quyết định bạn giàu hay nghèo trong tương lai.
+
+---
+
+Chúng ta cần viết tiếp phần kịch bản cho PHẦN 1: MỞ ĐẦU (HOOK & SETUP) với chủ đề chi phí cơ hội. Yêu cầu: 100 từ spoken, đã bao gồm buffer 15% cho Markdown overhead, nghĩa là phần text thực tế sau khi loại bỏ heading/bullet/SFX phải còn ít nhất 95 từ. Cần giữ giọng kể chuyện, tự nhiên, thẳng thật.
+
+Dựa vào outline có sẵn: Hook (câu chuyện về Bitcoin vs xe hơi), Slogan, Vấn đề chính. Viết lại toàn bộ phần này thành một đoạn văn nói tự nhiên, khoảng 100 từ. Chú ý không dùng bullet hay markdown cấp 3, chỉ có heading ## PHẦN 1: MỞ ĐẦU... và nội dung.
+
+Kiểm tra độ dài: Tôi sẽ viết khoảng 100-110 từ spoken. Đảm bảo hook hấp dẫn, slogan tự nhiên, vấn đề chính rõ.
+
+Viết như đang nói chuyện với khán giả, giọng empathetic, có micro-storytelling (dùng nhân vật như Minh). Dùng ngôn ngữ đơn giản, không công thức.## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+
+Bạn có bao giờ thấy tiếc vì không mua Bitcoin năm 2010, nhưng lại chẳng hề tiếc khi tiêu 500 triệu vào chiếc xe hơi mới? Cảm giác đó gọi là "mù quáng chi phí cơ hội". Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất. Vấn đề là: hầu hết chúng ta chỉ nhìn thấy số tiền mất đi trước mắt, mà quên mất những thứ vô hình – thứ quyết định bạn giàu hay nghèo trong 10 năm tới. Hãy tưởng tượng Minh, 30 tuổi, lương 20 triệu, quyết định mua xe trả góp. Anh ấy nghĩ mình đang "có tài sản", nhưng thực ra đang đánh mất cơ hội đầu tư gấp ba số tiền đó trong một thập kỷ.

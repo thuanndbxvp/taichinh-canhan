@@ -1,4 +1,4 @@
-﻿import React, { Suspense, useCallback, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { ControlPanel } from './components/ControlPanel';
 import { OutputDisplay } from './components/OutputDisplay';
 import { SideToolsPanel } from './components/SideToolsPanel';
@@ -252,9 +252,9 @@ const App: React.FC = () => {
             currentAiAction={generation.currentAiAction}
             error={generation.error}
             onStartSequentialGenerate={generation.startSequential}
+            onResumeSequentialGenerate={generation.resumeSequential}
             onStopSequentialGenerate={generation.stopSequential}
             isGeneratingSequentially={generation.isGeneratingSequentially}
-            onGenerateNextPart={() => generation.generateNextPart()}
             currentPart={generation.currentPartIndex}
             totalParts={generation.totalParts}
             revisionCount={generation.revisionCount}

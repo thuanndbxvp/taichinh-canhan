@@ -22,9 +22,9 @@ interface OutputDisplayProps {
   isLoading: boolean;
   error: string | null;
   onStartSequentialGenerate: () => void;
+  onResumeSequentialGenerate: () => void;
   onStopSequentialGenerate: () => void;
   isGeneratingSequentially: boolean;
-  onGenerateNextPart: () => void;
   currentPart: number;
   totalParts: number;
   revisionCount: number;
@@ -109,8 +109,9 @@ const cleanTtsText = (text: string): string => {
 export const OutputDisplay: React.FC<OutputDisplayProps> = ({ 
     title, script, isLoading, error, 
     onStartSequentialGenerate,
+    onResumeSequentialGenerate,
     onStopSequentialGenerate,
-    isGeneratingSequentially, onGenerateNextPart, currentPart, totalParts,
+    isGeneratingSequentially, currentPart, totalParts,
     revisionCount,
     scriptType,
     onImportScript,
@@ -350,16 +351,6 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
                             <div className={`w-3 h-3 rounded-full ${autoContinue ? 'bg-accent animate-pulse' : 'bg-text-secondary'}`} />
                             <span>Auto-next: {autoContinue ? 'Bật' : 'Tắt'}</span>
                         </button>
-
-                        {!isLoading && currentPart < totalParts && (
-                            <button 
-                                onClick={onGenerateNextPart} 
-                                className="flex items-center space-x-2 bg-accent hover:brightness-110 text-white px-3 py-1.5 rounded-md text-sm font-semibold transition shadow-md shadow-accent/20"
-                            >
-                                <BoltIcon className="w-4 h-4" />
-                                <span>Tiếp tục phần {currentPart + 1}/{totalParts}</span>
-                            </button>
-                        )}
                         
                         <button 
                             onClick={onStopSequentialGenerate} 
@@ -376,6 +367,17 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
                             <span>Dừng tạo</span>
                         </button>
                     </div>
+                )}
+
+                {/* Nút Tiếp Tục khi bị dừng/lỗi giữa chừng */}
+                {!isGeneratingSequentially && currentPart > 0 && currentPart < totalParts && !isLoading && (
+                    <button 
+                        onClick={onResumeSequentialGenerate} 
+                        className="flex items-center space-x-2 bg-accent hover:brightness-110 text-white px-3 py-1.5 rounded-md text-sm font-semibold transition shadow-md shadow-accent/20"
+                    >
+                        <BoltIcon className="w-4 h-4" />
+                        <span>Tiếp tục phần {currentPart + 1}/{totalParts}</span>
+                    </button>
                 )}
 
                 {!isGeneratingSequentially && (
