@@ -599,6 +599,9 @@ Sau 100 user → Neon Pro $19/month + Vercel Pro $20/month. ~$40/month cho full 
 - [ ] Insight apply vào prompt lần generate sau.
 - [ ] Thumbnail A/B test framework: sinh 5 concepts, track winner.
 
+### Phase 8 Done khi:
+- [ ] (xem Section 7.9 đầy đủ)
+
 ---
 
 ## 6. Phụ thuộc & Thứ tự thực hiện
@@ -633,7 +636,355 @@ Phase 7.8 — Thumbnail A/B (1 tuần)
 
 ---
 
-## 7. Tài liệu tham khảo
+## 7. Multi-Niche Architecture — cho phép mở app theo từng ngách
+
+> **Bối cảnh:** Hiện tại app hardcode ngách tài chính (`docs/FINANCE_DNA_PROMPT.md`, prompt registry trong `src/services/ai/prompts/index.ts`). Muốn bán cho khách hàng làm ngách kinh dị, kể truyện, du lịch, công nghệ,... → cần tách "DNA ngách" ra khỏi code, biến thành **data người dùng nạp vào** (DNA prompt + 100 tiêu đề mẫu + mô tả mẫu).
+>
+> Mục tiêu: khi cần mở ngách mới, **không cần đụng code** — chỉ cần tạo 1 profile mới chứa DNA + sample corpus, app tự adapt.
+
+### 7.1. Khái niệm "Niche Profile"
+
+Một Niche Profile = **DNA ngách** + **corpus mẫu** + **schema domain-specific**. Đóng gói thành 1 package có thể import/export (JSON + assets).
+
+**Ví dụ:**
+- `niche-finance.json` (đã có sẵn ở MVP)
+- `niche-horror.json` (mở thêm)
+- `niche-storytelling.json` (mở thêm)
+- `niche-tech-review.json` (mở thêm)
+
+Mỗi profile chứa:
+
+```jsonc
+{
+  "id": "horror",
+  "version": "1.0.0",
+  "name": "Kinh dị Việt",
+  "description": "Kể chuyện ma, true crime hư cấu, creepypasta Việt hóa",
+  "dna": {
+    "systemPrompt": "...",                    // phong cách + giọng + taboo
+    "systemPromptFor": {                       // theo usage_kind
+      "outline": "...",                        // cách viết outline kinh dị
+      "script_part": "...",                    // cách viết từng phần
+      "title": "...",                          // cách brainstorm tiêu đề
+      "description": "...",
+      "thumbnail_concept": "..."
+    },
+    "voice": "creepy_whisper",                 // enum từ app
+    "tone": "hồi hộp, hơi thở nặng",
+    "language": "vi-VN",
+    "forbiddenTopics": ["chính trị", "tôn giáo cụ thể"],
+    "mustInclude": ["disclaimer giả", "ambiguous ending"]
+  },
+  "sampleCorpus": {
+    "titles": [                                 // 100 tiêu đề mẫu
+      "Căn phòng số 13 tầng 6",
+      "Tiếng gõ lúc 3 giờ sáng",
+      "..."
+    ],
+    "descriptions": [                           // 50 mô tả mẫu
+      "Câu chuyện dựa trên sự kiện có thật tại...",
+      "..."
+    ],
+    "outlines": [                               // 20 outline mẫu (optional)
+      "## PHẦN 1: Setup\n- Hook:...\n- Introduce character...",
+      "..."
+    ],
+    "scripts": [                                // 5 script full mẫu (optional)
+      "...",
+      "..."
+    ]
+  },
+  "domainSchema": {                             // extension point
+    "additionalFields": [
+      { "key": "intensity", "label": "Mức độ rùng rợn (1-10)", "type": "slider", "default": 7 },
+      { "key": "subgenre", "label": "Thể loại phụ", "type": "select",
+        "options": ["ma quán", "true crime", "creepypasta", "dân gian VN"] }
+    ],
+    "titlePatterns": [                          // regex validate tiêu đề
+      "^[A-ZÀ-ỹ].{10,80}$"                      // bắt đầu HOA, 10-80 ký tự
+    ]
+  },
+  "ui": {
+    "theme": "dark",                            // override theme mặc định
+    "primaryColor": "#8B0000",
+    "iconUrl": "/niches/horror/icon.png",
+    "previewImages": ["/niches/horror/preview1.png", "..."]
+  }
+}
+```
+
+### 7.2. Refactor code để data-driven
+
+**Nguyên tắc:** Tách "logic chung" (viết outline, sinh tiêu đề,...) ra khỏi "đặc thù tài chính". Tất cả thứ đặc thù → config trong Niche Profile.
+
+**Trước (Phase 0-5 — hardcode):**
+```ts
+// src/services/ai/prompts/index.ts
+export const FINANCE_DNA_PROMPT = `
+Bạn là chuyên gia tài chính cá nhân với 15 năm kinh nghiệm...
+LUÔN LUÔN: thêm disclaimer "Đây không phải lời khuyên đầu tư"
+KHÔNG BAO GIỜ: hứa lợi nhuận cụ thể
+...`;
+```
+
+**Sau (Phase 8 — data-driven):**
+```ts
+// src/services/niche/registry.ts
+import type { NicheProfile } from './types';
+
+export class NicheRegistry {
+  private profiles = new Map<string, NicheProfile>();
+
+  register(profile: NicheProfile) {
+    this.profiles.set(profile.id, profile);
+  }
+
+  get(id: string): NicheProfile | undefined {
+    return this.profiles.get(id);
+  }
+
+  list(): NicheProfile[] {
+    return Array.from(this.profiles.values());
+  }
+
+  active(userId: string): NicheProfile {
+    const userPreferred = this.getPreferred(userId);
+    return userPreferred ?? this.profiles.get('finance')!;
+  }
+}
+
+// src/services/ai/promptBuilder.ts (rewrite)
+function buildSystemPrompt(brief: ContentBrief, niche: NicheProfile, usageKind: string) {
+  // 1. Lấy DNA theo usage kind
+  const dna = niche.dna.systemPromptFor[usageKind] ?? niche.dna.systemPrompt;
+
+  // 2. Inject brand bible (project-specific)
+  const brandBible = loadBrandBible(brief.projectId);
+
+  // 3. Inject domain-specific fields từ brief
+  const domainFields = niche.domainSchema.additionalFields
+    .map(f => `${f.label}: ${brief[f.key] ?? f.default}`)
+    .join('\n');
+
+  // 4. RAG few-shot từ sample corpus
+  const examples = sampleNicheExamples(niche, brief.topic, 3);
+
+  return `
+${dna}
+
+${brandBible.toPromptSection()}
+
+Domain-specific:
+${domainFields}
+
+Few-shot examples:
+${examples.map(ex => `### Ví dụ:\n${ex}`).join('\n\n')}
+`;
+}
+```
+
+### 7.3. Storage & distribution Niche Profiles
+
+**3 cách user lấy profile:**
+
+1. **Built-in** (đóng gói sẵn trong app): `finance`, `horror`, `storytelling` — đi kèm app.
+2. **Marketplace** (Phase 8.5): user mua/gắn profile từ cộng đồng (vd: "Profile kinh dị học đường của tác giả X").
+3. **Custom** (Phase 8.6): user tự tạo — paste DNA prompt + paste 100 tiêu đề mẫu → app build profile.
+
+**Lưu trữ ở đâu:**
+- Built-in: bundle trong app (`src/niches/*/profile.json`).
+- Custom + Marketplace: lưu trong Neon table `niche_profiles` (đa tenant).
+
+```sql
+-- Schema Neon (thêm vào Phase 6 schema)
+CREATE TABLE niche_profiles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES neon_auth.users(id) ON DELETE CASCADE,  -- null = built-in
+  name TEXT NOT NULL,
+  description TEXT,
+  dna JSONB NOT NULL,
+  sample_corpus JSONB NOT NULL,
+  domain_schema JSONB NOT NULL DEFAULT '{}',
+  ui_config JSONB NOT NULL DEFAULT '{}',
+  is_public BOOLEAN NOT NULL DEFAULT false,           -- true = marketplace
+  price_cents INT DEFAULT 0,                          -- 0 = free
+  install_count INT NOT NULL DEFAULT 0,
+  rating NUMERIC(3, 2),                                -- user rating
+  schema_version INT NOT NULL DEFAULT 1,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX idx_niche_user ON niche_profiles(user_id);
+CREATE INDEX idx_niche_public_rating ON niche_profiles(is_public, rating DESC)
+  WHERE is_public = true;
+
+-- User installed profiles (many-to-many)
+CREATE TABLE user_installed_niches (
+  user_id UUID NOT NULL REFERENCES neon_auth.users(id) ON DELETE CASCADE,
+  niche_id UUID NOT NULL REFERENCES niche_profiles(id) ON DELETE CASCADE,
+  installed_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  is_active BOOLEAN NOT NULL DEFAULT false,           -- 1 active tại 1 thời điểm
+  custom_overrides JSONB NOT NULL DEFAULT '{}',       -- user tinh chỉnh DNA
+  PRIMARY KEY (user_id, niche_id)
+);
+CREATE UNIQUE INDEX idx_user_active_niche
+  ON user_installed_niches(user_id) WHERE is_active = true;
+
+-- Project thuộc về niche nào (1 project = 1 niche)
+ALTER TABLE projects ADD COLUMN niche_id UUID REFERENCES niche_profiles(id);
+```
+
+### 7.4. Multi-tenancy & Marketplace economics
+
+**Model kinh doanh 2 lớp:**
+
+**Lớp 1 — SaaS cho cá nhân (B2C):**
+- User đăng ký → free tier 1 niche (built-in finance).
+- Pro tier ($9/tháng): mở khóa tất cả built-in niches + unlimited custom.
+- Creator tier ($29/tháng): đăng profile lên marketplace, nhận 70% revenue.
+
+**Lớp 2 — White-label cho doanh nghiệp (B2B):**
+- Agency mua gói white-label ($299/tháng): deploy app riêng với branding + niche của họ.
+- Mỗi agency = 1 `tenant` riêng trong DB (Postgres row + RLS scope theo tenant_id).
+
+```sql
+-- Tenants (white-label deploys)
+CREATE TABLE tenants (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  subdomain TEXT NOT NULL UNIQUE,                    -- acme.darkfrontiers.app
+  custom_domain TEXT,                                -- script.acme.vn
+  branding JSONB NOT NULL DEFAULT '{}',               -- logo, color, favicon
+  plan TEXT NOT NULL DEFAULT 'starter',               -- 'starter' | 'pro' | 'enterprise'
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- User thuộc tenant nào
+ALTER TABLE neon_auth.users ADD COLUMN tenant_id UUID REFERENCES tenants(id);
+
+-- RLS scope theo tenant
+CREATE POLICY projects_tenant ON projects
+  USING (user_id IN (
+    SELECT id FROM neon_auth.users
+    WHERE tenant_id = current_setting('app.current_tenant_id')::UUID
+  ));
+```
+
+### 7.5. Few-shot RAG cho từng niche
+
+**Vấn đề:** DNA prompt dài + 100 tiêu đề mẫu → vượt token limit. Cần RAG.
+
+**Giải pháp:**
+
+```ts
+// src/services/niche/rag.ts
+import { embed } from './embeddings';
+
+export async function buildFewShotContext(
+  niche: NicheProfile,
+  topic: string,
+  limit: number = 3
+): Promise<string> {
+  // 1. Embed topic + tất cả samples
+  const topicEmbedding = await embed(topic);
+  const samplesWithEmbedding = await Promise.all(
+    niche.sampleCorpus.titles.map(async (t, i) => ({
+      text: t,
+      embedding: await embed(t),
+      index: i,
+    }))
+  );
+
+  // 2. Cosine similarity → lấy top K
+  const topK = samplesWithEmbedding
+    .map(s => ({
+      ...s,
+      similarity: cosine(topicEmbedding, s.embedding),
+    }))
+    .sort((a, b) => b.similarity - a.similarity)
+    .slice(0, limit);
+
+  return topK.map(s => s.text).join('\n');
+}
+```
+
+**Embedding provider:**
+- OpenAI `text-embedding-3-small` ($0.02/1M tokens, rẻ)
+- Cache embeddings trong DB (`niche_sample_embeddings`) — tính 1 lần lúc install niche, dùng mãi.
+
+```sql
+CREATE TABLE niche_sample_embeddings (
+  niche_id UUID NOT NULL REFERENCES niche_profiles(id) ON DELETE CASCADE,
+  sample_index INT NOT NULL,
+  sample_type TEXT NOT NULL,                          -- 'title' | 'description' | 'outline'
+  embedding VECTOR(1536),                             -- pgvector extension
+  PRIMARY KEY (niche_id, sample_type, sample_index)
+);
+-- Index cho similarity search
+CREATE INDEX ON niche_sample_embeddings
+  USING ivfflat (embedding vector_cosine_ops);
+```
+
+### 7.6. UI/UX cho multi-niche
+
+**Switch niche:**
+- Sidebar: dropdown chọn niche active
+- Mỗi niche có icon + primary color → theme thay đổi
+- Project mới mặc định thuộc niche đang active
+
+**Brief form:**
+- Field cố định (title, audience, style, length) — chung mọi niche
+- Field dynamic từ `niche.domainSchema.additionalFields` — riêng mỗi niche
+  - Finance: `lãi suất dự kiến`, `kỳ hạn`, `số vốn ban đầu`
+  - Horror: `intensity (1-10)`, `subgenre`, `first-person?`
+  - Storytelling: `số nhân vật chính`, `setting (thời đại)`, `twist ending?`
+
+**Marketplace UI:**
+- Grid card hiển thị preview profile
+- Filter: niche category, rating, price
+- Click → xem chi tiết (DNA + sample tiêu đề + rating) → Install
+
+**Custom creator:**
+- Wizard 3 bước: (1) Paste DNA prompt, (2) Paste 100 tiêu đề mẫu (textarea bulk), (3) Preview test → Save.
+
+### 7.7. Sprint breakdown cho Phase 8
+
+| Sprint | Thời gian | Output |
+|---|---|---|
+| **S8.1 — Tách DNA khỏi code** | 1 tuần | Tạo `NicheProfile` type, refactor `promptBuilder.ts` nhận `NicheProfile`, migrate finance profile ra JSON, regression test (verify script tài chính giống cũ) |
+| **S8.2 — Storage + Registry** | 1 tuần | Schema `niche_profiles` + `user_installed_niches`, `NicheRegistry` class, switch active niche UI, fallback built-in |
+| **S8.3 — Dynamic brief schema** | 1 tuần | Render form fields từ `domainSchema.additionalFields`, validate theo `titlePatterns`, persist vào brief JSON |
+| **S8.4 — Sample corpus + RAG** | 1 tuần | pgvector setup, embed + store samples, `buildFewShotContext()` retrieval, A/B test (with/without RAG) |
+| **S8.5 — Marketplace UI + economy** | 1 tuần | Marketplace page, install/uninstall flow, Stripe cho paid profiles, rating UI |
+| **S8.6 — Custom profile creator** | 0.5 tuần | Wizard 3 bước (DNA + samples + preview), validation, save → user_installed_niches |
+| **S8.7 — Tenants + white-label** | 0.5 tuần | `tenants` table, subdomain routing, custom branding, RLS scope |
+
+**Tổng Phase 8: ~6 tuần**
+
+### 7.8. Tại sao Phase 8 đặt CUỐI cùng
+
+**Lý do:** Refactor multi-tenant khi đang build MVP dễ tạo ra over-abstraction. Cần ít nhất 1 niche (finance) chạy production ổn định + analytics data thật + ít nhất 1 ngách thứ 2 (horror) pilot → mới biết **đâu là invariant** (phải giữ trong code) và **đâu là variant** (đẩy ra config).
+
+**Cụ thể Phase 8 dựa trên:**
+- **Phase 6**: Persistence đa user (cần thiết cho marketplace nhiều user).
+- **Phase 7.1 (Series + Brand bible)**: cho thấy DNA injection là pattern tốt → generalize thành NicheProfile.
+- **Phase 7.7 (Feedback loop)**: ai_insights có thể share giữa các niche hoặc scope theo niche.
+- **1 niche thứ 2 pilot** (sau Phase 7): chứng minh refactor đúng hướng.
+
+### 7.9. Definition of Done cho Phase 8
+
+- [ ] Refactor: app không còn reference trực tiếp `FINANCE_DNA_PROMPT` ở code path — tất cả qua `NicheProfile`.
+- [ ] Regression: script tài chính generated từ Phase 8 chất lượng tương đương Phase 0-5 (blind test 10 script).
+- [ ] Thêm được 1 niche mới (vd: horror) bằng cách paste JSON, KHÔNG sửa code TypeScript.
+- [ ] Dynamic brief fields render đúng cho mỗi niche.
+- [ ] RAG few-shot giảm hallucination (đo bằng: % script có claim ngoài domain giảm).
+- [ ] Marketplace: 1 profile free + 1 profile trả phí flow install hoàn chỉnh.
+- [ ] Custom creator: user tạo được profile mới trong ≤ 5 phút (paste → preview → save).
+- [ ] White-label: deploy 1 tenant mới với branding riêng trong ≤ 30 phút.
+
+---
+
+## 9. Tài liệu tham khảo
 
 - [Neon Auth docs](https://neon.tech/docs/guides/auth) — Stack Auth under the hood
 - [Neon branching](https://neon.tech/docs/guides/branching) — dev DB per PR
@@ -644,7 +995,7 @@ Phase 7.8 — Thumbnail A/B (1 tuần)
 
 ---
 
-## 8. Kết luận
+## 10. Kết luận
 
 **Neon là lựa chọn đúng** cho Phase 6-7 vì:
 1. **Schema relational** phù hợp với domain (projects → scripts → publish_jobs → analytics có quan hệ chặt).
@@ -658,4 +1009,11 @@ Phase 7.8 — Thumbnail A/B (1 tuần)
 3. Phase 7.1-7.3 (Series + Brand + Publish) = **content workflow cốt lõi**.
 4. Phase 7.4-7.8 (Calendar + Export + Analytics + Feedback) = **studio tier**.
 
+**Multi-Niche (Phase 8) là đòn bẩy scale:**
+- Một codebase phục vụ N ngách (finance, horror, storytelling, tech-review, du lịch, giáo dục,...).
+- DNA prompt + 100 tiêu đề mẫu + dynamic brief fields = **data người dùng nạp vào**, không cần đụng code.
+- Marketplace cho phép creator bán profile → network effect (càng nhiều niche → càng hấp dẫn user).
+- White-label cho agency → B2B revenue stream ổn định.
+
 **Không nên làm Phase 7 trước Phase 6** — sẽ phải rewrite khi Phase 6 thay đổi auth/persistence layer.
+**Không nên làm Phase 8 trước Phase 7** — refactor multi-tenant khi chưa có 1 niche chạy production ổn → over-abstraction, lãng phí effort.
