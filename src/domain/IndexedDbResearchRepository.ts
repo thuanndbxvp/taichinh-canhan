@@ -1,4 +1,4 @@
-/**
+﻿/**
  * IndexedDbResearchRepository — adapter cho ResearchPack.
  * Key là scriptId, value là ResearchPack.
  */

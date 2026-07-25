@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import type { Scene, SceneKind } from '../src/domain/Scene';
 import type { UseSceneEditorReturn } from '../src/features/scenes/useSceneEditor';
 import type { UseClaimsReturn } from '../src/features/claims/useClaims';

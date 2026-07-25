@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Provider registry — ánh xạ AiProvider id → adapter tương ứng.
  * Đây là entry point duy nhất cho gateway lấy adapter.
  */

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * OpenAiCompatibleProvider — provider tổng quát cho mọi endpoint theo schema OpenAI.
  * baseUrl lấy từ localStorage('openai-base-url') để tương thích ngược với code cũ.
  *

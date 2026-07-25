@@ -1,4 +1,4 @@
-/**
+﻿/**
  * cacheKey — sinh key ổn định cho asset cache.
  *
  * Phase 3.5 yêu cầu cache key phải gắn với:

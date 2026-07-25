@@ -1,4 +1,4 @@
-/**
+﻿/**
  * aiRequest — wrapper fetch với timeout, AbortController, error model chuẩn.
  * Phase 0: dùng cho IdeaBrainstorm; phase 1 sẽ chuyển callApi sang đây.
  */

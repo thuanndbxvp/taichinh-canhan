@@ -1,4 +1,4 @@
-
+﻿
 import React from 'react';
 
 export const CogIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (

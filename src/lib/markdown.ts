@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Markdown parser helpers — gom logic parse Markdown phân tán trong App.tsx và
  * OutputDisplay.tsx về một nơi. Phase 0 chỉ phủ các luồng đang dùng:
  *  - parseIdeaFromIdeaBrainstorm: trích **[Idea]: <title>** + outline

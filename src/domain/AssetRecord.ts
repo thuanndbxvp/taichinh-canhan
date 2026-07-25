@@ -1,4 +1,4 @@
-/**
+﻿/**
  * AssetRecord — domain model cho asset sinh ra từ AI (visual prompt, video
  * prompt, scene summary, dialogue).
  *

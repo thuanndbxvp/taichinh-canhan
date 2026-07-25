@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ResearchPack — gói nghiên cứu cho Finance Content Studio (Phase 4 đầy đủ).
  *
  * Phase 3 chỉ cần khung: user có thể attach sources/claims vào document.

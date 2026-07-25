@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+﻿import { useCallback, useState } from 'react';
 import type { AiProvider, WordCountStats } from '../../../types';
 import { extractDialogue } from '../../../services/aiService';
 import { countWords } from '../../lib/markdown';

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+﻿import { describe, it, expect, beforeEach } from 'vitest';
 import { buildCacheKey, fnv1a, parseCacheKey } from './cacheKey';
 
 describe('fnv1a', () => {

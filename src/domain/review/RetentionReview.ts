@@ -1,4 +1,4 @@
-/**
+﻿/**
  * RetentionReview — kiểm tra cấu trúc giữ chân người xem.
  *
  * Phase 5.4 (plan1.md):

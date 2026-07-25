@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+﻿import { useCallback, useState } from 'react';
 import type { AiProvider, AllVisualPromptsResult, SceneSummary, ScriptPartSummary, SummarizeConfig, VisualPrompt } from '../../../types';
 import {
   generateAllVisualPrompts,
