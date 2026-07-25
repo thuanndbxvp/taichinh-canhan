@@ -1,4 +1,4 @@
-﻿import type { Expression, Style } from '../types';
+import type { Expression, Style } from '../types';
 
 export const EXPRESSION_EXPLANATIONS: Record<Expression, string> = {
   'Empathetic': 'Thể hiện sự đồng cảm, thấu hiểu với cảm xúc và tình huống của khán giả, tạo sự kết nối sâu sắc — phù hợp với kênh Chú Que Tài Chính khi nói về tiền bạc.',
@@ -18,7 +18,6 @@ export const STYLE_EXPLANATIONS: Record<Style, string> = {
 export const FORMATTING_EXPLANATIONS = {
   wordCount: 'Xác định độ dài ước tính cho kịch bản. Với video dài (>1000 từ), AI sẽ tạo dàn ý chi tiết trước để đảm bảo chất lượng và sự logic.',
   videoDuration: 'Nhập thời lượng video mong muốn (tính bằng phút). AI sẽ tự động ước tính số từ cần thiết (khoảng 150 từ/phút) để tạo kịch bản có độ dài phù hợp.',
-  scriptParts: 'Chia kịch bản thành số phần chính mong muốn. Chọn "Tự động" để AI quyết định cấu trúc tốt nhất dựa trên chủ đề.',
   includeIntro: 'Tự động tạo một đoạn mở đầu hấp dẫn để thu hút và giữ chân người xem ngay từ những giây đầu tiên.',
   includeOutro: 'Tự động tạo một đoạn kết luận, tóm tắt nội dung và bao gồm lời kêu gọi hành động (call-to-action).',
   headings: 'Sử dụng các tiêu đề (ví dụ: ## Phần 1) để phân chia rõ ràng các phần chính trong kịch bản.',

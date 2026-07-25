@@ -13,6 +13,7 @@ import { AppError } from '../src/lib/errors';
 import { aiGateway, validateApiKey } from '../src/services/ai';
 import { promptRegistry } from '../src/services/ai/PromptRegistry';
 import { parseAiJsonOrThrow, SCHEMAS } from '../src/services/ai/responseParser';
+import { parseOutlineIntoSegments as parseOutlineIntoSegmentsImpl } from '../src/services/ai/parseOutlineIntoSegments';
 // Side-effect import: đăng ký tất cả prompt finance-* vào registry.
 import '../src/services/ai/prompts';
 
@@ -370,7 +371,5 @@ export const generateSingleVideoPrompt = async (
 };
 
 export const parseOutlineIntoSegments = (outline: string): string[] => {
-  return outline
-    .split(/(?=^## .*?$)/m)
-    .filter((s) => s.trim() !== '' && !s.includes('### Dàn Ý'));
+  return parseOutlineIntoSegmentsImpl(outline);
 };

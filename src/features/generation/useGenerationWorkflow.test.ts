@@ -45,7 +45,13 @@ describe('useGenerationWorkflow', () => {
   });
 
   it('generate script ngắn gọi generateScript', async () => {
-    (aiService.generateScript as unknown as ReturnType<typeof vi.fn>).mockResolvedValue('script content');
+    (aiService.generateScript as unknown as ReturnType<typeof vi.fn>).mockImplementation(
+      async (_params: unknown, _provider: unknown, _model: unknown, onChunk?: (chunk: string) => void) => {
+        onChunk?.('script ');
+        onChunk?.('content');
+        return 'script content';
+      },
+    );
     const { result } = renderHook(() => useGenerationWorkflow({ brief, aiProvider: 'kyma', selectedModel: 'm' }));
     await act(async () => {
       await result.current.generate();
@@ -56,7 +62,12 @@ describe('useGenerationWorkflow', () => {
   });
 
   it('generate script dài gọi generateScriptOutline', async () => {
-    (aiService.generateScriptOutline as unknown as ReturnType<typeof vi.fn>).mockResolvedValue('## outline');
+    (aiService.generateScriptOutline as unknown as ReturnType<typeof vi.fn>).mockImplementation(
+      async (_params: unknown, _provider: unknown, _model: unknown, onChunk?: (chunk: string) => void) => {
+        onChunk?.('## outline');
+        return '## outline';
+      },
+    );
     const { result } = renderHook(() =>
       useGenerationWorkflow({ brief: { ...brief, wordCount: '1500' }, aiProvider: 'kyma', selectedModel: 'm' }),
     );
@@ -119,7 +130,17 @@ describe('useGenerationWorkflow', () => {
   });
 
   it('generate wordCount = 5 phút (lengthType=duration, videoDuration=5) → 750 từ → gọi generateScript', async () => {
-    (aiService.generateScript as unknown as ReturnType<typeof vi.fn>).mockResolvedValue('script 5 phút');
+    (aiService.generateScript as unknown as ReturnType<typeof vi.fn>).mockImplementation(
+      async (
+        _params: unknown,
+        _provider: unknown,
+        _model: unknown,
+        onChunk?: (chunk: string) => void,
+      ) => {
+        onChunk?.('script 5 phút');
+        return 'script 5 phút';
+      },
+    );
     const { result } = renderHook(() =>
       useGenerationWorkflow({
         brief: { ...brief, lengthType: 'duration', videoDuration: '5' },
@@ -144,7 +165,19 @@ describe('useGenerationWorkflow', () => {
   });
 
   it('revise thành công tăng revisionCount', async () => {
-    (aiService.reviseScript as unknown as ReturnType<typeof vi.fn>).mockResolvedValue('revised');
+    (aiService.reviseScript as unknown as ReturnType<typeof vi.fn>).mockImplementation(
+      async (
+        _script: unknown,
+        _prompt: unknown,
+        _params: unknown,
+        _provider: unknown,
+        _model: unknown,
+        onChunk?: (chunk: string) => void,
+      ) => {
+        onChunk?.('revised');
+        return 'revised';
+      },
+    );
     const { result } = renderHook(() => useGenerationWorkflow({ brief, aiProvider: 'kyma', selectedModel: 'm' }));
     act(() => result.current.setRevisionPrompt('làm gọn hơn'));
     act(() => result.current.setGeneratedScript('initial'));

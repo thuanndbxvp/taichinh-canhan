@@ -1,4 +1,4 @@
-﻿import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { promptRegistry } from './PromptRegistry';
 // Side-effect import: đăng ký prompt finance-*
 import './prompts';
@@ -12,10 +12,8 @@ describe('PromptRegistry', () => {
         title: 'Lãi kép',
         outlineContent: '',
         targetAudience: 'Vietnamese',
-        keywords: '',
-        formattingOptions: {} as never,
+        keywords: 'test',
         wordCount: '1000',
-        scriptParts: '5',
         scriptType: 'standard' as never,
         numberOfSpeakers: 'one_narrator' as never,
         styleOptions: { expression: 'Empathetic', style: 'Storytelling' },
@@ -35,9 +33,7 @@ describe('PromptRegistry', () => {
         outlineContent: '',
         targetAudience: 'Vietnamese',
         keywords: '',
-        formattingOptions: {} as never,
         wordCount: '800',
-        scriptParts: '5',
         scriptType: 'standard' as never,
         numberOfSpeakers: 'one_narrator' as never,
         styleOptions: { expression: 'Empathetic', style: 'Storytelling' },

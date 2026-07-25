@@ -30,12 +30,8 @@ interface ControlPanelProps {
   setStyleOptions: (options: StyleOptions) => void;
   keywords: string;
   setKeywords: (keywords: string) => void;
-  formattingOptions: FormattingOptions;
-  setFormattingOptions: (options: FormattingOptions) => void;
   wordCount: string;
   setWordCount: (count: string) => void;
-  scriptParts: string;
-  setScriptParts: (parts: string) => void;
   onGenerate: () => void;
   isLoading: boolean;
   onGenerateKeywordSuggestions: () => void;
@@ -83,9 +79,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   targetAudience, setTargetAudience,
   styleOptions, setStyleOptions,
   keywords, setKeywords,
-  formattingOptions, setFormattingOptions,
   wordCount, setWordCount,
-  scriptParts, setScriptParts,
   onGenerate, isLoading,
   onGenerateKeywordSuggestions, isSuggestingKeywords, keywordSuggestions, keywordSuggestionError, hasGeneratedKeywordSuggestions,
   scriptType, setScriptType,
@@ -120,9 +114,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         if (selectedModel !== customModel) setSelectedModel(customModel);
     }
   }, [aiProvider, apiKeys?.kyma]);
-  const handleCheckboxChange = (key: keyof FormattingOptions, value: boolean) => {
-    setFormattingOptions({ ...formattingOptions, [key]: value });
-  };
 
   const handleAddKeyword = (keyword: string) => {
     setKeywords(keywords ? `${keywords}, ${keyword}` : keyword);
@@ -468,66 +459,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                         </div>
                     </Tooltip>
                 )}
-
-                {scriptType === 'Video' && (
-                  <Tooltip text={FORMATTING_EXPLANATIONS.scriptParts}>
-                      <div>
-                          <label htmlFor="scriptParts" className="block text-xs font-medium text-text-secondary mb-1">Số phần</label>
-                          <div className="flex items-center space-x-2">
-                              <input 
-                                  id="scriptParts" 
-                                  type="number" 
-                                  value={scriptParts === 'Auto' ? '' : scriptParts} 
-                                  onChange={e => setScriptParts(e.target.value)} 
-                                  disabled={scriptParts === 'Auto'}
-                                  className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed`} 
-                                  placeholder="3"
-                              />
-                              <label className="flex items-center space-x-2 cursor-pointer whitespace-nowrap">
-                                  <input 
-                                      type="checkbox" 
-                                      className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} 
-                                      checked={scriptParts === 'Auto'} 
-                                      onChange={(e) => setScriptParts(e.target.checked ? 'Auto' : '3')} 
-                                  />
-                                  <span className={`text-sm text-emerald-200/80`}>Tự động</span>
-                              </label>
-                          </div>
-                      </div>
-                  </Tooltip>
-                )}
-            </div>
-            <div className="grid grid-cols-2 gap-y-2 gap-x-4 mt-4">
-                <Tooltip text={FORMATTING_EXPLANATIONS.includeIntro} className="block">
-                    <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} checked={formattingOptions.includeIntro} onChange={(e) => handleCheckboxChange('includeIntro', e.target.checked)} />
-                        <span className={`text-emerald-200/80`}>Intro</span>
-                    </label>
-                </Tooltip>
-                 <Tooltip text={FORMATTING_EXPLANATIONS.includeOutro} className="block">
-                    <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} checked={formattingOptions.includeOutro} onChange={(e) => handleCheckboxChange('includeOutro', e.target.checked)} />
-                        <span className={`text-emerald-200/80`}>Outro</span>
-                    </label>
-                </Tooltip>
-                <Tooltip text={FORMATTING_EXPLANATIONS.headings} className="block">
-                    <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} checked={formattingOptions.headings} onChange={(e) => handleCheckboxChange('headings', e.target.checked)} />
-                        <span className={`text-emerald-200/80`}>Tiêu đề</span>
-                    </label>
-                </Tooltip>
-                <Tooltip text={FORMATTING_EXPLANATIONS.bullets} className="block">
-                    <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} checked={formattingOptions.bullets} onChange={(e) => handleCheckboxChange('bullets', e.target.checked)} />
-                        <span className={`text-emerald-200/80`}>Gạch đầu dòng</span>
-                    </label>
-                </Tooltip>
-                 <Tooltip text={FORMATTING_EXPLANATIONS.bold} className="block">
-                    <label className="flex items-center space-x-2 cursor-pointer">
-                        <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} checked={formattingOptions.bold} onChange={(e) => handleCheckboxChange('bold', e.target.checked)} />
-                        <span className={`text-emerald-200/80`}>In đậm/nghiêng</span>
-                    </label>
-                </Tooltip>
             </div>
         </ControlSection>
         <Tooltip text="Tạo ra kịch bản hoàn chỉnh dựa trên tất cả các thiết lập bạn đã chọn ở trên.">

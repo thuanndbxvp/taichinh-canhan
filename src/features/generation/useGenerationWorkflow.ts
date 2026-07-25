@@ -49,7 +49,6 @@ function buildParams(brief: ContentBrief, finalWordCount: string): GenerationPar
     targetAudience: brief.targetAudience,
     styleOptions: brief.styleOptions,
     keywords: brief.keywords,
-    formattingOptions: brief.formattingOptions,
     wordCount: finalWordCount,
     scriptParts: brief.scriptParts,
     scriptType: brief.scriptType,
@@ -90,15 +89,24 @@ export function useGenerationWorkflow({
   const [autoContinue, setAutoContinue] = useState<boolean>(true);
   const [currentAiAction, setCurrentAiAction] = useState<string | null>(null);
   const isStoppingRef = useRef<boolean>(false);
+  // Chặn generateNextPart chạy song song (re-entrancy guard).
+  const isGeneratingPartRef = useRef<boolean>(false);
+  // Ref mirror của generatedScript để dùng trong callback mà không tạo dependency.
+  const scriptRef = useRef<string>('');
+  useEffect(() => {
+    scriptRef.current = generatedScript;
+  }, [generatedScript]);
 
   const resetAllCaches = useCallback(() => {
     setGeneratedScript('');
+    scriptRef.current = '';
     setRevisionCount(0);
     setIsGeneratingSequentially(false);
     setOutlineParts([]);
     setCurrentPartIndex(0);
     setFullOutlineText('');
     isStoppingRef.current = false;
+    isGeneratingPartRef.current = false;
   }, []);
 
   const generate = useCallback(async () => {
@@ -119,6 +127,7 @@ export function useGenerationWorkflow({
     setIsLoading(true);
     setError(null);
     setGeneratedScript('');
+    scriptRef.current = '';
     resetAllCaches();
 
     const params = buildParams(brief, finalWordCount);
@@ -128,7 +137,11 @@ export function useGenerationWorkflow({
       if (isLongScript) {
         setCurrentAiAction('Đang phân tích và lập dàn ý...');
         const outline = await generateScriptOutline(params, aiProvider, selectedModel, (chunk) => {
-           setGeneratedScript((prev) => prev + chunk);
+           setGeneratedScript((prev) => {
+             const next = prev + chunk;
+             scriptRef.current = next;
+             return next;
+           });
         });
         setFullOutlineText(outline);
         if (!outline || !outline.trim()) {
@@ -137,7 +150,11 @@ export function useGenerationWorkflow({
       } else {
         setCurrentAiAction('Đang tạo kịch bản...');
         const script = await generateScript(params, aiProvider, selectedModel, (chunk) => {
-           setGeneratedScript((prev) => prev + chunk);
+           setGeneratedScript((prev) => {
+             const next = prev + chunk;
+             scriptRef.current = next;
+             return next;
+           });
         });
         if (!script || !script.trim()) {
           setError('AI provider trả về kịch bản rỗng. Vui lòng thử lại hoặc đổi model.');
@@ -151,39 +168,64 @@ export function useGenerationWorkflow({
     }
   }, [brief, aiProvider, selectedModel, resetAllCaches]);
 
+  // generateNextPart dùng ref cho previousPartsScript & fullOutlineText để
+  // không còn phụ thuộc vào `generatedScript` (mỗi chunk sẽ re-create callback,
+  // re-fire effect bên dưới, gây chạy song song).
   const generateNextPart = useCallback(async () => {
-    if (!isGeneratingSequentially || currentPartIndex >= outlineParts.length || isStoppingRef.current) {
-      if (isStoppingRef.current) setIsGeneratingSequentially(false);
+    if (
+      !isGeneratingSequentially ||
+      isGeneratingPartRef.current ||
+      isStoppingRef.current
+    ) {
       return;
     }
 
+    // Snapshot index & parts tại thời điểm bắt đầu. Tránh bị state batch update
+    // làm lệch khi effect fire lần thứ 2 trong lúc part trước đang chạy.
+    const index = currentPartIndex;
+    const parts = outlineParts;
+    if (index >= parts.length) {
+      setIsGeneratingSequentially(false);
+      return;
+    }
+    const currentOutlinePart = parts[index];
+
+    isGeneratingPartRef.current = true;
     setIsLoading(true);
-    const currentOutlinePart = outlineParts[currentPartIndex];
     const finalWordCount = effectiveWordCount(brief);
     const params = buildParams(brief, finalWordCount);
 
     try {
-      setCurrentAiAction(`Đang viết phần ${currentPartIndex + 1}/${outlineParts.length}...`);
+      setCurrentAiAction(`Đang viết phần ${index + 1}/${parts.length}...`);
       const partContent = await generateScriptPart(
         fullOutlineText,
-        generatedScript,
+        scriptRef.current,
         currentOutlinePart,
         params,
         aiProvider,
         selectedModel,
         (chunk) => {
-           setGeneratedScript((prev) => prev + chunk);
+           setGeneratedScript((prev) => {
+             const next = prev + chunk;
+             scriptRef.current = next;
+             return next;
+           });
         }
       );
       if (isStoppingRef.current) return;
 
-      setGeneratedScript((prev) => prev + '\n\n---\n\n');
-      const nextIndex = currentPartIndex + 1;
+      setGeneratedScript((prev) => {
+        const next = prev + partContent + '\n\n---\n\n';
+        scriptRef.current = next;
+        return next;
+      });
+
+      const nextIndex = index + 1;
       setCurrentPartIndex(nextIndex);
 
-      if (autoContinue && nextIndex < outlineParts.length && !isStoppingRef.current) {
+      if (autoContinue && nextIndex < parts.length && !isStoppingRef.current) {
         setTimeout(() => generateNextPart(), 100);
-      } else if (nextIndex >= outlineParts.length) {
+      } else if (nextIndex >= parts.length) {
         setIsGeneratingSequentially(false);
       }
     } catch (err) {
@@ -191,10 +233,20 @@ export function useGenerationWorkflow({
       setError(message);
       setIsGeneratingSequentially(false);
     } finally {
+      isGeneratingPartRef.current = false;
       setIsLoading(false);
       setCurrentAiAction(null);
     }
-  }, [isGeneratingSequentially, currentPartIndex, outlineParts, brief, aiProvider, selectedModel, fullOutlineText, generatedScript, autoContinue]);
+  }, [
+    isGeneratingSequentially,
+    currentPartIndex,
+    outlineParts,
+    brief,
+    aiProvider,
+    selectedModel,
+    fullOutlineText,
+    autoContinue,
+  ]);
 
   const startSequential = useCallback(() => {
     if (!generatedScript) return;
@@ -204,31 +256,35 @@ export function useGenerationWorkflow({
       return;
     }
     isStoppingRef.current = false;
+    isGeneratingPartRef.current = false;
     setOutlineParts(parts);
     setCurrentPartIndex(0);
     setIsGeneratingSequentially(true);
-    setGeneratedScript(PARTS_HEADER);
+    const next = PARTS_HEADER;
+    setGeneratedScript(next);
+    scriptRef.current = next;
   }, [generatedScript]);
 
   const stopSequential = useCallback(() => {
     isStoppingRef.current = true;
+    isGeneratingPartRef.current = false;
     setIsLoading(false);
     setIsGeneratingSequentially(false);
   }, []);
 
-  // Trigger first part
+  // Trigger first part — chỉ fire khi chuyển sang sequential mode lần đầu.
+  // Không còn phụ thuộc `generatedScript` (chunk update gây re-fire).
   useEffect(() => {
     if (
       isGeneratingSequentially &&
       currentPartIndex === 0 &&
       outlineParts.length > 0 &&
-      !isLoading &&
-      generatedScript.includes('BẮT ĐẦU') &&
+      !isGeneratingPartRef.current &&
       !isStoppingRef.current
     ) {
       generateNextPart();
     }
-  }, [isGeneratingSequentially, currentPartIndex, outlineParts.length, isLoading, generatedScript, generateNextPart]);
+  }, [isGeneratingSequentially, currentPartIndex, outlineParts.length, generateNextPart]);
 
   const revise = useCallback(async () => {
     if (!generatedScript || !revisionPrompt.trim()) return;
@@ -236,13 +292,18 @@ export function useGenerationWorkflow({
     setError(null);
     setCurrentAiAction('Đang chỉnh sửa kịch bản theo yêu cầu...');
     const params = buildParams(brief, effectiveWordCount(brief));
-    
+
     // Xóa script hiện tại để stream lại từ đầu, hoặc có thể nối tiếp tùy logic. Ở đây ta replace.
     setGeneratedScript('');
-    
+    scriptRef.current = '';
+
     try {
       const revised = await reviseScript(generatedScript, revisionPrompt, params, aiProvider, selectedModel, (chunk) => {
-         setGeneratedScript((prev) => prev + chunk);
+         setGeneratedScript((prev) => {
+           const next = prev + chunk;
+           scriptRef.current = next;
+           return next;
+         });
       });
       setRevisionCount((prev) => prev + 1);
       setRevisionPrompt('');

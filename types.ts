@@ -1,4 +1,4 @@
-﻿
+
 // Ngôn ngữ/giọng điệu mặc định cho Finance Content Studio (Chú Que persona).
 // Chú Que Tài Chính — chỉ giữ 4 tông giọng cốt lõi phục vụ nhân vật.
 export type Expression =
@@ -22,15 +22,6 @@ export type ScenarioType = 'finance';
 export interface StyleOptions {
   expression: Expression;
   style: Style;
-}
-
-export interface FormattingOptions {
-  headings: boolean;
-  bullets: boolean;
-
-  bold: boolean;
-  includeIntro: boolean;
-  includeOutro: boolean;
 }
 
 // Data structures
@@ -72,9 +63,7 @@ export interface GenerationParams {
   targetAudience: string;
   styleOptions: StyleOptions;
   keywords: string;
-  formattingOptions: FormattingOptions;
   wordCount: string;
-  scriptParts: string;
   scriptType: ScriptType;
   numberOfSpeakers: NumberOfSpeakers;
   isFinanceMode?: boolean; // Flag for specialized finance mode

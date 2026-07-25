@@ -171,12 +171,8 @@ const App: React.FC = () => {
             setStyleOptions={brief.setStyleOptions}
             keywords={brief.brief.keywords}
             setKeywords={brief.setKeywords}
-            formattingOptions={brief.brief.formattingOptions}
-            setFormattingOptions={brief.setFormattingOptions}
             wordCount={brief.brief.wordCount}
             setWordCount={brief.setWordCount}
-            scriptParts={brief.brief.scriptParts}
-            setScriptParts={brief.setScriptParts}
             onGenerate={handleGenerate}
             isLoading={generation.isLoading || !hasApiKey}
             onGenerateKeywordSuggestions={() => ideas.generateKeywordSuggestions(brief.brief.title)}

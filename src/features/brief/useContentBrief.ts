@@ -1,7 +1,6 @@
-﻿import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type {
   Expression,
-  FormattingOptions,
   NumberOfSpeakers,
   ScriptType,
   Style,
@@ -15,9 +14,7 @@ export interface ContentBrief {
   targetAudience: string;
   styleOptions: StyleOptions;
   keywords: string;
-  formattingOptions: FormattingOptions;
   wordCount: string;
-  scriptParts: string;
   scriptType: ScriptType;
   numberOfSpeakers: NumberOfSpeakers;
   lengthType: 'words' | 'duration';
@@ -31,9 +28,7 @@ export interface ContentBriefPatch {
   targetAudience?: string;
   styleOptions?: StyleOptions;
   keywords?: string;
-  formattingOptions?: FormattingOptions;
   wordCount?: string;
-  scriptParts?: string;
   scriptType?: ScriptType;
   numberOfSpeakers?: NumberOfSpeakers;
   lengthType?: 'words' | 'duration';
@@ -50,15 +45,7 @@ const DEFAULT_BRIEF: ContentBrief = {
   targetAudience: APP_BRAND.defaultLanguage,
   styleOptions: FINANCE_STYLE,
   keywords: '',
-  formattingOptions: {
-    headings: true,
-    bullets: true,
-    bold: true,
-    includeIntro: false,
-    includeOutro: false,
-  },
   wordCount: '1200',
-  scriptParts: 'Auto',
   scriptType: 'Video',
   numberOfSpeakers: 'Auto',
   lengthType: 'words',
@@ -84,9 +71,7 @@ export function useContentBrief(initial?: ContentBriefPatch) {
   const setTargetAudience = useCallback((targetAudience: string) => patch({ targetAudience }), [patch]);
   const setStyleOptions = useCallback((styleOptions: StyleOptions) => patch({ styleOptions }), [patch]);
   const setKeywords = useCallback((keywords: string) => patch({ keywords }), [patch]);
-  const setFormattingOptions = useCallback((formattingOptions: FormattingOptions) => patch({ formattingOptions }), [patch]);
   const setWordCount = useCallback((wordCount: string) => patch({ wordCount }), [patch]);
-  const setScriptParts = useCallback((scriptParts: string) => patch({ scriptParts }), [patch]);
   const setScriptType = useCallback((scriptType: ScriptType) => patch({ scriptType }), [patch]);
   const setNumberOfSpeakers = useCallback((numberOfSpeakers: NumberOfSpeakers) => patch({ numberOfSpeakers }), [patch]);
   const setLengthType = useCallback((lengthType: 'words' | 'duration') => patch({ lengthType }), [patch]);
@@ -99,7 +84,6 @@ export function useContentBrief(initial?: ContentBriefPatch) {
       isFinanceMode: true,
       styleOptions: FINANCE_STYLE,
       targetAudience: 'Vietnamese',
-      formattingOptions: { ...prev.formattingOptions, bullets: true, bold: true },
       wordCount: '1200',
       videoDuration: '8',
     }));
@@ -124,9 +108,7 @@ export function useContentBrief(initial?: ContentBriefPatch) {
     setTargetAudience,
     setStyleOptions,
     setKeywords,
-    setFormattingOptions,
     setWordCount,
-    setScriptParts,
     setScriptType,
     setNumberOfSpeakers,
     setLengthType,
