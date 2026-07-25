@@ -15,7 +15,7 @@ import type {
 } from '../ProviderAdapter';
 import { fetchWithTimeout } from '../ProviderAdapter';
 
-const DEFAULT_BASE_URL = 'https://api.openai.com/v1';
+const DEFAULT_BASE_URL = 'https://openrouter.ai/api/v1';
 
 function getBaseUrl(): string {
   try {

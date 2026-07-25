@@ -36,8 +36,8 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
     const [newKeyInputs, setNewKeyInputs] = useState<Record<AiProvider, string>>({ kyma: '', openai: '' });
     
     // Custom settings for OpenAI compatible
-    const [openAiBaseUrl, setOpenAiBaseUrl] = useState<string>('https://api.openai.com/v1');
-    const [openAiModel, setOpenAiModel] = useState<string>('gpt-4o-mini');
+    const [openAiBaseUrl, setOpenAiBaseUrl] = useState<string>('https://openrouter.ai/api/v1');
+    const [openAiModel, setOpenAiModel] = useState<string>('anthropic/claude-3.5-sonnet');
 
     const [validationStatus, setValidationStatus] = useState<Record<AiProvider, ValidationStatus>>({
         kyma: { state: 'idle', message: null },
@@ -197,7 +197,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
                                 className="w-full bg-primary border border-border rounded-md p-1.5 text-text-primary text-xs focus:border-accent"
                                 value={openAiBaseUrl}
                                 onChange={(e) => setOpenAiBaseUrl(e.target.value)}
-                                placeholder="https://api.openai.com/v1"
+                                placeholder="https://openrouter.ai/api/v1"
                             />
                             <p className="text-[10px] text-text-secondary/60 mt-1">Dùng <b>https://openrouter.ai/api/v1</b> nếu sử dụng OpenRouter.</p>
                         </div>
@@ -208,9 +208,9 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
                                 className="w-full bg-primary border border-border rounded-md p-1.5 text-text-primary text-xs focus:border-accent"
                                 value={openAiModel}
                                 onChange={(e) => setOpenAiModel(e.target.value)}
-                                placeholder="gpt-4o-mini"
+                                placeholder="anthropic/claude-3.5-sonnet"
                             />
-                            <p className="text-[10px] text-text-secondary/60 mt-1">Ví dụ: <b>gpt-4o-mini</b> hoặc <b>google/gemini-2.5-flash</b>, <b>anthropic/claude-3.5-sonnet</b></p>
+                            <p className="text-[10px] text-text-secondary/60 mt-1">Ví dụ: <b>anthropic/claude-3.5-sonnet</b> hoặc <b>google/gemini-2.5-flash</b>, <b>openai/gpt-4o</b></p>
                         </div>
                     </div>
                 )}

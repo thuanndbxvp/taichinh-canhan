@@ -109,7 +109,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         })
         .catch(console.error);
     } else if (aiProvider === 'openai') {
-        const customModel = localStorage.getItem('openai-custom-model') || 'gpt-4o-mini';
+        const customModel = localStorage.getItem('openai-custom-model') || 'anthropic/claude-3.5-sonnet';
         setOpenAiModels([{ value: customModel, label: `Custom: ${customModel}` }]);
         if (selectedModel !== customModel) setSelectedModel(customModel);
     }
@@ -136,7 +136,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     if (provider === 'kyma') {
         setSelectedModel(kymaModels.length > 0 ? kymaModels[0].value : DEFAULT_KYMA_MODELS[0].value);
     } else {
-        const customModel = localStorage.getItem('openai-custom-model') || 'gpt-4o-mini';
+        const customModel = localStorage.getItem('openai-custom-model') || 'anthropic/claude-3.5-sonnet';
         setSelectedModel(customModel);
     }
   };
