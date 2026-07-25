@@ -76,6 +76,65 @@ describe('useGenerationWorkflow', () => {
     expect(result.current.error).toBe('boom');
   });
 
+  it('generate lỗi khi wordCount = 0 (lengthType=words)', async () => {
+    const { result } = renderHook(() =>
+      useGenerationWorkflow({ brief: { ...brief, wordCount: '0' }, aiProvider: 'kyma', selectedModel: 'm' }),
+    );
+    await act(async () => {
+      await result.current.generate();
+    });
+    expect(result.current.error).toMatch(/số từ lớn hơn 0/);
+    expect(aiService.generateScript).not.toHaveBeenCalled();
+  });
+
+  it('generate lỗi khi videoDuration = 0 (lengthType=duration)', async () => {
+    const { result } = renderHook(() =>
+      useGenerationWorkflow({ brief: { ...brief, lengthType: 'duration', videoDuration: '0' }, aiProvider: 'kyma', selectedModel: 'm' }),
+    );
+    await act(async () => {
+      await result.current.generate();
+    });
+    expect(result.current.error).toMatch(/thời lượng video lớn hơn 0/);
+    expect(aiService.generateScript).not.toHaveBeenCalled();
+  });
+
+  it('generate script trả rỗng → set error surface cho user', async () => {
+    (aiService.generateScript as unknown as ReturnType<typeof vi.fn>).mockResolvedValue('');
+    const { result } = renderHook(() => useGenerationWorkflow({ brief, aiProvider: 'kyma', selectedModel: 'm' }));
+    await act(async () => {
+      await result.current.generate();
+    });
+    expect(result.current.error).toMatch(/AI provider trả về kịch bản rỗng/);
+  });
+
+  it('generate outline trả rỗng → set error surface cho user', async () => {
+    (aiService.generateScriptOutline as unknown as ReturnType<typeof vi.fn>).mockResolvedValue('   ');
+    const { result } = renderHook(() =>
+      useGenerationWorkflow({ brief: { ...brief, wordCount: '1500' }, aiProvider: 'kyma', selectedModel: 'm' }),
+    );
+    await act(async () => {
+      await result.current.generate();
+    });
+    expect(result.current.error).toMatch(/AI provider trả về dàn ý rỗng/);
+  });
+
+  it('generate wordCount = 5 phút (lengthType=duration, videoDuration=5) → 750 từ → gọi generateScript', async () => {
+    (aiService.generateScript as unknown as ReturnType<typeof vi.fn>).mockResolvedValue('script 5 phút');
+    const { result } = renderHook(() =>
+      useGenerationWorkflow({
+        brief: { ...brief, lengthType: 'duration', videoDuration: '5' },
+        aiProvider: 'kyma',
+        selectedModel: 'm',
+      }),
+    );
+    await act(async () => {
+      await result.current.generate();
+    });
+    expect(aiService.generateScript).toHaveBeenCalled();
+    expect(result.current.generatedScript).toBe('script 5 phút');
+    expect(result.current.error).toBeNull();
+  });
+
   it('revise yêu cầu revisionPrompt không rỗng', async () => {
     const { result } = renderHook(() => useGenerationWorkflow({ brief, aiProvider: 'kyma', selectedModel: 'm' }));
     await act(async () => {

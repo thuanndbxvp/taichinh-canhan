@@ -104,12 +104,21 @@ export function useGenerationWorkflow({
       setError('Vui lòng nhập hoặc chọn một tiêu đề video.');
       return;
     }
+    const finalWordCount = effectiveWordCount(brief);
+    const wcNum = parseInt(finalWordCount, 10);
+    if (!Number.isFinite(wcNum) || wcNum <= 0) {
+      setError(
+        brief.lengthType === 'duration'
+          ? 'Vui lòng nhập thời lượng video lớn hơn 0 phút.'
+          : 'Vui lòng nhập tổng số từ lớn hơn 0.',
+      );
+      return;
+    }
     setIsLoading(true);
     setError(null);
     setGeneratedScript('');
     resetAllCaches();
 
-    const finalWordCount = effectiveWordCount(brief);
     const params = buildParams(brief, finalWordCount);
 
     try {
@@ -118,9 +127,15 @@ export function useGenerationWorkflow({
         const outline = await generateScriptOutline(params, aiProvider, selectedModel);
         setGeneratedScript(outline);
         setFullOutlineText(outline);
+        if (!outline || !outline.trim()) {
+          setError('AI provider trả về dàn ý rỗng. Vui lòng thử lại hoặc đổi model.');
+        }
       } else {
         const script = await generateScript(params, aiProvider, selectedModel);
         setGeneratedScript(script);
+        if (!script || !script.trim()) {
+          setError('AI provider trả về kịch bản rỗng. Vui lòng thử lại hoặc đổi model.');
+        }
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi không xác định.');
