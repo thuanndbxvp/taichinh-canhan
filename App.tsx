@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ControlPanel } from './components/ControlPanel';
 import { OutputDisplay } from './components/OutputDisplay';
 import { LibraryModal } from './components/LibraryModal';
@@ -21,6 +21,7 @@ import { useReviewWorkflow } from './src/features/review/useReviewWorkflow';
 import { useLibrary } from './src/features/library/useLibrary';
 import { useIdeaWorkflow } from './src/features/ideas/useIdeaWorkflow';
 import { useModalState } from './src/features/modals/useModalState';
+import type { AiProvider } from './types';
 
 const YoutubeLogoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="24" viewBox="0 0 28 20" fill="none" {...props}>

@@ -42,8 +42,14 @@ export const IdeaBrainstorm: React.FC<IdeaBrainstormProps> = ({ setTitle, setOut
     const isMounted = useRef(true);
 
     const initializeChat = useCallback(() => {
+        const config = getNextAiConfig();
+        if (!config) {
+             chatRef.current = null;
+             if (isMounted.current) setError("Vui lòng cấu hình API Key và kích hoạt AI.");
+             return;
+        }
         // Phase 0: Brainstorm hiện chỉ hoạt động với provider Kyma (giao thức OpenAI-compatible).
-        if (aiProvider !== 'kyma') {
+        if (config.provider !== 'kyma') {
             chatRef.current = null;
             if (isMounted.current) setError(null);
             return;
@@ -52,7 +58,7 @@ export const IdeaBrainstorm: React.FC<IdeaBrainstormProps> = ({ setTitle, setOut
             const apiKey = getApiKey('kyma');
             const ai = new GoogleGenAI({ apiKey });
             chatRef.current = ai.chats.create({
-                model: selectedModel,
+                model: config.model,
                 config: {
                     systemInstruction: 'You are a creative assistant for a Vietnamese YouTuber. Your goal is to help the user brainstorm and refine their video ideas through a friendly, encouraging conversation. Ask clarifying questions. When you propose a clear, actionable video idea, you MUST format it strictly as follows, with the title on the first line and the outline on the second:\n**[Idea]: Tiêu đề video ở đây**\nNội dung phác họa cho tiêu đề đó.'
                 }
@@ -129,7 +135,7 @@ export const IdeaBrainstorm: React.FC<IdeaBrainstormProps> = ({ setTitle, setOut
                         'Authorization': `Bearer ${apiKey}`
                     },
                     body: JSON.stringify({
-                        model: selectedModel,
+                        model: config.model,
                         messages: messagesForApi,
                     })
                 });

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TrashIcon } from './icons/TrashIcon';
-import type { AiProvider, LabeledOption } from '../types';
+import type { AiProvider } from '../types';
 import { validateApiKey } from '../services/aiService';
 import { CheckIcon } from './icons/CheckIcon';
 import { KeyIcon } from './icons/KeyIcon';
@@ -53,7 +53,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
     
     // Custom settings for OpenAI compatible
     const [openAiBaseUrl, setOpenAiBaseUrl] = useState<string>('https://openrouter.ai/api/v1');
-    const [kymaModelOptions, setKymaModelOptions] = useState<LabeledOption<string>[]>([]);
+    const [kymaModelOptions, setKymaModelOptions] = useState<{value: string, label: string}[]>([]);
 
     const [validationStatus, setValidationStatus] = useState<Record<AiProvider, ValidationStatus>>({
         kyma: { state: 'idle', message: null },
