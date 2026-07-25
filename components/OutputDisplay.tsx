@@ -232,8 +232,14 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
             </div>;
         }
         if (script) {
+            // Remove the start header so it doesn't become an empty section
+            const cleanScriptForSplit = script.replace('--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---\n\n', '');
+            
             // Split by main headers
-            const sections = script.split(/(?=^#+ .*?$|^#{0,3}\s*\*\*#+ .*?)/m).filter(s => s.trim() !== '' && !s.includes('---') && !s.includes('### Dàn Ý Chi Tiết'));
+            const sections = cleanScriptForSplit.split(/(?=^#+ .*?$|^#{0,3}\s*\*\*#+ .*?)/m).filter(s => {
+                const textOnly = s.replace(/-/g, '').trim();
+                return textOnly !== '' && !s.includes('### Dàn Ý Chi Tiết');
+            });
             
             // If it's just the initial "BẮT ĐẦU" or "DÀN Ý", render as simple text
             if (isOutlineState || script.trim() === '--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---') {
