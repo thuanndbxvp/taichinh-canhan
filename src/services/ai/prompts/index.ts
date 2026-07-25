@@ -75,7 +75,7 @@ function arcInstructionFor(partOutline: string): string {
 promptRegistry.register('finance.script.outline', {
   version: V1,
   build({ params }) {
-    const { title, targetAudience, styleOptions } = params;
+    const { title, targetAudience, styleOptions, wordCount } = params;
     const style = `Tone: ${styleOptions.expression}, Style: ${styleOptions.style}`;
     return {
       messages: [
@@ -94,6 +94,11 @@ QUY TẮC ĐỊNH DẠNG BẮT BUỘC (không tuân thủ = output vô dụng):
 - KHÔNG gộp 2 phần thành 1; mỗi phần là 1 heading riêng.
 - KHÔNG thêm bất kỳ text nào TRƯỚC heading "## PHẦN 1".
 - Mỗi phần có ÍT NHẤT 3 gạch đầu dòng mô tả ý chính.
+
+QUY TẮC VỀ ĐỘ DÀI:
+- Kịch bản dự kiến dài ${wordCount} từ.
+- ĐÂY LÀ DÀN Ý, KHÔNG PHẢI KỊCH BẢN. 
+- Mỗi gạch đầu dòng chỉ viết 1-2 câu siêu NGẮN GỌN (từ khóa, ý chính). TUYỆT ĐỐI KHÔNG viết thành đoạn văn dài thòng.
 
 Nội dung từng phần:
 - PHẦN 1: Hook thu hút -> Slogan -> Vấn đề chính.
