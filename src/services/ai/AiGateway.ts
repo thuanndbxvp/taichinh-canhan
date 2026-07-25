@@ -42,8 +42,10 @@ export interface AiRequest {
   extras?: Record<string, unknown>;
   /**
    * Callback nhận stream delta chunk.
+   * @param chunk Đoạn text mới nhất (delta)
+   * @param fullStream Toàn bộ text đã nhận được trong lượt (attempt) hiện tại
    */
-  onChunk?: (chunk: string) => void;
+  onChunk?: (chunk: string, fullStream: string) => void;
   /**
    * Loại call để ghi usage stats (outline, script, ...). Optional.
    */

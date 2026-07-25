@@ -26,7 +26,7 @@ async function callWithPrompt(
   input: Parameters<typeof promptRegistry.build>[1],
   action: string,
   signal?: AbortSignal,
-  onChunk?: (chunk: string) => void,
+  onChunk?: (chunk: string, fullStream: string) => void,
   usageKind?: UsageEntryKind,
 ): Promise<string> {
   const { messages } = promptRegistry.build(promptId, input);
@@ -102,7 +102,7 @@ export const generateScriptPart = async (
   params: GenerationParams,
   provider: AiProvider,
   model: string,
-  onChunk?: (chunk: string) => void,
+  onChunk?: (chunk: string, fullStream: string) => void,
 ): Promise<string> =>
   runPrompt('tạo phần kịch bản', () =>
     callWithPrompt(

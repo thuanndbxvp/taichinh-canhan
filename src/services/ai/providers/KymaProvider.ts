@@ -100,7 +100,7 @@ export const KymaProvider: ProviderAdapter = {
                 const text = delta.content || delta.reasoning_content || '';
                 if (text) {
                   fullContent += text;
-                  ctx.onChunk(text);
+                  ctx.onChunk(text, fullContent);
                 }
               }
             } catch (e) {

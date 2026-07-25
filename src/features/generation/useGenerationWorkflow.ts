@@ -191,9 +191,9 @@ export function useGenerationWorkflow({
         params,
         aiProvider,
         selectedModel,
-        (chunk) => {
-           setGeneratedScript((prev) => {
-             const next = prev + chunk;
+        (chunk, fullStream) => {
+           setGeneratedScript(() => {
+             const next = baseScript + fullStream;
              scriptRef.current = next;
              return next;
            });
