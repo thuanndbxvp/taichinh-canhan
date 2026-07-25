@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { AiProvider } from '../../../types';
 import { DEFAULT_KYMA_MODELS } from '../../../constants';
 import { apiKeyManager } from '../../../services/apiKeyManager';
@@ -45,6 +45,12 @@ export function useAiSettings(): UseAiSettingsReturn {
       const parsed = saved ? JSON.parse(saved) : DEFAULT_KEYS;
       setApiKeys(parsed);
       apiKeyManager.updateKeys(parsed);
+      
+      // Tự động chuyển provider nếu người dùng chỉ có key OpenAI
+      if ((parsed.kyma?.length ?? 0) === 0 && (parsed.openai?.length ?? 0) > 0) {
+          setAiProvider('openai');
+      }
+
       const theme = localStorage.getItem(THEME_KEY);
       if (theme) setThemeColor(theme);
     } catch (e) {
@@ -80,7 +86,18 @@ export function useAiSettings(): UseAiSettingsReturn {
     return () => clearTimeout(timer);
   }, [notification]);
 
-  const saveApiKeys = useCallback((keys: Record<AiProvider, string[]>) => setApiKeys(keys), []);
+  const saveApiKeys = useCallback((keys: Record<AiProvider, string[]>) => {
+    setApiKeys(keys);
+    setAiProvider(prevProvider => {
+        if ((keys[prevProvider]?.length ?? 0) === 0) {
+            const other = prevProvider === 'kyma' ? 'openai' : 'kyma';
+            if ((keys[other]?.length ?? 0) > 0) {
+                return other;
+            }
+        }
+        return prevProvider;
+    });
+  }, []);
   const clearNotification = useCallback(() => setNotification(null), []);
   const setLocalNotification = useCallback((msg: string) => setNotification(msg), []);
 
