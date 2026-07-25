@@ -122,11 +122,6 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
     const fileInputRef = useRef<HTMLInputElement>(null);
     const bottomRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        if (bottomRef.current && isLoading) {
-            bottomRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }, [script, isLoading]);
 
     useEffect(() => {
         if (copySuccess) {
