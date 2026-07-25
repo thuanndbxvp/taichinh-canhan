@@ -1,4 +1,4 @@
-﻿
+
 import React, { useEffect, useState } from 'react';
 import { OptionSelector } from './OptionSelector';
 import { SparklesIcon } from './icons/SparklesIcon';
@@ -179,7 +179,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                     className={`flex items-center gap-1 text-xs px-2 py-1 rounded-md transition bg-emerald-900/20 text-emerald-500 hover:bg-emerald-900/40`}
                 >
                     <BookmarkIcon className="w-3 h-3"/>
-                    <span>LÆ°u táº¥t cáº£</span>
+                    <span>Lưu tất cả</span>
                 </button>
             )}
         </div>
@@ -197,7 +197,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                       }}
                       className={`text-xs px-2 py-1 rounded-md transition bg-emerald-700 text-white hover:bg-emerald-600`}
                     >
-                        Sá»­ dá»¥ng
+                        Sử dụng
                     </button>
                     <button 
                         onClick={() => onSaveIdea(idea)}
@@ -207,12 +207,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                           {isIdeaSaved(idea) ? (
                               <>
                                   <CheckIcon className="w-3.5 h-3.5 text-green-400" />
-                                  <span className="text-text-secondary">ÄÃ£ lÆ°u</span>
+                                  <span className="text-text-secondary">Đã lưu</span>
                               </>
                           ) : (
                               <>
                                   <BookmarkIcon className="w-3 h-3"/>
-                                  <span>LÆ°u</span>
+                                  <span>Lưu</span>
                               </>
                           )}
                       </button>
@@ -225,12 +225,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
 
   return (
     <div className="space-y-6">
-        <ControlSection title="1. Ã tÆ°á»Ÿng chÃ­nh" isDark>
+        <ControlSection title="1. Ý tưởng chính" isDark>
             <input
               id="title"
               type="text"
               className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
-              placeholder="Nháº­p TiÃªu Ä‘á» Video, VD: 'TÆ°Æ¡ng lai cá»§a du hÃ nh vÅ© trá»¥'"
+              placeholder="Nhập Tiêu đề Video, VD: 'Tương lai của du hành vũ trụ'"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -238,12 +238,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               id="outline"
               rows={4}
               className={`mt-2 w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
-              placeholder="PhÃ¡c há»a ná»™i dung (tÃ¹y chá»n), VD: 'Äá» cáº­p Ä‘áº¿n lÃ£i kÃ©p, quá»¹ dá»± phÃ²ng, báº«y tÃ¢m lÃ½ chi tiÃªu. Táº§m nhÃ¬n 5 nÄƒm tá»›i.'"
+              placeholder="Phác họa nội dung (tùy chọn), VD: 'Đề cập đến lãi kép, quỹ dự phòng, bẫy tâm lý chi tiêu. Tầm nhìn 5 năm tới.'"
               value={outlineContent}
               onChange={(e) => setOutlineContent(e.target.value)}
             />
             
-            <Tooltip text="Sá»­ dá»¥ng AI Ä‘á»ƒ tháº£o luáº­n vÃ  phÃ¡t triá»ƒn Ã½ tÆ°á»Ÿng cá»§a báº¡n má»™t cÃ¡ch tÆ°Æ¡ng tÃ¡c.">
+            <Tooltip text="Sử dụng AI để thảo luận và phát triển ý tưởng của bạn một cách tương tác.">
               <IdeaBrainstorm 
                   setTitle={setTitle} 
                   setOutlineContent={setOutlineContent}
@@ -277,7 +277,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               />
             </Tooltip>
             <div className="grid grid-cols-2 gap-2 mt-4">
-                <Tooltip text="Dá»±a trÃªn tiÃªu Ä‘á» báº¡n nháº­p, AI sáº½ Ä‘á» xuáº¥t 5 Ã½ tÆ°á»Ÿng video khÃ¡c nhau vá»›i tiÃªu Ä‘á» vÃ  dÃ n Ã½ sÆ¡ bá»™.">
+                <Tooltip text="Dựa trên tiêu đề bạn nhập, AI sẽ đề xuất 5 ý tưởng video khác nhau với tiêu đề và dàn ý sơ bộ.">
                   <button 
                     onClick={onGenerateSuggestions} 
                     disabled={isSuggesting || !title}
@@ -291,28 +291,28 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                     ) : (
                       <>
                         <SparklesIcon className="w-5 h-5 mr-2" />
-                        <span>Gá»£i Ã½ AI</span>
+                        <span>Gợi ý AI</span>
                         {!isSuggesting && hasGeneratedTopicSuggestions && <CheckIcon className="w-5 h-5 ml-2 text-green-400" />}
                       </>
                     )}
                   </button>
                 </Tooltip>
-                <Tooltip text="Xem vÃ  quáº£n lÃ½ táº¥t cáº£ cÃ¡c Ã½ tÆ°á»Ÿng video báº¡n Ä‘Ã£ lÆ°u trÆ°á»›c Ä‘Ã³.">
+                <Tooltip text="Xem và quản lý tất cả các ý tưởng video bạn đã lưu trước đó.">
                   <button 
                     onClick={onOpenSavedIdeasModal} 
                     className={`w-full flex items-center justify-center font-bold py-2 px-4 rounded-lg transition border bg-emerald-900/20 border-emerald-900/40 text-emerald-500 hover:bg-emerald-900/40`}
                   >
-                    Kho Ã TÆ°á»Ÿng
+                    Kho Ý Tưởng
                   </button>
                 </Tooltip>
             </div>
 
             {suggestionError && <p className="text-red-400 text-sm mt-2">{suggestionError}</p>}
-            {suggestions.length > 0 && <IdeaList ideaList={suggestions} listTitle="Gá»£i Ã½ tá»« AI" />}
-            {uploadedIdeas.length > 0 && <IdeaList ideaList={uploadedIdeas} listTitle="Ã tÆ°á»Ÿng tá»« File cá»§a báº¡n" />}
+            {suggestions.length > 0 && <IdeaList ideaList={suggestions} listTitle="Gợi ý từ AI" />}
+            {uploadedIdeas.length > 0 && <IdeaList ideaList={uploadedIdeas} listTitle="Ý tưởng từ File của bạn" />}
         </ControlSection>
 
-        <ControlSection title="2. NhÃ  cung cáº¥p AI & Model" isDark>
+        <ControlSection title="2. Nhà cung cấp AI & Model" isDark>
             <div className={`flex rounded-lg p-1 mb-3 bg-black`}>
                 {AI_PROVIDER_OPTIONS.map(option => (
                     <button
@@ -340,16 +340,16 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             </select>
         </ControlSection>
 
-        <ControlSection title="3. Tá»« khÃ³a SEO (TÃ¹y chá»n)" isDark>
+        <ControlSection title="3. Từ khóa SEO (Tùy chọn)" isDark>
             <input
               id="keywords"
               type="text"
               className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
-              placeholder="VD: AI, sÃ¡ng táº¡o, tÆ°Æ¡ng lai"
+              placeholder="VD: AI, sáng tạo, tương lai"
               value={keywords}
               onChange={(e) => setKeywords(e.target.value)}
             />
-            <Tooltip text="AI sáº½ gá»£i Ã½ cÃ¡c tá»« khÃ³a SEO liÃªn quan Ä‘áº¿n chá»§ Ä‘á» cá»§a báº¡n Ä‘á»ƒ tÄƒng kháº£ nÄƒng Ä‘Æ°á»£c tÃ¬m tháº¥y.">
+            <Tooltip text="AI sẽ gợi ý các từ khóa SEO liên quan đến chủ đề của bạn để tăng khả năng được tìm thấy.">
               <button 
                 onClick={onGenerateKeywordSuggestions} 
                 disabled={isSuggestingKeywords || !title}
@@ -361,12 +361,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Äang gá»£i Ã½...
+                    Đang gợi ý...
                   </>
                 ) : (
                   <>
                     <SparklesIcon className="w-4 h-4 mr-2" />
-                    <span>Gá»£i Ã½ tá»« khÃ³a</span>
+                    <span>Gợi ý từ khóa</span>
                     {!isSuggestingKeywords && hasGeneratedKeywordSuggestions && <CheckIcon className="w-4 h-4 ml-2 text-green-400" />}
                   </>
                 )}
@@ -375,7 +375,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             {keywordSuggestionError && <p className="text-red-400 text-sm mt-2">{keywordSuggestionError}</p>}
             {keywordSuggestions.length > 0 && (
                 <div className="mt-3">
-                    <p className="text-xs font-medium text-text-secondary mb-2">Gá»£i Ã½:</p>
+                    <p className="text-xs font-medium text-text-secondary mb-2">Gợi ý:</p>
                     <div className="flex flex-wrap gap-2">
                         {keywordSuggestions.map((suggestion, index) => (
                             <button key={index} onClick={() => handleAddKeyword(suggestion)} className={`px-3 py-1 text-xs font-medium rounded-full transition-colors bg-emerald-900/20 text-emerald-500 hover:bg-emerald-900/40`}>
@@ -387,7 +387,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             )}
         </ControlSection>
 
-        <ControlSection title="4. Äá»‹nh dáº¡ng Ká»‹ch báº£n" isDark>
+        <ControlSection title="4. Định dạng Kịch bản" isDark>
             <div className={`flex rounded-lg p-1 bg-black`}>
                 {SCRIPT_TYPE_OPTIONS.map(option => (
                     <button
@@ -406,7 +406,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         </ControlSection>
 
         {scriptType === 'Podcast' && (
-          <ControlSection title="5. Sá»‘ lÆ°á»£ng ngÆ°á»i nÃ³i" isDark>
+          <ControlSection title="5. Số lượng người nói" isDark>
             <OptionSelector<NumberOfSpeakers>
                 options={NUMBER_OF_SPEAKERS_OPTIONS}
                 selectedOption={numberOfSpeakers}
@@ -415,7 +415,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           </ControlSection>
         )}
 
-        <ControlSection title={`${scriptType === 'Podcast' ? '6' : '5'}. NgÃ´n ngá»¯`} isDark>
+        <ControlSection title={`${scriptType === 'Podcast' ? '6' : '5'}. Ngôn ngữ`} isDark>
             <select
               id="language"
               value={targetAudience}
@@ -428,7 +428,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             </select>
         </ControlSection>
 
-        <ControlSection title={`${scriptType === 'Podcast' ? '7' : '6'}. Cáº¥u trÃºc & Äá»‹nh dáº¡ng`} isDark>
+        <ControlSection title={`${scriptType === 'Podcast' ? '7' : '6'}. Cấu trúc & Định dạng`} isDark>
             <div className={`flex rounded-lg p-1 mb-4 bg-black`}>
                 <button
                     onClick={() => setLengthType('words')}
@@ -438,7 +438,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                         : 'text-emerald-500/60 hover:text-emerald-500'
                     }`}
                 >
-                    Theo sá»‘ tá»«
+                    Theo số từ
                 </button>
                 <button
                     onClick={() => setLengthType('duration')}
@@ -448,7 +448,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                         : 'text-emerald-500/60 hover:text-emerald-500'
                     }`}
                 >
-                    Theo thá»i lÆ°á»£ng
+                    Theo thời lượng
                 </button>
             </div>
 
@@ -456,14 +456,14 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 {lengthType === 'words' ? (
                     <Tooltip text={FORMATTING_EXPLANATIONS.wordCount}>
                         <div>
-                            <label htmlFor="wordCount" className="block text-xs font-medium text-text-secondary mb-1">Tá»•ng sá»‘ tá»«</label>
+                            <label htmlFor="wordCount" className="block text-xs font-medium text-text-secondary mb-1">Tổng số từ</label>
                             <input id="wordCount" type="number" value={wordCount} onChange={e => setWordCount(e.target.value)} className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`} placeholder="VD: 800"/>
                         </div>
                     </Tooltip>
                 ) : (
                     <Tooltip text={FORMATTING_EXPLANATIONS.videoDuration}>
                         <div>
-                            <label htmlFor="videoDuration" className="block text-xs font-medium text-text-secondary mb-1">Thá»i lÆ°á»£ng video (phÃºt)</label>
+                            <label htmlFor="videoDuration" className="block text-xs font-medium text-text-secondary mb-1">Thời lượng video (phút)</label>
                             <input id="videoDuration" type="number" value={videoDuration} onChange={e => setVideoDuration(e.target.value)} className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`} placeholder="VD: 5"/>
                         </div>
                     </Tooltip>
@@ -472,7 +472,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 {scriptType === 'Video' && (
                   <Tooltip text={FORMATTING_EXPLANATIONS.scriptParts}>
                       <div>
-                          <label htmlFor="scriptParts" className="block text-xs font-medium text-text-secondary mb-1">Sá»‘ pháº§n</label>
+                          <label htmlFor="scriptParts" className="block text-xs font-medium text-text-secondary mb-1">Số phần</label>
                           <div className="flex items-center space-x-2">
                               <input 
                                   id="scriptParts" 
@@ -490,7 +490,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                                       checked={scriptParts === 'Auto'} 
                                       onChange={(e) => setScriptParts(e.target.checked ? 'Auto' : '3')} 
                                   />
-                                  <span className={`text-sm text-emerald-200/80`}>Tá»± Ä‘á»™ng</span>
+                                  <span className={`text-sm text-emerald-200/80`}>Tự động</span>
                               </label>
                           </div>
                       </div>
@@ -513,24 +513,24 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 <Tooltip text={FORMATTING_EXPLANATIONS.headings} className="block">
                     <label className="flex items-center space-x-2 cursor-pointer">
                         <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} checked={formattingOptions.headings} onChange={(e) => handleCheckboxChange('headings', e.target.checked)} />
-                        <span className={`text-emerald-200/80`}>TiÃªu Ä‘á»</span>
+                        <span className={`text-emerald-200/80`}>Tiêu đề</span>
                     </label>
                 </Tooltip>
                 <Tooltip text={FORMATTING_EXPLANATIONS.bullets} className="block">
                     <label className="flex items-center space-x-2 cursor-pointer">
                         <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} checked={formattingOptions.bullets} onChange={(e) => handleCheckboxChange('bullets', e.target.checked)} />
-                        <span className={`text-emerald-200/80`}>Gáº¡ch Ä‘áº§u dÃ²ng</span>
+                        <span className={`text-emerald-200/80`}>Gạch đầu dòng</span>
                     </label>
                 </Tooltip>
                  <Tooltip text={FORMATTING_EXPLANATIONS.bold} className="block">
                     <label className="flex items-center space-x-2 cursor-pointer">
                         <input type="checkbox" className={`h-4 w-4 rounded border-border focus:ring-accent text-emerald-600 bg-zinc-900`} checked={formattingOptions.bold} onChange={(e) => handleCheckboxChange('bold', e.target.checked)} />
-                        <span className={`text-emerald-200/80`}>In Ä‘áº­m/nghiÃªng</span>
+                        <span className={`text-emerald-200/80`}>In đậm/nghiêng</span>
                     </label>
                 </Tooltip>
             </div>
         </ControlSection>
-        <Tooltip text="Táº¡o ra ká»‹ch báº£n hoÃ n chá»‰nh dá»±a trÃªn táº¥t cáº£ cÃ¡c thiáº¿t láº­p báº¡n Ä‘Ã£ chá»n á»Ÿ trÃªn.">
+        <Tooltip text="Tạo ra kịch bản hoàn chỉnh dựa trên tất cả các thiết lập bạn đã chọn ở trên.">
           <button
               onClick={onGenerate}
               disabled={isLoading || !title}
@@ -542,12 +542,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Äang táº¡o...
+                  Đang tạo...
                 </>
               ) : (
                 <>
                   <SparklesIcon className="w-5 h-5 mr-2" />
-                  Táº¡o ká»‹ch báº£n
+                  Tạo kịch bản
                 </>
               )}
           </button>
