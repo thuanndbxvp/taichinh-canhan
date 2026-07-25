@@ -35,9 +35,13 @@ CÁC NGUYÊN TẮC KỂ CHUYỆN (Áp dụng linh hoạt):
    - Bước 4 (The Winners & Losers): Chốt lại rõ ràng dòng tiền vĩ mô đang chạy từ túi nhóm người nào (kẻ thua) sang túi nhóm người nào (người thắng).
 
 GIỌNG ĐIỆU CỐT LÕI:
-- Thẳng thật, thực tế, không vẽ "bánh vẽ", không đạo lý suông.
-- Diễn đạt mượt mà, văn phong nói tự nhiên, không cứng nhắc như sách giáo khoa.
-- Đồng cảm nhưng luôn dùng số liệu và logic để kéo khán giả về thực tại.`;
+- Đồng cảm nhưng luôn dùng số liệu và logic để kéo khán giả về thực tại.
+
+LƯU Ý NGHIÊM NGẶT KHI VIẾT (BẮT BUỘC TUÂN THỦ 100%):
+1. Kiểm tra chéo Tâm lý học: Khi sử dụng các thuật ngữ tâm lý (như Chi phí chìm, Ảo giác an toàn, Thiên kiến hiện tại), BẮT BUỘC phải đối chiếu đúng định nghĩa học thuật, không được gượng ép.
+2. Gia vị Ẩn dụ (Bắt buộc): Phải dùng ít nhất 1 hình ảnh ẩn dụ quen thuộc trong đời sống để mô tả tình trạng tài chính (Ví dụ: cái xô thủng, sợi dây mỏng, chiếc ghế một chân).
+3. Rào trước phản biện: Luôn phải có cấu trúc "Tôi không nói bạn phải [Hành động cực đoan]... Tôi đang nói bạn nên [Hành động logic]" để xoa dịu sự tự ái của người nghe trước khi đưa ra giải pháp.
+4. Ngôn ngữ bản địa: Khi đúc kết bài học, hãy sử dụng 1 câu Thành ngữ/Tục ngữ dân gian Việt Nam phù hợp với bối cảnh tài chính đó.`;
 
 const FINANCE_VISUAL_TEMPLATE = `Professional financial vector art, modern flat design style.
 Clean lines, vibrant colors like green, blue, gold, and white.
@@ -60,11 +64,11 @@ function arcInstructionFor(partOutline: string): string {
     case 2:
       return 'Nêu thực trạng thị trường hoặc bẫy tâm lý. Sử dụng câu chuyện nhân vật làm ví dụ để khán giả dễ đồng cảm.';
     case 3:
-      return 'PHẦN QUAN TRỌNG NHẤT: Phân tích vấn đề bằng các con số thực tế. Nhắc lại: CHỈ so sánh các con số cuối cùng một cách dễ hiểu, KHÔNG trình bày công thức toán học dài dòng. Giải quyết các thắc mắc/phản biện của khán giả.';
+      return 'PHẦN QUAN TRỌNG NHẤT: Phân tích vấn đề bằng các con số thực tế. Nhắc lại: CHỈ so sánh các con số cuối cùng một cách dễ hiểu, KHÔNG trình bày công thức toán học dài dòng. BẮT BUỘC sử dụng ít nhất 1 hình ảnh ẩn dụ vật lý quen thuộc (như cái xô thủng, máy chạy bộ) để minh họa cho tình trạng tài chính. Đừng quên dùng cấu trúc "Tôi không nói... Tôi đang nói..." để rào trước phản biện.';
     case 4:
       return 'Cung cấp lộ trình hành động (Step-by-step) rõ ràng, thực tế. Phân loại rõ giải pháp này hợp với ai, không hợp với ai.';
     case 5:
-      return 'Đưa ra một đúc kết/triết lý tài chính sâu sắc (có thể là châm ngôn nhưng phải thật sự phù hợp ngữ cảnh). Kết thúc bằng 1 câu hỏi Call-To-Action xoáy vào thực tế khán giả.';
+      return 'Đưa ra một đúc kết/triết lý tài chính sâu sắc. BẮT BUỘC chốt lại bằng 1 câu Thành ngữ/Tục ngữ dân gian Việt Nam cho thân thiện. Kết thúc bằng 1 câu hỏi Call-To-Action xoáy vào thực tế khán giả.';
     default:
       return 'Trình bày kiến thức tài chính một cách mạch lạc, chuyên nghiệp và có tính ứng dụng cao.';
   }
