@@ -78,7 +78,7 @@ promptRegistry.register('finance.script.outline', {
     const style = `Tone: ${styleOptions.expression}, Style: ${styleOptions.style}`;
     return {
       messages: [
-        { role: 'system', content: FINANCE_DNA.trim() },
+        { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + FINANCE_DNA.trim() },
         {
           role: 'user',
           content: `Tß║ío d├án ├╜ ─æ├║ng cß║Ñu tr├║c 5 phß║ºn bß║»t buß╗Öc.
@@ -126,7 +126,7 @@ promptRegistry.register('finance.script.part', {
 
     return {
       messages: [
-        { role: 'system', content: FINANCE_DNA.trim() },
+        { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + FINANCE_DNA.trim() },
         {
           role: 'user',
           content: `VIß║╛T TIß║╛P PHß║ªN Kß╗èCH Bß║óN: "${currentPartOutline}".
@@ -161,7 +161,7 @@ promptRegistry.register('finance.script.revise', {
       'L╞»U ├¥: Giß╗» vß╗»ng triß║┐t l├╜ cung cß║Ñp kiß║┐n thß╗⌐c t├ái ch├¡nh thß╗▒c tß║┐ v├á chuy├¬n nghiß╗çp. Kh├┤ng th├¬m yß║┐u tß╗æ giß║¡t g├ón, kinh dß╗ï hay clickbait.';
     return {
       messages: [
-        { role: 'system', content: FINANCE_DNA.trim() },
+        { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + FINANCE_DNA.trim() },
         {
           role: 'user',
           content: `Chß╗ënh sß╗¡a kß╗ïch bß║ún theo y├¬u cß║ºu: "${revisionPrompt}".\n${financeGuard}\n${styleLine}\n\nKß╗ïch bß║ún gß╗æc:\n${script}`,
