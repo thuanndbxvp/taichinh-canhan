@@ -16,16 +16,14 @@ import { useIdeaWorkflow } from './src/features/ideas/useIdeaWorkflow';
 import { useModalState } from './src/features/modals/useModalState';
 import type { AiProvider } from './types';
 
-// Lazy-load modals để giảm main bundle. Mỗi modal tải khi user mở.
-// Fallback là null (modal trống trong khi tải) vì các modal đều render overlay riêng.
-const LibraryModal = React.lazy(() => import('./components/LibraryModal').then(m => ({ default: m.LibraryModal })));
-const DialogueModal = React.lazy(() => import('./components/DialogueModal').then(m => ({ default: m.DialogueModal })));
-const ApiKeyModal = React.lazy(() => import('./components/ApiKeyModal').then(m => ({ default: m.ApiKeyModal })));
-const GuideModal = React.lazy(() => import('./components/GuideModal').then(m => ({ default: m.GuideModal.default ?? m.GuideModal })));
-const SummarizeModal = React.lazy(() => import('./components/SummarizeModal').then(m => ({ default: m.SummarizeModal })));
-const SavedIdeasModal = React.lazy(() => import('./components/SavedIdeasModal').then(m => ({ default: m.SavedIdeasModal })));
-const ScoreModal = React.lazy(() => import('./components/ScoreModal').then(m => ({ default: m.ScoreModal })));
-const UsageModal = React.lazy(() => import('./components/UsageModal').then(m => ({ default: m.UsageModal })));
+import { LibraryModal } from './components/LibraryModal';
+import { DialogueModal } from './components/DialogueModal';
+import { ApiKeyModal } from './components/ApiKeyModal';
+import GuideModal from './components/GuideModal';
+import { SummarizeModal } from './components/SummarizeModal';
+import { SavedIdeasModal } from './components/SavedIdeasModal';
+import { ScoreModal } from './components/ScoreModal';
+import { UsageModal } from './components/UsageModal';
 
 const YoutubeLogoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="24" viewBox="0 0 28 20" fill="none" {...props}>
@@ -296,7 +294,7 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      <Suspense fallback={null}>
+      <>
         {modals.isOpen('apiKey') && (
           <ApiKeyModal
             isOpen
@@ -385,7 +383,7 @@ const App: React.FC = () => {
             onClose={() => modals.close('usage')}
           />
         )}
-      </Suspense>
+      </>
     </div>
   );
 };
