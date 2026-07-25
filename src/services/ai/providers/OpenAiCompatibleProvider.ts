@@ -100,8 +100,8 @@ export const OpenAiCompatibleProvider: ProviderAdapter = {
         buffer = lines.pop() || '';
         for (const line of lines) {
           const t = line.trim();
-          if (t.startsWith('data: ')) {
-            const data = t.slice(6);
+          if (t.startsWith('data:')) {
+            const data = t.slice(5).trim();
             if (data === '[DONE]') continue;
             try {
               const parsed = JSON.parse(data);
