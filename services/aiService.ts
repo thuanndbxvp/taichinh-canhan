@@ -55,6 +55,21 @@ const handleApiError = (error: unknown, action: string): AppError => {
   return AppError.from('AI_PROVIDER_FAILED', `Lỗi khi ${action}`, { action }, error);
 };
 
+/**
+ * Run một async function với error chuẩn hoá về AppError theo `action`.
+ *
+ * Tất cả public function trong file này đều dùng helper này để tránh lặp
+ * `try { ... } catch (e) { throw handleApiError(e, action) }`. Khi thêm
+ * hàm mới, cứ viết logic bên trong, bọc ngoài bằng runPrompt().
+ */
+async function runPrompt<T>(action: string, fn: () => Promise<T>): Promise<T> {
+  try {
+    return await fn();
+  } catch (e) {
+    throw handleApiError(e, action);
+  }
+}
+
 export { validateApiKey };
 
 export const generateScriptOutline = async (
@@ -62,8 +77,8 @@ export const generateScriptOutline = async (
   provider: AiProvider,
   model: string,
   onChunk?: (chunk: string) => void,
-): Promise<string> => {
-  try {
+): Promise<string> =>
+  runPrompt('tạo dàn ý', async () => {
     const outline = await callWithPrompt(
       provider,
       model,
@@ -74,10 +89,7 @@ export const generateScriptOutline = async (
       onChunk,
     );
     return `### Dàn Ý Chi Tiết (Chuẩn bị tạo kịch bản sạch cho TTS)\n\n` + outline;
-  } catch (e) {
-    throw handleApiError(e, 'tạo dàn ý');
-  }
-};
+  });
 
 export const generateScriptPart = async (
   fullOutline: string,
@@ -87,9 +99,9 @@ export const generateScriptPart = async (
   provider: AiProvider,
   model: string,
   onChunk?: (chunk: string) => void,
-): Promise<string> => {
-  try {
-    return await callWithPrompt(
+): Promise<string> =>
+  runPrompt('tạo phần kịch bản', () =>
+    callWithPrompt(
       provider,
       model,
       'finance.script.part',
@@ -102,18 +114,15 @@ export const generateScriptPart = async (
       'tạo phần kịch bản',
       undefined,
       onChunk,
-    );
-  } catch (e) {
-    throw handleApiError(e, 'tạo phần kịch bản');
-  }
-};
+    ),
+  );
 
 export const generateTopicSuggestions = async (
   title: string,
   provider: AiProvider,
   model: string,
-): Promise<TopicSuggestionItem[]> => {
-  try {
+): Promise<TopicSuggestionItem[]> =>
+  runPrompt('gợi ý chủ đề', async () => {
     const content = await callWithPrompt(
       provider,
       model,
@@ -122,10 +131,7 @@ export const generateTopicSuggestions = async (
       'gợi ý chủ đề',
     );
     return parseAiJsonOrThrow<TopicSuggestionItem[]>(content, SCHEMAS.topicSuggestions, 'gợi ý chủ đề');
-  } catch (e) {
-    throw handleApiError(e, 'gợi ý chủ đề');
-  }
-};
+  });
 
 export const reviseScript = async (
   script: string,
@@ -134,9 +140,9 @@ export const reviseScript = async (
   provider: AiProvider,
   model: string,
   onChunk?: (chunk: string) => void,
-): Promise<string> => {
-  try {
-    return await callWithPrompt(
+): Promise<string> =>
+  runPrompt('sửa kịch bản', () =>
+    callWithPrompt(
       provider,
       model,
       'finance.script.revise',
@@ -148,18 +154,15 @@ export const reviseScript = async (
       'sửa kịch bản',
       undefined,
       onChunk,
-    );
-  } catch (e) {
-    throw handleApiError(e, 'sửa kịch bản');
-  }
-};
+    ),
+  );
 
 export const extractDialogue = async (
   script: string,
   provider: AiProvider,
   model: string,
-): Promise<Record<string, string>> => {
-  try {
+): Promise<Record<string, string>> =>
+  runPrompt('tách lời thoại', async () => {
     const content = await callWithPrompt(
       provider,
       model,
@@ -168,17 +171,14 @@ export const extractDialogue = async (
       'tách lời thoại',
     );
     return parseAiJsonOrThrow<Record<string, string>>(content, SCHEMAS.dialogue, 'tách lời thoại');
-  } catch (e) {
-    throw handleApiError(e, 'tách lời thoại');
-  }
-};
+  });
 
 export const generateKeywordSuggestions = async (
   title: string,
   provider: AiProvider,
   model: string,
-): Promise<string[]> => {
-  try {
+): Promise<string[]> =>
+  runPrompt('gợi ý từ khóa', async () => {
     const content = await callWithPrompt(
       provider,
       model,
@@ -190,19 +190,15 @@ export const generateKeywordSuggestions = async (
       .split(',')
       .map((k) => k.trim())
       .filter(Boolean);
-  } catch (e) {
-    handleApiError(e, 'gợi ý từ khóa');
-    return [];
-  }
-};
+  });
 
 export const summarizeScriptForScenes = async (
   script: string,
   config: SummarizeConfig,
   provider: AiProvider,
   model: string,
-): Promise<ScriptPartSummary[]> => {
-  try {
+): Promise<ScriptPartSummary[]> =>
+  runPrompt('chuyển thể kịch bản (vui lòng thử lại với model mạnh hơn)', async () => {
     const content = await callWithPrompt(
       provider,
       model,
@@ -221,17 +217,14 @@ export const summarizeScriptForScenes = async (
       });
     }
     return parsed;
-  } catch (e) {
-    throw handleApiError(e, 'chuyển thể kịch bản (vui lòng thử lại với model mạnh hơn)');
-  }
-};
+  });
 
 export const suggestStyleOptions = async (
   title: string,
   provider: AiProvider,
   model: string,
-): Promise<StyleOptions> => {
-  try {
+): Promise<StyleOptions> =>
+  runPrompt('gợi ý phong cách', async () => {
     const content = await callWithPrompt(
       provider,
       model,
@@ -240,17 +233,14 @@ export const suggestStyleOptions = async (
       'gợi ý phong cách',
     );
     return parseAiJsonOrThrow<StyleOptions>(content, SCHEMAS.styleOptions, 'gợi ý phong cách');
-  } catch (e) {
-    throw handleApiError(e, 'gợi ý phong cách');
-  }
-};
+  });
 
 export const parseIdeasFromFile = async (
   content: string,
   provider: AiProvider,
   model: string,
-): Promise<TopicSuggestionItem[]> => {
-  try {
+): Promise<TopicSuggestionItem[]> =>
+  runPrompt('phân tích file', async () => {
     const responseContent = await callWithPrompt(
       provider,
       model,
@@ -263,47 +253,38 @@ export const parseIdeasFromFile = async (
       SCHEMAS.topicSuggestions,
       'phân tích file',
     );
-  } catch (e) {
-    throw handleApiError(e, 'phân tích file');
-  }
-};
+  });
 
 export const scoreScript = async (
   script: string,
   provider: AiProvider,
   model: string,
-): Promise<string> => {
-  try {
-    return await callWithPrompt(
+): Promise<string> =>
+  runPrompt('chấm điểm kịch bản', () =>
+    callWithPrompt(
       provider,
       model,
       'finance.score',
       { script },
       'chấm điểm kịch bản',
-    );
-  } catch (e) {
-    throw handleApiError(e, 'chấm điểm kịch bản');
-  }
-};
+    ),
+  );
 
 export const generateSingleVideoPrompt = async (
   scene: SceneSummary,
   config: SummarizeConfig,
   provider: AiProvider,
   model: string,
-): Promise<string> => {
-  try {
-    return await callWithPrompt(
+): Promise<string> =>
+  runPrompt('tạo prompt video', () =>
+    callWithPrompt(
       provider,
       model,
       'finance.video.single',
       { scene, config },
       'tạo prompt video',
-    );
-  } catch (e) {
-    throw handleApiError(e, 'tạo prompt video');
-  }
-};
+    ),
+  );
 
 export const parseOutlineIntoSegments = (outline: string): string[] => {
   return parseOutlineIntoSegmentsImpl(outline);

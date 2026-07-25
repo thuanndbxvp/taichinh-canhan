@@ -56,6 +56,8 @@ export const OpenAiCompatibleProvider: ProviderAdapter = {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${ctx.apiKey}`,
+        'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'https://youtube-script-generator.local',
+        'X-Title': 'Chu Que Tai Chinh App',
       },
       body: JSON.stringify({
         model: request.model,

@@ -9,6 +9,7 @@
  */
 import { promptRegistry } from '../PromptRegistry';
 import type { StyleOptions } from '../../../../types';
+import { detectPart } from '../partKeywords';
 
 const V1 = { version: '1.0.0', updatedAt: '2026-07-25', notes: 'Phase 5 baseline — Chú Que Tài Chính only' } as const;
 
@@ -49,23 +50,20 @@ const styleInstruction = (s: StyleOptions): string =>
 - Style (Phong cách viết): ${s.style}.`;
 
 function arcInstructionFor(partOutline: string): string {
-  const upper = partOutline.toUpperCase();
-  if (upper.includes('PHẦN 1') || upper.includes('MỞ ĐẦU') || upper.includes('HOOK')) {
-    return 'BẮT BUỘC theo thứ tự: 1. Hook (Câu chuyện cụ thể với Tên + Tuổi + Mức lương, hoặc nghịch lý bẻ gãy niềm tin) -> 2. Slogan ("Chào mừng bạn đến với Chú Que Tài Chính...") -> 3. Teaser & Disclaimer.';
+  switch (detectPart(partOutline)) {
+    case 1:
+      return 'BẮT BUỘC theo thứ tự: 1. Hook (Câu chuyện cụ thể với Tên + Tuổi + Mức lương, hoặc nghịch lý bẻ gãy niềm tin) -> 2. Slogan ("Chào mừng bạn đến với Chú Que Tài Chính...") -> 3. Teaser & Disclaimer.';
+    case 2:
+      return 'Nêu thực trạng bằng số liệu thị trường thực tế. Chỉ ra cái bẫy tâm lý mà nhiều người đang mắc kẹt. Tiếp tục sử dụng câu chuyện của nhân vật đã tạo ở Phần 1.';
+    case 3:
+      return 'PHẦN QUAN TRỌNG NHẤT: Mổ xẻ vấn đề bằng các bài toán kinh tế (cộng/trừ/nhân/chia). Sử dụng kỹ thuật chuyển đoạn để tạo tò mò trước khi đưa ra con số. Dùng cấu trúc Bẻ gãy phản biện "Tôi không nói... Tôi đang nói...".';
+    case 4:
+      return 'Cung cấp lộ trình Step-by-step. Nêu rõ giải pháp này dành cho ai và không dành cho ai.';
+    case 5:
+      return 'Chốt lại 1 câu triết lý tài chính sâu sắc bằng một câu Tục ngữ/Thành ngữ Việt Nam. Kêu gọi hành động (CTA) BẮT BUỘC bằng cách đặt MỘT câu hỏi thực tế xoáy vào hoàn cảnh của khán giả để kích thích bình luận.';
+    default:
+      return 'Trình bày kiến thức tài chính một cách mạch lạc, chuyên nghiệp và có tính ứng dụng cao.';
   }
-  if (upper.includes('PHẦN 2') || upper.includes('BỐI CẢNH') || upper.includes('PROBLEM')) {
-    return 'Nêu thực trạng bằng số liệu thị trường thực tế. Chỉ ra cái bẫy tâm lý mà nhiều người đang mắc kẹt. Tiếp tục sử dụng câu chuyện của nhân vật đã tạo ở Phần 1.';
-  }
-  if (upper.includes('PHẦN 3') || upper.includes('GIẢI PHẪU') || upper.includes('ANALYSIS')) {
-    return 'PHẦN QUAN TRỌNG NHẤT: Mổ xẻ vấn đề bằng các bài toán kinh tế (cộng/trừ/nhân/chia). Sử dụng kỹ thuật chuyển đoạn để tạo tò mò trước khi đưa ra con số. Dùng cấu trúc Bẻ gãy phản biện "Tôi không nói... Tôi đang nói...".';
-  }
-  if (upper.includes('PHẦN 4') || upper.includes('GIẢI PHÁP') || upper.includes('ACTIONABLE')) {
-    return 'Cung cấp lộ trình Step-by-step. Nêu rõ giải pháp này dành cho ai và không dành cho ai.';
-  }
-  if (upper.includes('PHẦN 5') || upper.includes('ĐÚC KẾT') || upper.includes('TAKEAWAY')) {
-    return 'Chốt lại 1 câu triết lý tài chính sâu sắc bằng một câu Tục ngữ/Thành ngữ Việt Nam. Kêu gọi hành động (CTA) BẮT BUỘC bằng cách đặt MỘT câu hỏi thực tế xoáy vào hoàn cảnh của khán giả để kích thích bình luận.';
-  }
-  return 'Trình bày kiến thức tài chính một cách mạch lạc, chuyên nghiệp và có tính ứng dụng cao.';
 }
 
 // --- Registrations ---

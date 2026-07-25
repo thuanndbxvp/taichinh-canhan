@@ -2,7 +2,7 @@
  * parseOutlineIntoSegments — tách dàn ý thành các phần để generate kịch bản tuần tự.
  *
  * AI có thể trả dàn ý theo nhiều format khác nhau. Thay vì chỉ match 1 regex
- * `^## .*?$`, ta nhận 4 format phổ biến + fallback bằng keyword:
+ * `^## .*?$`, ta nhận 4 format phổ biện + fallback bằng keyword:
  *
  *   1. Markdown heading:  `## PHẦN 1: MỞ ĐẦU`   hoặc   `### PHẦN 1`
  *   2. Bold marker:       `**PHẦN 1: MỞ ĐẦU**`
@@ -22,23 +22,23 @@
  *   trả về [toàn bộ outline] để user vẫn proceed được 1 phần.
  */
 
+import { partRegex } from './partKeywords';
+
 const MAX_AUTO_PARTS = 5;
 
-const PART_KEYWORDS: { key: string; regex: RegExp }[] = [
-  { key: 'PHẦN 1', regex: /PHẦN\s*1\b[^\n]*/i },
-  { key: 'PHẦN 2', regex: /PHẦN\s*2\b[^\n]*/i },
-  { key: 'PHẦN 3', regex: /PHẦN\s*3\b[^\n]*/i },
-  { key: 'PHẦN 4', regex: /PHẦN\s*4\b[^\n]*/i },
-  { key: 'PHẦN 5', regex: /PHẦN\s*5\b[^\n]*/i },
-];
+const PART_KEYWORDS: { key: string; regex: RegExp }[] = (
+  [1, 2, 3, 4, 5] as const
+).map((n) => ({
+  key: `PHẦN ${n}`,
+  regex: new RegExp(`PHẦN\\s*${n}\\b[^\\n]*`, 'i'),
+}));
 
-const ARC_KEYWORDS: { key: string; regex: RegExp }[] = [
-  { key: 'PHẦN 1', regex: /\bMỞ\s*ĐẦU\b[^\n]*HOOK|\bHOOK\b[^\n]*SETUP/i },
-  { key: 'PHẦN 2', regex: /\bBỐI\s*CẢNH\b[^\n]*VẤN\s*ĐỀ|\bVẤN\s*ĐỀ\b|\bPROBLEM\b/i },
-  { key: 'PHẦN 3', regex: /\bGIẢI\s*PHẪU\b[^\n]*TOÁN|\bANALYSIS\b/i },
-  { key: 'PHẦN 4', regex: /\bGIẢI\s*PHÁP\b[^\n]*THỰC\s*TẾ|\bACTIONABLE\b/i },
-  { key: 'PHẦN 5', regex: /\bĐÚC\s*KẾT\b[^\n]*CTA|\bTAKEAWAY\b[^\n]*CTA/i },
-];
+const ARC_KEYWORDS: { key: string; regex: RegExp }[] = (
+  [1, 2, 3, 4, 5] as const
+).map((n) => ({
+  key: `PHẦN ${n}`,
+  regex: partRegex(n),
+}));
 
 function findHeaderPositions(text: string): { index: number; label: string }[] {
   /**

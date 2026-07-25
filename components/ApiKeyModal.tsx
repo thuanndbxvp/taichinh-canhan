@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TrashIcon } from './icons/TrashIcon';
 import type { AiProvider } from '../types';
 import { validateApiKey } from '../services/aiService';
@@ -199,6 +199,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
                                 onChange={(e) => setOpenAiBaseUrl(e.target.value)}
                                 placeholder="https://api.openai.com/v1"
                             />
+                            <p className="text-[10px] text-text-secondary/60 mt-1">Dùng <b>https://openrouter.ai/api/v1</b> nếu sử dụng OpenRouter.</p>
                         </div>
                         <div>
                             <label className="text-xs font-semibold text-text-secondary block mb-1">Custom Model Name</label>
@@ -209,6 +210,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onClose, curre
                                 onChange={(e) => setOpenAiModel(e.target.value)}
                                 placeholder="gpt-4o-mini"
                             />
+                            <p className="text-[10px] text-text-secondary/60 mt-1">Ví dụ: <b>gpt-4o-mini</b> hoặc <b>google/gemini-2.5-flash</b>, <b>anthropic/claude-3.5-sonnet</b></p>
                         </div>
                     </div>
                 )}
