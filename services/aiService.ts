@@ -12,6 +12,7 @@ import { aiGateway, validateApiKey } from '../src/services/ai';
 import { promptRegistry } from '../src/services/ai/PromptRegistry';
 import { parseAiJsonOrThrow, SCHEMAS } from '../src/services/ai/responseParser';
 import { parseOutlineIntoSegments as parseOutlineIntoSegmentsImpl } from '../src/services/ai/parseOutlineIntoSegments';
+import type { UsageEntryKind } from '../src/services/usage/usageTracker';
 // Side-effect import: đăng ký tất cả prompt finance-* vào registry.
 import '../src/services/ai/prompts';
 
@@ -26,6 +27,7 @@ async function callWithPrompt(
   action: string,
   signal?: AbortSignal,
   onChunk?: (chunk: string) => void,
+  usageKind?: UsageEntryKind,
 ): Promise<string> {
   const { messages } = promptRegistry.build(promptId, input);
   try {
@@ -35,6 +37,7 @@ async function callWithPrompt(
       messages,
       signal,
       onChunk,
+      usageKind,
     });
     return res.content;
   } catch (error) {
@@ -87,6 +90,7 @@ export const generateScriptOutline = async (
       'tạo dàn ý',
       undefined,
       onChunk,
+      'outline',
     );
     return `### Dàn Ý Chi Tiết (Chuẩn bị tạo kịch bản sạch cho TTS)\n\n` + outline;
   });
@@ -114,6 +118,7 @@ export const generateScriptPart = async (
       'tạo phần kịch bản',
       undefined,
       onChunk,
+      'script_part',
     ),
   );
 
@@ -129,6 +134,9 @@ export const generateTopicSuggestions = async (
       'finance.topics.suggest',
       { title },
       'gợi ý chủ đề',
+      undefined,
+      undefined,
+      'idea',
     );
     return parseAiJsonOrThrow<TopicSuggestionItem[]>(content, SCHEMAS.topicSuggestions, 'gợi ý chủ đề');
   });
@@ -154,6 +162,7 @@ export const reviseScript = async (
       'sửa kịch bản',
       undefined,
       onChunk,
+      'script',
     ),
   );
 
@@ -169,6 +178,9 @@ export const extractDialogue = async (
       'finance.dialogue.extract',
       { script },
       'tách lời thoại',
+      undefined,
+      undefined,
+      'dialogue',
     );
     return parseAiJsonOrThrow<Record<string, string>>(content, SCHEMAS.dialogue, 'tách lời thoại');
   });
@@ -185,6 +197,9 @@ export const generateKeywordSuggestions = async (
       'finance.keywords.suggest',
       { title },
       'gợi ý từ khóa',
+      undefined,
+      undefined,
+      'idea',
     );
     return content
       .split(',')
@@ -205,6 +220,9 @@ export const summarizeScriptForScenes = async (
       'finance.scenes.summarize',
       { script, config },
       'chuyển thể kịch bản',
+      undefined,
+      undefined,
+      'summarize',
     );
     const parsed = parseAiJsonOrThrow<ScriptPartSummary[]>(
       content,
@@ -231,6 +249,9 @@ export const suggestStyleOptions = async (
       'finance.style.suggest',
       { title },
       'gợi ý phong cách',
+      undefined,
+      undefined,
+      'idea',
     );
     return parseAiJsonOrThrow<StyleOptions>(content, SCHEMAS.styleOptions, 'gợi ý phong cách');
   });
@@ -247,6 +268,9 @@ export const parseIdeasFromFile = async (
       'finance.ideas.fromFile',
       { content },
       'phân tích file',
+      undefined,
+      undefined,
+      'idea',
     );
     return parseAiJsonOrThrow<TopicSuggestionItem[]>(
       responseContent,
@@ -267,6 +291,9 @@ export const scoreScript = async (
       'finance.score',
       { script },
       'chấm điểm kịch bản',
+      undefined,
+      undefined,
+      'score',
     ),
   );
 
@@ -283,6 +310,9 @@ export const generateSingleVideoPrompt = async (
       'finance.video.single',
       { scene, config },
       'tạo prompt video',
+      undefined,
+      undefined,
+      'visual_prompt',
     ),
   );
 

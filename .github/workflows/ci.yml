@@ -1,0 +1,40 @@
+# CI workflow — chạy trên GitHub Actions mỗi khi push PR.
+# Tương đương `npm run verify:quick` (tsc + lint + test, skip build vì tốn thời gian).
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test -- --run --reporter=verbose
+
+      # Skip build vì Vite bundle quá lớn (675kB), chỉ bundle khi release.
+      # Uncomment nếu cần verify production build.
+      # - name: Build
+      #   run: npm run build

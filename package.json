@@ -10,8 +10,11 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "verify": "npm run typecheck && npm run lint && npm run test && npm run build",
+    "verify:quick": "npm run typecheck && npm run lint && npm run test"
   },
   "dependencies": {
     "@google/genai": "^1.25.0",

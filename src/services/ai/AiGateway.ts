@@ -18,6 +18,7 @@ import { AppError } from '../../lib/errors';
 import { apiKeyManager } from '../../../services/apiKeyManager';
 import { ProviderError } from './ProviderError';
 import { getProvider } from './providerRegistry';
+import { recordUsage, type UsageEntryKind } from '../usage/usageTracker';
 import type {
   ChatMessage,
   ProviderChatContext,
@@ -43,6 +44,14 @@ export interface AiRequest {
    * Callback nhận stream delta chunk.
    */
   onChunk?: (chunk: string) => void;
+  /**
+   * Loại call để ghi usage stats (outline, script, ...). Optional.
+   */
+  usageKind?: UsageEntryKind;
+  /**
+   * Label tùy chọn cho usage stats.
+   */
+  usageLabel?: string;
 }
 
 export interface AiResponse {
@@ -146,6 +155,17 @@ export class AiGateway {
 
       try {
         const res = await adapter.chat(providerReq, ctx);
+        // Ghi usage stats (no-op nếu provider không trả token count).
+        if (res.usage) {
+          recordUsage({
+            provider: req.provider,
+            model: req.model,
+            kind: req.usageKind ?? 'other',
+            promptTokens: res.usage.prompt,
+            completionTokens: res.usage.completion,
+            label: req.usageLabel,
+          });
+        }
         return {
           content: res.content,
           usage: res.usage,

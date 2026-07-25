@@ -9,7 +9,8 @@ export type ModalKey =
   | 'allVisualPrompts'
   | 'summarize'
   | 'score'
-  | 'dialogue';
+  | 'dialogue'
+  | 'usage';
 
 const ALL_MODALS: ModalKey[] = [
   'library',
@@ -21,6 +22,7 @@ const ALL_MODALS: ModalKey[] = [
   'summarize',
   'score',
   'dialogue',
+  'usage',
 ];
 
 type ModalState = Record<ModalKey, boolean>;
