@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Provider adapter — interface thống nhất cho mọi AI provider.
  *
  * Mỗi adapter chịu trách nhiệm:
@@ -53,6 +53,10 @@ export interface ProviderChatContext {
    * Timeout cho 1 lần gọi provider (gateway có thể override).
    */
   timeoutMs?: number;
+  /**
+   * Callback nhận stream delta chunk.
+   */
+  onChunk?: (chunk: string) => void;
 }
 
 export interface ProviderAdapter {

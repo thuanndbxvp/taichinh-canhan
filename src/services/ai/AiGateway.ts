@@ -1,4 +1,4 @@
-﻿/**
+/**
  * AiGateway — tầng duy nhất giao tiếp với AI provider.
  *
  * Trách nhiệm:
@@ -39,6 +39,10 @@ export interface AiRequest {
    * Provider-specific extras (response_format, stop, ...).
    */
   extras?: Record<string, unknown>;
+  /**
+   * Callback nhận stream delta chunk.
+   */
+  onChunk?: (chunk: string) => void;
 }
 
 export interface AiResponse {
@@ -137,6 +141,7 @@ export class AiGateway {
         apiKey,
         signal: req.signal,
         timeoutMs: req.timeoutMs ?? this.defaultTimeoutMs,
+        onChunk: req.onChunk,
       };
 
       try {

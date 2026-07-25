@@ -1,4 +1,4 @@
-﻿import type {
+import type {
   GenerationParams,
   VisualPrompt,
   AllVisualPromptsResult,
@@ -26,6 +26,7 @@ async function callWithPrompt(
   input: Parameters<typeof promptRegistry.build>[1],
   action: string,
   signal?: AbortSignal,
+  onChunk?: (chunk: string) => void,
 ): Promise<string> {
   const { messages } = promptRegistry.build(promptId, input);
   try {
@@ -34,6 +35,7 @@ async function callWithPrompt(
       model,
       messages,
       signal,
+      onChunk,
     });
     return res.content;
   } catch (error) {
@@ -60,6 +62,7 @@ export const generateScript = async (
   params: GenerationParams,
   provider: AiProvider,
   model: string,
+  onChunk?: (chunk: string) => void,
 ): Promise<string> => {
   try {
     return await callWithPrompt(
@@ -68,6 +71,8 @@ export const generateScript = async (
       'finance.script',
       { params },
       'tạo kịch bản',
+      undefined,
+      onChunk,
     );
   } catch (e) {
     throw handleApiError(e, 'tạo kịch bản');
@@ -78,6 +83,7 @@ export const generateScriptOutline = async (
   params: GenerationParams,
   provider: AiProvider,
   model: string,
+  onChunk?: (chunk: string) => void,
 ): Promise<string> => {
   try {
     const outline = await callWithPrompt(
@@ -86,6 +92,8 @@ export const generateScriptOutline = async (
       'finance.script.outline',
       { params },
       'tạo dàn ý',
+      undefined,
+      onChunk,
     );
     return `### Dàn Ý Chi Tiết (Chuẩn bị tạo kịch bản sạch cho TTS)\n\n` + outline;
   } catch (e) {
@@ -100,6 +108,7 @@ export const generateScriptPart = async (
   params: GenerationParams,
   provider: AiProvider,
   model: string,
+  onChunk?: (chunk: string) => void,
 ): Promise<string> => {
   try {
     return await callWithPrompt(
@@ -113,6 +122,8 @@ export const generateScriptPart = async (
         currentPartOutline,
       },
       'tạo phần kịch bản',
+      undefined,
+      onChunk,
     );
   } catch (e) {
     throw handleApiError(e, 'tạo phần kịch bản');
@@ -144,6 +155,7 @@ export const reviseScript = async (
   params: GenerationParams,
   provider: AiProvider,
   model: string,
+  onChunk?: (chunk: string) => void,
 ): Promise<string> => {
   try {
     return await callWithPrompt(
@@ -156,6 +168,8 @@ export const reviseScript = async (
         style: params.styleOptions,
       },
       'sửa kịch bản',
+      undefined,
+      onChunk,
     );
   } catch (e) {
     throw handleApiError(e, 'sửa kịch bản');

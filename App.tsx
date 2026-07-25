@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { ControlPanel } from './components/ControlPanel';
 import { OutputDisplay } from './components/OutputDisplay';
 import { LibraryModal } from './components/LibraryModal';
@@ -215,6 +215,7 @@ const App: React.FC = () => {
             title={brief.brief.title}
             script={generation.generatedScript}
             isLoading={generation.isLoading}
+            currentAiAction={generation.currentAiAction}
             error={generation.error}
             onStartSequentialGenerate={generation.startSequential}
             onStopSequentialGenerate={generation.stopSequential}

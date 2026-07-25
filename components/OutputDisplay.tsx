@@ -1,4 +1,4 @@
-﻿
+
 import React, { useState, useEffect, useRef } from 'react';
 import { ClipboardIcon } from './icons/ClipboardIcon';
 import { SaveIcon } from './icons/SaveIcon';
@@ -38,6 +38,7 @@ interface OutputDisplayProps {
   onImportScript: (file: File) => void;
   autoContinue?: boolean;
   setAutoContinue?: (val: boolean) => void;
+  currentAiAction?: string | null;
 }
 
 const InitialState: React.FC<{ onImportClick: () => void }> = ({ onImportClick }) => (
@@ -125,10 +126,18 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
     loadingVisualPromptsParts,
     onImportScript,
     autoContinue,
-    setAutoContinue
+    setAutoContinue,
+    currentAiAction
 }) => {
     const [copySuccess, setCopySuccess] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const bottomRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (bottomRef.current && isLoading) {
+            bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [script, isLoading]);
 
     useEffect(() => {
         if (copySuccess) {
@@ -213,6 +222,9 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
     const showActionControls = !!script;
 
     const getDisplayTitle = () => {
+        if (currentAiAction) {
+            return currentAiAction;
+        }
         if (isGeneratingSequentially) {
             return `Tiến trình: ${currentPart}/${totalParts} phần`;
         }
@@ -421,6 +433,7 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
         <div className="p-6 overflow-y-auto flex-grow min-h-[400px]">
             <div className="w-full h-full">
                 {renderContent()}
+                <div ref={bottomRef} />
             </div>
         </div>
         {isGeneratingSequentially && !isLoading && currentPart === totalParts && (

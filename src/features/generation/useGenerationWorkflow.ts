@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AiProvider, GenerationParams } from '../../../types';
 import {
   generateScript,
@@ -39,6 +39,7 @@ export interface UseGenerationWorkflowReturn {
   revise: () => Promise<void>;
   resetAllCaches: () => void;
   setExternalError: (msg: string | null) => void;
+  currentAiAction: string | null;
 }
 
 function buildParams(brief: ContentBrief, finalWordCount: string): GenerationParams {
@@ -87,6 +88,7 @@ export function useGenerationWorkflow({
   const [currentPartIndex, setCurrentPartIndex] = useState<number>(0);
   const [fullOutlineText, setFullOutlineText] = useState<string>('');
   const [autoContinue, setAutoContinue] = useState<boolean>(true);
+  const [currentAiAction, setCurrentAiAction] = useState<string | null>(null);
   const isStoppingRef = useRef<boolean>(false);
 
   const resetAllCaches = useCallback(() => {
@@ -124,15 +126,19 @@ export function useGenerationWorkflow({
     try {
       const isLongScript = parseInt(finalWordCount, 10) >= 1000;
       if (isLongScript) {
-        const outline = await generateScriptOutline(params, aiProvider, selectedModel);
-        setGeneratedScript(outline);
+        setCurrentAiAction('Đang phân tích và lập dàn ý...');
+        const outline = await generateScriptOutline(params, aiProvider, selectedModel, (chunk) => {
+           setGeneratedScript((prev) => prev + chunk);
+        });
         setFullOutlineText(outline);
         if (!outline || !outline.trim()) {
           setError('AI provider trả về dàn ý rỗng. Vui lòng thử lại hoặc đổi model.');
         }
       } else {
-        const script = await generateScript(params, aiProvider, selectedModel);
-        setGeneratedScript(script);
+        setCurrentAiAction('Đang tạo kịch bản...');
+        const script = await generateScript(params, aiProvider, selectedModel, (chunk) => {
+           setGeneratedScript((prev) => prev + chunk);
+        });
         if (!script || !script.trim()) {
           setError('AI provider trả về kịch bản rỗng. Vui lòng thử lại hoặc đổi model.');
         }
@@ -141,6 +147,7 @@ export function useGenerationWorkflow({
       setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi không xác định.');
     } finally {
       setIsLoading(false);
+      setCurrentAiAction(null);
     }
   }, [brief, aiProvider, selectedModel, resetAllCaches]);
 
@@ -156,6 +163,7 @@ export function useGenerationWorkflow({
     const params = buildParams(brief, finalWordCount);
 
     try {
+      setCurrentAiAction(`Đang viết phần ${currentPartIndex + 1}/${outlineParts.length}...`);
       const partContent = await generateScriptPart(
         fullOutlineText,
         generatedScript,
@@ -163,10 +171,13 @@ export function useGenerationWorkflow({
         params,
         aiProvider,
         selectedModel,
+        (chunk) => {
+           setGeneratedScript((prev) => prev + chunk);
+        }
       );
       if (isStoppingRef.current) return;
 
-      setGeneratedScript((prev) => prev + partContent + '\n\n---\n\n');
+      setGeneratedScript((prev) => prev + '\n\n---\n\n');
       const nextIndex = currentPartIndex + 1;
       setCurrentPartIndex(nextIndex);
 
@@ -181,6 +192,7 @@ export function useGenerationWorkflow({
       setIsGeneratingSequentially(false);
     } finally {
       setIsLoading(false);
+      setCurrentAiAction(null);
     }
   }, [isGeneratingSequentially, currentPartIndex, outlineParts, brief, aiProvider, selectedModel, fullOutlineText, generatedScript, autoContinue]);
 
@@ -222,16 +234,23 @@ export function useGenerationWorkflow({
     if (!generatedScript || !revisionPrompt.trim()) return;
     setIsLoading(true);
     setError(null);
+    setCurrentAiAction('Đang chỉnh sửa kịch bản theo yêu cầu...');
     const params = buildParams(brief, effectiveWordCount(brief));
+    
+    // Xóa script hiện tại để stream lại từ đầu, hoặc có thể nối tiếp tùy logic. Ở đây ta replace.
+    setGeneratedScript('');
+    
     try {
-      const revised = await reviseScript(generatedScript, revisionPrompt, params, aiProvider, selectedModel);
-      setGeneratedScript(revised);
+      const revised = await reviseScript(generatedScript, revisionPrompt, params, aiProvider, selectedModel, (chunk) => {
+         setGeneratedScript((prev) => prev + chunk);
+      });
       setRevisionCount((prev) => prev + 1);
       setRevisionPrompt('');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Lỗi khi sửa kịch bản.');
     } finally {
       setIsLoading(false);
+      setCurrentAiAction(null);
     }
   }, [generatedScript, revisionPrompt, brief, aiProvider, selectedModel]);
 
@@ -256,5 +275,6 @@ export function useGenerationWorkflow({
     revise,
     resetAllCaches,
     setExternalError: setError,
+    currentAiAction,
   };
 }

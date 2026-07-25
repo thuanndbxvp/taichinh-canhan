@@ -1,4 +1,4 @@
-﻿/**
+/**
  * OpenAiCompatibleProvider — provider tổng quát cho mọi endpoint theo schema OpenAI.
  * baseUrl lấy từ localStorage('openai-base-url') để tương thích ngược với code cũ.
  *
@@ -62,6 +62,7 @@ export const OpenAiCompatibleProvider: ProviderAdapter = {
         messages: request.messages,
         ...(request.temperature !== undefined ? { temperature: request.temperature } : {}),
         ...(request.maxTokens !== undefined ? { max_tokens: request.maxTokens } : {}),
+        ...(ctx.onChunk ? { stream: true } : {}),
         ...(request.extras ?? {}),
       }),
       signal: ctx.signal,
@@ -71,6 +72,41 @@ export const OpenAiCompatibleProvider: ProviderAdapter = {
     if (!res.ok) {
       const text = await res.text().catch(() => '');
       throw ProviderError.fromHttp(res.status, text);
+    }
+
+    if (ctx.onChunk && res.body) {
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let fullContent = '';
+      let buffer = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+        for (const line of lines) {
+          const t = line.trim();
+          if (t.startsWith('data: ')) {
+            const data = t.slice(6);
+            if (data === '[DONE]') continue;
+            try {
+              const parsed = JSON.parse(data);
+              const delta = parsed.choices?.[0]?.delta?.content;
+              if (delta) {
+                fullContent += delta;
+                ctx.onChunk(delta);
+              }
+            } catch (e) {
+              // Ignore invalid JSON chunks
+            }
+          }
+        }
+      }
+      return {
+        content: fullContent,
+        raw: { stream: true },
+      };
     }
 
     const raw = await res.json().catch(() => null);
