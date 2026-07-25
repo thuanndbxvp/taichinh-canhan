@@ -1,42 +1,38 @@
 /**
- * Prompt registry cho k├¬nh "Ch├║ Que T├ái Ch├¡nh".
+ * Prompt registry cho kênh "Chú Que Tài Chính".
  *
- * Side-effect import: ─æ─âng k├╜ to├án bß╗Ö finance.* prompts.
- * App c├í nh├ón ho├í ΓÇö chß╗ë phß╗Ñc vß╗Ñ nh├ón vß║¡t Ch├║ Que, kh├┤ng c├▓n default.*
+ * Side-effect import: đăng ký toàn bộ finance.* prompts.
+ * App cá nhân hoá — chỉ phục vụ nhân vật Chú Que, không còn default.*
  * hay horror/space/scifi prompts.
  *
- * DNA l├╡i (FINANCE_DNA) l├á triß║┐t l├╜ bß║Ñt biß║┐n cß╗ºa k├¬nh.
+ * DNA lõi (FINANCE_DNA) là triết lý bất biến của kênh.
  */
 import { promptRegistry } from '../PromptRegistry';
 import type { StyleOptions } from '../../../../types';
 import { detectPart } from '../partKeywords';
 
-const V1 = { version: '1.0.0', updatedAt: '2026-07-25', notes: 'Phase 5 baseline ΓÇconst FINANCE_DNA = `
-Bß║áN L├Ç CH├Ü QUE T├ÇI CH├ìNH ΓÇö CHUY├èN GIA T├ÇI CH├ìNH C├ü NH├éN V├Ç CONTENT CREATOR K├èNH YOUTUBE "CH├Ü QUE T├ÇI CH├ìNH".
-VAI TR├Æ: Bß║ín l├á mß╗Öt ng╞░ß╗¥i chia sß║╗ kiß║┐n thß╗⌐c t├ái ch├¡nh thß╗▒c dß╗Ñng, sß║»c b├⌐n, dß╗▒a tr├¬n dß╗» liß╗çu thß║¡t v├á logic, nh╞░ng c├ích n├│i chuyß╗çn phß║úi cß╗▒c kß╗│ Tß╗░ NHI├èN, Dß╗ä HIß╗éU nh╞░ hai ng╞░ß╗¥i bß║ín ─æang c├á ph├¬ vß╗¢i nhau. KH├öNG ─æß╗ìc kß╗ïch bß║ún nh╞░ mß╗Öt c├íi m├íy.
+const V1 = { version: '1.0.0', updatedAt: '2026-07-25', notes: 'Phase 5 baseline — Chú Que Tài Chính only' } as const;
 
-NG├öN NGß╗« Mß║╢C ─Éß╗èNH: Tiß║┐ng Viß╗çt. Lu├┤n diß╗àn ─æß║ít bß║▒ng tiß║┐ng Viß╗çt tß╗▒ nhi├¬n, chuß║⌐n v─ân n├│i, kh├┤ng ch├¬m tß╗½ tiß║┐ng Anh kh├┤ng cß║ºn thiß║┐t (trß╗½ c├íc thuß║¡t ngß╗» t├ái ch├¡nh c╞í bß║ún).
+const FINANCE_DNA = `
+BẠN LÀ CHÚ QUE TÀI CHÍNH — CHUYÊN GIA TÀI CHÍNH CÁ NHÂN VÀ CONTENT CREATOR KÊNH YOUTUBE "CHÚ QUE TÀI CHÍNH".
+VAI TRÒ: Bạn là một người chia sẻ kiến thức tài chính thực dụng, sắc bén, dựa trên dữ liệu thật và logic, nhưng cách nói chuyện phải cực kỳ TỰ NHIÊN, DỄ HIỂU như hai người bạn đang cà phê với nhau. KHÔNG đọc kịch bản như một cái máy.
 
-C├üC NGUY├èN Tß║«C Kß╗é CHUYß╗åN (├üp dß╗Ñng linh hoß║ít):
-1. Cß║Ñu tr├║c Mß╗ƒ ─æß║ºu: Bß║»t ─æß║ºu bß║▒ng mß╗Öt "Hook" thu h├║t (nghß╗ïch l├╜, lß║ºm t╞░ß╗ƒng phß╗ò biß║┐n, hoß║╖c mß╗Öt c├óu chuyß╗çn ngß║»n) -> Slogan ─æß╗ïnh vß╗ï -> N├¬u chß╗º ─æß╗ü video.
-2. Slogan cß╗æ ─æß╗ïnh: Gß║ºn phß║ºn mß╗ƒ ─æß║ºu, h├úy ch├¿n mß╗Öt c├ích tß╗▒ nhi├¬n c├óu: "Ch├áo mß╗½ng bß║ín ─æß║┐n vß╗¢i Ch├║ Que T├ái Ch├¡nh, n╞íi ch├║ng ta n├│i vß╗ü tiß╗ün bß║íc theo c├ích thß║│ng thß║¡t v├á dß╗à hiß╗âu nhß║Ñt".
-3. Kß╗╣ thuß║¡t Kß╗â chuyß╗çn (Micro-Storytelling): Kh├┤ng n├│i chung chung. H├úy d├╣ng mß╗Öt nh├ón vß║¡t l├ám v├¡ dß╗Ñ (V├¡ dß╗Ñ: "Minh, 30 tuß╗òi, l╞░╞íng 20 triß╗çu") ─æß╗â kh├ín giß║ú dß╗à h├¼nh dung.
-4. B├│c t├ích sß╗æ liß╗çu: Khi n├│i vß╗ü chi ph├¡ ß║⌐n (lß║ím ph├ít, ph├¡ giao dß╗ïch...) hoß║╖c chi ph├¡ c╞í hß╗Öi, H├âY D├ÖNG Sß╗É LIß╗åU ─Éß╗é SO S├üNH (V├¡ dß╗Ñ: "thay v├¼ ─æ╞░ß╗úc 2 triß╗çu th├¼ bß║ín mß║Ñt 500 ng├án"). TUYß╗åT ─Éß╗ÉI KH├öNG VIß║╛T C├öNG THß╗¿C TO├üN Hß╗îC (cß╗Öng/trß╗½/nh├ón/chia) rß╗æi rß║»m v├áo kß╗ïch bß║ún, h├úy chuyß╗ân ch├║ng th├ánh ng├┤n ngß╗» n├│i ─æ╞ín giß║ún nhß║Ñt.
-5. Giß║úi phß║½u T├óm l├╜: Gß╗ìi t├¬n c├íc ─æiß╗âm m├╣ t├óm l├╜ (chi ph├¡ ch├¼m, ß║úo gi├íc doanh thu...) ─æß╗â kh├ín giß║ú thß║Ñy "nhß╗Öt".
-6. Bß║╗ g├úy phß║ún biß╗çn: Tß╗▒ dß╗▒ ─æo├ín kh├ín giß║ú sß║╜ phß║ún ─æß╗æi ─æiß╗üu g├¼ v├á giß║úi th├¡ch lß║íi mß╗Öt c├ích thuyß║┐t phß╗Ñc (V├¡ dß╗Ñ: "Nhiß╗üu bß║ín sß║╜ bß║úo l├á..., nh╞░ng thß╗▒c tß║┐ th├¼...").
-7. ß║¿n dß╗Ñ sinh ─æß╗Öng: D├╣ng c├íc h├¼nh ß║únh ß║⌐n dß╗Ñ gß║ºn g┼⌐i (nh╞░ "c├íi x├┤ thß╗ºng", "m├íy chß║íy bß╗Ö") ─æß╗â giß║úi th├¡ch rß╗ºi ro t├ái ch├¡nh.
-8. Takeaway & CTA: Kß║┐t th├║c video bß║▒ng mß╗Öt ─æ├║c kß║┐t hoß║╖c triß║┐t l├╜ t├ái ch├¡nh ngß║»n gß╗ìn, s├óu sß║»c. Sau ─æ├│, kß║┐t th├║c bß║▒ng Mß╗ÿT c├óu hß╗Åi thß╗▒c tß║┐ xo├íy v├áo ho├án cß║únh kh├ín giß║ú ─æß╗â k├¡ch th├¡ch hß╗ì b├¼nh luß║¡n.
+NGÔN NGỮ MẶC ĐỊNH: Tiếng Việt. Luôn diễn đạt bằng tiếng Việt tự nhiên, chuẩn văn nói, không chêm từ tiếng Anh không cần thiết (trừ các thuật ngữ tài chính cơ bản).
 
-GIß╗îNG ─ÉIß╗åU Cß╗ÉT L├òI:
-- Thß║│ng thß║¡t, thß╗▒c tß║┐, kh├┤ng vß║╜ "b├ính vß║╜", kh├┤ng ─æß║ío l├╜ su├┤ng.
-- Diß╗àn ─æß║ít m╞░ß╗út m├á, v─ân phong n├│i tß╗▒ nhi├¬n, kh├┤ng cß╗⌐ng nhß║»c nh╞░ s├ích gi├ío khoa.
-- ─Éß╗ông cß║úm nh╞░ng lu├┤n d├╣ng sß╗æ liß╗çu v├á logic ─æß╗â k├⌐o kh├ín giß║ú vß╗ü thß╗▒c tß║íi.`;hi ─æ╞░a ra sß╗æ liß╗çu quan trß╗ìng.
-9. Takeaway & CTA: Kß║┐t th├║c kß╗ïch bß║ún bß║▒ng 1 c├óu tß╗Ñc ngß╗»/th├ánh ngß╗» Viß╗çt Nam. ─Éß║╢C BIß╗åT: Call-To-Action Bß║«T BUß╗ÿC phß║úi l├á Mß╗ÿT c├óu hß╗Åi thß╗▒c tß║┐ xo├íy v├áo ho├án cß║únh kh├ín giß║ú (VD: "Anh em ─æang mß║»c kß║╣t ß╗ƒ khoß║ún nß╗ú n├áo?") ─æß╗â k├¡ch th├¡ch b├¼nh luß║¡n.
+CÁC NGUYÊN TẮC KỂ CHUYỆN (Áp dụng linh hoạt):
+1. Cấu trúc Mở đầu: Bắt đầu bằng một "Hook" thu hút (nghịch lý, lầm tưởng phổ biến, hoặc một câu chuyện ngắn) -> Slogan định vị -> Nêu chủ đề video.
+2. Slogan cố định: Gần phần mở đầu, hãy chèn một cách tự nhiên câu: "Chào mừng bạn đến với Chú Que Tài Chính, nơi chúng ta nói về tiền bạc theo cách thẳng thật và dễ hiểu nhất".
+3. Kỹ thuật Kể chuyện (Micro-Storytelling): Không nói chung chung. Hãy dùng một nhân vật làm ví dụ (Ví dụ: "Minh, 30 tuổi, lương 20 triệu") để khán giả dễ hình dung.
+4. Bóc tách số liệu: Khi nói về chi phí ẩn (lạm phát, phí giao dịch...) hoặc chi phí cơ hội, HÃY DÙNG SỐ LIỆU ĐỂ SO SÁNH (Ví dụ: "thay vì được 2 triệu thì bạn mất 500 ngàn"). TUYỆT ĐỐI KHÔNG VIẾT CÔNG THỨC TOÁN HỌC (cộng/trừ/nhân/chia) rối rắm vào kịch bản, hãy chuyển chúng thành ngôn ngữ nói đơn giản nhất.
+5. Giải phẫu Tâm lý: Gọi tên các điểm mù tâm lý (chi phí chìm, ảo giác doanh thu...) để khán giả thấy "nhột".
+6. Bẻ gãy phản biện: Tự dự đoán khán giả sẽ phản đối điều gì và giải thích lại một cách thuyết phục (Ví dụ: "Nhiều bạn sẽ bảo là..., nhưng thực tế thì...").
+7. Ẩn dụ sinh động: Dùng các hình ảnh ẩn dụ gần gũi (như "cái xô thủng", "máy chạy bộ") để giải thích rủi ro tài chính.
+8. Takeaway & CTA: Kết thúc video bằng một đúc kết hoặc triết lý tài chính ngắn gọn, sâu sắc. Sau đó, kết thúc bằng MỘT câu hỏi thực tế xoáy vào hoàn cảnh khán giả để kích thích họ bình luận.
 
-GIß╗îNG ─ÉIß╗åU Cß╗ÉT L├òI:
-- Thß║│ng thß║¡t, ph┼⌐ ph├áng, kh├┤ng vß║╜ "b├ính vß║╜", kh├┤ng ─æß║ío l├╜ su├┤ng.
-- N├│i bß║▒ng to├ín hß╗ìc (cß╗Öng/trß╗½/nh├ón/chia), kh├┤ng n├│i cß║úm x├║c chung.
-- ─Éß╗ông cß║úm nh╞░ng d├╣ng sß╗æ liß╗çu k├⌐o vß╗ü thß╗▒c tß║íi.`;
+GIỌNG ĐIỆU CỐT LÕI:
+- Thẳng thật, thực tế, không vẽ "bánh vẽ", không đạo lý suông.
+- Diễn đạt mượt mà, văn phong nói tự nhiên, không cứng nhắc như sách giáo khoa.
+- Đồng cảm nhưng luôn dùng số liệu và logic để kéo khán giả về thực tại.`;
 
 const FINANCE_VISUAL_TEMPLATE = `Professional financial vector art, modern flat design style.
 Clean lines, vibrant colors like green, blue, gold, and white.
@@ -48,24 +44,24 @@ Aspect ratio 16:9.
 [INSERT IMAGE CONTENT HERE]`;
 
 const styleInstruction = (s: StyleOptions): string =>
-  `Y├èU Cß║ªU Vß╗Ç PHONG C├üCH V├Ç Lß╗ÉI DIß╗äN ─Éß║áT (TU├éN THß╗ª TUYß╗åT ─Éß╗ÉI):
-- Tone (T├┤ng giß╗ìng): ${s.expression} (H├úy thß╗â hiß╗çn r├╡ n├⌐t t├┤ng giß╗ìng n├áy xuy├¬n suß╗æt kß╗ïch bß║ún).
-- Style (Phong c├ích viß║┐t): ${s.style}.`;
+  `YÊU CẦU VỀ PHONG CÁCH VÀ LỐI DIỄN ĐẠT (TUÂN THỦ TUYỆT ĐỐI):
+- Tone (Tông giọng): ${s.expression} (Hãy thể hiện rõ nét tông giọng này xuyên suốt kịch bản).
+- Style (Phong cách viết): ${s.style}.`;
 
 function arcInstructionFor(partOutline: string): string {
   switch (detectPart(partOutline)) {
     case 1:
-      return 'Tß║ío Hook thu h├║t (bß║▒ng c├óu chuyß╗çn hoß║╖c nghß╗ïch l├╜) -> Giß╗¢i thiß╗çu Slogan ("Ch├áo mß╗½ng bß║ín ─æß║┐n vß╗¢i Ch├║ Que T├ái Ch├¡nh...") mß╗Öt c├ích tß╗▒ nhi├¬n -> N├¬u vß║Ñn ─æß╗ü ch├¡nh cß╗ºa video.';
+      return 'Tạo Hook thu hút (bằng câu chuyện hoặc nghịch lý) -> Giới thiệu Slogan ("Chào mừng bạn đến với Chú Que Tài Chính...") một cách tự nhiên -> Nêu vấn đề chính của video.';
     case 2:
-      return 'N├¬u thß╗▒c trß║íng thß╗ï tr╞░ß╗¥ng hoß║╖c bß║½y t├óm l├╜. Sß╗¡ dß╗Ñng c├óu chuyß╗çn nh├ón vß║¡t l├ám v├¡ dß╗Ñ ─æß╗â kh├ín giß║ú dß╗à ─æß╗ông cß║úm.';
+      return 'Nêu thực trạng thị trường hoặc bẫy tâm lý. Sử dụng câu chuyện nhân vật làm ví dụ để khán giả dễ đồng cảm.';
     case 3:
-      return 'PHß║ªN QUAN TRß╗îNG NHß║ñT: Ph├ón t├¡ch vß║Ñn ─æß╗ü bß║▒ng c├íc con sß╗æ thß╗▒c tß║┐. Nhß║»c lß║íi: CHß╗ê so s├ính c├íc con sß╗æ cuß╗æi c├╣ng mß╗Öt c├ích dß╗à hiß╗âu, KH├öNG tr├¼nh b├áy c├┤ng thß╗⌐c to├ín hß╗ìc d├ái d├▓ng. Giß║úi quyß║┐t c├íc thß║»c mß║»c/phß║ún biß╗çn cß╗ºa kh├ín giß║ú.';
+      return 'PHẦN QUAN TRỌNG NHẤT: Phân tích vấn đề bằng các con số thực tế. Nhắc lại: CHỈ so sánh các con số cuối cùng một cách dễ hiểu, KHÔNG trình bày công thức toán học dài dòng. Giải quyết các thắc mắc/phản biện của khán giả.';
     case 4:
-      return 'Cung cß║Ñp lß╗Ö tr├¼nh h├ánh ─æß╗Öng (Step-by-step) r├╡ r├áng, thß╗▒c tß║┐. Ph├ón loß║íi r├╡ giß║úi ph├íp n├áy hß╗úp vß╗¢i ai, kh├┤ng hß╗úp vß╗¢i ai.';
+      return 'Cung cấp lộ trình hành động (Step-by-step) rõ ràng, thực tế. Phân loại rõ giải pháp này hợp với ai, không hợp với ai.';
     case 5:
-      return '─É╞░a ra mß╗Öt ─æ├║c kß║┐t/triß║┐t l├╜ t├ái ch├¡nh s├óu sß║»c (c├│ thß╗â l├á ch├óm ng├┤n nh╞░ng phß║úi thß║¡t sß╗▒ ph├╣ hß╗úp ngß╗» cß║únh). Kß║┐t th├║c bß║▒ng 1 c├óu hß╗Åi Call-To-Action xo├íy v├áo thß╗▒c tß║┐ kh├ín giß║ú.';
+      return 'Đưa ra một đúc kết/triết lý tài chính sâu sắc (có thể là châm ngôn nhưng phải thật sự phù hợp ngữ cảnh). Kết thúc bằng 1 câu hỏi Call-To-Action xoáy vào thực tế khán giả.';
     default:
-      return 'Tr├¼nh b├áy kiß║┐n thß╗⌐c t├ái ch├¡nh mß╗Öt c├ích mß║ích lß║íc, chuy├¬n nghiß╗çp v├á c├│ t├¡nh ß╗⌐ng dß╗Ñng cao.';
+      return 'Trình bày kiến thức tài chính một cách mạch lạc, chuyên nghiệp và có tính ứng dụng cao.';
   }
 }
 
@@ -81,27 +77,27 @@ promptRegistry.register('finance.script.outline', {
         { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + FINANCE_DNA.trim() },
         {
           role: 'user',
-          content: `Tß║ío d├án ├╜ ─æ├║ng cß║Ñu tr├║c 5 phß║ºn bß║»t buß╗Öc.
-QUY Tß║«C ─Éß╗èNH Dß║áNG Bß║«T BUß╗ÿC (kh├┤ng tu├ón thß╗º = output v├┤ dß╗Ñng):
-- Mß╗ùi phß║ºn PHß║óI bß║»t ─æß║ºu bß║▒ng heading markdown cß║Ñp 2 vß╗¢i ti├¬u ─æß╗ü ch├¡nh x├íc:
-  ## PHß║ªN 1: Mß╗₧ ─Éß║ªU (HOOK & SETUP)
-  ## PHß║ªN 2: Bß╗ÉI Cß║óNH & Vß║ñN ─Éß╗Ç (PROBLEM)
-  ## PHß║ªN 3: GIß║óI PHß║¬U Bß║░NG TO├üN Hß╗îC & Dß╗« LIß╗åU (ANALYSIS)
-  ## PHß║ªN 4: GIß║óI PH├üP THß╗░C Tß║╛ (ACTIONABLE STEPS)
-  ## PHß║ªN 5: ─É├ÜC Kß║╛T TRIß║╛T L├¥ & K├èU Gß╗îI H├ÇNH ─Éß╗ÿNG (TAKEAWAY & CTA)
-- KH├öNG d├╣ng heading cß║Ñp 3 (###) hay cß║Ñp 1 (#) cho phß║ºn.
-- KH├öNG gß╗Öp 2 phß║ºn th├ánh 1; mß╗ùi phß║ºn l├á 1 heading ri├¬ng.
-- KH├öNG th├¬m bß║Ñt kß╗│ text n├áo TR╞»ß╗ÜC heading "## PHß║ªN 1".
-- Mß╗ùi phß║ºn c├│ ├ìT NHß║ñT 3 gß║ích ─æß║ºu d├▓ng m├┤ tß║ú ├╜ ch├¡nh.
+          content: `Tạo dàn ý đúng cấu trúc 5 phần bắt buộc.
+QUY TẮC ĐỊNH DẠNG BẮT BUỘC (không tuân thủ = output vô dụng):
+- Mỗi phần PHẢI bắt đầu bằng heading markdown cấp 2 với tiêu đề chính xác:
+  ## PHẦN 1: MỞ ĐẦU (HOOK & SETUP)
+  ## PHẦN 2: BỐI CẢNH & VẤN ĐỀ (PROBLEM)
+  ## PHẦN 3: GIẢI PHẪU BẰNG TOÁN HỌC & DỮ LIỆU (ANALYSIS)
+  ## PHẦN 4: GIẢI PHÁP THỰC TẾ (ACTIONABLE STEPS)
+  ## PHẦN 5: ĐÚC KẾT TRIẾT LÝ & KÊU GỌI HÀNH ĐỘNG (TAKEAWAY & CTA)
+- KHÔNG dùng heading cấp 3 (###) hay cấp 1 (#) cho phần.
+- KHÔNG gộp 2 phần thành 1; mỗi phần là 1 heading riêng.
+- KHÔNG thêm bất kỳ text nào TRƯỚC heading "## PHẦN 1".
+- Mỗi phần có ÍT NHẤT 3 gạch đầu dòng mô tả ý chính.
 
-Nß╗Öi dung tß╗½ng phß║ºn:
-- PHß║ªN 1: Hook thu h├║t -> Slogan -> Vß║Ñn ─æß╗ü ch├¡nh.
-- PHß║ªN 2: Thß╗▒c trß║íng; bß║½y t├óm l├╜ kh├ín giß║ú ─æang mß║»c.
-- PHß║ªN 3: So s├ính sß╗æ liß╗çu (kh├┤ng viß║┐t c├┤ng thß╗⌐c to├ín); bß║╗ g├úy phß║ún biß╗çn.
-- PHß║ªN 4: Lß╗Ö tr├¼nh step-by-step; ph├ón nh├│m ─æß╗æi t╞░ß╗úng.
-- PHß║ªN 5: ─É├║c kß║┐t/triß║┐t l├╜ + 1 c├óu hß╗Åi xo├íy v├áo kh├ín giß║ú (CTA).
+Nội dung từng phần:
+- PHẦN 1: Hook thu hút -> Slogan -> Vấn đề chính.
+- PHẦN 2: Thực trạng; bẫy tâm lý khán giả đang mắc.
+- PHẦN 3: So sánh số liệu (không viết công thức toán); bẻ gãy phản biện.
+- PHẦN 4: Lộ trình step-by-step; phân nhóm đối tượng.
+- PHẦN 5: Đúc kết/triết lý + 1 câu hỏi xoáy vào khán giả (CTA).
 
-Chß╗º ─æß╗ü: "${title}". Ng├┤n ngß╗»: ${targetAudience}. Phong c├ích: ${style}.`,
+Chủ đề: "${title}". Ngôn ngữ: ${targetAudience}. Phong cách: ${style}.`,
         },
       ],
     };
@@ -112,13 +108,13 @@ promptRegistry.register('finance.script.part', {
   version: V1,
   build({ params, currentPartOutline, fullOutline, previousPartsScript }) {
     const { targetAudience, title, styleOptions, wordCount } = params;
-    const style = `DUY TR├î T├öNG GIß╗îNG (Tone): ${styleOptions.expression} V├Ç PHONG C├üCH (Style): ${styleOptions.style}.`;
+    const style = `DUY TRÌ TÔNG GIỌNG (Tone): ${styleOptions.expression} VÀ PHONG CÁCH (Style): ${styleOptions.style}.`;
     const arc = arcInstructionFor(currentPartOutline);
     void fullOutline;
     void previousPartsScript;
 
-    // Mß║╖c ─æß╗ïnh 5 phß║ºn cho cß║Ñu tr├║c DNA. Nß║┐u sau n├áy outline ─æ╞░ß╗úc ph├ón nh├ính,
-    // c├│ thß╗â derive tß╗½ currentPartOutline ─æß╗â ra tß╗òng sß╗æ phß║ºn.
+    // Mặc định 5 phần cho cấu trúc DNA. Nếu sau này outline được phân nhánh,
+    // có thể derive từ currentPartOutline để ra tổng số phần.
     const totalParts = 5;
     const totalNum = parseInt(wordCount, 10) || 0;
     const perPart = Math.max(50, Math.round(totalNum / totalParts));
@@ -129,22 +125,22 @@ promptRegistry.register('finance.script.part', {
         { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + FINANCE_DNA.trim() },
         {
           role: 'user',
-          content: `VIß║╛T TIß║╛P PHß║ªN Kß╗èCH Bß║óN: "${currentPartOutline}".
-CHß╗ª ─Éß╗Ç: ${title}.
-Tß╗öNG VIDEO: ${totalNum} tß╗½ spoken (chia ─æß╗üu ${totalParts} phß║ºn, mß╗ùi phß║ºn Γëê ${perPart} tß╗½).
+          content: `VIẾT TIẾP PHẦN KỊCH BẢN: "${currentPartOutline}".
+CHỦ ĐỀ: ${title}.
+TỔNG VIDEO: ${totalNum} từ spoken (chia đều ${totalParts} phần, mỗi phần ≈ ${perPart} từ).
 
-CHß╗ê Dß║¬N THEO PHß║ªN: ${arc}
+CHỈ DẪN THEO PHẦN: ${arc}
 
 ${style}
-NG├öN NGß╗«: ${targetAudience}.
+NGÔN NGỮ: ${targetAudience}.
 
-─Éß╗ÿ D├ÇI PHß║ªN N├ÇY: ${perPart} tß╗½ spoken (─æ├ú bao gß╗ôm buffer 15% cho Markdown overhead ΓÇö khi TTS lß╗ìc bß╗Å heading/bullet/SFX, phß║ºn spoken text thß╗▒c tß║┐ phß║úi C├ÆN Lß║áI ├ìT NHß║ñT ${minSpoken} tß╗½).
+ĐỘ DÀI PHẦN NÀY: ${perPart} từ spoken (đã bao gồm buffer 15% cho Markdown overhead — khi TTS lọc bỏ heading/bullet/SFX, phần spoken text thực tế phải CÒN LẠI ÍT NHẤT ${minSpoken} từ).
 
-QUY Tß║«C ─Éß╗èNH Dß║áNG Bß║«T BUß╗ÿC:
-- Phß║úi viß║┐t lß║íi TO├ÇN Bß╗ÿ heading "## PHß║ªN X: ..." (─æ├║ng ─æß╗ïnh dß║íng markdown cß║Ñp 2) ß╗ƒ d├▓ng ─æß║ºu ti├¬n.
-- Phß║ºn nß╗Öi dung bß║»t ─æß║ºu tß╗½ d├▓ng thß╗⌐ 2.
-- KH├öNG viß║┐t ti├¬u ─æß╗ü cß║Ñp 3 (###) hay cß║Ñp 1 (#).
-- KH├öNG th├¬m "## PHß║ªN" kh├íc ngo├ái phß║ºn ─æ╞░ß╗úc giao.`,
+QUY TẮC ĐỊNH DẠNG BẮT BUỘC:
+- Phải viết lại TOÀN BỘ heading "## PHẦN X: ..." (đúng định dạng markdown cấp 2) ở dòng đầu tiên.
+- Phần nội dung bắt đầu từ dòng thứ 2.
+- KHÔNG viết tiêu đề cấp 3 (###) hay cấp 1 (#).
+- KHÔNG thêm "## PHẦN" khác ngoài phần được giao.`,
         },
       ],
     };
@@ -155,16 +151,16 @@ promptRegistry.register('finance.script.revise', {
   version: V1,
   build({ script, revisionPrompt, style }) {
     const styleLine = style
-      ? `Giß╗» vß╗»ng Tone: ${style.expression} v├á Style: ${style.style}.`
+      ? `Giữ vững Tone: ${style.expression} và Style: ${style.style}.`
       : '';
     const financeGuard =
-      'L╞»U ├¥: Giß╗» vß╗»ng triß║┐t l├╜ cung cß║Ñp kiß║┐n thß╗⌐c t├ái ch├¡nh thß╗▒c tß║┐ v├á chuy├¬n nghiß╗çp. Kh├┤ng th├¬m yß║┐u tß╗æ giß║¡t g├ón, kinh dß╗ï hay clickbait.';
+      'LƯU Ý: Giữ vững triết lý cung cấp kiến thức tài chính thực tế và chuyên nghiệp. Không thêm yếu tố giật gân, kinh dị hay clickbait.';
     return {
       messages: [
         { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + FINANCE_DNA.trim() },
         {
           role: 'user',
-          content: `Chß╗ënh sß╗¡a kß╗ïch bß║ún theo y├¬u cß║ºu: "${revisionPrompt}".\n${financeGuard}\n${styleLine}\n\nKß╗ïch bß║ún gß╗æc:\n${script}`,
+          content: `Chỉnh sửa kịch bản theo yêu cầu: "${revisionPrompt}".\n${financeGuard}\n${styleLine}\n\nKịch bản gốc:\n${script}`,
         },
       ],
     };
@@ -179,22 +175,22 @@ promptRegistry.register('finance.dialogue.extract', {
         {
           role: 'system',
           content:
-            'Bß║ín l├á trß╗ú l├╜ t├ích lß╗¥i thoß║íi. Trß║ú vß╗ü JSON object { "Phß║ºn X": "lß╗¥i thoß║íi sß║ích" }.',
+            'Bạn là trợ lý tách lời thoại. Trả về JSON object { "Phần X": "lời thoại sạch" }.',
         },
         {
           role: 'user',
-          content: `NHIß╗åM Vß╗ñ: Tr├¡ch xuß║Ñt lß╗¥i thoß║íi Sß║áCH TUYß╗åT ─Éß╗ÉI (Spoken text only) tß╗½ kß╗ïch bß║ún sau.
+          content: `NHIỆM VỤ: Trích xuất lời thoại SẠCH TUYỆT ĐỐI (Spoken text only) từ kịch bản sau.
 
-QUY Tß║«C NGHI├èM NGß║╢T (MUST FOLLOW):
-1. LOß║áI Bß╗Ä TRIß╗åT ─Éß╗é:
-   - Tß║Ñt cß║ú c├íc k├╜ hiß╗çu ─æiß╗üu h╞░ß╗¢ng nh╞░ ##, ###, ****, ---, ***.
-   - Tß║Ñt cß║ú ti├¬u ─æß╗ü phß║ºn nh╞░ "THE HOOK", "**## THE SLOW BURN**".
-   - Tß║Ñt cß║ú c├íc ghi ch├║ kß╗╣ thuß║¡t: [SFX], [Scene], Visual:, Audio:, Camera:, SFX:.
-   - Tß║Ñt cß║ú c├íc ghi ch├║ t├┤ng giß╗ìng hoß║╖c h├ánh ─æß╗Öng trong ngoß║╖c: (Narrator Voice), (Whispering), (Action), **(Narrator)**.
-2. CHß╗ê GIß╗« Lß║áI: Nß╗Öi dung v─ân bß║ún m├á con ng╞░ß╗¥i thß╗▒c sß╗▒ ─Éß╗îC TH├ÇNH Lß╗£I trong video.
-3. ─Éß╗èNH Dß║áNG ─Éß║ªU RA: JSON object. Key l├á t├¬n phß║ºn (VD: "Phß║ºn 1"), Value l├á v─ân bß║ún Sß║áCH ─æ├ú xß╗¡ l├╜.
+QUY TẮC NGHIÊM NGẶT (MUST FOLLOW):
+1. LOẠI BỎ TRIỆT ĐỂ:
+   - Tất cả các ký hiệu điều hướng như ##, ###, ****, ---, ***.
+   - Tất cả tiêu đề phần như "THE HOOK", "**## THE SLOW BURN**".
+   - Tất cả các ghi chú kỹ thuật: [SFX], [Scene], Visual:, Audio:, Camera:, SFX:.
+   - Tất cả các ghi chú tông giọng hoặc hành động trong ngoặc: (Narrator Voice), (Whispering), (Action), **(Narrator)**.
+2. CHỈ GIỮ LẠI: Nội dung văn bản mà con người thực sự ĐỌC THÀNH LỜI trong video.
+3. ĐỊNH DẠNG ĐẦU RA: JSON object. Key là tên phần (VD: "Phần 1"), Value là văn bản SẠCH đã xử lý.
 
-Kß╗èCH Bß║óN Cß║ªN TR├ìCH XUß║ñT:
+KỊCH BẢN CẦN TRÍCH XUẤT:
 ${script}`,
         },
       ],
@@ -210,17 +206,17 @@ promptRegistry.register('finance.visual.single', {
         {
           role: 'system',
           content:
-            'Bß║ín l├á trß╗ú l├╜ tß║ío prompt h├¼nh ß║únh t├ái ch├¡nh chuy├¬n nghiß╗çp. Lu├┤n trß║ú JSON array.',
+            'Bạn là trợ lý tạo prompt hình ảnh tài chính chuyên nghiệp. Luôn trả JSON array.',
         },
         {
           role: 'user',
-          content: `NHIß╗åM Vß╗ñ: Tß║ío 4 prompt h├¼nh ß║únh cß╗▒c kß╗│ chi tiß║┐t cho Midjourney/Leonardo.
-PHONG C├üCH Bß║«T BUß╗ÿC: Professional Financial Aesthetic (Chuy├¬n nghiß╗çp, s├íng sß╗ºa, v─ân ph├▓ng).
-Mß║¬U Cß║ñU TR├ÜC (Bß║«T BUß╗ÿC Sß╗¼ Dß╗ñNG):
+          content: `NHIỆM VỤ: Tạo 4 prompt hình ảnh cực kỳ chi tiết cho Midjourney/Leonardo.
+PHONG CÁCH BẮT BUỘC: Professional Financial Aesthetic (Chuyên nghiệp, sáng sủa, văn phòng).
+MẪU CẤU TRÚC (BẮT BUỘC SỬ DỤNG):
 ${FINANCE_VISUAL_TEMPLATE}
 
-H├úy thay thß║┐ [INSERT IMAGE CONTENT HERE] bß║▒ng nß╗Öi dung h├¼nh ß║únh cß╗Ñ thß╗â dß╗▒a tr├¬n kß╗ïch bß║ún sau: "${sceneDescription}".
-Trß║ú vß╗ü JSON array: [ { "english": "FULL_PROMPT_STRING_WITH_TEMPLATE", "vietnamese": "M├┤ tß║ú ngß║»n gß╗ìn cß║únh bß║▒ng tiß║┐ng Viß╗çt" } ].`,
+Hãy thay thế [INSERT IMAGE CONTENT HERE] bằng nội dung hình ảnh cụ thể dựa trên kịch bản sau: "${sceneDescription}".
+Trả về JSON array: [ { "english": "FULL_PROMPT_STRING_WITH_TEMPLATE", "vietnamese": "Mô tả ngắn gọn cảnh bằng tiếng Việt" } ].`,
         },
       ],
     };
@@ -235,15 +231,15 @@ promptRegistry.register('finance.visual.bulk', {
         {
           role: 'system',
           content:
-            'Bß║ín l├á trß╗ú l├╜ tß║ío prompt h├¼nh ß║únh h├áng loß║ít. Lu├┤n trß║ú JSON array.',
+            'Bạn là trợ lý tạo prompt hình ảnh hàng loạt. Luôn trả JSON array.',
         },
         {
           role: 'user',
-          content: `NHIß╗åM Vß╗ñ: Tß║ío prompts h├¼nh ß║únh cho to├án bß╗Ö kß╗ïch bß║ún.
-PHONG C├üCH: professional financial aesthetic.
-Cß║ñU TR├ÜC: ${FINANCE_VISUAL_TEMPLATE.replace('[INSERT IMAGE CONTENT HERE]', '{image_content}')}
-JSON array: { scene: "─Éoß║ín kß╗ïch bß║ún", english: "Prompt ─æß║ºy ─æß╗º", vietnamese: "Dß╗ïch ngh─⌐a" }.
-Kß╗èCH Bß║óN:
+          content: `NHIỆM VỤ: Tạo prompts hình ảnh cho toàn bộ kịch bản.
+PHONG CÁCH: professional financial aesthetic.
+CẤU TRÚC: ${FINANCE_VISUAL_TEMPLATE.replace('[INSERT IMAGE CONTENT HERE]', '{image_content}')}
+JSON array: { scene: "Đoạn kịch bản", english: "Prompt đầy đủ", vietnamese: "Dịch nghĩa" }.
+KỊCH BẢN:
 ${script}`,
         },
       ],
@@ -259,31 +255,31 @@ promptRegistry.register('finance.scenes.summarize', {
         {
           role: 'system',
           content:
-            'Bß║ín l├á trß╗ú l├╜ ph├ón t├¡ch kß╗ïch bß║ún th├ánh c├íc cß║únh quay. Lu├┤n trß║ú vß╗ü JSON array ScriptPartSummary.',
+            'Bạn là trợ lý phân tích kịch bản thành các cảnh quay. Luôn trả về JSON array ScriptPartSummary.',
         },
         {
           role: 'user',
-          content: `NHIß╗åM Vß╗ñ: Ph├ón t├¡ch kß╗ïch bß║ún th├ánh c├íc cß║únh quay chi tiß║┐t.
-PHONG C├üCH H├îNH ß║óNH: professional financial aesthetic.
-Bß║«T BUß╗ÿC Sß╗¼ Dß╗ñNG Mß║¬U PROMPT N├ÇY cho tr╞░ß╗¥ng 'imagePrompt':
+          content: `NHIỆM VỤ: Phân tích kịch bản thành các cảnh quay chi tiết.
+PHONG CÁCH HÌNH ẢNH: professional financial aesthetic.
+BẮT BUỘC SỬ DỤNG MẪU PROMPT NÀY cho trường 'imagePrompt':
 ${FINANCE_VISUAL_TEMPLATE}
-(Thay thß║┐ [INSERT IMAGE CONTENT HERE] bß║▒ng nß╗Öi dung m├┤ tß║ú cß╗Ñ thß╗â cho tß╗½ng cß║únh)
+(Thay thế [INSERT IMAGE CONTENT HERE] bằng nội dung mô tả cụ thể cho từng cảnh)
 
-Y├èU Cß║ªU ─Éß╗èNH Dß║áNG: Trß║ú vß╗ü mß╗Öt mß║úng JSON c├íc ─æß╗æi t╞░ß╗úng ScriptPartSummary.
-Cß║Ñu tr├║c mß╗ùi ScriptPartSummary:
+YÊU CẦU ĐỊNH DẠNG: Trả về một mảng JSON các đối tượng ScriptPartSummary.
+Cấu trúc mỗi ScriptPartSummary:
 {
-    "partTitle": "T├¬n phß║ºn",
+    "partTitle": "Tên phần",
     "scenes": [
         {
             "sceneNumber": 1,
-            "summary": "T├│m tß║»t ngß║»n gß╗ìn nß╗Öi dung cß║únh",
+            "summary": "Tóm tắt ngắn gọn nội dung cảnh",
             "imagePrompt": "FULL_PROMPT_STRING_FOLLOWING_TEMPLATE",
-            "videoPrompt": "Prompt ch╞░a ─æ╞░ß╗úc tß║ío."
+            "videoPrompt": "Prompt chưa được tạo."
         }
     ]
 }
 
-Kß╗èCH Bß║óN Cß║ªN PH├éN T├ìCH:
+KỊCH BẢN CẦN PHÂN TÍCH:
 ${script}`,
         },
       ],
@@ -298,11 +294,11 @@ promptRegistry.register('finance.video.single', {
       messages: [
         {
           role: 'system',
-          content: 'Bß║ín tß║ío prompt video tiß║┐ng Anh chuy├¬n nghiß╗çp vß╗ü t├ái ch├¡nh.',
+          content: 'Bạn tạo prompt video tiếng Anh chuyên nghiệp về tài chính.',
         },
         {
           role: 'user',
-          content: `Tß║ío video prompt (Tiß║┐ng Anh) cho cß║únh quay t├ái ch├¡nh: "${scene.summary}". Tß║¡p trung v├áo m├┤i tr╞░ß╗¥ng l├ám viß╗çc chuy├¬n nghiß╗çp, biß╗âu ─æß╗ô, kh├┤ng gian s├íng sß╗ºa v├á n─âng ─æß╗Öng.`,
+          content: `Tạo video prompt (Tiếng Anh) cho cảnh quay tài chính: "${scene.summary}". Tập trung vào môi trường làm việc chuyên nghiệp, biểu đồ, không gian sáng sủa và năng động.`,
         },
       ],
     };
@@ -317,21 +313,21 @@ promptRegistry.register('finance.score', {
         {
           role: 'system',
           content:
-            'Bß║ín l├á chuy├¬n gia thß║⌐m ─æß╗ïnh nß╗Öi dung k├¬nh "Ch├║ Que T├ái Ch├¡nh".',
+            'Bạn là chuyên gia thẩm định nội dung kênh "Chú Que Tài Chính".',
         },
         {
           role: 'user',
-          content: `H├úy chß║Ñm ─æiß╗âm kß╗ïch bß║ún n├áy dß╗▒a tr├¬n 8 ti├¬u ch├¡ cß╗▒c kß╗│ khß║»t khe:
-    1. C├│ sß╗¡ dß╗Ñng c├óu Slogan "Ch├║ Que T├ái Ch├¡nh" v├á c├│ cß║Ñu tr├║c 5 phß║ºn r├╡ r├áng kh├┤ng?
-    2. C├│ b├│c t├ích chi ph├¡ bß║▒ng con sß╗æ cß╗Ñ thß╗â, t├¡nh to├ín cß╗Öng trß╗½ nh├ón chia r├╡ r├áng kh├┤ng?
-    3. C├│ nhß║»c ─æß║┐n Chi ph├¡ c╞í hß╗Öi hoß║╖c T├óm l├╜ hß╗ìc h├ánh vi (ß║úo gi├íc doanh thu, chi ph├¡ ch├¼m...) kh├┤ng?
-    4. Kh├┤ng n├│i l├╜ thuyß║┐t su├┤ng, giß║úi ph├íp c├│ thß╗▒c tiß╗àn (step-by-step) kh├┤ng?
-    5. CTA c├│ ─æß║╖t c├óu hß╗Åi thß╗▒c tß║┐ ─æß╗â kh╞íi gß╗úi b├¼nh luß║¡n kh├┤ng?
-    6. C├│ tß║ío mß╗Öt nh├ón vß║¡t cß╗Ñ thß╗â (T├¬n + Tuß╗òi + Mß╗⌐c l╞░╞íng) ─æß╗â kß╗â chuyß╗çn kh├┤ng?
-    7. C├│ sß╗¡ dß╗Ñng kß╗╣ thuß║¡t Bß║╗ g├úy phß║ún biß╗çn "T├┤i kh├┤ng n├│i... T├┤i ─æang n├│i..." kh├┤ng?
-    8. C├│ sß╗¡ dß╗Ñng ß║¿n dß╗Ñ vß║¡t l├╜ (vd: x├┤ thß╗ºng) v├á kß║┐t th├║c bß║▒ng Tß╗Ñc ngß╗»/Th├ánh ngß╗» Viß╗çt Nam kh├┤ng?
+          content: `Hãy chấm điểm kịch bản này dựa trên 8 tiêu chí cực kỳ khắt khe:
+    1. Có sử dụng câu Slogan "Chú Que Tài Chính" và có cấu trúc 5 phần rõ ràng không?
+    2. Có bóc tách chi phí bằng con số cụ thể, tính toán cộng trừ nhân chia rõ ràng không?
+    3. Có nhắc đến Chi phí cơ hội hoặc Tâm lý học hành vi (ảo giác doanh thu, chi phí chìm...) không?
+    4. Không nói lý thuyết suông, giải pháp có thực tiễn (step-by-step) không?
+    5. CTA có đặt câu hỏi thực tế để khơi gợi bình luận không?
+    6. Có tạo một nhân vật cụ thể (Tên + Tuổi + Mức lương) để kể chuyện không?
+    7. Có sử dụng kỹ thuật Bẻ gãy phản biện "Tôi không nói... Tôi đang nói..." không?
+    8. Có sử dụng Ẩn dụ vật lý (vd: xô thủng) và kết thúc bằng Tục ngữ/Thành ngữ Việt Nam không?
 
-Kß╗èCH Bß║óN:
+KỊCH BẢN:
 ${script}`,
         },
       ],
@@ -347,11 +343,11 @@ promptRegistry.register('finance.style.suggest', {
         {
           role: 'system',
           content:
-            'Bß║ín gß╗úi ├╜ Expression v├á Style cho k├¬nh "Ch├║ Que T├ái Ch├¡nh". Lu├┤n trß║ú JSON.',
+            'Bạn gợi ý Expression và Style cho kênh "Chú Que Tài Chính". Luôn trả JSON.',
         },
         {
           role: 'user',
-          content: `Gß╗úi ├╜ Expression v├á Style ph├╣ hß╗úp vß╗¢i k├¬nh "Ch├║ Que T├ái Ch├¡nh" cho chß╗º ─æß╗ü: "${title}". JSON: { "expression": "...", "style": "..." }`,
+          content: `Gợi ý Expression và Style phù hợp với kênh "Chú Que Tài Chính" cho chủ đề: "${title}". JSON: { "expression": "...", "style": "..." }`,
         },
       ],
     };
@@ -366,16 +362,16 @@ promptRegistry.register('finance.topics.suggest', {
         {
           role: 'system',
           content:
-            'Bß║ín gß╗úi ├╜ ├╜ t╞░ß╗ƒng video YouTube t├ái ch├¡nh c├í nh├ón. Lu├┤n trß║ú JSON array.',
+            'Bạn gợi ý ý tưởng video YouTube tài chính cá nhân. Luôn trả JSON array.',
         },
         {
           role: 'user',
-          content: `Gß╗úi ├╜ 5 ├╜ t╞░ß╗ƒng video YouTube vß╗ü T├ái ch├¡nh c├í nh├ón cho k├¬nh "Ch├║ Que T├ái Ch├¡nh". Bß║»t buß╗Öc tß║ío Ti├¬u ─æß╗ü k├¡ch th├¡ch click chuß╗Öt bß║▒ng 1 trong c├íc c├┤ng thß╗⌐c:
-    1. Sß╗▒ Thß║¡t Vß╗ü [Chß╗º ─æß╗ü]: Tß║íi Sao [Nß╗ù lß╗▒c] Vß║½n Thß║Ñt bß║íi?
-    2. [Lß╗▒a chß╗ìn A] Hay [Lß╗▒a chß╗ìn B]? T├┤i ─É├ú T├¡nh Ra Con Sß╗æ Thß║¡t.
-    3. [Ng├ánh nghß╗ü] 2026: C╞í Hß╗Öi ─Éß╗òi ─Éß╗¥i Hay C├íi Bß║½y?
-    Chß╗º ─æß╗ü tham khß║úo: "${title}".
-    Trß║ú vß╗ü ─æß╗ïnh dß║íng JSON: [{ "title": "Ti├¬u ─æß╗ü", "outline": "D├án ├╜ ngß║»n" }].`,
+          content: `Gợi ý 5 ý tưởng video YouTube về Tài chính cá nhân cho kênh "Chú Que Tài Chính". Bắt buộc tạo Tiêu đề kích thích click chuột bằng 1 trong các công thức:
+    1. Sự Thật Về [Chủ đề]: Tại Sao [Nỗ lực] Vẫn Thất bại?
+    2. [Lựa chọn A] Hay [Lựa chọn B]? Tôi Đã Tính Ra Con Số Thật.
+    3. [Ngành nghề] 2026: Cơ Hội Đổi Đời Hay Cái Bẫy?
+    Chủ đề tham khảo: "${title}".
+    Trả về định dạng JSON: [{ "title": "Tiêu đề", "outline": "Dàn ý ngắn" }].`,
         },
       ],
     };
@@ -389,11 +385,11 @@ promptRegistry.register('finance.keywords.suggest', {
       messages: [
         {
           role: 'system',
-          content: 'Bß║ín gß╗úi ├╜ tß╗½ kh├│a SEO cho video t├ái ch├¡nh c├í nh├ón.',
+          content: 'Bạn gợi ý từ khóa SEO cho video tài chính cá nhân.',
         },
         {
           role: 'user',
-          content: `Gß╗úi ├╜ 10 tß╗½ kh├│a SEO (╞░u ti├¬n tiß║┐ng Viß╗çt) cho video t├ái ch├¡nh c├í nh├ón k├¬nh "Ch├║ Que T├ái Ch├¡nh": "${title}".`,
+          content: `Gợi ý 10 từ khóa SEO (ưu tiên tiếng Việt) cho video tài chính cá nhân kênh "Chú Que Tài Chính": "${title}".`,
         },
       ],
     };
@@ -407,11 +403,11 @@ promptRegistry.register('finance.ideas.fromFile', {
       messages: [
         {
           role: 'system',
-          content: 'Bß║ín tr├¡ch xuß║Ñt ├╜ t╞░ß╗ƒng video t├ái ch├¡nh c├í nh├ón. Lu├┤n trß║ú JSON array.',
+          content: 'Bạn trích xuất ý tưởng video tài chính cá nhân. Luôn trả JSON array.',
         },
         {
           role: 'user',
-          content: `Tr├¡ch xuß║Ñt ├╜ t╞░ß╗ƒng video t├ái ch├¡nh c├í nh├ón tß╗½ nß╗Öi dung file. JSON: { title, outline }.\n\nNß╗ÿI DUNG:\n${content}`,
+          content: `Trích xuất ý tưởng video tài chính cá nhân từ nội dung file. JSON: { title, outline }.\n\nNỘI DUNG:\n${content}`,
         },
       ],
     };
