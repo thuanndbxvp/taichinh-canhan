@@ -20,12 +20,15 @@ const DEFAULT_BASE_URL = 'https://openrouter.ai/api/v1';
 function getBaseUrl(): string {
   try {
     if (typeof localStorage !== 'undefined') {
-      return localStorage.getItem('openai-base-url') || DEFAULT_BASE_URL;
+      const stored = localStorage.getItem('openai-base-url');
+      if (stored) {
+        return stored.trim().replace(/\/+$/, '');
+      }
     }
   } catch {
     /* SSR / no localStorage */
   }
-  return DEFAULT_BASE_URL;
+  return DEFAULT_BASE_URL.trim().replace(/\/+$/, '');
 }
 
 export const OpenAiCompatibleProvider: ProviderAdapter = {
