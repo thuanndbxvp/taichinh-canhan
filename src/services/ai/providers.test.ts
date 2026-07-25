@@ -132,6 +132,6 @@ describe('OpenAiCompatibleProvider', () => {
       { model: 'g', messages: [{ role: 'user', content: 'x' }] },
       { apiKey: 'k' },
     );
-    expect(calledUrl).toContain('api.openai.com/v1/chat/completions');
+    expect(calledUrl).toContain('openrouter.ai/api/v1/chat/completions');
   });
 });

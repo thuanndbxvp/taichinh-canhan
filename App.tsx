@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+﻿import React, { useCallback, useEffect, useState } from 'react';
 import { ControlPanel } from './components/ControlPanel';
 import { OutputDisplay } from './components/OutputDisplay';
 import { LibraryModal } from './components/LibraryModal';
@@ -37,7 +37,14 @@ const App: React.FC = () => {
   const [pendingGenerate, setPendingGenerate] = useState(false);
 
   useEffect(() => {
-      if (!currentAiConfig && aiSettings.activeProviders.length > 0) {
+      // Đảm bảo currentAiConfig luôn valid:
+      // - Nếu chưa có → lấy provider đầu tiên đang active.
+      // - Nếu đang dùng provider không còn active (user tắt) → fallback về provider đầu.
+      if (aiSettings.activeProviders.length === 0) {
+          setCurrentAiConfig(null);
+          return;
+      }
+      if (!currentAiConfig || !aiSettings.activeProviders.includes(currentAiConfig.provider)) {
           const firstProvider = aiSettings.activeProviders[0];
           setCurrentAiConfig({ provider: firstProvider, model: aiSettings.models[firstProvider] || '' });
       }
@@ -272,6 +279,7 @@ const App: React.FC = () => {
             onExtractAndCount={handleOpenDialogue}
             onOpenDialogueModal={() => modals.open('dialogue')}
             wordCountStats={dialogue.stats}
+            isExtracting={dialogue.isExtracting}
             onScoreScript={handleScoreClick}
             isScoring={review.isScoring}
           />

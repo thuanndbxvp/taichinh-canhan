@@ -1,12 +1,12 @@
-
-import React, { useEffect, useState } from 'react';
+﻿
+import React, { useState } from 'react';
 import { OptionSelector } from './OptionSelector';
 import { SparklesIcon } from './icons/SparklesIcon';
-import type { StyleOptions, FormattingOptions, Expression, Style, ScriptType, NumberOfSpeakers, TopicSuggestionItem, SavedIdea, AiProvider } from '../types';
-import { EXPRESSION_OPTIONS, STYLE_OPTIONS, LANGUAGE_OPTIONS, SCRIPT_TYPE_OPTIONS, NUMBER_OF_SPEAKERS_OPTIONS, AI_PROVIDER_OPTIONS, DEFAULT_KYMA_MODELS, OPENAI_MODELS, FINANCE_IDEAS } from '../constants';
+import type { StyleOptions, ScriptType, NumberOfSpeakers, TopicSuggestionItem, SavedIdea, AiProvider } from '../types';
+import { LANGUAGE_OPTIONS, SCRIPT_TYPE_OPTIONS, NUMBER_OF_SPEAKERS_OPTIONS, FINANCE_IDEAS } from '../constants';
 import { IdeaBrainstorm } from './IdeaBrainstorm';
 import { Tooltip } from './Tooltip';
-import { EXPRESSION_EXPLANATIONS, STYLE_EXPLANATIONS, FORMATTING_EXPLANATIONS } from '../constants/explanations';
+import { FORMATTING_EXPLANATIONS } from '../constants/explanations';
 import { BookmarkIcon } from './icons/BookmarkIcon';
 import { IdeaFileUploader } from './IdeaFileUploader';
 import { LightbulbIcon } from './icons/LightbulbIcon';
@@ -54,7 +54,7 @@ interface ControlPanelProps {
   savedIdeas: SavedIdea[];
   onSaveIdea: (idea: TopicSuggestionItem) => void | Promise<void>;
   onOpenSavedIdeasModal: () => void;
-  onParseFile: (file: File) => void;
+  onParseFile: (content: string) => void | Promise<void>;
   isParsingFile: boolean;
   parsingFileError: string | null;
   uploadedIdeas: TopicSuggestionItem[];

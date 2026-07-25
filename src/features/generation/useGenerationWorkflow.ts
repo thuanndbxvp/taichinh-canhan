@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+﻿import { useCallback, useEffect, useRef, useState } from 'react';
 import type { AiProvider, GenerationParams } from '../../../types';
 import {
   generateScriptOutline,
@@ -50,7 +50,6 @@ function buildParams(brief: ContentBrief, finalWordCount: string): GenerationPar
     styleOptions: brief.styleOptions,
     keywords: brief.keywords,
     wordCount: finalWordCount,
-    scriptParts: brief.scriptParts,
     scriptType: brief.scriptType,
     numberOfSpeakers: brief.numberOfSpeakers,
     isFinanceMode: brief.isFinanceMode,

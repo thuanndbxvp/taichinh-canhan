@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { TrashIcon } from './icons/TrashIcon';
 import type { AiProvider } from '../types';
 import { validateApiKey } from '../services/aiService';
@@ -52,7 +52,14 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
     const [localModels, setLocalModels] = useState<Record<AiProvider, string>>(models);
     
     // Custom settings for OpenAI compatible
-    const [openAiBaseUrl, setOpenAiBaseUrl] = useState<string>('https://openrouter.ai/api/v1');
+    // Khởi tạo openAiBaseUrl từ localStorage để không ghi đè config đã lưu mỗi lần mở modal.
+    const [openAiBaseUrl, setOpenAiBaseUrl] = useState<string>(() => {
+        try {
+            return localStorage.getItem('openai-base-url') || 'https://openrouter.ai/api/v1';
+        } catch {
+            return 'https://openrouter.ai/api/v1';
+        }
+    });
     const [kymaModelOptions, setKymaModelOptions] = useState<{value: string, label: string}[]>([]);
 
     const [validationStatus, setValidationStatus] = useState<Record<AiProvider, ValidationStatus>>({
@@ -83,10 +90,13 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
 
     useEffect(() => {
         if (isOpen && localApiKeys.kyma?.[0]) {
-            fetch('https://api.kyma.vn/v1/models', {
+            fetch('https://kymaapi.com/v1/models', {
                 headers: { 'Authorization': `Bearer ${localApiKeys.kyma[0]}` }
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json();
+            })
             .then(data => {
                 if (data?.data) {
                     const fetchedModels = data.data.map((m: any) => ({ value: m.id, label: m.name || m.id }));
@@ -96,9 +106,9 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                     }
                 }
             })
-            .catch(console.error);
+            .catch(err => console.error('[ApiKeyModal] Failed to fetch Kyma models:', err));
         }
-    }, [isOpen, localApiKeys.kyma]);
+    }, [isOpen, localApiKeys.kyma, localModels.kyma]);
 
     const handleAddKey = async (provider: AiProvider) => {
         const rawInput = (newKeyInputs[provider] || '').trim();

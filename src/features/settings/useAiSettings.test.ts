@@ -11,14 +11,14 @@ describe('useAiSettings', () => {
   it('init với default keys khi localStorage trống', () => {
     const { result } = renderHook(() => useAiSettings());
     expect(result.current.apiKeys).toEqual({ kyma: [], openai: [] });
-    expect(result.current.hasApiKey).toBe(false);
+    expect(result.current.hasAnyApiKey).toBe(false);
   });
 
   it('saveApiKeys cập nhật state và persist vào localStorage', () => {
     const { result } = renderHook(() => useAiSettings());
     act(() => result.current.saveApiKeys({ kyma: ['abc'], openai: [] }));
     expect(result.current.apiKeys.kyma).toEqual(['abc']);
-    expect(result.current.hasApiKey).toBe(true);
+    expect(result.current.hasAnyApiKey).toBe(true);
     expect(JSON.parse(localStorage.getItem('ai-api-keys') || '{}')).toEqual({ kyma: ['abc'], openai: [] });
   });
 
@@ -30,10 +30,10 @@ describe('useAiSettings', () => {
     expect(localStorage.getItem('yt-script-theme')).toBe('#abcdef');
   });
 
-  it('sửa provider khi switch', () => {
+  it('setActiveProviders toggle provider', () => {
     const { result } = renderHook(() => useAiSettings());
-    act(() => result.current.setAiProvider('openai'));
-    expect(result.current.aiProvider).toBe('openai');
+    act(() => result.current.setActiveProviders(['openai']));
+    expect(result.current.activeProviders).toEqual(['openai']);
   });
 
   it('setLocalNotification + clearNotification không ném', () => {
@@ -53,5 +53,48 @@ describe('useAiSettings', () => {
     });
     expect(result.current.apiKeys.kyma).toEqual(['key1', 'key2']);
     expect(result.current.notification).toContain('kyma');
+  });
+
+  describe('getNextAiConfig round-robin', () => {
+    it('trả về null khi không có key nào', () => {
+      const { result } = renderHook(() => useAiSettings());
+      act(() => result.current.setActiveProviders(['kyma', 'openai']));
+      expect(result.current.getNextAiConfig()).toBeNull();
+    });
+
+    it('luôn trả về provider duy nhất khi chỉ bật 1 (không tăng roundRobinIndex)', () => {
+      const { result } = renderHook(() => useAiSettings());
+      act(() => result.current.saveApiKeys({ kyma: ['k1'], openai: [] }));
+      act(() => result.current.setActiveProviders(['kyma']));
+      const c1 = result.current.getNextAiConfig();
+      const c2 = result.current.getNextAiConfig();
+      const c3 = result.current.getNextAiConfig();
+      expect(c1?.provider).toBe('kyma');
+      expect(c2?.provider).toBe('kyma');
+      expect(c3?.provider).toBe('kyma');
+    });
+
+    it('xoay vòng kyma ↔ openai khi cả 2 active và có key', () => {
+      const { result } = renderHook(() => useAiSettings());
+      act(() => result.current.saveApiKeys({ kyma: ['k1'], openai: ['o1'] }));
+      act(() => result.current.setActiveProviders(['kyma', 'openai']));
+      const seq = Array.from({ length: 4 }, () => result.current.getNextAiConfig()?.provider);
+      expect(seq).toEqual(['kyma', 'openai', 'kyma', 'openai']);
+    });
+
+    it('bỏ qua provider không có key khi xoay vòng', () => {
+      const { result } = renderHook(() => useAiSettings());
+      act(() => result.current.saveApiKeys({ kyma: ['k1'], openai: [] }));
+      act(() => result.current.setActiveProviders(['kyma', 'openai']));
+      const seq = Array.from({ length: 4 }, () => result.current.getNextAiConfig()?.provider);
+      expect(seq).toEqual(['kyma', 'kyma', 'kyma', 'kyma']);
+    });
+
+    it('saveApiKeys tự động enable provider nếu active hiện tại không có key', () => {
+      const { result } = renderHook(() => useAiSettings());
+      act(() => result.current.setActiveProviders(['kyma']));
+      act(() => result.current.saveApiKeys({ kyma: [], openai: ['o1'] }));
+      expect(result.current.activeProviders).toEqual(['openai']);
+    });
   });
 });

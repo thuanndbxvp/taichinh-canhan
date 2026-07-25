@@ -1,4 +1,4 @@
-
+﻿
 import type { Expression, Style, ScriptType, NumberOfSpeakers, AiProvider, TopicSuggestionItem } from './types';
 
 interface LabeledOption<T> {
@@ -79,6 +79,7 @@ export const FINANCE_IDEAS: TopicSuggestionItem[] = [
     },
     {
         title: "Quỹ Dự Phòng Khẩn Cấp: Lá chắn an toàn trong thời kỳ suy thoái",
+        outline: "Tại sao mọi kế hoạch tài chính đều cần bắt đầu bằng quỹ dự phòng 3-6 tháng chi phí. Hướng dẫn xây dựng quỹ khẩn cấp hiệu quả và những sai lầm phổ biến cần tránh."
     },
     {
         title: "FIRE (Độc lập tài chính, Nghỉ hưu sớm): Giấc mơ hay Ảo tưởng?",

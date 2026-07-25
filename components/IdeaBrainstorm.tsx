@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+﻿import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { GoogleGenAI, Chat } from "@google/genai";
 import type { ChatMessage, AiProvider } from '../types';
 import { SparklesIcon } from './icons/SparklesIcon';
@@ -51,7 +51,7 @@ export const IdeaBrainstorm: React.FC<IdeaBrainstormProps> = ({ setTitle, setOut
         // Phase 0: Brainstorm hiện chỉ hoạt động với provider Kyma (giao thức OpenAI-compatible).
         if (config.provider !== 'kyma') {
             chatRef.current = null;
-            if (isMounted.current) setError(null);
+            if (isMounted.current) setError('Brainstorm hiện chỉ hỗ trợ Kyma. Vui lòng bật Kyma API Key để sử dụng.');
             return;
         }
         try {
