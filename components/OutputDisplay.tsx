@@ -121,6 +121,7 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
     currentAiAction,
     macroData,
 }) => {
+    const [copySuccess, setCopySuccess] = useState('');
     const [copiedStates, setCopiedStates] = useState<Record<number, boolean>>({});
     const fileInputRef = useRef<HTMLInputElement>(null);
     const bottomRef = useRef<HTMLDivElement>(null);

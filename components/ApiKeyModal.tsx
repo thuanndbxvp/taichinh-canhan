@@ -66,6 +66,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
     });
     const [kymaModelOptions, setKymaModelOptions] = useState<{value: string, label: string}[]>([]);
     const [localTavilyKey, setLocalTavilyKey] = useState<string>(tavilyApiKey);
+    const [isTavilyFocused, setIsTavilyFocused] = useState<boolean>(false);
 
     const [validationStatus, setValidationStatus] = useState<Record<AiProvider, ValidationStatus>>({
         kyma: { state: 'idle', message: null },
@@ -406,8 +407,10 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                                 Tavily API Key
                             </label>
                             <input
-                                type="password"
-                                value={localTavilyKey}
+                                type="text"
+                                value={isTavilyFocused || !localTavilyKey || localTavilyKey.length <= 8 ? localTavilyKey : `${localTavilyKey.slice(0, 4)}••••••••••••${localTavilyKey.slice(-4)}`}
+                                onFocus={() => setIsTavilyFocused(true)}
+                                onBlur={() => setIsTavilyFocused(false)}
                                 onChange={(e) => setLocalTavilyKey(e.target.value)}
                                 placeholder="tvly-..."
                                 className="w-full bg-primary border border-border rounded-md px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent transition-colors"
