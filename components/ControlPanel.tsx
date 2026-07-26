@@ -239,13 +239,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                     </select>
                 </div>
 
-            <Tooltip text="Tải lên một file .txt chứa danh sách các ý tưởng để AI tự động phân tích và thêm vào danh sách gợi ý.">
-              <IdeaFileUploader 
-                  onParse={onParseFile}
-                  isLoading={isParsingFile}
-                  error={parsingFileError}
-              />
-            </Tooltip>
+
             <div className="grid grid-cols-2 gap-2 mt-4">
                 <Tooltip text="Dựa trên tiêu đề bạn nhập, AI sẽ đề xuất 5 ý tưởng video khác nhau với tiêu đề và dàn ý sơ bộ.">
                   <button 
