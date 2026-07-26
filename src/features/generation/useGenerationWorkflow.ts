@@ -156,13 +156,21 @@ export function useGenerationWorkflow({
       }
 
       setCurrentAiAction('Đang phân tích và lập dàn ý...');
-      const outline = await generateScriptOutline(params, aiProvider, selectedModel, (chunk) => {
-         setGeneratedScript((prev) => {
-           const next = prev + chunk;
-           scriptRef.current = next;
-           return next;
-         });
-      });
+      const outline = await generateScriptOutline(
+        params, 
+        aiProvider, 
+        selectedModel, 
+        (chunk) => {
+          setGeneratedScript((prev) => {
+            const next = prev + chunk;
+            scriptRef.current = next;
+            return next;
+          });
+        },
+        (phase) => {
+          setCurrentAiAction(phase);
+        }
+      );
       setFullOutlineText(outline);
       if (!outline || !outline.trim()) {
         setError('AI provider trả về dàn ý rỗng. V vui lòng thử lại hoặc đổi model.');

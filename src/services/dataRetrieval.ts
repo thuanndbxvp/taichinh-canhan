@@ -1,14 +1,34 @@
 import type { AiProvider } from '../../types';
+import { callWithPrompt } from './ai/AiGateway';
+
+async function performTavilySearch(query: string, tavilyKey: string): Promise<string> {
+  const response = await fetch('https://api.tavily.com/search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      api_key: tavilyKey,
+      query,
+      search_depth: 'basic',
+      include_answer: true,
+      max_results: 2,
+    }),
+  });
+  if (!response.ok) return '';
+  const data = await response.json();
+  if (data.answer) return data.answer;
+  if (data.results && data.results.length > 0) {
+    return data.results.map((r: any) => `- ${r.title}: ${r.content}`).join('\n');
+  }
+  return '';
+}
 
 /**
  * Dịch vụ lấy dữ liệu vĩ mô bằng Tavily Search.
- * Ở Phase 1, tạm thời fix cứng API Key Tavily để test tính năng Web Search 
- * mà không cần phải thay đổi cấu trúc quản lý API Key hiện tại của app.
  */
 export const fetchMacroData = async (
   title: string,
-  _provider: AiProvider,
-  _model: string
+  provider: AiProvider,
+  model: string
 ): Promise<string> => {
   const tavilyKey = localStorage.getItem('tavily-api-key') || '';
   
@@ -17,41 +37,47 @@ export const fetchMacroData = async (
     return `[LƯU Ý]: Không tự động lấy được dữ liệu vĩ mô (Tavily Key chưa cấu hình). Hãy dựa vào nguyên lý gốc.`;
   }
 
-  console.log(`[Data Retrieval] Đang yêu cầu Tavily tìm kiếm dữ liệu vĩ mô cho: ${title}`);
+  console.log(`[Data Retrieval] Đang yêu cầu AI Planner lên kế hoạch tìm kiếm cho: ${title}`);
   
   try {
-    const response = await fetch('https://api.tavily.com/search', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        api_key: tavilyKey,
-        query: `số liệu kinh tế vĩ mô mới nhất về ${title}`,
-        search_depth: "basic",
-        include_answer: true,
-        max_results: 3
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`Tavily API responded with status: ${response.status}`);
-    }
-
-    const data = await response.json();
+    // 1. Dùng AI Planner để tạo queries
+    const plannerResult = await callWithPrompt(
+      provider,
+      model,
+      'finance.data.planner',
+      { title },
+      'lên kế hoạch tìm kiếm',
+      { temperature: 0.2 },
+    );
     
-    // Tavily trả về 'answer' (LLM-generated summary) và 'results'
-    if (data.answer) {
-      return data.answer;
+    let queries: string[] = [];
+    try {
+      const match = plannerResult.match(/\[.*\]/s);
+      if (match) {
+        queries = JSON.parse(match[0]);
+      }
+    } catch (e) {
+      console.warn('Không parse được JSON từ AI Planner, fallback về query mặc định', e);
     }
     
-    if (data.results && data.results.length > 0) {
-      return data.results.map((r: any) => `- ${r.title}: ${r.content}`).join('\n');
+    if (!queries || queries.length === 0) {
+      queries = [`số liệu kinh tế vĩ mô mới nhất về ${title}`];
     }
 
-    return `Không tìm thấy dữ liệu vĩ mô mới nhất trên Web.`;
+    console.log(`[Data Retrieval] Các truy vấn sẽ thực hiện:`, queries);
+
+    // 2. Chạy tìm kiếm song song
+    const searchPromises = queries.map(q => performTavilySearch(q, tavilyKey));
+    const results = await Promise.all(searchPromises);
+    
+    const combinedData = results.filter(r => r.trim() !== '').join('\n\n---\n\n');
+    
+    if (!combinedData) {
+      return `Không tìm thấy dữ liệu vĩ mô mới nhất trên Web.`;
+    }
+    return combinedData;
   } catch (error) {
-    console.error('Lỗi khi fetch dữ liệu vĩ mô từ Tavily:', error);
-    return `[LƯU Ý]: Lỗi kết nối công cụ tìm kiếm. Hãy phân tích dựa trên nguyên lý tài chính căn bản thay vì bịa số liệu.`;
+    console.error('Lỗi khi fetch dữ liệu vĩ mô:', error);
+    return `[LƯU Ý]: Lỗi kết nối công cụ tìm kiếm hoặc AI Planner. Hãy phân tích dựa trên nguyên lý tài chính căn bản thay vì bịa số liệu.`;
   }
 };

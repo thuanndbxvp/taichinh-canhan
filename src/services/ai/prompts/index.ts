@@ -163,6 +163,7 @@ QUY TẮC ĐỊNH DẠNG BẮT BUỘC (không tuân thủ = output vô dụng):
 - KHÔNG gộp 2 phần thành 1; mỗi phần là 1 heading riêng.
 - KHÔNG thêm bất kỳ text nào TRƯỚC heading "## PHẦN 1".
 - Mỗi phần có ÍT NHẤT 3 gạch đầu dòng mô tả ý chính.
+- QUY TẮC SỐ LIỆU TỐI THƯỢNG: TUYỆT ĐỐI KHÔNG TỰ BỊA CÁC SỐ LIỆU CỤ THỂ (như giá vàng, lãi suất, tỷ giá của các năm trong quá khứ/hiện tại). Nếu hệ thống không cung cấp trong DỮ LIỆU VĨ MÔ, bắt buộc phải dùng biến số như [CẦN ĐIỀN GIÁ VÀNG NĂM 2004] để người dùng tự điền. Vi phạm quy tắc này là lỗi chết người.
 
 QUY TẮC VỀ ĐỘ DÀI:
 - Kịch bản dự kiến dài ${wordCount} từ.
@@ -598,6 +599,59 @@ promptRegistry.register('finance.ideas.fromFile', {
         {
           role: 'user',
           content: `Trích xuất ý tưởng video tài chính cá nhân từ nội dung file. JSON: { title, outline }.\n\nNỘI DUNG:\n${content}`,
+        },
+      ],
+    };
+  },
+});
+
+promptRegistry.register('finance.data.planner', {
+  version: V1,
+  build({ title }) {
+    return {
+      messages: [
+        {
+          role: 'system',
+          content: 'Bạn là chuyên gia phân tích dữ liệu vĩ mô. Hãy lập kế hoạch tìm kiếm thông tin.',
+        },
+        {
+          role: 'user',
+          content: `Để viết kịch bản tài chính cho chủ đề: "${title}", hãy liệt kê đúng 3 câu lệnh tìm kiếm Google cực kỳ cụ thể để lấy số liệu thực tế (ví dụ: lãi suất, lịch sử giá cả, biến động thị trường, giá vàng 2004, 2026).
+Trả về JSON array chứa 3 string. Ví dụ: ["Giá vàng SJC hôm nay 2026", "Lãi suất tiết kiệm Vietcombank 2026", "Lịch sử giá vàng Việt Nam 2004"].
+CHỈ TRẢ VỀ JSON ARRAY, không giải thích.`,
+        },
+      ],
+    };
+  },
+});
+
+promptRegistry.register('finance.script.factcheck', {
+  version: V1,
+  build({ outline, macroContext }) {
+    return {
+      messages: [
+        {
+          role: 'system',
+          content: 'Bạn là TỔNG BIÊN TẬP KIỂM DUYỆT SỐ LIỆU (Fact-Checker). Nhiệm vụ của bạn là soi lỗi số liệu bịa đặt trong dàn ý.',
+        },
+        {
+          role: 'user',
+          content: `Đây là dàn ý kịch bản được viết bởi một AI khác:
+<outline>
+${outline}
+</outline>
+
+Đây là DỮ LIỆU VĨ MÔ CHÍNH XÁC mà hệ thống cung cấp (nếu có):
+<macro>
+${macroContext || 'Không có dữ liệu vĩ mô nào được cung cấp.'}
+</macro>
+
+YÊU CẦU KIỂM DUYỆT (FACT-CHECKING):
+1. Quét toàn bộ dàn ý trên. Tìm các con số cụ thể (giá tiền, lãi suất, tỷ giá, năm) mà AI tự ý đưa vào.
+2. Nếu các con số đó mâu thuẫn với <macro>, hoặc AI tự bịa số liệu lịch sử (VD: tự cho giá vàng 2004 là 10 triệu) mà không có cơ sở, HÃY GẠCH BỎ CHÚNG.
+3. Thay thế các số liệu bịa đặt bằng biến số cần điền, ví dụ: [CẦN ĐIỀN CHÍNH XÁC GIÁ VÀNG NĂM 2004]. Hoặc nếu bạn biết CHẮC CHẮN con số thực tế (và phù hợp với bối cảnh năm hiện tại), bạn có thể sửa lại cho đúng.
+4. KHÔNG làm thay đổi cấu trúc Heading của dàn ý (vẫn giữ nguyên 5 PHẦN).
+5. TRẢ VỀ DÀN Ý ĐÃ ĐƯỢC THANH LỌC, KHÔNG GIẢI THÍCH DÀI DÒNG. Bắt đầu ngay bằng "## PHẦN 1...".`,
         },
       ],
     };

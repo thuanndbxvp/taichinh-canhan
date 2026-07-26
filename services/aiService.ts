@@ -60,8 +60,10 @@ export const generateScriptOutline = async (
   provider: AiProvider,
   model: string,
   onChunk?: (chunk: string) => void,
+  onPhaseChange?: (phase: string) => void,
 ): Promise<string> =>
   runPrompt('tạo dàn ý', async () => {
+    onPhaseChange?.('Đang tạo dàn ý thô (bước 1)...');
     const outline = await callWithPrompt(
       provider,
       model,
@@ -69,10 +71,22 @@ export const generateScriptOutline = async (
       { params },
       'tạo dàn ý',
       { temperature: getTemperatureForStyle(params.scriptStyle) },
-      onChunk,
+      undefined, // Do not stream raw outline
       'outline',
     );
-    return `### Dàn Ý Chi Tiết (Chuẩn bị tạo kịch bản sạch cho TTS)\n\n` + outline;
+    
+    onPhaseChange?.('Đang kiểm duyệt số liệu và xuất bản (Fact-checking)...');
+    const factCheckedOutline = await callWithPrompt(
+      provider,
+      model,
+      'finance.script.factcheck',
+      { outline, macroContext: params.macroContext },
+      'kiểm duyệt dàn ý',
+      { temperature: 0.1 },
+      onChunk, // Stream the final outline
+      'factcheck',
+    );
+    return `### Dàn Ý Chi Tiết (Chuẩn bị tạo kịch bản sạch cho TTS)\n\n` + factCheckedOutline;
   });
 
 export const generateScriptPart = async (

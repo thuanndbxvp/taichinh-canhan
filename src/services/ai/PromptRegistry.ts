@@ -81,6 +81,11 @@ export interface PromptRegistryMap {
   'finance.topics.suggest': { title: string };
   'finance.keywords.suggest': { title: string };
   'finance.ideas.fromFile': { content: string };
+  'finance.router.classify': { title: string };
+  'finance.data.retrieve': { title: string };
+  'finance.score.outline': { script: string };
+  'finance.data.planner': { title: string };
+  'finance.script.factcheck': { outline: string; macroContext?: string };
   'default.script': { params: GenerationParams };
   'default.script.outline': { params: GenerationParams };
   'default.script.part': {
