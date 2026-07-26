@@ -66,7 +66,7 @@ export const OpenAiCompatibleProvider: ProviderAdapter = {
         model: request.model,
         messages: request.messages,
         ...(request.temperature !== undefined ? { temperature: request.temperature } : {}),
-        ...(request.maxTokens !== undefined ? { max_tokens: request.maxTokens } : {}),
+        max_tokens: request.maxTokens ?? 8000,
         ...(ctx.onChunk ? { stream: true } : {}),
         ...(request.extras ?? {}),
       }),
