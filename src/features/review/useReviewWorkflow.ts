@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import type { AiProvider } from '../../../types';
-import { scoreScript, reviseScriptPartial, type ScoreResult, type ScriptReplacement } from '../../../services/aiService';
+import { scoreScript, scoreOutline, reviseScriptPartial, type ScoreResult, type ScriptReplacement } from '../../../services/aiService';
 
 export interface UseReviewWorkflowArgs {
   aiProvider: AiProvider;
@@ -13,6 +13,7 @@ export interface UseReviewWorkflowReturn {
   error: string | null;
   rawStream: string;
   score2: (script: string) => Promise<void>;
+  scoreOutline2: (script: string) => Promise<void>;
   revise2: (script: string, revisionPrompt: string) => Promise<ScriptReplacement[]>;
   isRevising: boolean;
   clear: () => void;
@@ -32,6 +33,26 @@ export function useReviewWorkflow({ aiProvider, selectedModel }: UseReviewWorkfl
       setRawStream('');
       try {
         const result = await scoreScript(script, aiProvider, selectedModel, (chunk, full) => {
+          setRawStream(full);
+        });
+        setScore(result);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Lỗi khi chấm điểm.');
+      } finally {
+        setIsScoring(false);
+      }
+    },
+    [aiProvider, selectedModel],
+  );
+
+  const scoreOutline2 = useCallback(
+    async (script: string) => {
+      if (!script) return;
+      setIsScoring(true);
+      setError(null);
+      setRawStream('');
+      try {
+        const result = await scoreOutline(script, aiProvider, selectedModel, (chunk, full) => {
           setRawStream(full);
         });
         setScore(result);
@@ -73,5 +94,5 @@ export function useReviewWorkflow({ aiProvider, selectedModel }: UseReviewWorkfl
     setRawStream('');
   }, []);
 
-  return { score, isScoring, isRevising, error, rawStream, score2, revise2, clear };
+  return { score, isScoring, isRevising, error, rawStream, score2, scoreOutline2, revise2, clear };
 }

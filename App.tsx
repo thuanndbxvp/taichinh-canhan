@@ -129,11 +129,17 @@ const App: React.FC = () => {
     [ideas, brief, modals],
   );
 
+  const isOutlinePhase = generation.currentPartIndex === 0 && generation.totalParts > 0 && !generation.isGeneratingSequentially;
+
   // Score dialog
   const handleScoreClick = useCallback(async () => {
     modals.open('score');
-    await review.score2(generation.generatedScript);
-  }, [modals, review, generation.generatedScript]);
+    if (isOutlinePhase) {
+      await review.scoreOutline2(generation.generatedScript);
+    } else {
+      await review.score2(generation.generatedScript);
+    }
+  }, [modals, review, generation.generatedScript, isOutlinePhase]);
 
   // Summarize dialog
   const handleSummarizeClick = useCallback((config: Parameters<typeof scenes.summarize>[1]) => {
@@ -312,6 +318,7 @@ const App: React.FC = () => {
             autoContinue={generation.autoContinue}
             setAutoContinue={generation.setAutoContinue}
             macroData={generation.macroData}
+            isOutlinePhase={isOutlinePhase}
           />
         </div>
         <div className="lg:col-span-3">
@@ -332,6 +339,7 @@ const App: React.FC = () => {
             isExtracting={dialogue.isExtracting}
             onScoreScript={handleScoreClick}
             isScoring={review.isScoring}
+            isOutlinePhase={isOutlinePhase}
           />
         </div>
       </main>
@@ -403,12 +411,14 @@ const App: React.FC = () => {
           <ScoreModal
             isOpen
             onClose={() => modals.close('score')}
+            title={brief.brief.title}
             score={review.score}
             isLoading={review.isScoring}
             error={review.error}
             rawStream={review.rawStream}
             isRevising={review.isRevising}
             onRevise={handleReviseScript}
+            isOutlinePhase={isOutlinePhase}
           />
         )}
         {modals.isOpen('summarize') && (

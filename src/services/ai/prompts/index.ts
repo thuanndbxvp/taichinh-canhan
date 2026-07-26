@@ -482,6 +482,49 @@ ${script}`,
   },
 });
 
+promptRegistry.register('finance.score.outline', {
+  version: V1,
+  build({ script }) {
+    return {
+      messages: [
+        {
+          role: 'system',
+          content:
+            'Bạn là chuyên gia thẩm định Dàn Ý video tài chính cá nhân. Bạn đánh giá mức độ logic, cấu trúc và tính thu hút của các ý tưởng trong Dàn Ý. Bắt buộc trả về JSON. KHÔNG phạt Dàn Ý vì sử dụng gạch đầu dòng (bullet points) hay listicle, vì đây là Dàn Ý chứ không phải Kịch bản chi tiết.',
+        },
+        {
+          role: 'user',
+          content: `Đánh giá DÀN Ý này dựa trên 5 tiêu chí:
+1. Cấu trúc (Structure): Các phần có được phân chia hợp lý không? Đánh giá tính logic của trật tự các luận điểm. (Tuyệt đối không trừ điểm nếu dùng gạch đầu dòng).
+2. Dữ liệu & Logic (Research): Dàn ý có vạch ra được các con số hoặc ví dụ thực tế cần có không?
+3. Góc nhìn (Voice): Góc nhìn tiếp cận vấn đề có sắc sảo, thực tế và phù hợp với định hướng kênh không?
+4. Chiều sâu (Insight): Ý tưởng cốt lõi (Core message) có thực sự đọng lại giá trị không?
+5. Tiềm năng thị giác (Cinematic): Dàn ý có gợi ra các hình ảnh, biểu đồ, hay ẩn dụ thị giác nào dễ thực hiện trên video không?
+
+Trả về JSON ĐÚNG cấu trúc sau (điểm /10):
+{
+  "criteria": {
+    "structure": { "score": 8.5, "analysis": "...", "evidence": "..." },
+    "research": { "score": 7.0, "analysis": "...", "evidence": "..." },
+    "voice": { "score": 9.0, "analysis": "...", "evidence": "..." },
+    "insight": { "score": 8.0, "analysis": "...", "evidence": "..." },
+    "cinematic": { "score": 6.5, "analysis": "...", "evidence": "..." }
+  },
+  "penalties": [],
+  "pros": ["Điểm mạnh 1", "Điểm mạnh 2"],
+  "cons": ["Điểm cần cải thiện 1", "Điểm cần cải thiện 2"],
+  "overallReview": "Nhận xét tổng quan về tính khả thi của ý tưởng...",
+  "estimatedTime": "N/A"
+}
+
+DÀN Ý:
+${script}`,
+        },
+      ],
+    };
+  },
+});
+
 promptRegistry.register('finance.style.suggest', {
   version: V1,
   build({ title }) {

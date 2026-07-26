@@ -14,6 +14,8 @@ interface ScoreModalProps {
   rawStream?: string;
   isRevising?: boolean;
   onRevise?: (prompt: string) => void;
+  title?: string;
+  isOutlinePhase?: boolean;
 }
 
 const StreamViewer: React.FC<{ stream: string }> = ({ stream }) => {
@@ -39,7 +41,7 @@ const StreamViewer: React.FC<{ stream: string }> = ({ stream }) => {
     );
 };
 
-export const ScoreModal: React.FC<ScoreModalProps> = ({ isOpen, onClose, score, isLoading, error, rawStream, isRevising, onRevise }) => {
+export const ScoreModal: React.FC<ScoreModalProps> = ({ isOpen, onClose, score, isLoading, error, rawStream, isRevising, onRevise, title, isOutlinePhase }) => {
     const [copySuccess, setCopySuccess] = useState('');
     const [selectedFeedback, setSelectedFeedback] = useState<string[]>([]);
     const [userComment, setUserComment] = useState('');
@@ -97,8 +99,12 @@ export const ScoreModal: React.FC<ScoreModalProps> = ({ isOpen, onClose, score, 
             >
                 <div className="flex justify-between items-center p-4 border-b border-border">
                      <div className="flex items-center gap-3">
-                        <TrophyIcon className="w-6 h-6 text-amber-400" />
-                        <h2 className="text-xl font-bold text-accent">Script Doctor - Đánh Giá Chuyên Sâu</h2>
+                        <div className="p-2 bg-accent/20 rounded-lg">
+                            <span className="text-xl">💡</span>
+                        </div>
+                        <h2 className="text-2xl font-bold text-text-primary">
+                            Script Doctor - Đánh Giá Chuyên Sâu {isOutlinePhase ? 'Dàn Ý' : 'Kịch Bản'}
+                        </h2>
                     </div>
                     <button onClick={onClose} className="text-text-secondary hover:text-text-primary text-2xl font-bold">&times;</button>
                 </div>
@@ -228,24 +234,23 @@ export const ScoreModal: React.FC<ScoreModalProps> = ({ isOpen, onClose, score, 
                                 )}
                                 <h3 className="font-bold text-accent mb-3 flex items-center gap-2">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                                    Tự Động Sửa Kịch Bản Theo Ý Kiến
+                                    Tự Động Sửa {isOutlinePhase ? 'Dàn Ý' : 'Kịch Bản'}
                                 </h3>
                                 <p className="text-sm text-text-secondary mb-4">
-                                    Tích chọn (Checkbox) các <b>Phạm Quy</b> hoặc <b>Cần Cải Thiện</b> ở trên để AI tự động sửa lại những đoạn văn tương ứng.
-                                    AI sẽ chỉ sửa đoạn cần thiết để không làm gãy mạch kịch bản.
+                                    Tích chọn các <b>Phạm Quy</b> hoặc <b>Cần Cải Thiện</b> ở trên để AI tự động sửa lại.
                                 </p>
                                 <textarea 
                                     className="w-full bg-secondary text-text-primary p-3 rounded border border-border focus:border-accent outline-none text-sm min-h-[80px] mb-4 placeholder-text-secondary/50" 
-                                    placeholder="Ghi chú thêm cho AI (Ví dụ: Thêm một ví dụ thực tế vào phần 2...)"
+                                    placeholder="Ghi chú thêm cho AI..."
                                     value={userComment}
                                     onChange={e => setUserComment(e.target.value)}
                                 />
                                 <button 
                                     onClick={handleRevise}
-                                    disabled={isRevising || (selectedFeedback.length === 0 && !userComment.trim())}
+                                    disabled={isRevising || selectedFeedback.length === 0}
                                     className="w-full bg-accent hover:brightness-110 text-white font-bold py-3 px-6 rounded-md transition shadow-lg shadow-accent/20 disabled:opacity-50 flex justify-center items-center gap-2"
                                 >
-                                    Tiếp thu & Bắt Đầu Sửa
+                                    <span className="text-lg">✨</span> Sửa {isOutlinePhase ? 'dàn ý' : 'kịch bản'} theo ý kiến đã chọn
                                 </button>
                             </div>
                         </div>

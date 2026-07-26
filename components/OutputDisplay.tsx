@@ -34,6 +34,7 @@ interface OutputDisplayProps {
   setAutoContinue?: (val: boolean) => void;
   currentAiAction?: string | null;
   macroData?: string | null;
+  isOutlinePhase?: boolean;
 }
 
 const InitialState: React.FC<{ onImportClick: () => void }> = ({ onImportClick }) => (
@@ -120,6 +121,7 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
     setAutoContinue,
     currentAiAction,
     macroData,
+    isOutlinePhase,
 }) => {
     const [copySuccess, setCopySuccess] = useState('');
     const [copiedStates, setCopiedStates] = useState<Record<number, boolean>>({});
@@ -222,7 +224,7 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
         if (isLoading) {
             return 'Đang xử lý kịch bản...';
         }
-        return 'Kịch bản';
+        return isOutlinePhase ? 'Dàn ý' : 'Kịch bản';
     };
 
     const renderContent = () => {

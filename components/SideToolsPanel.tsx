@@ -26,6 +26,7 @@ interface SideToolsPanelProps {
   isExtracting: boolean;
   onScoreScript: () => void;
   isScoring: boolean;
+  isOutlinePhase?: boolean;
 }
 
 export const SideToolsPanel: React.FC<SideToolsPanelProps> = ({
@@ -45,6 +46,7 @@ export const SideToolsPanel: React.FC<SideToolsPanelProps> = ({
     isExtracting,
     onScoreScript,
     isScoring,
+    isOutlinePhase,
 }) => {
 
     return (

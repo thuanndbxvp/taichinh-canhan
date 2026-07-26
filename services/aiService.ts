@@ -329,6 +329,41 @@ export const scoreScript = async (
     );
   });
 
+export const scoreOutline = async (
+  script: string,
+  provider: AiProvider,
+  model: string,
+  onChunk?: (chunk: string, fullStream: string) => void
+): Promise<ScoreResult> =>
+  runPrompt('chấm điểm dàn ý', async () => {
+    const content = await callWithPrompt(
+      provider,
+      model,
+      'finance.score.outline',
+      { script },
+      'chấm điểm dàn ý',
+      undefined,
+      onChunk,
+      undefined,
+      'score',
+    );
+    return parseAiJsonOrThrow<ScoreResult>(
+      content,
+      {
+        kind: 'object',
+        fields: {
+          criteria: 'object',
+          penalties: 'array',
+          pros: 'array',
+          cons: 'array',
+          overallReview: 'string',
+          estimatedTime: 'string',
+        }
+      },
+      'chấm điểm dàn ý'
+    );
+  });
+
 export interface ScriptReplacement {
   original_text_snippet: string;
   new_text: string;
