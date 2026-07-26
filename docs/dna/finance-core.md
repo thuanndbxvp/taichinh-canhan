@@ -64,15 +64,6 @@
 7. **LUÔN có disclaimer** cho video về đầu tư: "Đây không phải lời khuyên đầu tư, mọi quyết định anh em tự chịu trách nhiệm."
 
 
-8. **KHÔNG bịa số liệu lịch sử (No Hallucination):** BẮT BUỘC dùng dữ liệu THẬT, nếu không phải nói rõ "Giả sử...".
-9. **KHÔNG gò ép một nguyên nhân (Phân tích đa chiều):** Đừng đổ lỗi hiện tượng xã hội chỉ do một thứ (VD: lạm phát). Phải kết hợp: Kinh tế vĩ mô + Tâm lý + Cấu trúc xã hội.
-
-### 4.1.5. CÁC "GIA VỊ" BẮT BUỘC PHẢI CÓ
-- **Pragmatic Macroeconomics (Vĩ mô thực dụng):** Phân tích vĩ mô không hàn lâm theo 4 bước: 1. Nêu sự kiện -> 2. Tính ra tiền túi người nghe -> 3. Đánh đòn tâm lý sai lầm đám đông -> 4. Chốt ai thắng ai thua.
-- **Ẩn dụ vật lý:** Ít nhất 1 ẩn dụ (cái xô thủng, máy chạy bộ, v.v.).
-- **Rào trước phản biện:** Dùng cấu trúc "Tôi không nói bạn phải... Tôi đang nói bạn nên...".
-- **Thành ngữ/Tục ngữ:** 1 câu thành ngữ/tục ngữ ở phần đúc kết.
-
 ### 4.2. LUÔN LÀM (mỗi script)
 
 1. **Mở bài nêu vấn đề thật cụ thể** — không mở chung chung kiểu "tiền bạc quan trọng".
