@@ -121,6 +121,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         const cleanedTitle = idea.title.replace(/^\d+\.\s*/, '');
         setTitle(cleanedTitle);
         setOutlineContent(idea.outline);
+        if (idea.branch) {
+            setScriptStyle(idea.branch);
+        } else {
+            setScriptStyle('auto');
+        }
     }
   };
 
@@ -278,6 +283,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                             <option value="psychology">Tâm lý Xã hội (Psychology)</option>
                             <option value="mythbusting">Bóc phốt lầm tưởng (Myth-busting)</option>
                             <option value="listicle">Danh sách thực chiến (Listicle)</option>
+                            <option value="fundamental">Kỹ năng & Kiến thức nền tảng (Fundamental)</option>
                         </select>
                     </div>
                 </Tooltip>

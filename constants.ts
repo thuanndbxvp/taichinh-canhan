@@ -334,6 +334,7 @@ export const FINANCE_IDEAS: TopicSuggestionItem[] = [
   {
     category: "AI gợi ý",
     title: "Tài chính cho sinh viên mới ra trường",
+    branch: "fundamental",
     outline: "Cẩm nang sinh tồn tài chính trong những năm tháng lương thấp. Cách thiết lập thói quen chi tiêu chuẩn mực ngay từ tháng lương đầu tiên."
   },
   {
@@ -357,6 +358,7 @@ export const FINANCE_IDEAS: TopicSuggestionItem[] = [
   {
     category: "AI gợi ý",
     title: "Thuế Thu nhập Cá nhân: Những điều người lao động cần biết",
+    branch: "fundamental",
     outline: "Cách tính thuế TNCN cơ bản. Các khoản giảm trừ gia cảnh và phương pháp hợp pháp để tối ưu hóa số thuế phải nộp hằng năm."
   },
   {
@@ -452,6 +454,7 @@ export const FINANCE_IDEAS: TopicSuggestionItem[] = [
   {
     category: "AI gợi ý",
     title: "Nghệ thuật Bán hàng: Kỹ năng sinh tồn số 1 của người giàu",
+    branch: "fundamental",
     outline: "Tại sao tỷ phú nào cũng là một người bán hàng xuất sắc? Cách tư duy về bán hàng không phải là 'móc túi' người khác mà là trao đi giá trị và giải quyết vấn đề."
   },
   {
@@ -469,6 +472,7 @@ export const FINANCE_IDEAS: TopicSuggestionItem[] = [
   {
     category: "AI gợi ý",
     title: "Quyền năng của từ 'KHÔNG' trong quản lý tài chính",
+    branch: "fundamental",
     outline: "Làm thế nào để từ chối những cuộc vui tốn kém, những lời mời gọi vay mượn từ người thân mà không mất lòng. Kỷ luật bảo vệ chiếc ví của chính mình."
   },
   {
@@ -504,6 +508,7 @@ export const FINANCE_IDEAS: TopicSuggestionItem[] = [
   {
     category: "AI gợi ý",
     title: "Bảo hiểm Y tế tự nguyện: Tấm khiên rẻ nhất nhưng quyền lực nhất",
+    branch: "fundamental",
     outline: "Đừng vội mua bảo hiểm nhân thọ tiền chục triệu nếu chưa có Bảo hiểm y tế Nhà nước. Cách tận dụng BHYT để giảm đến 80% gánh nặng viện phí khi rủi ro ập tới."
   },
   {
@@ -599,6 +604,7 @@ export const FINANCE_IDEAS: TopicSuggestionItem[] = [
   {
     category: "AI gợi ý",
     title: "Bẫy thu nhập trung bình (Middle-income trap) ở cấp độ cá nhân",
+    branch: "fundamental",
     outline: "Tại sao nhiều người kẹt ở mức lương 20-30 triệu suốt nhiều năm mà không thể bứt phá. Cách nâng cấp kỹ năng (Upskill) để nhảy vọt lên phân khúc thu nhập cao."
   },
   {

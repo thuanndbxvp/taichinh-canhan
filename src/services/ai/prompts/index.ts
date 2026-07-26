@@ -19,6 +19,7 @@ import analyticalRaw from '../../../../docs/dna/finance-analytical.md?raw';
 import psychologyRaw from '../../../../docs/dna/finance-psychology.md?raw';
 import mythbustingRaw from '../../../../docs/dna/finance-mythbusting.md?raw';
 import listicleRaw from '../../../../docs/dna/finance-listicle.md?raw';
+import fundamentalRaw from '../../../../docs/dna/finance-fundamental.md?raw';
 import hooksRaw from '../../../../docs/dna/finance-hooks.md?raw';
 
 function getBranchDna(branch?: string): string {
@@ -27,6 +28,7 @@ function getBranchDna(branch?: string): string {
     case 'psychology': return psychologyRaw;
     case 'mythbusting': return mythbustingRaw;
     case 'listicle': return listicleRaw;
+    case 'fundamental': return fundamentalRaw;
     default: return analyticalRaw;
   }
 }
@@ -95,6 +97,7 @@ Nhánh (branch) được phép:
 - "psychology": Nếu chủ đề liên quan đến tâm lý, thói quen tiêu tiền, áp lực đồng trang lứa, cảm xúc (VD: Lương 20 triệu vẫn thiếu, nghiện mua sắm).
 - "mythbusting": Nếu chủ đề là những niềm tin sai lầm phổ biến, lừa đảo, hoặc cần bóc phốt (VD: "Thu nhập thụ động là dối trá").
 - "listicle": Nếu chủ đề là dạng top/danh sách cụ thể, hành động nhanh (VD: 5 cách tiết kiệm, 3 sai lầm).
+- "fundamental": Nếu chủ đề là các kiến thức/kỹ năng nền tảng cơ bản, luật lệ, thuế, bảo hiểm (VD: Thuế TNCN, Kỹ năng bán hàng).
 
 Kiểu mở đầu (hook) được phép:
 - "story": Kể một câu chuyện cá nhân/nhân vật (Hợp với psychology).
