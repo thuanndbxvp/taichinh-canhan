@@ -40,9 +40,13 @@ serve(async (req) => {
       })
     }
 
-    // SECURITY CHECK
-    // const isAdmin = user.user_metadata?.role === 'admin'
-    // if (!isAdmin) {}
+    // SECURITY CHECK: Only allow 'thuannd@dark.local' to perform admin actions
+    if (user.email !== 'thuannd@dark.local') {
+      return new Response(JSON.stringify({ error: 'Forbidden: Admin access only' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      })
+    }
 
     // Admin Client with service_role_key
     const adminClient = createClient(supabaseUrl, supabaseServiceKey)

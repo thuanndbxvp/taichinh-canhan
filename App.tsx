@@ -14,6 +14,7 @@ import { useReviewWorkflow } from './src/features/review/useReviewWorkflow';
 import { useLibrary } from './src/features/library/useLibrary';
 import { useIdeaWorkflow } from './src/features/ideas/useIdeaWorkflow';
 import { useModalState } from './src/features/modals/useModalState';
+import { useAuth } from './src/contexts/AuthContext';
 import type { AiProvider } from './types';
 
 import { LibraryModal } from './components/LibraryModal';
@@ -34,6 +35,7 @@ const YoutubeLogoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 );
 
 const App: React.FC = () => {
+  const { user } = useAuth();
   const brief = useContentBrief();
   const aiSettings = useAiSettings();
   const [currentAiConfig, setCurrentAiConfig] = useState<{provider: AiProvider, model: string} | null>(null);
@@ -181,6 +183,13 @@ const App: React.FC = () => {
     });
   }, [library, brief.brief, generation.generatedScript]);
 
+  // AUTO-SAVE: Khi AI tạo xong (script != null, không còn loading) và chưa save
+  useEffect(() => {
+    if (generation.generatedScript && !generation.isLoading && !library.hasSaved && !pendingGenerate) {
+      handleSaveToLibrary();
+    }
+  }, [generation.generatedScript, generation.isLoading, library.hasSaved, pendingGenerate, handleSaveToLibrary]);
+
   const hasApiKey = aiSettings.hasAnyApiKey;
 
   return (
@@ -219,9 +228,11 @@ const App: React.FC = () => {
             </svg>
             <span className="hidden md:inline">Usage</span>
           </button>
-          <button onClick={() => modals.open('admin')} className="px-3 md:px-4 py-1.5 text-sm font-semibold rounded-md border border-emerald-900 text-emerald-400 hover:bg-emerald-400/10 transition-colors flex items-center gap-2">
-            <span className="hidden md:inline">Admin</span>
-          </button>
+          {user?.email === 'thuannd@dark.local' && (
+            <button onClick={() => modals.open('admin')} className="px-3 md:px-4 py-1.5 text-sm font-semibold rounded-md border border-emerald-900 text-emerald-400 hover:bg-emerald-400/10 transition-colors flex items-center gap-2">
+              <span className="hidden md:inline">Admin</span>
+            </button>
+          )}
           <button onClick={() => modals.open('apiKey')} className="px-4 py-1.5 text-sm font-semibold rounded-md border border-border text-text-secondary">API</button>
         </div>
       </header>
@@ -317,8 +328,6 @@ const App: React.FC = () => {
             isSummarizing={scenes.isSummarizing}
             hasSummarizedScript={!!scenes.summarizedScript}
             onOpenLibrary={() => modals.open('library')}
-            onSaveToLibrary={handleSaveToLibrary}
-            hasSavedToLibrary={library.hasSaved}
             onExtractAndCount={handleOpenDialogue}
             onOpenDialogueModal={() => modals.open('dialogue')}
             wordCountStats={dialogue.stats}
