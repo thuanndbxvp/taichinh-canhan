@@ -410,12 +410,12 @@ promptRegistry.register('finance.score', {
           content: `Hãy nhận xét và chấm điểm kịch bản này dựa trên 5 tiêu chí. 
 Mỗi tiêu chí cho điểm từ 1-10, đi kèm lời phê (analysis) và dẫn chứng cụ thể từ kịch bản (evidence).
 
-5 TIÊU CHÍ:
-1. Kết cấu và mạch cảm xúc (structure): Opening có thu hút? Logic chuyển ý có mượt? Cao trào có build-up? Kết có dư âm?
-2. Độ chính xác & nghiên cứu (research): Số liệu, bối cảnh, logic có đúng? Đủ sâu hay chỉ hời hợt?
-3. Giọng văn & phong cách kể (voice): Nhịp điệu câu văn dài/ngắn, ẩn dụ, từ ngữ có đúng chất "Chú Que"? Có ra vẻ "đời" và sắc lạnh?
-4. Ý tưởng và chiều sâu (insight): Góc nhìn có gì mới? Có khiến người xem suy nghĩ sâu hơn hay chỉ là liệt kê fact? (Insight > Information)
-5. Nhịp đọc & hình ảnh (cinematic): Cấu trúc có gợi hình ảnh điện ảnh? Có khoảng nghỉ?
+5 TIÊU CHÍ (Dành riêng cho Tài Chính Cá Nhân):
+1. Kết cấu và mạch cảm xúc (structure): Mở đầu có đánh trúng nỗi đau tài chính thực tế? Chuyển ý giữa các bài toán tiền bạc có mượt không? Kết thúc có đúc kết bài học đắt giá và câu chào chuẩn kênh?
+2. Tính thực chiến & Số liệu (research): Các con số (lãi suất, lương, giá nhà) có thực tế với Việt Nam không? Có cảnh báo rủi ro không? Có bị sa đà vào lý thuyết suông hay hứa hẹn làm giàu nhanh (lỗi nặng)?
+3. Giọng văn & Phong cách (voice): Xưng hô "Tôi - anh em" có tự nhiên? Văn phong có sắc lạnh, thẳng thắn, "không bán mơ", ít dùng thuật ngữ học thuật (gatekeeping) nhưng vẫn thấu cảm?
+4. Tư duy & Chiều sâu (insight): Có bóc trần được tâm lý hành vi (FOMO, bẫy tiêu dùng)? Có phá vỡ định kiến tài chính cũ kỹ (Myth-busting) hay chỉ khuyên "hãy tiết kiệm" chung chung?
+5. Nhịp điệu thu âm (cinematic): Cấu trúc câu dài/ngắn có đan xen để tạo điểm nhấn âm thanh khi đọc? Có ngắt quãng hợp lý (khoảng nghỉ) để khán giả ngấm số liệu? Không viết câu dài lê thê đều đều.
 
 QUY TẮC TRỪ ĐIỂM (Penalties):
 - Trừ 0.2-0.5: Lặp ý, lặp từ, chuyển đoạn gượng.
