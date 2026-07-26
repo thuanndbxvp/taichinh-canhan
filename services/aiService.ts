@@ -266,11 +266,30 @@ export const parseIdeasFromFile = async (
     );
   });
 
-export interface ScoreResult {
+export interface CriteriaScore {
   score: number;
+  analysis: string;
+  evidence: string;
+}
+
+export interface ScorePenalty {
+  reason: string;
+  deduction: number;
+}
+
+export interface ScoreResult {
+  criteria: {
+    structure: CriteriaScore;
+    research: CriteriaScore;
+    voice: CriteriaScore;
+    insight: CriteriaScore;
+    cinematic: CriteriaScore;
+  };
+  penalties: ScorePenalty[];
   pros: string[];
   cons: string[];
   overallReview: string;
+  estimatedTime: string;
 }
 
 export const scoreScript = async (
@@ -294,10 +313,12 @@ export const scoreScript = async (
       {
         kind: 'object',
         fields: {
-          score: 'number',
+          criteria: 'object',
+          penalties: 'array',
           pros: 'array',
           cons: 'array',
           overallReview: 'string',
+          estimatedTime: 'string',
         }
       },
       'chấm điểm kịch bản'

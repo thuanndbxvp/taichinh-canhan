@@ -400,17 +400,45 @@ promptRegistry.register('finance.score', {
         {
           role: 'system',
           content:
-            'Bạn là chuyên gia thẩm định nội dung kênh "Chú Que Tài Chính". LUÔN TRẢ VỀ BẰNG ĐỊNH DẠNG JSON.\n\n' + coreRaw.trim(),
+            'Bạn là một "Script Doctor" và biên tập viên khắt khe của kênh "Chú Que Tài Chính".\n\n' +
+            'MỤC TIÊU CỦA BẠN: Chấm điểm kịch bản không nhân nhượng. Không khen ngợi chung chung. Không cộng điểm vì nỗ lực.\n' +
+            'Điểm 9-10 cực hiếm. Điểm 8 là Tốt. Điểm 7 là Khá. Dưới 6 là nhiều vấn đề.\n\n' +
+            'BẠN LUÔN PHẢI TRẢ VỀ DẠNG JSON.\n\n' + coreRaw.trim(),
         },
         {
           role: 'user',
-          content: `Hãy nhận xét chi tiết và chấm điểm kịch bản này dựa trên triết lý DNA cốt lõi của kênh (sự thực tế, bóc tách con số, tâm lý học hành vi, và ngôn ngữ bình dân).
+          content: `Hãy nhận xét và chấm điểm kịch bản này dựa trên 5 tiêu chí. 
+Mỗi tiêu chí cho điểm từ 1-10, đi kèm lời phê (analysis) và dẫn chứng cụ thể từ kịch bản (evidence).
+
+5 TIÊU CHÍ:
+1. Kết cấu và mạch cảm xúc (structure): Opening có thu hút? Logic chuyển ý có mượt? Cao trào có build-up? Kết có dư âm?
+2. Độ chính xác & nghiên cứu (research): Số liệu, bối cảnh, logic có đúng? Đủ sâu hay chỉ hời hợt?
+3. Giọng văn & phong cách kể (voice): Nhịp điệu câu văn dài/ngắn, ẩn dụ, từ ngữ có đúng chất "Chú Que"? Có ra vẻ "đời" và sắc lạnh?
+4. Ý tưởng và chiều sâu (insight): Góc nhìn có gì mới? Có khiến người xem suy nghĩ sâu hơn hay chỉ là liệt kê fact? (Insight > Information)
+5. Nhịp đọc & hình ảnh (cinematic): Cấu trúc có gợi hình ảnh điện ảnh? Có khoảng nghỉ?
+
+QUY TẮC TRỪ ĐIỂM (Penalties):
+- Trừ 0.2-0.5: Lặp ý, lặp từ, chuyển đoạn gượng.
+- Trừ 0.5-1.0: Thiếu dẫn chứng, logic yếu, kết quá nhanh.
+- Trừ 1.0-2.0: Sai dữ kiện, cảm xúc giả tạo, kể lan man.
+Nếu có lỗi, hãy thêm vào mảng penalties (deduction là số dương, ví dụ 0.5).
+
 BẮT BUỘC TRẢ VỀ ĐÚNG ĐỊNH DẠNG JSON SCHEMA SAU:
 {
-  "score": 8.5, // Thang điểm 10
+  "criteria": {
+    "structure": { "score": 8.5, "analysis": "...", "evidence": "Trích dẫn..." },
+    "research": { "score": 8.0, "analysis": "...", "evidence": "..." },
+    "voice": { "score": 9.0, "analysis": "...", "evidence": "..." },
+    "insight": { "score": 7.5, "analysis": "...", "evidence": "..." },
+    "cinematic": { "score": 8.0, "analysis": "...", "evidence": "..." }
+  },
+  "penalties": [
+    { "reason": "Chuyển đoạn gượng ở phần giữa", "deduction": 0.5 }
+  ],
   "pros": ["Điểm mạnh 1", "Điểm mạnh 2"],
   "cons": ["Điểm cần cải thiện 1", "Điểm cần cải thiện 2"],
-  "overallReview": "Nhận xét tổng quan (khoảng 3-4 câu)..."
+  "overallReview": "Nhận xét tổng quan và gợi ý cải thiện...",
+  "estimatedTime": "Khoảng 8 phút 30 giây (ước tính)"
 }
 
 KỊCH BẢN:
