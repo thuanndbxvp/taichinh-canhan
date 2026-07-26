@@ -17,7 +17,7 @@ export const AdminPanelModal: React.FC<{
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [newEmail, setNewEmail] = useState('');
+  const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
   const [isAdmin, setIsAdmin] = useState(false);
@@ -52,19 +52,20 @@ export const AdminPanelModal: React.FC<{
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newEmail || !newPassword) return;
+    if (!newUsername || !newPassword) return;
 
     setLoading(true);
     setError(null);
     try {
+      const email = newUsername.includes('@') ? newUsername : `${newUsername}@dark.local`;
       const { error } = await supabase.functions.invoke('manage-users', {
         method: 'POST',
-        body: { email: newEmail, password: newPassword }
+        body: { email, password: newPassword }
       });
 
       if (error) throw error;
 
-      setNewEmail('');
+      setNewUsername('');
       setNewPassword('');
       await checkAdminAndLoadUsers();
     } catch (err: any) {
@@ -152,12 +153,12 @@ export const AdminPanelModal: React.FC<{
                 <h3 className="text-lg font-semibold text-white mb-4">Tạo Tài Khoản Mới</h3>
                 <form onSubmit={handleCreateUser} className="flex gap-4 items-end">
                   <div className="flex-1">
-                    <label className="block text-sm font-medium text-gray-400 mb-1">Email</label>
+                    <label className="block text-sm font-medium text-gray-400 mb-1">Tên đăng nhập</label>
                     <input
-                      type="email"
+                      type="text"
                       required
-                      value={newEmail}
-                      onChange={(e) => setNewEmail(e.target.value)}
+                      value={newUsername}
+                      onChange={(e) => setNewUsername(e.target.value)}
                       className="w-full px-3 py-2 bg-black border border-gray-700 rounded-md text-white focus:outline-none focus:border-emerald-500"
                     />
                   </div>
@@ -190,7 +191,7 @@ export const AdminPanelModal: React.FC<{
                     <table className="w-full text-left border-collapse">
                       <thead>
                         <tr className="border-b border-gray-800 text-gray-400 text-sm">
-                          <th className="pb-3 font-medium">Email</th>
+                          <th className="pb-3 font-medium">Tài khoản</th>
                           <th className="pb-3 font-medium">Ngày tạo</th>
                           <th className="pb-3 font-medium">Hành động</th>
                         </tr>
@@ -198,7 +199,7 @@ export const AdminPanelModal: React.FC<{
                       <tbody className="text-sm">
                         {users.map(u => (
                           <tr key={u.id} className="border-b border-gray-800/50 hover:bg-gray-800/30 transition-colors">
-                            <td className="py-3 text-gray-200">{u.email}</td>
+                            <td className="py-3 text-gray-200">{u.email.replace('@dark.local', '')}</td>
                             <td className="py-3 text-gray-400">{new Date(u.created_at).toLocaleString('vi-VN')}</td>
                             <td className="py-3">
                               <div className="flex gap-2">

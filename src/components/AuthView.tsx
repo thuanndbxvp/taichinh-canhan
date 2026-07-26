@@ -7,7 +7,7 @@ import { SparklesIcon } from '../../components/icons/SparklesIcon';
 export const AuthView: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, isLoading } = useAuth();
   
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,11 @@ export const AuthView: React.FC<{ children: React.ReactNode }> = ({ children }) 
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const email = username.includes('@') ? username : `${username}@dark.local`;
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
       if (error) throw error;
     } catch (err: any) {
       setError(err.message || 'Đã có lỗi xảy ra');
@@ -64,18 +68,18 @@ export const AuthView: React.FC<{ children: React.ReactNode }> = ({ children }) 
               </div>
             )}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300">
-                Email
+              <label htmlFor="username" className="block text-sm font-medium text-gray-300">
+                Tên đăng nhập
               </label>
               <div className="mt-1">
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
+                  id="username"
+                  name="username"
+                  type="text"
+                  autoComplete="username"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-700 rounded-md shadow-sm placeholder-gray-500 bg-black text-white focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-colors"
                 />
               </div>

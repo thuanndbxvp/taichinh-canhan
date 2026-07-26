@@ -40,28 +40,18 @@ serve(async (req) => {
       })
     }
 
-    // SECURITY CHECK: In a real app, verify user is an admin.
-    // For this MVP, we assume the first user created is admin, or check a specific email.
-    // Example: if (user.email !== 'your-admin@email.com') throw 'Not admin'
-    // To keep it flexible, we'll allow anyone who can login to view, BUT only in our private setup.
-    // We should probably check if user has role 'admin' in user_metadata:
-    const isAdmin = user.user_metadata?.role === 'admin'
-    // If not checking metadata, we can just allow it for now since registration is disabled, 
-    // but ideally we only want the actual admin to use it.
-    if (!isAdmin) {
-      // Optional fallback: if no admin exists, make the FIRST user calling this the admin.
-      // We skip strict check for now to avoid locking you out, but you should set your role to 'admin'
-      // in Supabase dashboard.
-    }
+    // SECURITY CHECK
+    // const isAdmin = user.user_metadata?.role === 'admin'
+    // if (!isAdmin) {}
 
     // Admin Client with service_role_key
     const adminClient = createClient(supabaseUrl, supabaseServiceKey)
 
-    const { method } = await req.json().catch(() => ({ method: req.method }))
-    let body = {}
-    if (req.method !== 'GET') {
+    let body: any = {}
+    if (req.method !== 'GET' && req.method !== 'OPTIONS') {
       try { body = await req.json() } catch(e) {}
     }
+    const method = body.method || req.method
 
     if (method === 'GET') {
       // List users
