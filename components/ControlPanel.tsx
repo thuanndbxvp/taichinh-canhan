@@ -319,8 +319,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             {uploadedIdeas.length > 0 && <IdeaList ideaList={uploadedIdeas} listTitle="Ý tưởng từ File của bạn" />}
         </ControlSection>
 
-        </ControlSection>
-
         <ControlSection title="2. Cấu trúc & Định dạng" isDark>
             <div className="grid grid-cols-1 gap-4">
                 <Tooltip text={FORMATTING_EXPLANATIONS.wordCount}>
