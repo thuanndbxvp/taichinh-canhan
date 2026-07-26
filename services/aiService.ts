@@ -22,38 +22,6 @@ import type { UsageEntryKind } from '../src/services/usage/usageTracker';
 // Side-effect import: đăng ký tất cả prompt finance-* vào registry.
 import '../src/services/ai/prompts';
 
-/**
- * Helper: gọi gateway với messages từ prompt registry, map lỗi về AppError.
- */
-async function callWithPrompt(
-  provider: AiProvider,
-  model: string,
-  promptId: Parameters<typeof promptRegistry.build>[0],
-  input: Parameters<typeof promptRegistry.build>[1],
-  action: string,
-  signal?: AbortSignal,
-  onChunk?: (chunk: string, fullStream: string) => void,
-  usageKind?: UsageEntryKind,
-): Promise<string> {
-  const { messages } = promptRegistry.build(promptId, input);
-  try {
-    const res = await aiGateway.execute({
-      provider,
-      model,
-      messages,
-      signal,
-      onChunk,
-      usageKind,
-    });
-    return res.content;
-  } catch (error) {
-    if (error instanceof AppError) {
-      throw error;
-    }
-    throw AppError.from('AI_PROVIDER_FAILED', `Lỗi khi ${action}`, { action }, error);
-  }
-}
-
 const handleApiError = (error: unknown, action: string): AppError => {
   if (error instanceof AppError) {
     return error;

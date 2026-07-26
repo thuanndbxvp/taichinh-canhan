@@ -10,7 +10,7 @@ import {
 import type { ContentBrief } from '../brief/useContentBrief';
 import { AppError } from '../../lib/errors';
 import { minutesToTargetWords } from '../../domain/wordCount';
-import { fetchMacroData } from '../../../services/dataRetrieval';
+import { fetchMacroData } from '../../services/dataRetrieval';
 
 const PARTS_HEADER = '--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---\n\n';
 

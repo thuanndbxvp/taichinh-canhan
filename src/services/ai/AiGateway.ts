@@ -24,6 +24,7 @@ import type {
   ProviderChatContext,
   ProviderChatRequest,
 } from './ProviderAdapter';
+import { promptRegistry } from './PromptRegistry';
 
 export interface AiRequest {
   provider: AiProvider;
@@ -263,6 +264,46 @@ export class AiGateway {
  * Phase 3+ có thể inject policy khác qua DI nếu cần.
  */
 export const aiGateway = new AiGateway();
+
+/**
+ * Helper: gọi gateway với messages từ prompt registry.
+ */
+export async function callWithPrompt(
+  provider: AiProvider,
+  model: string,
+  promptId: Parameters<typeof promptRegistry.build>[0],
+  input: Parameters<typeof promptRegistry.build>[1],
+  action: string,
+  extras?: Record<string, unknown>,
+  onChunk?: (chunk: string, fullStream: string) => void,
+  usageKind?: UsageEntryKind,
+  usageLabel?: string,
+  signal?: AbortSignal,
+): Promise<string> {
+  const { messages } = promptRegistry.build(promptId, input);
+  try {
+    const res = await aiGateway.execute({
+      provider,
+      model,
+      messages,
+      extras,
+      onChunk,
+      usageKind,
+      usageLabel,
+      signal,
+    });
+    return res.content;
+  } catch (e) {
+    if (e instanceof ProviderError) {
+      throw new AppError(
+        'ai_generation_failed',
+        `Lỗi khi ${action}: ${e.message}`,
+        { provider, originalError: e }
+      );
+    }
+    throw e;
+  }
+}
 
 /**
  * Validate key qua gateway (cho UI). Dùng đúng provider adapter.
