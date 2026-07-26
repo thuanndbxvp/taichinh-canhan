@@ -222,11 +222,14 @@ NGÔN NGỮ: ${targetAudience}.
 ĐỘ DÀI PHẦN NÀY: ${perPart} từ spoken (đã bao gồm buffer 15% cho Markdown overhead — khi TTS lọc bỏ heading/bullet/SFX, phần spoken text thực tế phải CÒN LẠI ÍT NHẤT ${minSpoken} từ).
 
 QUY TẮC ĐỊNH DẠNG TỐI THƯỢNG (Bắt buộc tuân thủ 100%):
-1. TRẢ VỀ TRỰC TIẾP NỘI DUNG KỊCH BẢN. TUYỆT ĐỐI KHÔNG giải thích, KHÔNG dạo đầu, KHÔNG suy luận (ví dụ: "Bắt đầu viết...", "Chúng ta cần viết...").
-2. BẮT ĐẦU NGAY văn bản bằng TOÀN BỘ heading "## PHẦN X: ..." (đúng định dạng markdown cấp 2).
-3. Phần nội dung bắt đầu từ dòng thứ 2.
-4. KHÔNG viết tiêu đề cấp 3 (###) hay cấp 1 (#).
-5. KHÔNG thêm "## PHẦN" khác ngoài phần được giao.`,
+1. TRẢ VỀ TRỰC TIẾP NỘI DUNG KỊCH BẢN. TUYỆT ĐỐI KHÔNG giải thích, KHÔNG dạo đầu, KHÔNG suy luận.
+2. BẮT ĐẦU NGAY văn bản bằng TOÀN BỘ heading "## PHẦN X: ..." (đúng định dạng markdown cấp 2). Các nội dung tiếp theo bắt đầu từ dòng thứ 2.
+3. KHÔNG viết tiêu đề cấp 3 (###) hay cấp 1 (#). KHÔNG thêm "## PHẦN" khác ngoài phần được giao.
+4. ĐỊNH DẠNG VĂN XUÔI 100%: Tuyệt đối KHÔNG dùng gạch đầu dòng (-), dấu sao (*), hoặc đánh số (1. 2. 3.) đứng đầu dòng. Phải viết thành các đoạn văn liên tục (Paragraphs).
+5. XƯNG HÔ: Luôn xưng "Tôi" và gọi khán giả là "Anh em" hoặc "Bạn".
+6. TỪ NỐI VĂN NÓI: KHÔNG dùng các từ chuyển ý khô khan (Đầu tiên là, Tiếp theo, Tóm lại). HÃY DÙNG: "Anh em thử nghĩ mà xem...", "Cái thứ hai này mới thực sự khiến nhiều người mất tiền...", "Nói thật với anh em...".
+7. NHỊP ĐIỆU CÂU (PACING): Đan xen các câu rất ngắn (3-5 chữ) cạnh những câu dài phân tích để tạo điểm nhấn. (Ví dụ: "Hùng mua xe. Hùng trả góp. Và Hùng mất sạch 500 triệu sau 3 năm.").
+8. DỮ LIỆU: Phải giữ nguyên 100% các con số, giá tiền, dữ liệu đã chốt trong Dàn Ý. Không tự ý bịa thêm số liệu mới. Hãy giải thích cặn kẽ từng ý trong dàn ý, đừng tóm tắt ngắn gọn.`,
         },
       ],
     };
