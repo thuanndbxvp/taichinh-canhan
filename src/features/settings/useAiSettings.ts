@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, useRef } from 'react';
 import type { AiProvider } from '../../../types';
 import { DEFAULT_KYMA_MODELS } from '../../../constants';
 import { apiKeyManager } from '../../../services/apiKeyManager';
+import { supabase } from '../../lib/supabase';
 
 const STORAGE_KEY = 'ai-api-keys';
 const ACTIVE_PROVIDERS_KEY = 'ai-active-providers';
@@ -89,6 +90,21 @@ export function useAiSettings(): UseAiSettingsReturn {
       
       const savedTavily = localStorage.getItem(TAVILY_KEY_STORAGE);
       if (savedTavily) setTavilyApiKey(savedTavily);
+
+      // Async sync from Supabase
+      supabase.auth.getUser().then(({ data: { user } }) => {
+        if (user?.user_metadata?.apiKeys) {
+          const cloudKeys = user.user_metadata.apiKeys;
+          setApiKeys(cloudKeys);
+          apiKeyManager.updateKeys(cloudKeys);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudKeys));
+        }
+        if (user?.user_metadata?.tavilyApiKey) {
+          const cloudTavily = user.user_metadata.tavilyApiKey;
+          setTavilyApiKey(cloudTavily);
+          localStorage.setItem(TAVILY_KEY_STORAGE, cloudTavily);
+        }
+      });
     } catch (e) {
       console.error('Failed to load ai settings', e);
     }
@@ -130,6 +146,15 @@ export function useAiSettings(): UseAiSettingsReturn {
 
   const saveApiKeys = useCallback((keys: Record<AiProvider, string[]>) => {
     setApiKeys(keys);
+    apiKeyManager.updateKeys(keys);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(keys));
+    setNotification('Đã lưu cấu hình API Key');
+    
+    // Sync to Supabase
+    supabase.auth.updateUser({
+      data: { apiKeys: keys }
+    }).catch(e => console.error('Failed to sync api keys to supabase', e));
+
     setActiveProviders(prev => {
         // Auto enable a provider if we just added a key and the current active ones have no keys
         const validActive = prev.filter(p => (keys[p]?.length ?? 0) > 0);
@@ -165,6 +190,12 @@ export function useAiSettings(): UseAiSettingsReturn {
   const saveTavilyApiKey = useCallback((key: string) => {
     setTavilyApiKey(key);
     localStorage.setItem(TAVILY_KEY_STORAGE, key);
+    setNotification('Đã lưu Tavily API Key');
+    
+    // Sync to Supabase
+    supabase.auth.updateUser({
+      data: { tavilyApiKey: key }
+    }).catch(e => console.error('Failed to sync tavily key to supabase', e));
   }, []);
 
   return {

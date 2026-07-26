@@ -4,8 +4,9 @@
  * Lưu trong localStorage (đơn giản, không cần IndexedDB bootstrap).
  * Mỗi call được ghi vào ring buffer (giữ 100 entry gần nhất) + totals.
  *
- * Phase 6 sau có thể chuyển sang IndexedDB + backend sync nếu cần.
+ * Phase 6: Sync to Supabase `usage_events` table automatically.
  */
+import { supabase } from '../../lib/supabase';
 
 const STORAGE_KEY = 'dark-frontiers:usage';
 const MAX_ENTRIES = 100;
@@ -151,7 +152,29 @@ export function recordUsage(input: {
     totalCost: state.totals.totalCost + cost,
     calls: state.totals.calls + 1,
   };
+
   saveState(state);
+
+  // Async log to Supabase
+  supabase.auth.getUser().then(({ data: { user } }) => {
+    if (user) {
+      supabase.from('usage_events').insert({
+        user_id: user.id,
+        project_id: null, // Default to null for now if we don't have project context in AiGateway
+        provider: entry.provider,
+        model: entry.model,
+        prompt_tokens: entry.promptTokens,
+        completion_tokens: entry.completionTokens,
+        total_tokens: entry.totalTokens,
+        cost_usd: entry.cost,
+        usage_kind: entry.kind,
+        request_id: entry.id
+      }).then(({ error }) => {
+        if (error) console.error('Failed to log usage_events to Supabase:', error);
+      });
+    }
+  });
+
   return entry;
 }
 

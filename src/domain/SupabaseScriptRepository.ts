@@ -61,6 +61,7 @@ export class SupabaseScriptRepository implements ScriptRepository {
         title: row.title,
         outlineContent: row.outline || '',
         script: row.content || '',
+        brief: row.brief || undefined,
       });
       // override id and dates
       return {
@@ -90,6 +91,7 @@ export class SupabaseScriptRepository implements ScriptRepository {
       title: data.title,
       outlineContent: data.outline || '',
       script: data.content || '',
+      brief: data.brief || undefined,
     });
 
     return {
@@ -116,7 +118,7 @@ export class SupabaseScriptRepository implements ScriptRepository {
         .from('scripts')
         .update({
           title: doc.title,
-          brief: {}, // Empty JSON for now, or you could stringify doc.brief
+          brief: doc.brief || {}, 
           outline: doc.outlineContent,
           content: doc.script,
           updated_at: new Date().toISOString()
@@ -138,7 +140,7 @@ export class SupabaseScriptRepository implements ScriptRepository {
         .insert({
           project_id: projectId,
           title: doc.title,
-          brief: {}, 
+          brief: doc.brief || {}, 
           outline: doc.outlineContent,
           content: doc.script,
         })

@@ -1,4 +1,4 @@
-﻿import { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export type ModalKey =
   | 'library'
@@ -10,7 +10,8 @@ export type ModalKey =
   | 'summarize'
   | 'score'
   | 'dialogue'
-  | 'usage';
+  | 'usage'
+  | 'admin';
 
 const ALL_MODALS: ModalKey[] = [
   'library',
@@ -23,6 +24,7 @@ const ALL_MODALS: ModalKey[] = [
   'score',
   'dialogue',
   'usage',
+  'admin',
 ];
 
 type ModalState = Record<ModalKey, boolean>;

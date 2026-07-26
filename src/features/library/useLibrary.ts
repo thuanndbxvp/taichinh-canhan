@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { LibraryItem } from '../../../types';
 import { downloadLibrary, parseLibraryImport } from '../../lib/libraryIo';
 import type { ScriptRepository } from '../../domain/Repository';
@@ -17,7 +17,7 @@ export interface UseLibraryReturn {
    * Giữ type LibraryItem[] để không phá UI, nhưng mỗi item có schemaVersion.
    */
   library: LibraryItem[];
-  saveCurrent: (input: { title: string; outlineContent: string; script: string }) => Promise<boolean>;
+  saveCurrent: (input: { title: string; outlineContent: string; script: string, brief?: any }) => Promise<boolean>;
   loadItem: (item: LibraryItem) => { title: string; outlineContent: string; script: string };
   removeItem: (id: number) => Promise<void>;
   exportAll: () => void;
@@ -47,6 +47,7 @@ function documentToLibraryItem(doc: ScriptDocument): LibraryItem {
     outlineContent: doc.outlineContent,
     script: doc.script,
     cachedData: doc.cachedData,
+    brief: doc.brief,
   };
 }
 
@@ -92,13 +93,14 @@ export function useLibrary(): UseLibraryReturn {
   }, [repository]);
 
   const saveCurrent = useCallback(
-    async (input: { title: string; outlineContent: string; script: string }) => {
+    async (input: { title: string; outlineContent: string; script: string; brief?: any }) => {
       if (!input.script.trim() || !input.title.trim()) return false;
       try {
         const doc = createScriptDocument({
           title: input.title,
           outlineContent: input.outlineContent,
           script: input.script,
+          brief: input.brief,
         });
         await repository.save(doc);
         // Refresh list từ repo để tránh race condition.

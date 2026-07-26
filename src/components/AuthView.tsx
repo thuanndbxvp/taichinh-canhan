@@ -7,7 +7,6 @@ import { SparklesIcon } from '../../components/icons/SparklesIcon';
 export const AuthView: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, isLoading } = useAuth();
   
-  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -31,15 +30,8 @@ export const AuthView: React.FC<{ children: React.ReactNode }> = ({ children }) 
     setLoading(true);
 
     try {
-      if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.auth.signUp({ email, password });
-        if (error) throw error;
-        // Optionally show message if email confirmation is required
-        setError('Đăng ký thành công! Đang đăng nhập...');
-      }
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
     } catch (err: any) {
       setError(err.message || 'Đã có lỗi xảy ra');
     } finally {
@@ -113,29 +105,15 @@ export const AuthView: React.FC<{ children: React.ReactNode }> = ({ children }) 
                 disabled={loading}
                 className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 transition-colors"
               >
-                {loading ? 'Đang xử lý...' : isLogin ? 'Đăng Nhập' : 'Đăng Ký'}
+                {loading ? 'Đang xử lý...' : 'Đăng Nhập'}
               </button>
             </div>
           </form>
 
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-700" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-gray-900 text-gray-400">Hoặc</span>
-              </div>
-            </div>
-
-            <div className="mt-6 text-center">
-              <button
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors"
-              >
-                {isLogin ? 'Chưa có tài khoản? Đăng ký ngay' : 'Đã có tài khoản? Đăng nhập'}
-              </button>
-            </div>
+          <div className="mt-6 text-center">
+             <p className="text-gray-400 text-xs italic">
+               Hệ thống nội bộ. Vui lòng liên hệ Admin để được cấp tài khoản.
+             </p>
           </div>
         </div>
       </div>
