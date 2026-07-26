@@ -437,3 +437,24 @@ export const generateSingleVideoPrompt = async (
 export const parseOutlineIntoSegments = (outline: string): string[] => {
   return parseOutlineIntoSegmentsImpl(outline);
 };
+
+export const resolveMissingData = async (
+  script: string,
+  strategy: 'search' | 'estimate' | 'simplify',
+  provider: AiProvider,
+  model: string,
+  searchData?: string,
+  onChunk?: (chunk: string, fullStream: string) => void,
+): Promise<string> =>
+  runPrompt('xử lý số liệu trống', () =>
+    callWithPrompt(
+      provider,
+      model,
+      `finance.script.resolve.${strategy}`,
+      { script, searchData },
+      'xử lý số liệu trống',
+      onChunk,
+      undefined,
+      'outline',
+    ),
+  );

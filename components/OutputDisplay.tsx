@@ -37,6 +37,7 @@ interface OutputDisplayProps {
   macroData?: string | null;
   isOutlinePhase?: boolean;
   onChangeScript?: (script: string) => void;
+  onResolveMissingData?: (strategy: 'search' | 'estimate' | 'simplify') => void;
 }
 
 const InitialState: React.FC<{ onImportClick: () => void }> = ({ onImportClick }) => (
@@ -110,6 +111,19 @@ const cleanTtsText = (text: string): string => {
         .trim();
 };
 
+const renderHighlightedScript = (text: string) => {
+    const parts = text.split(/(\[CẦN ĐIỀN.*?\]|\[KIỂM TRA LẠI.*?\])/gi);
+    return parts.map((part, i) => {
+        if (part.toUpperCase().startsWith('[CẦN ĐIỀN')) {
+            return <mark key={i} className="bg-orange-500/30 text-orange-400 rounded px-1.5 py-0.5 font-bold shadow-sm">{part}</mark>;
+        }
+        if (part.toUpperCase().startsWith('[KIỂM TRA LẠI')) {
+            return <mark key={i} className="bg-yellow-500/30 text-yellow-400 rounded px-1.5 py-0.5 font-bold shadow-sm">{part}</mark>;
+        }
+        return <span key={i}>{part}</span>;
+    });
+};
+
 export const OutputDisplay: React.FC<OutputDisplayProps> = ({ 
     title, script, isLoading, error, 
     onStartSequentialGenerate,
@@ -125,6 +139,7 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
     macroData,
     isOutlinePhase,
     onChangeScript,
+    onResolveMissingData,
 }) => {
     const bottomRef = useRef<HTMLDivElement>(null);
     const [copySuccess, setCopySuccess] = useState<string>('');
@@ -271,7 +286,7 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
                     {isOutlineState || script.trim() === '--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---' ? (
                         <div className="prose prose-invert max-w-none prose-p:text-text-secondary">
                             <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-text-secondary bg-primary/20 p-4 rounded-lg border border-border/50">
-                                {script}
+                                {renderHighlightedScript(script)}
                             </pre>
                         </div>
                     ) : (
@@ -437,21 +452,49 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
             
             {/* Missing Data Banner */}
             {!isLoading && script && onChangeScript && extractPlaceholders(script).length > 0 && (
-                <div className="w-full bg-orange-900/30 border border-orange-500/50 text-orange-400 p-3 rounded-md flex items-center justify-between shadow-sm">
-                    <div className="flex items-center space-x-2">
-                        <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        <span className="text-sm font-medium">
-                            Phát hiện {extractPlaceholders(script).length} số liệu cần điền trong dàn ý.
-                        </span>
+                <div className="w-full bg-orange-900/30 border border-orange-500/50 text-orange-400 p-4 rounded-md flex flex-col gap-3 shadow-sm">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                            <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            <span className="text-sm font-medium">
+                                Phát hiện {extractPlaceholders(script).length} số liệu cần điền trong dàn ý.
+                            </span>
+                        </div>
+                        <button 
+                            onClick={() => setShowMissingDataModal(true)}
+                            className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded shadow transition flex-shrink-0"
+                        >
+                            Điền thủ công
+                        </button>
                     </div>
-                    <button 
-                        onClick={() => setShowMissingDataModal(true)}
-                        className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded shadow transition flex-shrink-0"
-                    >
-                        Điền nhanh
-                    </button>
+                    {onResolveMissingData && (
+                        <div className="flex gap-2 flex-wrap mt-1">
+                            <button 
+                                onClick={() => onResolveMissingData('search')}
+                                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded flex items-center gap-1.5 transition"
+                            >
+                                <BoltIcon className="w-3.5 h-3.5" />
+                                Đặc vụ Tìm kiếm
+                            </button>
+                            <button 
+                                onClick={() => onResolveMissingData('estimate')}
+                                className="px-3 py-1.5 bg-yellow-600/50 border border-yellow-500/50 hover:bg-yellow-500/50 text-yellow-100 text-xs font-bold rounded flex items-center gap-1.5 transition"
+                            >
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                </svg>
+                                Tự Ước Tính & Chờ Duyệt
+                            </button>
+                            <button 
+                                onClick={() => onResolveMissingData('simplify')}
+                                className="px-3 py-1.5 bg-gray-600/50 border border-gray-500/50 hover:bg-gray-500/50 text-gray-200 text-xs font-bold rounded transition"
+                            >
+                                Đơn giản hoá số liệu
+                            </button>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

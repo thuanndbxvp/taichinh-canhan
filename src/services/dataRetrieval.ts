@@ -1,7 +1,7 @@
 import type { AiProvider } from '../../types';
 import { callWithPrompt } from './ai/AiGateway';
 
-async function performTavilySearch(query: string, tavilyKey: string): Promise<string> {
+export async function performTavilySearch(query: string, tavilyKey: string): Promise<string> {
   const response = await fetch('https://api.tavily.com/search', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

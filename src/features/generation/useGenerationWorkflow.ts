@@ -6,11 +6,12 @@ import {
   parseOutlineIntoSegments,
   reviseScript,
   classifyTopic,
+  resolveMissingData,
 } from '../../../services/aiService';
 import type { ContentBrief } from '../brief/useContentBrief';
 import { AppError } from '../../lib/errors';
 import { minutesToTargetWords } from '../../domain/wordCount';
-import { fetchMacroData } from '../../services/dataRetrieval';
+import { fetchMacroData, performTavilySearch } from '../../services/dataRetrieval';
 
 const PARTS_HEADER = '--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---\n\n';
 
@@ -192,6 +193,54 @@ export function useGenerationWorkflow({
       setCurrentAiAction(null);
     }
   }, [brief, aiProvider, selectedModel, resetAllCaches]);
+
+  const handleResolveMissingData = useCallback(async (strategy: 'search' | 'estimate' | 'simplify') => {
+    if (!scriptRef.current) return;
+    setIsLoading(true);
+    setError(null);
+    try {
+      let searchData = '';
+      if (strategy === 'search') {
+        setCurrentAiAction('Đang tìm kiếm dữ liệu vĩ mô bổ sung...');
+        const matches = [...scriptRef.current.matchAll(/\[CẦN ĐIỀN(.*?)\]/gi)];
+        if (matches.length > 0) {
+          const queries = matches.map(m => m[1].trim()).filter(Boolean);
+          const tavilyKey = localStorage.getItem('tavily-api-key') || '';
+          if (tavilyKey && queries.length > 0) {
+            const results = await Promise.all(queries.map(q => performTavilySearch(q, tavilyKey)));
+            searchData = results.map((r, i) => `Truy vấn: ${queries[i]}\nKết quả: ${r}`).join('\n\n');
+          }
+        }
+      }
+
+      setCurrentAiAction(
+        strategy === 'search' ? 'Đang điền số liệu thật vào dàn ý...' :
+        strategy === 'estimate' ? 'Đang tự ước tính số liệu...' :
+        'Đang dọn dẹp số liệu phức tạp...'
+      );
+
+      const resolved = await resolveMissingData(
+        scriptRef.current,
+        strategy,
+        aiProvider,
+        selectedModel,
+        searchData,
+        (chunk, fullStream) => {
+          setGeneratedScript(fullStream);
+          scriptRef.current = fullStream;
+          if (outlineParts.length === 0 && !isGeneratingSequentially) {
+            setFullOutlineText(fullStream);
+          }
+        }
+      );
+      updateScript(resolved);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi khi phân tích dữ liệu.');
+    } finally {
+      setIsLoading(false);
+      setCurrentAiAction(null);
+    }
+  }, [aiProvider, selectedModel, outlineParts.length, isGeneratingSequentially, updateScript]);
 
   // generateNextPart dùng ref cho previousPartsScript & fullOutlineText để
   // không còn phụ thuộc vào `generatedScript` (mỗi chunk sẽ re-create callback,
@@ -387,5 +436,6 @@ export function useGenerationWorkflow({
     resetAllCaches,
     setExternalError: setError,
     currentAiAction,
+    handleResolveMissingData,
   };
 }

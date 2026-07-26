@@ -323,6 +323,7 @@ const App: React.FC = () => {
             macroData={generation.macroData}
             isOutlinePhase={isOutlinePhase}
             onChangeScript={generation.updateScript}
+            onResolveMissingData={generation.handleResolveMissingData}
           />
         </div>
         <div className="lg:col-span-3">

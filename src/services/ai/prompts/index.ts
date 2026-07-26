@@ -657,3 +657,39 @@ YÊU CẦU KIỂM DUYỆT (FACT-CHECKING):
     };
   },
 });
+
+promptRegistry.register('finance.script.resolve.search', {
+  version: V1,
+  build({ script, searchData }) {
+    return {
+      messages: [
+        { role: 'system', content: `Bạn là trợ lý biên tập. Nhiệm vụ của bạn là thay thế các biến số [CẦN ĐIỀN] trong kịch bản bằng dữ liệu thực tế được cung cấp.` },
+        { role: 'user', content: `DỮ LIỆU TÌM KIẾM ĐƯỢC:\n${searchData}\n\nYÊU CẦU: Hãy duyệt qua toàn bộ Dàn ý sau và thay thế TẤT CẢ các thẻ [CẦN ĐIỀN...] bằng số liệu tương ứng từ Dữ liệu tìm kiếm được.\nNếu dữ liệu tìm kiếm KHÔNG CÓ con số đó, HÃY TỰ ƯỚC TÍNH BẰNG KIẾN THỨC CỦA BẠN VÀ BỌC BẰNG THẺ [KIỂM TRA LẠI: <số liệu của bạn>]. Tuyệt đối không để lại thẻ [CẦN ĐIỀN]. Chỉ trả về nội dung Dàn ý đã sửa, không thêm chữ gì khác.\n\nDÀN Ý GỐC:\n${script}` },
+      ],
+    };
+  },
+});
+
+promptRegistry.register('finance.script.resolve.estimate', {
+  version: V1,
+  build({ script }) {
+    return {
+      messages: [
+        { role: 'system', content: `Bạn là trợ lý biên tập am hiểu kinh tế.` },
+        { role: 'user', content: `YÊU CẦU: Hãy duyệt qua Dàn ý sau. Với TẤT CẢ các thẻ [CẦN ĐIỀN...], hãy sử dụng kiến thức kinh tế của bạn để TỰ ƯỚC TÍNH một con số/giá trị hợp lý nhất có thể, và thay thế bằng thẻ [KIỂM TRA LẠI: <số liệu ước tính của bạn>].\nVí dụ: đổi [CẦN ĐIỀN Lãi suất tiết kiệm 2020-2024] thành [KIỂM TRA LẠI: khoảng 6-7%/năm].\nTuyệt đối không để lại thẻ [CẦN ĐIỀN]. Chỉ trả về nội dung Dàn ý đã sửa, không thêm chữ gì khác.\n\nDÀN Ý GỐC:\n${script}` },
+      ],
+    };
+  },
+});
+
+promptRegistry.register('finance.script.resolve.simplify', {
+  version: V1,
+  build({ script }) {
+    return {
+      messages: [
+        { role: 'system', content: `Bạn là trợ lý biên tập.` },
+        { role: 'user', content: `YÊU CẦU: Hãy duyệt qua Dàn ý sau. Có một số thẻ [CẦN ĐIỀN...] yêu cầu dữ liệu quá phức tạp. Hãy XÓA BỎ các thẻ này và VIẾT LẠI câu đó theo hướng đánh giá định tính chung chung (ví dụ: thay vì cần con số lạm phát chính xác, hãy sửa thành "cao hơn lạm phát rất nhiều").\nTuyệt đối không để lại thẻ [CẦN ĐIỀN]. Chỉ trả về nội dung Dàn ý đã sửa, không thêm chữ gì khác.\n\nDÀN Ý GỐC:\n${script}` },
+      ],
+    };
+  },
+});
