@@ -207,9 +207,16 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                         defaultValue=""
                     >
                         <option value="" disabled>-- Chọn chủ đề tài chính --</option>
-                        {FINANCE_IDEAS.map(idea => (
-                            <option key={idea.title} value={idea.title}>{idea.title}</option>
-                        ))}
+                        <optgroup label="Chú béo gợi ý">
+                            {FINANCE_IDEAS.filter(i => i.category === 'Chú béo gợi ý').map(idea => (
+                                <option key={idea.title} value={idea.title}>{idea.title}</option>
+                            ))}
+                        </optgroup>
+                        <optgroup label="AI gợi ý">
+                            {FINANCE_IDEAS.filter(i => i.category === 'AI gợi ý').map(idea => (
+                                <option key={idea.title} value={idea.title}>{idea.title}</option>
+                            ))}
+                        </optgroup>
                     </select>
                 </div>
 

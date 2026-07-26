@@ -29,6 +29,7 @@ export interface TopicSuggestionItem {
     title: string;
     vietnameseTitle?: string;
     outline: string;
+    category?: string;
 }
 
 export interface SavedIdea {
