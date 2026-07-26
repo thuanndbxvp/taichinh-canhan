@@ -399,19 +399,12 @@ promptRegistry.register('finance.score', {
         {
           role: 'system',
           content:
-            'Bạn là chuyên gia thẩm định nội dung kênh "Chú Que Tài Chính".',
+            'Bạn là chuyên gia thẩm định nội dung kênh "Chú Que Tài Chính".\n\n' + coreRaw.trim(),
         },
         {
           role: 'user',
-          content: `Hãy chấm điểm kịch bản này dựa trên 8 tiêu chí cực kỳ khắt khe:
-    1. Có sử dụng câu Slogan "Chú Que Tài Chính" và có cấu trúc 5 phần rõ ràng không?
-    2. Có bóc tách chi phí bằng con số cụ thể, tính toán cộng trừ nhân chia rõ ràng không?
-    3. Có nhắc đến Chi phí cơ hội hoặc Tâm lý học hành vi (ảo giác doanh thu, chi phí chìm...) không?
-    4. Không nói lý thuyết suông, giải pháp có thực tiễn (step-by-step) không?
-    5. CTA có đặt câu hỏi thực tế để khơi gợi bình luận không?
-    6. Có tạo một nhân vật cụ thể (Tên + Tuổi + Mức lương) để kể chuyện không?
-    7. Có sử dụng kỹ thuật Bẻ gãy phản biện "Tôi không nói... Tôi đang nói..." không?
-    8. Có sử dụng Ẩn dụ vật lý (vd: xô thủng) và kết thúc bằng Tục ngữ/Thành ngữ Việt Nam không?
+          content: `Hãy nhận xét chi tiết và chấm điểm (thang 10/10) kịch bản này dựa trên triết lý DNA cốt lõi của kênh (sự thực tế, bóc tách con số, tâm lý học hành vi, và ngôn ngữ bình dân).
+Chỉ ra rõ những điểm làm tốt và những điểm cần cải thiện.
 
 KỊCH BẢN:
 ${script}`,

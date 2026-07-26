@@ -99,10 +99,7 @@ export const SideToolsPanel: React.FC<SideToolsPanelProps> = ({
                         revisionPrompt={revisionPrompt}
                         setRevisionPrompt={setRevisionPrompt}
                         onRevise={onRevise}
-                        onSummarizeScript={onSummarizeScript}
                         isLoading={isLoading}
-                        isSummarizing={isSummarizing}
-                        hasSummarizedScript={hasSummarizedScript}
                     />
                 </>
             )}
