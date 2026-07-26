@@ -92,7 +92,7 @@ export const MissingDataModal: React.FC<MissingDataModalProps> = ({
                   <label className="text-sm font-semibold text-text-primary capitalize">{label}</label>
                   <input
                     type="text"
-                    className="w-full bg-primary/50 text-text-primary px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-accent text-sm"
+                    className="w-full bg-black/40 text-white placeholder-gray-500 px-3 py-2 border border-border rounded-md focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent text-sm"
                     placeholder="Nhập giá trị thật..."
                     value={formData[placeholder] || ''}
                     onChange={(e) => handleChange(placeholder, e.target.value)}
