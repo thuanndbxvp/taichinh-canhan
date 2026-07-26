@@ -310,7 +310,7 @@ DNA Lõi này là **bắt buộc**. Sau đó ghép với 1 trong 4 nhánh:
 - `finance-psychology.md` — Tâm lý xã hội
 - `finance-mythbusting.md` — Bóc phốt / Myth-busting
 
-Cách ghép prompt thực tế (xem ở file `niche-finance.md` — sẽ viết ở bước cuối).
+Cách ghép prompt thực tế ở file `niche-finance.md` §3.
 
 ---
 
