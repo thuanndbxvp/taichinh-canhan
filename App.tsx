@@ -35,7 +35,7 @@ const YoutubeLogoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 );
 
 const App: React.FC = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const brief = useContentBrief();
   const aiSettings = useAiSettings();
   const [currentAiConfig, setCurrentAiConfig] = useState<{provider: AiProvider, model: string} | null>(null);
@@ -234,6 +234,11 @@ const App: React.FC = () => {
             </button>
           )}
           <button onClick={() => modals.open('apiKey')} className="px-4 py-1.5 text-sm font-semibold rounded-md border border-border text-text-secondary">API</button>
+          <button onClick={signOut} className="px-3 py-1.5 text-sm font-semibold rounded-md border border-red-900/50 text-red-400 hover:bg-red-400/10 transition-colors flex items-center gap-2" title="Đăng xuất">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+            </svg>
+          </button>
         </div>
       </header>
 
