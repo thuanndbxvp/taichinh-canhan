@@ -1,4 +1,4 @@
-﻿/**
+/**
  * getRepositoryBundle — trả về aggregate root theo feature flag.
  *
  * Phase 3 chọn LocalStorage làm default để tương thích ngược với dữ liệu
@@ -13,14 +13,18 @@ import { LocalStorageSettingsRepository } from './LocalStorageSettingsRepository
 import { IndexedDbScriptRepository } from './IndexedDbScriptRepository';
 import { IndexedDbAssetRepository } from './IndexedDbAssetRepository';
 import { IndexedDbResearchRepository } from './IndexedDbResearchRepository';
+import { SupabaseScriptRepository } from './SupabaseScriptRepository';
 
-export type StorageBackend = 'hybrid' | 'indexeddb' | 'localstorage';
+export type StorageBackend = 'hybrid' | 'indexeddb' | 'localstorage' | 'supabase';
 
 function resolveBackend(): StorageBackend {
   if (typeof import.meta !== 'undefined' && (import.meta as { env?: Record<string, string> }).env) {
     const env = (import.meta as unknown as { env: Record<string, string> }).env;
     const flag = env.VITE_STORAGE_BACKEND;
-    if (flag === 'indexeddb' || flag === 'localstorage') return flag;
+    if (flag === 'indexeddb' || flag === 'localstorage' || flag === 'supabase') return flag;
+    
+    // Default to supabase if VITE_SUPABASE_URL is present
+    if (env.VITE_SUPABASE_URL) return 'supabase';
   }
   return 'hybrid';
 }
@@ -28,6 +32,13 @@ function resolveBackend(): StorageBackend {
 export function getRepositoryBundle(backend?: StorageBackend): RepositoryBundle {
   const chosen = backend ?? resolveBackend();
   switch (chosen) {
+    case 'supabase':
+      return {
+        scripts: new SupabaseScriptRepository(),
+        settings: new LocalStorageSettingsRepository(),
+        assets: new IndexedDbAssetRepository(),
+        research: new IndexedDbResearchRepository(),
+      };
     case 'indexeddb':
       return {
         scripts: new IndexedDbScriptRepository(),
