@@ -325,19 +325,19 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
             accept=".txt,.srt,.xlsx"
             className="hidden"
         />
-        <div className="flex justify-between items-center p-4 border-b border-border flex-wrap gap-2 sticky top-[81px] bg-secondary/95 backdrop-blur-md z-10">
-            <h2 className="text-lg font-semibold text-text-primary flex items-center gap-2">
-                <span>{getDisplayTitle()}</span>
-                {isLoading && (
-                    <svg className="animate-spin h-5 w-5 text-accent" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                )}
-            </h2>
-            <div className="flex items-center gap-2 flex-wrap">
-                {script && !isLoading && isOutlineState && (
-                    <div className="flex items-center gap-2">
+        <div className="flex flex-col p-4 border-b border-border gap-3 sticky top-[81px] bg-secondary/95 backdrop-blur-md z-10">
+            <div className="flex justify-between items-center flex-wrap gap-2">
+                <h2 className="text-lg font-semibold text-text-primary flex items-center gap-2">
+                    <span>{getDisplayTitle()}</span>
+                    {isLoading && (
+                        <svg className="animate-spin h-5 w-5 text-accent" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    )}
+                </h2>
+                <div className="flex items-center gap-2 flex-wrap">
+                    {script && !isLoading && isOutlineState && (
                          <div className="flex items-center gap-2 bg-primary/40 px-3 py-1.5 rounded-md border border-border">
                             <input 
                                 type="checkbox" 
@@ -348,15 +348,9 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
                             />
                             <label htmlFor="header-autoContinue" className="text-xs font-medium text-text-secondary cursor-pointer whitespace-nowrap">Auto-next</label>
                         </div>
-                        <button onClick={onStartSequentialGenerate} className="flex items-center space-x-2 bg-accent hover:brightness-110 text-white px-3 py-1.5 rounded-md text-sm font-semibold transition shadow-md shadow-accent/20">
-                            <BoltIcon className="w-4 h-4" />
-                            <span>Tạo kịch bản đầy đủ</span>
-                        </button>
-                    </div>
-                )}
+                    )}
 
-                {isGeneratingSequentially && (
-                    <div className="flex items-center gap-2">
+                    {isGeneratingSequentially && (
                         <button 
                             onClick={() => setAutoContinue?.(!autoContinue)}
                             className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm font-semibold transition border ${
@@ -368,63 +362,72 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
                             <div className={`w-3 h-3 rounded-full ${autoContinue ? 'bg-accent animate-pulse' : 'bg-text-secondary'}`} />
                             <span>Auto-next: {autoContinue ? 'Bật' : 'Tắt'}</span>
                         </button>
-                        
-                        <button 
-                            onClick={onStopSequentialGenerate} 
-                            disabled={!isLoading}
-                            className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm font-semibold transition shadow-md ${
-                                isLoading 
-                                ? 'bg-red-600 hover:bg-red-500 text-white shadow-red-900/20' 
-                                : 'bg-red-900/20 text-red-500/50 cursor-not-allowed border border-red-900/30'
-                            }`}
-                        >
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <rect x="5" y="5" width="10" height="10" rx="1" />
-                            </svg>
-                            <span>Dừng tạo</span>
-                        </button>
-                    </div>
-                )}
+                    )}
 
-                {/* Nút Tiếp Tục khi bị dừng/lỗi giữa chừng */}
-                {!isGeneratingSequentially && currentPart > 0 && currentPart < totalParts && !isLoading && (
-                    <button 
-                        onClick={onResumeSequentialGenerate} 
-                        className="flex items-center space-x-2 bg-accent hover:brightness-110 text-white px-3 py-1.5 rounded-md text-sm font-semibold transition shadow-md shadow-accent/20"
-                    >
-                        <BoltIcon className="w-4 h-4" />
-                        <span>Tiếp tục phần {currentPart + 1}/{totalParts}</span>
-                    </button>
-                )}
+                    {!isGeneratingSequentially && (
+                        <button onClick={handleImportClick} className="flex items-center space-x-2 bg-secondary hover:bg-primary/50 text-text-primary px-3 py-1.5 rounded-md text-sm transition border border-border">
+                            <UploadIcon className="w-4 h-4" />
+                            <span>Import</span>
+                        </button>
+                    )}
 
-                {!isGeneratingSequentially && (
-                    <button onClick={handleImportClick} className="flex items-center space-x-2 bg-secondary hover:bg-primary/50 text-text-primary px-3 py-1.5 rounded-md text-sm transition border border-border">
-                        <UploadIcon className="w-4 h-4" />
-                        <span>Import</span>
-                    </button>
-                )}
-
-                {showActionControls && !isGeneratingSequentially && (
-                    <>
-                        <button onClick={handleExportTxt} className="flex items-center space-x-2 bg-secondary hover:bg-primary/50 text-text-primary px-3 py-1.5 rounded-md text-sm transition disabled:opacity-50 border border-border" disabled={isLoading}>
-                            <DownloadIcon className="w-4 h-4" />
-                            <span>Tải .txt</span>
-                        </button>
-                        <button 
-                            onClick={handleExportExcel} 
-                            className="flex items-center space-x-2 bg-secondary hover:bg-primary/50 text-text-primary px-3 py-1.5 rounded-md text-sm transition border border-border disabled:opacity-50" 
-                            disabled={isLoading}
-                        >
-                            <DownloadIcon className="w-4 h-4 text-green-500" />
-                            <span className="text-green-500 font-semibold">Tải Excel</span>
-                        </button>
-                        <button onClick={handleCopy} className="flex items-center space-x-2 bg-secondary hover:bg-primary/50 text-text-primary px-3 py-1.5 rounded-md text-sm transition disabled:opacity-50 border border-border" disabled={!!copySuccess || isLoading}>
-                            <ClipboardIcon className="w-4 h-4" />
-                            <span>{copySuccess || 'Sao chép'}</span>
-                        </button>
-                    </>
-                )}
+                    {showActionControls && !isGeneratingSequentially && (
+                        <>
+                            <button onClick={handleExportTxt} className="flex items-center space-x-2 bg-secondary hover:bg-primary/50 text-text-primary px-3 py-1.5 rounded-md text-sm transition disabled:opacity-50 border border-border" disabled={isLoading}>
+                                <DownloadIcon className="w-4 h-4" />
+                                <span>Tải .txt</span>
+                            </button>
+                            <button 
+                                onClick={handleExportExcel} 
+                                className="flex items-center space-x-2 bg-secondary hover:bg-primary/50 text-text-primary px-3 py-1.5 rounded-md text-sm transition border border-border disabled:opacity-50" 
+                                disabled={isLoading}
+                            >
+                                <DownloadIcon className="w-4 h-4 text-green-500" />
+                                <span className="text-green-500 font-semibold">Tải Excel</span>
+                            </button>
+                            <button onClick={handleCopy} className="flex items-center space-x-2 bg-secondary hover:bg-primary/50 text-text-primary px-3 py-1.5 rounded-md text-sm transition disabled:opacity-50 border border-border" disabled={!!copySuccess || isLoading}>
+                                <ClipboardIcon className="w-4 h-4" />
+                                <span>{copySuccess || 'Sao chép'}</span>
+                            </button>
+                        </>
+                    )}
+                </div>
             </div>
+
+            {/* FULL WIDTH ACTION BUTTONS */}
+            {script && !isLoading && isOutlineState && (
+                <button onClick={onStartSequentialGenerate} className="w-full flex justify-center items-center space-x-2 bg-accent hover:brightness-110 text-white px-4 py-2.5 rounded-md text-sm font-bold transition shadow-md shadow-accent/20">
+                    <BoltIcon className="w-5 h-5" />
+                    <span>TẠO KỊCH BẢN ĐẦY ĐỦ</span>
+                </button>
+            )}
+
+            {isGeneratingSequentially && (
+                <button 
+                    onClick={onStopSequentialGenerate} 
+                    disabled={!isLoading}
+                    className={`w-full flex justify-center items-center space-x-2 px-4 py-2.5 rounded-md text-sm font-bold transition shadow-md ${
+                        isLoading 
+                        ? 'bg-red-600 hover:bg-red-500 text-white shadow-red-900/20' 
+                        : 'bg-red-900/20 text-red-500/50 cursor-not-allowed border border-red-900/30'
+                    }`}
+                >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <rect x="5" y="5" width="10" height="10" rx="1" />
+                    </svg>
+                    <span>DỪNG TẠO</span>
+                </button>
+            )}
+
+            {!isGeneratingSequentially && currentPart > 0 && currentPart < totalParts && !isLoading && (
+                <button 
+                    onClick={onResumeSequentialGenerate} 
+                    className="w-full flex justify-center items-center space-x-2 bg-accent hover:brightness-110 text-white px-4 py-2.5 rounded-md text-sm font-bold transition shadow-md shadow-accent/20"
+                >
+                    <BoltIcon className="w-5 h-5" />
+                    <span>TIẾP TỤC TẠO PHẦN {currentPart + 1}/{totalParts}</span>
+                </button>
+            )}
         </div>
         <div className="p-6 overflow-y-auto flex-grow min-h-[400px]">
             <div className="w-full h-full">
