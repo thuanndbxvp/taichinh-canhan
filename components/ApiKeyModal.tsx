@@ -15,6 +15,8 @@ interface ApiKeyModalProps {
   onSaveActiveProviders: (providers: AiProvider[]) => void;
   models: Record<AiProvider, string>;
   onSaveModels: (models: Record<AiProvider, string>) => void;
+  tavilyApiKey: string;
+  onSaveTavilyApiKey: (key: string) => void;
 }
 
 const KymaIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
@@ -44,7 +46,9 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
     activeProviders,
     onSaveActiveProviders,
     models,
-    onSaveModels
+    onSaveModels,
+    tavilyApiKey,
+    onSaveTavilyApiKey
 }) => {
     const [localApiKeys, setLocalApiKeys] = useState<Record<AiProvider, string[]>>(currentApiKeys);
     const [newKeyInputs, setNewKeyInputs] = useState<Record<AiProvider, string>>({ kyma: '', openai: '' });
@@ -61,6 +65,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
         }
     });
     const [kymaModelOptions, setKymaModelOptions] = useState<{value: string, label: string}[]>([]);
+    const [localTavilyKey, setLocalTavilyKey] = useState<string>(tavilyApiKey);
 
     const [validationStatus, setValidationStatus] = useState<Record<AiProvider, ValidationStatus>>({
         kyma: { state: 'idle', message: null },
@@ -85,8 +90,9 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
             // Load custom OpenAI settings
             const savedBaseUrl = localStorage.getItem('openai-base-url');
             if (savedBaseUrl) setOpenAiBaseUrl(savedBaseUrl);
+            setLocalTavilyKey(tavilyApiKey);
         }
-    }, [isOpen, currentApiKeys, activeProviders, models]);
+    }, [isOpen, currentApiKeys, activeProviders, models, tavilyApiKey]);
 
     useEffect(() => {
         if (isOpen && localApiKeys.kyma?.[0]) {
@@ -211,6 +217,7 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
             kyma: (localModels.kyma || '').trim(),
             openai: (localModels.openai || '').trim()
         });
+        onSaveTavilyApiKey(localTavilyKey);
         onClose();
     };
 
@@ -378,6 +385,35 @@ export const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                 <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-6 overflow-y-auto flex-grow">
                     {renderKeyPanel('kyma')}
                     {renderKeyPanel('openai')}
+                </div>
+                <div className="px-5 pb-5">
+                    <div className="bg-secondary rounded-lg p-5 border border-border">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="p-2 bg-accent/10 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-text-primary">Tavily Search API</h3>
+                                <p className="text-xs text-text-secondary">Dùng để AI tra cứu số liệu vĩ mô trên Web</p>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="text-xs font-semibold text-text-secondary block mb-1">
+                                Tavily API Key
+                            </label>
+                            <input
+                                type="password"
+                                value={localTavilyKey}
+                                onChange={(e) => setLocalTavilyKey(e.target.value)}
+                                placeholder="tvly-..."
+                                className="w-full bg-primary border border-border rounded-md px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent transition-colors"
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div className="p-4 bg-primary border-t border-border flex flex-col sm:flex-row justify-end items-center gap-3">
                      <button onClick={onClose} className="w-full sm:w-auto text-sm bg-secondary hover:bg-primary/50 text-text-secondary font-semibold py-2 px-4 rounded-md transition border border-border">

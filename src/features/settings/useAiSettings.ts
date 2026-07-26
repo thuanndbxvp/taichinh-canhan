@@ -7,6 +7,7 @@ const STORAGE_KEY = 'ai-api-keys';
 const ACTIVE_PROVIDERS_KEY = 'ai-active-providers';
 const MODELS_KEY = 'ai-models';
 const THEME_KEY = 'yt-script-theme';
+const TAVILY_KEY_STORAGE = 'tavily-api-key';
 
 const DEFAULT_KEYS: Record<AiProvider, string[]> = { kyma: [], openai: [] };
 const DEFAULT_THEME = '#ef4444';
@@ -21,6 +22,9 @@ export interface UseAiSettingsReturn {
   setModels: (models: Record<AiProvider, string>) => void;
   themeColor: string;
   setThemeColor: (color: string) => void;
+  tavilyApiKey: string;
+  setTavilyApiKey: (key: string) => void;
+  saveTavilyApiKey: (key: string) => void;
   hasAnyApiKey: boolean;
   notification: string | null;
   clearNotification: () => void;
@@ -39,6 +43,7 @@ export function useAiSettings(): UseAiSettingsReturn {
     openai: 'anthropic/claude-4.5-sonnet'
   });
   const [themeColor, setThemeColor] = useState<string>(DEFAULT_THEME);
+  const [tavilyApiKey, setTavilyApiKey] = useState<string>('');
   const [notification, setNotification] = useState<string | null>(null);
   
   const roundRobinIndex = useRef(0);
@@ -81,6 +86,9 @@ export function useAiSettings(): UseAiSettingsReturn {
 
       const theme = localStorage.getItem(THEME_KEY);
       if (theme) setThemeColor(theme);
+      
+      const savedTavily = localStorage.getItem(TAVILY_KEY_STORAGE);
+      if (savedTavily) setTavilyApiKey(savedTavily);
     } catch (e) {
       console.error('Failed to load ai settings', e);
     }
@@ -154,6 +162,11 @@ export function useAiSettings(): UseAiSettingsReturn {
       return { provider, model: models[provider] };
   }, [activeProviders, apiKeys, models]);
 
+  const saveTavilyApiKey = useCallback((key: string) => {
+    setTavilyApiKey(key);
+    localStorage.setItem(TAVILY_KEY_STORAGE, key);
+  }, []);
+
   return {
     apiKeys,
     setApiKeys,
@@ -164,6 +177,9 @@ export function useAiSettings(): UseAiSettingsReturn {
     setModels,
     themeColor,
     setThemeColor,
+    tavilyApiKey,
+    setTavilyApiKey,
+    saveTavilyApiKey,
     hasAnyApiKey,
     notification,
     clearNotification,

@@ -1,7 +1,5 @@
 import type { AiProvider } from '../../types';
 
-const TAVILY_TEST_KEY = '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';
-
 /**
  * Dịch vụ lấy dữ liệu vĩ mô bằng Tavily Search.
  * Ở Phase 1, tạm thời fix cứng API Key Tavily để test tính năng Web Search 
@@ -12,6 +10,13 @@ export const fetchMacroData = async (
   _provider: AiProvider,
   _model: string
 ): Promise<string> => {
+  const tavilyKey = localStorage.getItem('tavily-api-key') || '';
+  
+  if (!tavilyKey.trim()) {
+    console.log(`[Data Retrieval] Bỏ qua Web Search vì chưa cấu hình Tavily API Key.`);
+    return `[LƯU Ý]: Không tự động lấy được dữ liệu vĩ mô (Tavily Key chưa cấu hình). Hãy dựa vào nguyên lý gốc.`;
+  }
+
   console.log(`[Data Retrieval] Đang yêu cầu Tavily tìm kiếm dữ liệu vĩ mô cho: ${title}`);
   
   try {
@@ -21,7 +26,7 @@ export const fetchMacroData = async (
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        api_key: TAVILY_TEST_KEY,
+        api_key: tavilyKey,
         query: `số liệu kinh tế vĩ mô mới nhất về ${title}`,
         search_depth: "basic",
         include_answer: true,

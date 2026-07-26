@@ -309,6 +309,8 @@ const App: React.FC = () => {
             onSaveActiveProviders={aiSettings.setActiveProviders}
             models={aiSettings.models}
             onSaveModels={aiSettings.setModels}
+            tavilyApiKey={aiSettings.tavilyApiKey}
+            onSaveTavilyApiKey={aiSettings.saveTavilyApiKey}
           />
         )}
         {modals.isOpen('guide') && (
