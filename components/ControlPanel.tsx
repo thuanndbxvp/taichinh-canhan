@@ -121,10 +121,29 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         const cleanedTitle = idea.title.replace(/^\d+\.\s*/, '');
         setTitle(cleanedTitle);
         setOutlineContent(idea.outline);
+        
+        let targetBranch = 'auto';
         if (idea.branch) {
+            targetBranch = idea.branch;
             setScriptStyle(idea.branch);
         } else {
             setScriptStyle('auto');
+        }
+
+        // Tự động gán Hook để bỏ qua bước gọi AI phân loại
+        if (idea.hook) {
+            setScriptHook(idea.hook);
+        } else if (targetBranch !== 'auto') {
+            const branchToHookMap: Record<string, string> = {
+                'psychology': 'story',
+                'mythbusting': 'myth',
+                'analytical': 'data',
+                'listicle': 'question',
+                'fundamental': 'question'
+            };
+            setScriptHook(branchToHookMap[targetBranch] || 'auto');
+        } else {
+            setScriptHook('auto');
         }
     }
   };
