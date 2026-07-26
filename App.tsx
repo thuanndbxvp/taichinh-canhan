@@ -322,6 +322,7 @@ const App: React.FC = () => {
             setAutoContinue={generation.setAutoContinue}
             macroData={generation.macroData}
             isOutlinePhase={isOutlinePhase}
+            onChangeScript={generation.updateScript}
           />
         </div>
         <div className="lg:col-span-3">

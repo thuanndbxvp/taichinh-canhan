@@ -20,6 +20,8 @@ export type UsageEntryKind =
   | 'visual_prompt'
   | 'score'
   | 'idea'
+  | 'factcheck'
+  | 'planner'
   | 'other';
 
 export interface UsageEntry {

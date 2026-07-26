@@ -59,7 +59,7 @@ export const generateScriptOutline = async (
   params: GenerationParams,
   provider: AiProvider,
   model: string,
-  onChunk?: (chunk: string) => void,
+  onChunk?: (chunk: string, fullStream: string) => void,
   onPhaseChange?: (phase: string) => void,
 ): Promise<string> =>
   runPrompt('tạo dàn ý', async () => {

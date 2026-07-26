@@ -12,6 +12,7 @@ import { CheckIcon } from './icons/CheckIcon';
 import type { ScriptType } from '../types';
 import { UploadIcon } from './icons/UploadIcon';
 import { Tooltip } from './Tooltip';
+import { MissingDataModal, extractPlaceholders } from './MissingDataModal';
 
 // Make TypeScript aware of the global XLSX object from the CDN
 declare const XLSX: any;
@@ -35,6 +36,7 @@ interface OutputDisplayProps {
   currentAiAction?: string | null;
   macroData?: string | null;
   isOutlinePhase?: boolean;
+  onChangeScript?: (script: string) => void;
 }
 
 const InitialState: React.FC<{ onImportClick: () => void }> = ({ onImportClick }) => (
@@ -122,11 +124,13 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
     currentAiAction,
     macroData,
     isOutlinePhase,
+    onChangeScript,
 }) => {
-    const [copySuccess, setCopySuccess] = useState('');
+    const bottomRef = useRef<HTMLDivElement>(null);
+    const [copySuccess, setCopySuccess] = useState<string>('');
+    const [showMissingDataModal, setShowMissingDataModal] = useState(false);
     const [copiedStates, setCopiedStates] = useState<Record<number, boolean>>({});
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const bottomRef = useRef<HTMLDivElement>(null);
 
 
     useEffect(() => {
@@ -430,6 +434,26 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
                     <span>TIẾP TỤC TẠO PHẦN {currentPart + 1}/{totalParts}</span>
                 </button>
             )}
+            
+            {/* Missing Data Banner */}
+            {!isLoading && script && onChangeScript && extractPlaceholders(script).length > 0 && (
+                <div className="w-full bg-orange-900/30 border border-orange-500/50 text-orange-400 p-3 rounded-md flex items-center justify-between shadow-sm">
+                    <div className="flex items-center space-x-2">
+                        <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <span className="text-sm font-medium">
+                            Phát hiện {extractPlaceholders(script).length} số liệu cần điền trong dàn ý.
+                        </span>
+                    </div>
+                    <button 
+                        onClick={() => setShowMissingDataModal(true)}
+                        className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded shadow transition flex-shrink-0"
+                    >
+                        Điền nhanh
+                    </button>
+                </div>
+            )}
         </div>
         <div className="p-6 overflow-y-auto flex-grow min-h-[400px]">
             <div className="w-full h-full">
@@ -444,6 +468,16 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
                     <span>Kịch bản đã hoàn tất!</span>
                 </div>
             </div>
+        )}
+        
+        {showMissingDataModal && onChangeScript && (
+            <MissingDataModal 
+                isOpen={showMissingDataModal}
+                onClose={() => setShowMissingDataModal(false)}
+                script={script}
+                placeholders={extractPlaceholders(script)}
+                onApply={onChangeScript}
+            />
         )}
     </div>
   );

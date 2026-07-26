@@ -56,7 +56,7 @@ export interface ProviderChatContext {
   /**
    * Callback nhận stream delta chunk.
    */
-  onChunk?: (chunk: string) => void;
+  onChunk?: (chunk: string, fullStream: string) => void;
 }
 
 export interface ProviderAdapter {

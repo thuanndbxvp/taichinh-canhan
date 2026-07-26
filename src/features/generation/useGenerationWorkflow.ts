@@ -115,6 +115,16 @@ export function useGenerationWorkflow({
     isGeneratingPartRef.current = false;
   }, []);
 
+  const updateScript = useCallback((newScript: string) => {
+    setGeneratedScript(newScript);
+    scriptRef.current = newScript;
+    // Nếu đang ở giai đoạn Dàn ý, đồng bộ sang fullOutlineText
+    // (Bởi vì outlineParts.length === 0 && !isGeneratingSequentially nghĩa là chưa bắt đầu sinh kịch bản)
+    if (outlineParts.length === 0 && !isGeneratingSequentially) {
+      setFullOutlineText(newScript);
+    }
+  }, [outlineParts.length, isGeneratingSequentially]);
+
   const generate = useCallback(async () => {
     if (!brief.title.trim()) {
       setError('Vui lòng nhập hoặc chọn một tiêu đề video.');
@@ -356,6 +366,7 @@ export function useGenerationWorkflow({
     generatedScript,
     setGeneratedScript,
     macroData,
+    updateScript,
     isLoading,
     error,
     revisionPrompt,
