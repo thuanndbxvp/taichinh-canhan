@@ -369,6 +369,7 @@ const App: React.FC = () => {
             score={review.score}
             isLoading={review.isScoring}
             error={review.error}
+            rawStream={review.rawStream}
           />
         )}
         {modals.isOpen('summarize') && (

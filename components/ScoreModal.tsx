@@ -11,26 +11,33 @@ interface ScoreModalProps {
   score: ScoreResult | null;
   isLoading: boolean;
   error: string | null;
+  rawStream?: string;
 }
 
-const LoadingSkeleton: React.FC = () => (
-    <div className="space-y-6 animate-pulse">
-        <div className="h-32 bg-primary rounded-xl border border-border w-full flex flex-col items-center justify-center">
-            <div className="h-4 bg-secondary rounded w-24 mb-4"></div>
-            <div className="h-12 bg-secondary rounded w-32"></div>
-        </div>
-        {[...Array(2)].map((_, i) => (
-            <div key={i}>
-                <div className="h-6 bg-primary rounded w-1/3 mb-3"></div>
-                <div className="h-4 bg-primary rounded w-1/4 mb-2"></div>
-                <div className="h-12 bg-primary rounded w-full"></div>
-            </div>
-        ))}
-        <div className="h-16 bg-primary rounded w-full mt-8"></div>
-    </div>
-);
+const StreamViewer: React.FC<{ stream: string }> = ({ stream }) => {
+    const endRef = React.useRef<HTMLDivElement>(null);
+    React.useEffect(() => {
+        endRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [stream]);
 
-export const ScoreModal: React.FC<ScoreModalProps> = ({ isOpen, onClose, score, isLoading, error }) => {
+    return (
+        <div className="bg-black/60 text-green-400 font-mono p-5 rounded-xl border border-border h-96 overflow-y-auto whitespace-pre-wrap text-sm shadow-inner relative custom-scrollbar">
+            <div className="sticky top-0 right-0 flex justify-end mb-2">
+                <div className="flex items-center gap-2 bg-black/80 px-3 py-1 rounded-full border border-green-900/50">
+                    <span className="flex h-2 w-2 relative">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <span className="text-xs font-sans text-green-400 opacity-80">AI đang phân tích & trích xuất JSON...</span>
+                </div>
+            </div>
+            {stream || 'Đang kết nối với Script Doctor...'}
+            <div ref={endRef} />
+        </div>
+    );
+};
+
+export const ScoreModal: React.FC<ScoreModalProps> = ({ isOpen, onClose, score, isLoading, error, rawStream }) => {
     const [copySuccess, setCopySuccess] = useState('');
 
     useEffect(() => {
@@ -83,7 +90,7 @@ export const ScoreModal: React.FC<ScoreModalProps> = ({ isOpen, onClose, score, 
                 </div>
                 
                 <div className="p-6 overflow-y-auto flex-grow custom-scrollbar bg-black/20">
-                    {isLoading && <LoadingSkeleton />}
+                    {isLoading && <StreamViewer stream={rawStream || ''} />}
                     {error && <p className="text-red-400 bg-red-900/50 p-4 rounded-md border border-red-500/30">{error}</p>}
                     
                     {!isLoading && !error && score && (

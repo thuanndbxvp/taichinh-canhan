@@ -296,6 +296,7 @@ export const scoreScript = async (
   script: string,
   provider: AiProvider,
   model: string,
+  onChunk?: (chunk: string, fullStream: string) => void
 ): Promise<ScoreResult> =>
   runPrompt('chấm điểm kịch bản', async () => {
     const content = await callWithPrompt(
@@ -305,6 +306,7 @@ export const scoreScript = async (
       { script },
       'chấm điểm kịch bản',
       undefined,
+      onChunk,
       undefined,
       'score',
     );
