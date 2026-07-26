@@ -1,4 +1,4 @@
-﻿
+
 import React from 'react';
 import type { WordCountStats } from '../types';
 import { MicrophoneIcon } from './icons/MicrophoneIcon';
@@ -14,8 +14,7 @@ interface WordCountCheckProps {
 export const WordCountCheck: React.FC<WordCountCheckProps> = ({ stats, targetWordCount, onExtractAndCount, onOpenDialogueModal, isLoading }) => {
     if (!stats) {
         return (
-            <div className="bg-secondary p-4 rounded-lg border border-border space-y-3">
-                <h3 className="text-md font-semibold text-text-primary mb-2">Kiểm tra Số từ & Tách Voice</h3>
+            <div className="space-y-3 pt-2">
                 <p className="text-sm text-text-secondary mb-3">Nhấn nút để tách lời thoại và xem phân tích số từ chi tiết cho kịch bản.</p>
                 <button
                     onClick={onExtractAndCount}
@@ -68,8 +67,7 @@ export const WordCountCheck: React.FC<WordCountCheckProps> = ({ stats, targetWor
     }
 
     return (
-        <div className="bg-secondary p-4 rounded-lg border border-border space-y-3">
-            <h3 className="text-md font-semibold text-text-primary mb-2">Kiểm tra Số từ (Lời thoại)</h3>
+        <div className="space-y-3 pt-2">
             <div>
                 <table className="w-full text-sm text-left table-fixed">
                     <tbody>

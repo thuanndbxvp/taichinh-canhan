@@ -51,45 +51,50 @@ export const SideToolsPanel: React.FC<SideToolsPanelProps> = ({
 
     return (
         <div className="w-full space-y-6 sticky top-[98px]">
-            <div className="bg-secondary p-4 rounded-lg border border-border space-y-3">
-                 <h3 className="text-md font-semibold text-text-primary text-center">Tiện ích & Cài đặt</h3>
-                 <div className="flex items-center gap-3">
-                    <button 
-                        onClick={onOpenLibrary}
-                        className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary hover:bg-primary/70 text-text-primary font-semibold rounded-lg transition-colors border border-border"
-                        aria-label="Mở thư viện"
-                    >
-                        <BookOpenIcon className="w-5 h-5"/>
-                        <span>Thư viện</span>
-                    </button>
-                </div>
-                 <button
-                    onClick={onScoreScript}
-                    disabled={!script || isLoading || isScoring}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary hover:bg-primary/70 text-text-primary font-semibold rounded-lg transition-colors border border-border disabled:opacity-50 disabled:cursor-not-allowed"
-                    aria-label="Chấm điểm kịch bản"
-                >
-                    <TrophyIcon className="w-5 h-5 text-amber-400" />
-                    <span>{isScoring ? 'Đang chấm điểm...' : 'Chấm điểm kịch bản'}</span>
-                </button>
+            <div className="bg-secondary p-4 rounded-lg border border-border space-y-4 shadow-sm">
+                 <h3 className="text-md font-semibold text-text-primary border-b border-border pb-2">Tiện ích & Thống kê</h3>
+                 <button 
+                     onClick={onOpenLibrary}
+                     className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary hover:bg-primary/70 text-text-primary font-semibold rounded-lg transition-colors border border-border"
+                     aria-label="Mở thư viện"
+                 >
+                     <BookOpenIcon className="w-5 h-5"/>
+                     <span>Thư viện</span>
+                 </button>
+                 {script && (
+                     <WordCountCheck
+                         stats={wordCountStats}
+                         targetWordCount={targetWordCount}
+                         onExtractAndCount={onExtractAndCount}
+                         onOpenDialogueModal={onOpenDialogueModal}
+                         isLoading={isExtracting}
+                     />
+                 )}
             </div>
 
             {script && (
-                <>
-                    <WordCountCheck
-                        stats={wordCountStats}
-                        targetWordCount={targetWordCount}
-                        onExtractAndCount={onExtractAndCount}
-                        onOpenDialogueModal={onOpenDialogueModal}
-                        isLoading={isExtracting}
-                    />
+                <div className="bg-secondary p-4 rounded-lg border border-border space-y-4 shadow-sm">
+                    <h3 className="text-md font-semibold text-text-primary border-b border-border pb-2">
+                        {isOutlinePhase ? 'Công cụ Dàn ý' : 'Công cụ Kịch bản'}
+                    </h3>
+                    <button
+                        onClick={onScoreScript}
+                        disabled={!script || isLoading || isScoring}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary hover:bg-primary/70 text-text-primary font-semibold rounded-lg transition-colors border border-border disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Chấm điểm kịch bản"
+                    >
+                        <TrophyIcon className="w-5 h-5 text-amber-400" />
+                        <span>{isScoring ? 'Đang chấm điểm...' : isOutlinePhase ? 'Chấm điểm dàn ý' : 'Chấm điểm kịch bản'}</span>
+                    </button>
+                    
                     <ScriptTools 
                         revisionPrompt={revisionPrompt}
                         setRevisionPrompt={setRevisionPrompt}
                         onRevise={onRevise}
                         isLoading={isLoading}
+                        isOutlinePhase={isOutlinePhase}
                     />
-                </>
+                </div>
             )}
         </div>
     );

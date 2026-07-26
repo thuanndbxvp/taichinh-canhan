@@ -129,7 +129,10 @@ const App: React.FC = () => {
     [ideas, brief, modals],
   );
 
-  const isOutlinePhase = generation.currentPartIndex === 0 && generation.totalParts > 0 && !generation.isGeneratingSequentially;
+  const isOutlinePhase = !!generation.generatedScript && 
+    generation.totalParts === 0 && 
+    !generation.isGeneratingSequentially && 
+    !generation.generatedScript.includes('BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT');
 
   // Score dialog
   const handleScoreClick = useCallback(async () => {
