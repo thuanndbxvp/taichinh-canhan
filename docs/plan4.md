@@ -68,6 +68,8 @@ Browser ──(JWT Supabase Auth)──> React/Vite SPA
 
 ## 1. Phase 6 — Production Hardening
 
+*(Lưu ý: Ngay trước Phase 6, chúng ta có **Phase 5.5: Supabase Revision Tracking** để lưu lịch sử sửa kịch bản dựa trên AI Feedback, bảng `script_revisions` đã được gộp chung vào Schema bên dưới).*
+
 ### 1.1. Lý do dùng Supabase (không phải Neon, Firebase, Atlas)
 
 | Tiêu chí | Supabase | Neon | Firebase | Mongo Atlas |
@@ -123,6 +125,18 @@ CREATE TABLE public.scripts (
 );
 CREATE INDEX idx_scripts_project ON public.scripts(project_id, status);
 
+-- Script Revisions (Lịch sử chỉnh sửa kịch bản theo AI Feedback - Phase 5.5)
+CREATE TABLE public.script_revisions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  script_id UUID NOT NULL REFERENCES public.scripts(id) ON DELETE CASCADE,
+  old_content TEXT NOT NULL,
+  new_content TEXT NOT NULL,
+  applied_feedback JSONB NOT NULL,     -- Lưu lại mảng các góp ý đã chọn để sửa
+  user_comment TEXT,                   -- Lời dặn dò thêm của người dùng
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX idx_script_revisions_script ON public.script_revisions(script_id, created_at DESC);
+
 -- Usage events (mỗi AI call = 1 row)
 CREATE TABLE public.usage_events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -159,6 +173,7 @@ CREATE INDEX idx_jobs_user_status ON public.jobs(user_id, status, created_at DES
 -- RLS policies (Supabase style — dùng auth.uid() helper)
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.scripts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.script_revisions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.usage_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.jobs ENABLE ROW LEVEL SECURITY;
 
@@ -176,6 +191,20 @@ CREATE POLICY scripts_owner ON public.scripts
   ))
   WITH CHECK (project_id IN (
     SELECT id FROM public.projects WHERE user_id = auth.uid()
+  ));
+
+-- Script Revisions: thấy qua script -> project
+CREATE POLICY script_revisions_owner ON public.script_revisions
+  FOR ALL TO authenticated
+  USING (script_id IN (
+    SELECT id FROM public.scripts WHERE project_id IN (
+      SELECT id FROM public.projects WHERE user_id = auth.uid()
+    )
+  ))
+  WITH CHECK (script_id IN (
+    SELECT id FROM public.scripts WHERE project_id IN (
+      SELECT id FROM public.projects WHERE user_id = auth.uid()
+    )
   ));
 
 CREATE POLICY usage_owner ON public.usage_events

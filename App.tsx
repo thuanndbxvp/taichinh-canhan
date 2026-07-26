@@ -150,6 +150,27 @@ const App: React.FC = () => {
     }
   }, [generation.generatedScript, dialogue.dialogue]);
 
+  const handleReviseScript = useCallback(async (revisionPrompt: string) => {
+    const replacements = await review.revise2(generation.generatedScript, revisionPrompt);
+    if (replacements && replacements.length > 0) {
+      let newScript = generation.generatedScript;
+      let appliedCount = 0;
+      for (const rep of replacements) {
+         if (newScript.includes(rep.original_text_snippet)) {
+             newScript = newScript.replace(rep.original_text_snippet, rep.new_text);
+             appliedCount++;
+         }
+      }
+      generation.setGeneratedScript(newScript);
+      modals.close('score');
+      aiSettings.setLocalNotification(`Đã sửa thành công ${appliedCount}/${replacements.length} đoạn kịch bản!`);
+    } else if (review.error) {
+      aiSettings.setLocalNotification("Có lỗi xảy ra khi tự động sửa kịch bản.");
+    } else {
+      aiSettings.setLocalNotification("AI không tìm thấy đoạn nào phù hợp để sửa.");
+    }
+  }, [generation.generatedScript, review, generation, modals, aiSettings]);
+
   const hasApiKey = aiSettings.hasAnyApiKey;
 
   return (
@@ -283,11 +304,7 @@ const App: React.FC = () => {
             isSummarizing={scenes.isSummarizing}
             hasSummarizedScript={!!scenes.summarizedScript}
             onOpenLibrary={() => modals.open('library')}
-            onSaveToLibrary={() => library.saveCurrent({
-              title: brief.brief.title,
-              outlineContent: brief.brief.outlineContent,
-              script: generation.generatedScript,
-            })}
+            onSaveToLibrary={handleSaveToLibrary}
             hasSavedToLibrary={library.hasSaved}
             onExtractAndCount={handleOpenDialogue}
             onOpenDialogueModal={() => modals.open('dialogue')}
@@ -370,6 +387,8 @@ const App: React.FC = () => {
             isLoading={review.isScoring}
             error={review.error}
             rawStream={review.rawStream}
+            isRevising={review.isRevising}
+            onRevise={handleReviseScript}
           />
         )}
         {modals.isOpen('summarize') && (

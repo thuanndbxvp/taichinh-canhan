@@ -1,4 +1,4 @@
-﻿/**
+/**
  * PromptRegistry — registry các prompt versioned theo use case.
  *
  * Mỗi prompt là 1 builder function nhận input typed và trả string hoàn chỉnh
@@ -29,6 +29,7 @@ export type PromptId =
   | 'finance.script.outline'
   | 'finance.script.part'
   | 'finance.script.revise'
+  | 'finance.script.revise.partial'
   | 'finance.dialogue.extract'
   | 'finance.visual.single'
   | 'finance.visual.bulk'
@@ -61,6 +62,11 @@ export interface PromptRegistryMap {
     currentPartOutline: string;
   };
   'finance.script.revise': {
+    script: string;
+    revisionPrompt: string;
+    style: StyleOptions | null;
+  };
+  'finance.script.revise.partial': {
     script: string;
     revisionPrompt: string;
     style: StyleOptions | null;

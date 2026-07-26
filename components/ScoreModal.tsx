@@ -12,6 +12,8 @@ interface ScoreModalProps {
   isLoading: boolean;
   error: string | null;
   rawStream?: string;
+  isRevising?: boolean;
+  onRevise?: (prompt: string) => void;
 }
 
 const StreamViewer: React.FC<{ stream: string }> = ({ stream }) => {
@@ -37,8 +39,20 @@ const StreamViewer: React.FC<{ stream: string }> = ({ stream }) => {
     );
 };
 
-export const ScoreModal: React.FC<ScoreModalProps> = ({ isOpen, onClose, score, isLoading, error, rawStream }) => {
+export const ScoreModal: React.FC<ScoreModalProps> = ({ isOpen, onClose, score, isLoading, error, rawStream, isRevising, onRevise }) => {
     const [copySuccess, setCopySuccess] = useState('');
+    const [selectedFeedback, setSelectedFeedback] = useState<string[]>([]);
+    const [userComment, setUserComment] = useState('');
+
+    const toggleFeedback = (text: string) => {
+        setSelectedFeedback(prev => prev.includes(text) ? prev.filter(p => p !== text) : [...prev, text]);
+    };
+
+    const handleRevise = () => {
+        if (!onRevise) return;
+        const promptText = `\n- Phản hồi đã chọn để sửa:\n${selectedFeedback.map(f => `  + ${f}`).join('\n')}\n- Ghi chú thêm: ${userComment}`;
+        onRevise(promptText);
+    };
 
     useEffect(() => {
         if (copySuccess) {
@@ -117,9 +131,12 @@ export const ScoreModal: React.FC<ScoreModalProps> = ({ isOpen, onClose, score, 
                                         </h3>
                                         <ul className="space-y-2">
                                             {score.penalties.map((p, idx) => (
-                                                <li key={idx} className="text-red-300/80 text-sm flex justify-between items-center bg-black/20 px-3 py-2 rounded">
-                                                    <span>{p.reason}</span>
-                                                    <span className="font-bold text-red-400 bg-red-900/40 px-2 py-0.5 rounded">-{p.deduction}</span>
+                                                <li key={idx} className="text-red-300/80 text-sm flex justify-between items-start bg-black/20 px-3 py-2 rounded gap-2 cursor-pointer hover:bg-black/40 transition-colors" onClick={() => toggleFeedback(p.reason)}>
+                                                    <div className="flex items-start gap-2">
+                                                        <input type="checkbox" checked={selectedFeedback.includes(p.reason)} onChange={() => {}} className="mt-1 flex-shrink-0" />
+                                                        <span>{p.reason}</span>
+                                                    </div>
+                                                    <span className="font-bold text-red-400 bg-red-900/40 px-2 py-0.5 rounded whitespace-nowrap">-{p.deduction}</span>
                                                 </li>
                                             ))}
                                         </ul>
@@ -183,8 +200,8 @@ export const ScoreModal: React.FC<ScoreModalProps> = ({ isOpen, onClose, score, 
                                     </h3>
                                     <ul className="space-y-2">
                                         {score.cons.map((con, idx) => (
-                                            <li key={idx} className="text-text-secondary text-sm flex gap-2">
-                                                <span className="text-amber-500 mt-0.5">•</span>
+                                            <li key={idx} className="text-text-secondary text-sm flex gap-2 cursor-pointer hover:bg-black/20 p-2 -mx-2 rounded transition-colors" onClick={() => toggleFeedback(con)}>
+                                                <input type="checkbox" checked={selectedFeedback.includes(con)} onChange={() => {}} className="mt-0.5 flex-shrink-0" />
                                                 <span>{con}</span>
                                             </li>
                                         ))}
@@ -198,6 +215,38 @@ export const ScoreModal: React.FC<ScoreModalProps> = ({ isOpen, onClose, score, 
                                 <p className="text-text-secondary text-sm leading-relaxed whitespace-pre-wrap">
                                     {score.overallReview}
                                 </p>
+                            </div>
+
+                            {/* Revision Section */}
+                            <div className="bg-primary/50 p-6 rounded-lg border border-accent/30 mt-6 relative overflow-hidden">
+                                {isRevising && (
+                                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
+                                        <svg className="animate-spin h-10 w-10 text-accent mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                        <p className="text-accent font-bold animate-pulse text-lg">Đang tiến hành phẫu thuật kịch bản...</p>
+                                        <p className="text-xs text-text-secondary mt-2">Dữ liệu thô đang được xử lý ở màn hình Loading (nếu bật)</p>
+                                    </div>
+                                )}
+                                <h3 className="font-bold text-accent mb-3 flex items-center gap-2">
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                                    Tự Động Sửa Kịch Bản Theo Ý Kiến
+                                </h3>
+                                <p className="text-sm text-text-secondary mb-4">
+                                    Tích chọn (Checkbox) các <b>Phạm Quy</b> hoặc <b>Cần Cải Thiện</b> ở trên để AI tự động sửa lại những đoạn văn tương ứng.
+                                    AI sẽ chỉ sửa đoạn cần thiết để không làm gãy mạch kịch bản.
+                                </p>
+                                <textarea 
+                                    className="w-full bg-secondary text-text-primary p-3 rounded border border-border focus:border-accent outline-none text-sm min-h-[80px] mb-4 placeholder-text-secondary/50" 
+                                    placeholder="Ghi chú thêm cho AI (Ví dụ: Thêm một ví dụ thực tế vào phần 2...)"
+                                    value={userComment}
+                                    onChange={e => setUserComment(e.target.value)}
+                                />
+                                <button 
+                                    onClick={handleRevise}
+                                    disabled={isRevising || (selectedFeedback.length === 0 && !userComment.trim())}
+                                    className="w-full bg-accent hover:brightness-110 text-white font-bold py-3 px-6 rounded-md transition shadow-lg shadow-accent/20 disabled:opacity-50 flex justify-center items-center gap-2"
+                                >
+                                    Tiếp thu & Bắt Đầu Sửa
+                                </button>
                             </div>
                         </div>
                     )}

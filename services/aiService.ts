@@ -128,6 +128,8 @@ export const classifyTopic = async (
 ): Promise<RouteResult> =>
   runPrompt('phân loại kịch bản', () => internalClassifyTopic(title, provider, model));
 
+
+
 export const reviseScript = async (
   script: string,
   revisionPrompt: string,
@@ -324,6 +326,43 @@ export const scoreScript = async (
         }
       },
       'chấm điểm kịch bản'
+    );
+  });
+
+export interface ScriptReplacement {
+  original_text_snippet: string;
+  new_text: string;
+}
+
+export const reviseScriptPartial = async (
+  script: string,
+  revisionPrompt: string,
+  provider: AiProvider,
+  model: string,
+  onChunk?: (chunk: string, fullStream: string) => void
+): Promise<{ replacements: ScriptReplacement[] }> =>
+  runPrompt('sửa kịch bản', async () => {
+    const content = await callWithPrompt(
+      provider,
+      model,
+      'finance.script.revise.partial',
+      { script, revisionPrompt, style: null },
+      'sửa kịch bản',
+      undefined,
+      onChunk,
+      undefined,
+      'revise',
+    );
+    
+    return parseAiJsonOrThrow<{ replacements: ScriptReplacement[] }>(
+      content,
+      {
+        kind: 'object',
+        fields: {
+          replacements: 'array'
+        }
+      },
+      'sửa kịch bản'
     );
   });
 

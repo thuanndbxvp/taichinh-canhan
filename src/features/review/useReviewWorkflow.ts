@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import type { AiProvider } from '../../../types';
-import { scoreScript, type ScoreResult } from '../../../services/aiService';
+import { scoreScript, reviseScriptPartial, type ScoreResult, type ScriptReplacement } from '../../../services/aiService';
 
 export interface UseReviewWorkflowArgs {
   aiProvider: AiProvider;
@@ -13,6 +13,8 @@ export interface UseReviewWorkflowReturn {
   error: string | null;
   rawStream: string;
   score2: (script: string) => Promise<void>;
+  revise2: (script: string, revisionPrompt: string) => Promise<ScriptReplacement[]>;
+  isRevising: boolean;
   clear: () => void;
 }
 
@@ -42,11 +44,34 @@ export function useReviewWorkflow({ aiProvider, selectedModel }: UseReviewWorkfl
     [aiProvider, selectedModel],
   );
 
+  const [isRevising, setIsRevising] = useState<boolean>(false);
+
+  const revise2 = useCallback(
+    async (script: string, revisionPrompt: string) => {
+      if (!script || !revisionPrompt) return [];
+      setIsRevising(true);
+      setError(null);
+      setRawStream('');
+      try {
+        const result = await reviseScriptPartial(script, revisionPrompt, aiProvider, selectedModel, (chunk, full) => {
+          setRawStream(full);
+        });
+        return result.replacements;
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Lỗi khi sửa kịch bản.');
+        return [];
+      } finally {
+        setIsRevising(false);
+      }
+    },
+    [aiProvider, selectedModel],
+  );
+
   const clear = useCallback(() => {
     setScore(null);
     setError(null);
     setRawStream('');
   }, []);
 
-  return { score, isScoring, error, rawStream, score2, clear };
+  return { score, isScoring, isRevising, error, rawStream, score2, revise2, clear };
 }

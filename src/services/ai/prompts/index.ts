@@ -254,6 +254,39 @@ promptRegistry.register('finance.script.revise', {
   },
 });
 
+promptRegistry.register('finance.script.revise.partial', {
+  version: V1,
+  build({ script, revisionPrompt, style }) {
+    const styleLine = style
+      ? `Giữ vững Tone: ${style.expression} và Style: ${style.style}.`
+      : '';
+    const financeGuard =
+      'LƯU Ý: Giữ vững triết lý cung cấp kiến thức tài chính thực tế và chuyên nghiệp. Không thêm yếu tố giật gân, kinh dị hay clickbait.';
+    return {
+      messages: [
+        { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\nBạn là Script Doctor của kênh "Chú Que Tài Chính". Nhiệm vụ của bạn là sửa kịch bản dựa trên các feedback cụ thể. ${financeGuard}\n\n` + coreRaw.trim() },
+        {
+          role: 'user',
+          content: `KỊCH BẢN GỐC:\n${script}\n\nYÊU CẦU CHỈNH SỬA:\n${revisionPrompt}\n${styleLine}\n\nNHIỆM VỤ QUAN TRỌNG:
+Thay vì viết lại toàn bộ kịch bản, bạn HÃY CHỈ SỬA NHỮNG ĐOẠN CẦN THIẾT để tiết kiệm thời gian và không làm hỏng dòng chảy văn bản cũ.
+Bạn phải trả về định dạng JSON chứa mảng các đoạn cần thay thế:
+\`\`\`json
+{
+  "replacements": [
+    {
+      "original_text_snippet": "Trích đoạn ngắn (khoảng 2-5 câu) từ kịch bản gốc cần được thay thế. TRÍCH XUẤT CHÍNH XÁC TỪNG CHỮ 100%.",
+      "new_text": "Đoạn văn mới đã được sửa theo feedback để thay thế cho trích đoạn trên."
+    }
+  ]
+}
+\`\`\`
+Lưu ý: Chỉ trả về JSON, không giải thích gì thêm.`
+        },
+      ],
+    };
+  },
+});
+
 promptRegistry.register('finance.dialogue.extract', {
   version: V1,
   build({ script }) {
