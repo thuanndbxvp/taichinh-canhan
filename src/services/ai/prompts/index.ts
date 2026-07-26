@@ -144,8 +144,13 @@ Nếu chủ đề không liên quan đến vĩ mô (ví dụ: "cách kiểm soá
 promptRegistry.register('finance.script.outline', {
   version: V1,
   build({ params }) {
-    const { title, targetAudience, styleOptions, wordCount } = params;
+    const { title, outlineContent, targetAudience, styleOptions, wordCount } = params;
     const style = `Tone: ${styleOptions.expression}, Style: ${styleOptions.style}`;
+    
+    const userRequirements = outlineContent 
+      ? `\n\nYÊU CẦU NỘI DUNG TỪ ĐẠO DIỄN (TRỌNG SỐ CAO NHẤT):\n"${outlineContent}"\n-> HƯỚNG DẪN: Lấy "Chủ đề" làm móng, nhưng BẮT BUỘC phải lồng ghép tất cả các ý trong "Yêu cầu nội dung" này vào các phần của Dàn ý sao cho mạch lạc và hợp lý nhất.` 
+      : '';
+
     return {
       messages: [
         { role: 'system', content: buildFinanceSystemPrompt(params.scriptStyle, params.scriptHook, params.macroContext) },
@@ -177,7 +182,9 @@ Nội dung từng phần:
 - PHẦN 4: Lộ trình step-by-step; phân nhóm đối tượng.
 - PHẦN 5: Đúc kết/triết lý + 1 câu hỏi xoáy vào khán giả (CTA).
 
-Chủ đề: "${title}". Ngôn ngữ: ${targetAudience}. Phong cách: ${style}.`,
+CHỦ ĐỀ CHÍNH: "${title}"
+NGÔN NGỮ: ${targetAudience}
+PHONG CÁCH: ${style}${userRequirements}`,
         },
       ],
     };
