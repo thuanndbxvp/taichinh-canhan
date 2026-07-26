@@ -28,17 +28,10 @@ interface ControlPanelProps {
   setTargetAudience: (audience: string) => void;
   styleOptions: StyleOptions;
   setStyleOptions: (options: StyleOptions) => void;
-  keywords: string;
-  setKeywords: (keywords: string) => void;
   wordCount: string;
   setWordCount: (count: string) => void;
   onGenerate: () => void;
   isLoading: boolean;
-  onGenerateKeywordSuggestions: () => void;
-  isSuggestingKeywords: boolean;
-  keywordSuggestions: string[];
-  keywordSuggestionError: string | null;
-  hasGeneratedKeywordSuggestions: boolean;
   scriptType: ScriptType;
   setScriptType: (type: ScriptType) => void;
   numberOfSpeakers: NumberOfSpeakers;
@@ -79,10 +72,8 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   onGenerateSuggestions, isSuggesting, suggestions, suggestionError, hasGeneratedTopicSuggestions,
   targetAudience, setTargetAudience,
   styleOptions, setStyleOptions,
-  keywords, setKeywords,
   wordCount, setWordCount,
   onGenerate, isLoading,
-  onGenerateKeywordSuggestions, isSuggestingKeywords, keywordSuggestions, keywordSuggestionError, hasGeneratedKeywordSuggestions,
   scriptType, setScriptType,
   numberOfSpeakers, setNumberOfSpeakers,
   scriptStyle, setScriptStyle,
@@ -95,9 +86,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   apiKeys
 }) => {
 
-  const handleAddKeyword = (keyword: string) => {
-    setKeywords(keywords ? `${keywords}, ${keyword}` : keyword);
-  };
+
   
   const isIdeaSaved = (idea: TopicSuggestionItem) => {
     return savedIdeas.some(saved => saved.title === idea.title && saved.outline === idea.outline);
@@ -330,55 +319,9 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             {uploadedIdeas.length > 0 && <IdeaList ideaList={uploadedIdeas} listTitle="Ý tưởng từ File của bạn" />}
         </ControlSection>
 
-        <ControlSection title="2. Từ khóa SEO (Tùy chọn)" isDark>
-            <input
-              id="keywords"
-              type="text"
-              className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
-              placeholder="VD: AI, sáng tạo, tương lai"
-              value={keywords}
-              onChange={(e) => setKeywords(e.target.value)}
-            />
-            <Tooltip text="AI sẽ gợi ý các từ khóa SEO liên quan đến chủ đề của bạn để tăng khả năng được tìm thấy.">
-              <button 
-                onClick={onGenerateKeywordSuggestions} 
-                disabled={isSuggestingKeywords || !title}
-                className={`w-full mt-2 flex items-center justify-center transition text-sm py-2 px-4 rounded-lg border bg-emerald-900/10 border-emerald-900/30 text-emerald-500 hover:bg-emerald-900/20 disabled:opacity-40 disabled:cursor-not-allowed`}
-              >
-                {isSuggestingKeywords ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-3 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Đang gợi ý...
-                  </>
-                ) : (
-                  <>
-                    <SparklesIcon className="w-4 h-4 mr-2" />
-                    <span>Gợi ý từ khóa</span>
-                    {!isSuggestingKeywords && hasGeneratedKeywordSuggestions && <CheckIcon className="w-4 h-4 ml-2 text-green-400" />}
-                  </>
-                )}
-              </button>
-            </Tooltip>
-            {keywordSuggestionError && <p className="text-red-400 text-sm mt-2">{keywordSuggestionError}</p>}
-            {keywordSuggestions.length > 0 && (
-                <div className="mt-3">
-                    <p className="text-xs font-medium text-text-secondary mb-2">Gợi ý:</p>
-                    <div className="flex flex-wrap gap-2">
-                        {keywordSuggestions.map((suggestion, index) => (
-                            <button key={index} onClick={() => handleAddKeyword(suggestion)} className={`px-3 py-1 text-xs font-medium rounded-full transition-colors bg-emerald-900/20 text-emerald-500 hover:bg-emerald-900/40`}>
-                                {suggestion}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
         </ControlSection>
 
-
-        <ControlSection title="4. Cấu trúc & Định dạng" isDark>
+        <ControlSection title="2. Cấu trúc & Định dạng" isDark>
             <div className="grid grid-cols-1 gap-4">
                 <Tooltip text={FORMATTING_EXPLANATIONS.wordCount}>
                     <div className="relative">

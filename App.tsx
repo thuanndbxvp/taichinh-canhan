@@ -258,17 +258,10 @@ const App: React.FC = () => {
             setTargetAudience={brief.setTargetAudience}
             styleOptions={brief.brief.styleOptions}
             setStyleOptions={brief.setStyleOptions}
-            keywords={brief.brief.keywords}
-            setKeywords={brief.setKeywords}
             wordCount={brief.brief.wordCount}
             setWordCount={brief.setWordCount}
             onGenerate={handleGenerateClick}
             isLoading={generation.isLoading || !hasApiKey}
-            onGenerateKeywordSuggestions={() => ideas.generateKeywordSuggestions(brief.brief.title)}
-            isSuggestingKeywords={ideas.isSuggestingKeywords}
-            keywordSuggestions={ideas.keywordSuggestions}
-            keywordSuggestionError={ideas.keywordSuggestionError}
-            hasGeneratedKeywordSuggestions={ideas.hasGeneratedKeywordSuggestions}
             scriptType={brief.brief.scriptType}
             setScriptType={brief.setScriptType}
             numberOfSpeakers={brief.brief.numberOfSpeakers}
