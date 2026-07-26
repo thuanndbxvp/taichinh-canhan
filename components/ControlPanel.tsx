@@ -379,45 +379,23 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
 
 
         <ControlSection title="4. Cấu trúc & Định dạng" isDark>
-            <div className={`flex rounded-lg p-1 mb-4 bg-black`}>
-                <button
-                    onClick={() => setLengthType('words')}
-                    className={`w-full py-2 text-sm font-semibold rounded-md transition-colors ${
-                        lengthType === 'words' 
-                        ? 'bg-emerald-700 text-white shadow-sm' 
-                        : 'text-emerald-500/60 hover:text-emerald-500'
-                    }`}
-                >
-                    Theo số từ
-                </button>
-                <button
-                    onClick={() => setLengthType('duration')}
-                    className={`w-full py-2 text-sm font-semibold rounded-md transition-colors ${
-                        lengthType === 'duration' 
-                        ? 'bg-emerald-700 text-white shadow-sm' 
-                        : 'text-emerald-500/60 hover:text-emerald-500'
-                    }`}
-                >
-                    Theo thời lượng
-                </button>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {lengthType === 'words' ? (
-                    <Tooltip text={FORMATTING_EXPLANATIONS.wordCount}>
-                        <div>
-                            <label htmlFor="wordCount" className="block text-xs font-medium text-text-secondary mb-1">Tổng số từ</label>
-                            <input id="wordCount" type="number" value={wordCount} onChange={e => setWordCount(e.target.value)} className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`} placeholder="VD: 800"/>
+            <div className="grid grid-cols-1 gap-4">
+                <Tooltip text={FORMATTING_EXPLANATIONS.wordCount}>
+                    <div className="relative">
+                        <label htmlFor="wordCount" className="block text-xs font-medium text-text-secondary mb-1">Tổng số từ</label>
+                        <input 
+                            id="wordCount" 
+                            type="number" 
+                            value={wordCount} 
+                            disabled
+                            className={`w-full border rounded-md p-2 transition bg-black/50 border-emerald-900/30 text-emerald-100/50 cursor-not-allowed`} 
+                            placeholder="VD: 800"
+                        />
+                        <div className="mt-2 text-xs text-amber-500 italic">
+                            * Tính năng kiểm soát số từ chính xác đang được phát triển.
                         </div>
-                    </Tooltip>
-                ) : (
-                    <Tooltip text={FORMATTING_EXPLANATIONS.videoDuration}>
-                        <div>
-                            <label htmlFor="videoDuration" className="block text-xs font-medium text-text-secondary mb-1">Thời lượng video (phút)</label>
-                            <input id="videoDuration" type="number" value={videoDuration} onChange={e => setVideoDuration(e.target.value)} className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`} placeholder="VD: 5"/>
-                        </div>
-                    </Tooltip>
-                )}
+                    </div>
+                </Tooltip>
             </div>
         </ControlSection>
         <Tooltip text="Tạo ra kịch bản hoàn chỉnh dựa trên tất cả các thiết lập bạn đã chọn ở trên.">
