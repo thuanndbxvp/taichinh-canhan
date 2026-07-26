@@ -5,10 +5,12 @@ import {
   generateScriptPart,
   parseOutlineIntoSegments,
   reviseScript,
+  classifyTopic,
 } from '../../../services/aiService';
 import type { ContentBrief } from '../brief/useContentBrief';
 import { AppError } from '../../lib/errors';
 import { minutesToTargetWords } from '../../domain/wordCount';
+import { fetchMacroData } from '../../../services/dataRetrieval';
 
 const PARTS_HEADER = '--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---\n\n';
 
@@ -54,6 +56,8 @@ function buildParams(brief: ContentBrief, finalWordCount: string): GenerationPar
     scriptType: brief.scriptType,
     numberOfSpeakers: brief.numberOfSpeakers,
     isFinanceMode: brief.isFinanceMode,
+    scriptStyle: brief.scriptStyle,
+    scriptHook: brief.scriptHook,
   };
 }
 
@@ -133,6 +137,21 @@ export function useGenerationWorkflow({
     const params = buildParams(brief, finalWordCount);
 
     try {
+      if (params.scriptStyle === 'auto' || params.scriptHook === 'auto') {
+        setCurrentAiAction('Đang phân loại phong cách kịch bản...');
+        const route = await classifyTopic(params.title, aiProvider, selectedModel);
+        if (params.scriptStyle === 'auto') params.scriptStyle = route.branch;
+        if (params.scriptHook === 'auto') params.scriptHook = route.hook;
+      }
+
+      setCurrentAiAction('Đang thu thập dữ liệu vĩ mô thực tế...');
+      try {
+        const macroData = await fetchMacroData(params.title, aiProvider, selectedModel);
+        params.macroContext = macroData;
+      } catch (e) {
+        console.warn('Lỗi khi fetch dữ liệu vĩ mô, tiếp tục không có context', e);
+      }
+
       setCurrentAiAction('Đang phân tích và lập dàn ý...');
       const outline = await generateScriptOutline(params, aiProvider, selectedModel, (chunk) => {
          setGeneratedScript((prev) => {

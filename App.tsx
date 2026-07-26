@@ -223,6 +223,10 @@ const App: React.FC = () => {
             setScriptType={brief.setScriptType}
             numberOfSpeakers={brief.brief.numberOfSpeakers}
             setNumberOfSpeakers={brief.setNumberOfSpeakers}
+            scriptStyle={brief.brief.scriptStyle}
+            setScriptStyle={brief.setScriptStyle}
+            scriptHook={brief.brief.scriptHook}
+            setScriptHook={brief.setScriptHook}
             onSuggestStyle={() => ideas.suggestStyle(brief.brief.title)}
             isSuggestingStyle={ideas.isSuggestingStyle}
             styleSuggestionError={ideas.styleSuggestionError}

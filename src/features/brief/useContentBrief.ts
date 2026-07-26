@@ -21,6 +21,8 @@ export interface ContentBrief {
   lengthType: 'words' | 'duration';
   videoDuration: string;
   isFinanceMode: boolean;
+  scriptStyle: string;
+  scriptHook: string;
 }
 
 export interface ContentBriefPatch {
@@ -35,6 +37,8 @@ export interface ContentBriefPatch {
   lengthType?: 'words' | 'duration';
   videoDuration?: string;
   isFinanceMode?: boolean;
+  scriptStyle?: string;
+  scriptHook?: string;
 }
 
 // Chú Que Tài Chính — chỉ một style mặc định phục vụ nhân vật.
@@ -52,6 +56,8 @@ const DEFAULT_BRIEF: ContentBrief = {
   lengthType: 'words',
   videoDuration: '8',
   isFinanceMode: true,
+  scriptStyle: 'auto',
+  scriptHook: 'auto',
 };
 
 /**
@@ -77,6 +83,8 @@ export function useContentBrief(initial?: ContentBriefPatch) {
   const setNumberOfSpeakers = useCallback((numberOfSpeakers: NumberOfSpeakers) => patch({ numberOfSpeakers }), [patch]);
   const setLengthType = useCallback((lengthType: 'words' | 'duration') => patch({ lengthType }), [patch]);
   const setVideoDuration = useCallback((videoDuration: string) => patch({ videoDuration }), [patch]);
+  const setScriptStyle = useCallback((scriptStyle: string) => patch({ scriptStyle }), [patch]);
+  const setScriptHook = useCallback((scriptHook: string) => patch({ scriptHook }), [patch]);
   const setIsFinanceMode = useCallback(() => {
     // App chỉ phục vụ "Chú Que Tài Chính" — finance mode là cố định.
     // Giữ API để tương thích component cũ nhưng luôn ép về true.
@@ -115,6 +123,8 @@ export function useContentBrief(initial?: ContentBriefPatch) {
     setLengthType,
     setVideoDuration,
     setIsFinanceMode,
+    setScriptStyle,
+    setScriptHook,
     effectiveTargetWordCount,
   };
 }

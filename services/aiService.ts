@@ -8,7 +8,13 @@ import type {
   SceneSummary,
 } from '../types';
 import { AppError } from '../src/lib/errors';
-import { aiGateway, validateApiKey } from '../src/services/ai';
+import { 
+  aiGateway, 
+  validateApiKey, 
+  callWithPrompt, 
+  classifyTopic as internalClassifyTopic, 
+  type RouteResult 
+} from '../src/services/ai';
 import { promptRegistry } from '../src/services/ai/PromptRegistry';
 import { parseAiJsonOrThrow, SCHEMAS } from '../src/services/ai/responseParser';
 import { parseOutlineIntoSegments as parseOutlineIntoSegmentsImpl } from '../src/services/ai/parseOutlineIntoSegments';
@@ -75,6 +81,12 @@ async function runPrompt<T>(action: string, fn: () => Promise<T>): Promise<T> {
 
 export { validateApiKey };
 
+function getTemperatureForStyle(style?: string): number {
+  if (style === 'analytical' || style === 'mythbusting') return 0.4;
+  if (style === 'psychology' || style === 'listicle') return 0.75;
+  return 0.7;
+}
+
 export const generateScriptOutline = async (
   params: GenerationParams,
   provider: AiProvider,
@@ -88,7 +100,7 @@ export const generateScriptOutline = async (
       'finance.script.outline',
       { params },
       'tạo dàn ý',
-      undefined,
+      { temperature: getTemperatureForStyle(params.scriptStyle) },
       onChunk,
       'outline',
     );
@@ -116,7 +128,7 @@ export const generateScriptPart = async (
         currentPartOutline,
       },
       'tạo phần kịch bản',
-      undefined,
+      { temperature: getTemperatureForStyle(params.scriptStyle) },
       onChunk,
       'script_part',
     ),
@@ -140,6 +152,13 @@ export const generateTopicSuggestions = async (
     );
     return parseAiJsonOrThrow<TopicSuggestionItem[]>(content, SCHEMAS.topicSuggestions, 'gợi ý chủ đề');
   });
+
+export const classifyTopic = async (
+  title: string,
+  provider: AiProvider,
+  model: string,
+): Promise<RouteResult> =>
+  runPrompt('phân loại kịch bản', () => internalClassifyTopic(title, provider, model));
 
 export const reviseScript = async (
   script: string,

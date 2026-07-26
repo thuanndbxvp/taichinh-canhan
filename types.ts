@@ -68,6 +68,9 @@ export interface GenerationParams {
   scriptType: ScriptType;
   numberOfSpeakers: NumberOfSpeakers;
   isFinanceMode?: boolean; // Flag for specialized finance mode
+  scriptStyle?: string; // e.g. "auto", "analytical", "psychology", "mythbusting", "listicle"
+  scriptHook?: string;  // e.g. "auto", "story", "data", "myth", "question"
+  macroContext?: string; // Dữ liệu vĩ mô thật lấy từ web
 }
 
 export interface VisualPrompt {

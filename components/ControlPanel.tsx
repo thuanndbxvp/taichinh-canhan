@@ -43,6 +43,10 @@ interface ControlPanelProps {
   setScriptType: (type: ScriptType) => void;
   numberOfSpeakers: NumberOfSpeakers;
   setNumberOfSpeakers: (num: NumberOfSpeakers) => void;
+  scriptStyle: string;
+  setScriptStyle: (style: string) => void;
+  scriptHook: string;
+  setScriptHook: (hook: string) => void;
   onSuggestStyle: () => void;
   isSuggestingStyle: boolean;
   styleSuggestionError: string | null;
@@ -81,6 +85,8 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   onGenerateKeywordSuggestions, isSuggestingKeywords, keywordSuggestions, keywordSuggestionError, hasGeneratedKeywordSuggestions,
   scriptType, setScriptType,
   numberOfSpeakers, setNumberOfSpeakers,
+  scriptStyle, setScriptStyle,
+  scriptHook, setScriptHook,
   onSuggestStyle, isSuggestingStyle, styleSuggestionError, hasSuggestedStyle,
   lengthType, setLengthType, videoDuration, setVideoDuration,
   savedIdeas, onSaveIdea, onOpenSavedIdeasModal,
@@ -255,6 +261,42 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                   >
                     Kho Ý Tưởng
                   </button>
+                </Tooltip>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                <Tooltip text="Chọn phong cách cho kịch bản. Mặc định AI sẽ tự động phân loại dựa vào chủ đề.">
+                    <div>
+                        <label className="block text-xs font-medium text-text-secondary mb-1">Phong cách Kịch bản</label>
+                        <select 
+                            value={scriptStyle} 
+                            onChange={e => setScriptStyle(e.target.value)} 
+                            className="w-full bg-black border border-emerald-900/50 rounded-md p-2 text-emerald-100 text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
+                        >
+                            <option value="auto">✨ AI Tự Động Phân Loại</option>
+                            <option value="analytical">Phân tích Số liệu (Analytical)</option>
+                            <option value="psychology">Tâm lý Xã hội (Psychology)</option>
+                            <option value="mythbusting">Bóc phốt lầm tưởng (Myth-busting)</option>
+                            <option value="listicle">Danh sách thực chiến (Listicle)</option>
+                        </select>
+                    </div>
+                </Tooltip>
+                
+                <Tooltip text="Chọn kiểu Hook mở đầu. Mặc định AI sẽ tự động chọn để tạo sự đa dạng.">
+                    <div>
+                        <label className="block text-xs font-medium text-text-secondary mb-1">Kiểu Mở Đầu (Hook)</label>
+                        <select 
+                            value={scriptHook} 
+                            onChange={e => setScriptHook(e.target.value)} 
+                            className="w-full bg-black border border-emerald-900/50 rounded-md p-2 text-emerald-100 text-sm focus:ring-1 focus:ring-emerald-500 outline-none"
+                        >
+                            <option value="auto">✨ AI Tự Động Chọn</option>
+                            <option value="story">Kể chuyện cá nhân (Story)</option>
+                            <option value="data">Số liệu gây sốc (Data)</option>
+                            <option value="myth">Đập tan lầm tưởng (Myth)</option>
+                            <option value="question">Câu hỏi tương tác (Question)</option>
+                        </select>
+                    </div>
                 </Tooltip>
             </div>
 
