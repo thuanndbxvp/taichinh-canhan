@@ -400,12 +400,18 @@ promptRegistry.register('finance.score', {
         {
           role: 'system',
           content:
-            'Bạn là chuyên gia thẩm định nội dung kênh "Chú Que Tài Chính".\n\n' + coreRaw.trim(),
+            'Bạn là chuyên gia thẩm định nội dung kênh "Chú Que Tài Chính". LUÔN TRẢ VỀ BẰNG ĐỊNH DẠNG JSON.\n\n' + coreRaw.trim(),
         },
         {
           role: 'user',
-          content: `Hãy nhận xét chi tiết và chấm điểm (thang 10/10) kịch bản này dựa trên triết lý DNA cốt lõi của kênh (sự thực tế, bóc tách con số, tâm lý học hành vi, và ngôn ngữ bình dân).
-Chỉ ra rõ những điểm làm tốt và những điểm cần cải thiện.
+          content: `Hãy nhận xét chi tiết và chấm điểm kịch bản này dựa trên triết lý DNA cốt lõi của kênh (sự thực tế, bóc tách con số, tâm lý học hành vi, và ngôn ngữ bình dân).
+BẮT BUỘC TRẢ VỀ ĐÚNG ĐỊNH DẠNG JSON SCHEMA SAU:
+{
+  "score": 8.5, // Thang điểm 10
+  "pros": ["Điểm mạnh 1", "Điểm mạnh 2"],
+  "cons": ["Điểm cần cải thiện 1", "Điểm cần cải thiện 2"],
+  "overallReview": "Nhận xét tổng quan (khoảng 3-4 câu)..."
+}
 
 KỊCH BẢN:
 ${script}`,

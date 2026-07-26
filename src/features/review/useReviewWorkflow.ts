@@ -1,6 +1,6 @@
-﻿import { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import type { AiProvider } from '../../../types';
-import { scoreScript } from '../../../services/aiService';
+import { scoreScript, type ScoreResult } from '../../../services/aiService';
 
 export interface UseReviewWorkflowArgs {
   aiProvider: AiProvider;
@@ -8,7 +8,7 @@ export interface UseReviewWorkflowArgs {
 }
 
 export interface UseReviewWorkflowReturn {
-  score: string | null;
+  score: ScoreResult | null;
   isScoring: boolean;
   error: string | null;
   score2: (script: string) => Promise<void>;
@@ -16,7 +16,7 @@ export interface UseReviewWorkflowReturn {
 }
 
 export function useReviewWorkflow({ aiProvider, selectedModel }: UseReviewWorkflowArgs): UseReviewWorkflowReturn {
-  const [score, setScore] = useState<string | null>(null);
+  const [score, setScore] = useState<ScoreResult | null>(null);
   const [isScoring, setIsScoring] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 

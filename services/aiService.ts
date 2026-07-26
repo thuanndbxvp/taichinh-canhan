@@ -266,13 +266,20 @@ export const parseIdeasFromFile = async (
     );
   });
 
+export interface ScoreResult {
+  score: number;
+  pros: string[];
+  cons: string[];
+  overallReview: string;
+}
+
 export const scoreScript = async (
   script: string,
   provider: AiProvider,
   model: string,
-): Promise<string> =>
-  runPrompt('chấm điểm kịch bản', () =>
-    callWithPrompt(
+): Promise<ScoreResult> =>
+  runPrompt('chấm điểm kịch bản', async () => {
+    const content = await callWithPrompt(
       provider,
       model,
       'finance.score',
@@ -281,8 +288,21 @@ export const scoreScript = async (
       undefined,
       undefined,
       'score',
-    ),
-  );
+    );
+    return parseAiJsonOrThrow<ScoreResult>(
+      content,
+      {
+        kind: 'object',
+        fields: {
+          score: 'number',
+          pros: 'array',
+          cons: 'array',
+          overallReview: 'string',
+        }
+      },
+      'chấm điểm kịch bản'
+    );
+  });
 
 export const generateSingleVideoPrompt = async (
   scene: SceneSummary,
