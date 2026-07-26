@@ -82,6 +82,7 @@ export function useGenerationWorkflow({
   selectedModel,
 }: UseGenerationWorkflowArgs): UseGenerationWorkflowReturn {
   const [generatedScript, setGeneratedScript] = useState<string>('');
+  const [macroData, setMacroData] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [revisionPrompt, setRevisionPrompt] = useState<string>('');
@@ -104,6 +105,7 @@ export function useGenerationWorkflow({
   const resetAllCaches = useCallback(() => {
     setGeneratedScript('');
     scriptRef.current = '';
+    setMacroData(null);
     setRevisionCount(0);
     setIsGeneratingSequentially(false);
     setOutlineParts([]);
@@ -146,8 +148,9 @@ export function useGenerationWorkflow({
 
       setCurrentAiAction('Đang thu thập dữ liệu vĩ mô thực tế...');
       try {
-        const macroData = await fetchMacroData(params.title, aiProvider, selectedModel);
-        params.macroContext = macroData;
+        const fetchedMacro = await fetchMacroData(brief.title, aiProvider, selectedModel);
+        setMacroData(fetchedMacro);
+        params.macroContext = fetchedMacro;
       } catch (e) {
         console.warn('Lỗi khi fetch dữ liệu vĩ mô, tiếp tục không có context', e);
       }
@@ -344,6 +347,7 @@ export function useGenerationWorkflow({
   return {
     generatedScript,
     setGeneratedScript,
+    macroData,
     isLoading,
     error,
     revisionPrompt,
