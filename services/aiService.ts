@@ -443,18 +443,32 @@ export const resolveMissingData = async (
   strategy: 'search' | 'estimate' | 'simplify',
   provider: AiProvider,
   model: string,
-  searchData?: string,
-  onChunk?: (chunk: string, fullStream: string) => void,
-): Promise<string> =>
-  runPrompt('xử lý số liệu trống', () =>
+  searchData?: string
+): Promise<string> => {
+  const jsonString = await runPrompt('xử lý số liệu trống', () =>
     callWithPrompt(
       provider,
       model,
       `finance.script.resolve.${strategy}`,
       { script, searchData },
       'xử lý số liệu trống',
-      onChunk,
       undefined,
-      'outline',
-    ),
+      undefined,
+      'outline'
+    )
   );
+
+  try {
+    const rawJson = jsonString.replace(/```json/g, '').replace(/```/g, '').trim();
+    const replacements = JSON.parse(rawJson) as Record<string, string>;
+    
+    let updatedScript = script;
+    for (const [key, value] of Object.entries(replacements)) {
+      updatedScript = updatedScript.replace(key, value);
+    }
+    return updatedScript;
+  } catch (err) {
+    console.error('Lỗi khi parse JSON từ AI cho resolveMissingData:', err);
+    throw new Error('AI không trả về đúng định dạng JSON.');
+  }
+};

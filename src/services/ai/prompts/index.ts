@@ -663,8 +663,8 @@ promptRegistry.register('finance.script.resolve.search', {
   build({ script, searchData }) {
     return {
       messages: [
-        { role: 'system', content: `Bạn là trợ lý biên tập. Nhiệm vụ của bạn là thay thế các biến số [CẦN ĐIỀN] trong kịch bản bằng dữ liệu thực tế được cung cấp.` },
-        { role: 'user', content: `DỮ LIỆU TÌM KIẾM ĐƯỢC:\n${searchData}\n\nYÊU CẦU: Hãy duyệt qua toàn bộ Dàn ý sau và thay thế TẤT CẢ các thẻ [CẦN ĐIỀN...] bằng số liệu tương ứng từ Dữ liệu tìm kiếm được.\nNếu dữ liệu tìm kiếm KHÔNG CÓ con số đó, HÃY TỰ ƯỚC TÍNH BẰNG KIẾN THỨC CỦA BẠN VÀ BỌC BẰNG THẺ [KIỂM TRA LẠI: <số liệu của bạn>]. Tuyệt đối không để lại thẻ [CẦN ĐIỀN]. Chỉ trả về nội dung Dàn ý đã sửa, không thêm chữ gì khác.\n\nDÀN Ý GỐC:\n${script}` },
+        { role: 'system', content: `Bạn là trợ lý biên tập. Nhiệm vụ của bạn là giải quyết các biến số [CẦN ĐIỀN...] trong kịch bản bằng dữ liệu thực tế.` },
+        { role: 'user', content: `DỮ LIỆU TÌM KIẾM ĐƯỢC:\n${searchData}\n\nYÊU CẦU: Hãy duyệt qua toàn bộ Dàn ý sau và tìm các thẻ [CẦN ĐIỀN...]. Hãy thay thế các thẻ đó bằng số liệu tương ứng từ Dữ liệu tìm kiếm được.\nNếu dữ liệu tìm kiếm KHÔNG CÓ con số đó, giá trị thay thế phải là chính thẻ đó hoặc ghi rõ [TÌM KIẾM THẤT BẠI: thẻ cũ]. Tuyệt đối KHÔNG tự ước tính.\n\nBẮT BUỘC TRẢ VỀ ĐÚNG ĐỊNH DẠNG JSON OBJECT:\n- KEY là toàn bộ chuỗi thẻ cũ (ví dụ: "[CẦN ĐIỀN Giá vàng]").\n- VALUE là chuỗi mới để thay thế.\n\nVí dụ: { "[CẦN ĐIỀN Giá vàng năm 2004]": "7 triệu VNĐ", "[CẦN ĐIỀN Lãi suất]": "[TÌM KIẾM THẤT BẠI: Lãi suất]" }\n\nTUYỆT ĐỐI KHÔNG TRẢ VỀ TOÀN BỘ DÀN Ý, CHỈ TRẢ VỀ ĐÚNG 1 ĐỐI TƯỢNG JSON.\n\nDÀN Ý GỐC:\n${script}` },
       ],
     };
   },
@@ -676,7 +676,7 @@ promptRegistry.register('finance.script.resolve.estimate', {
     return {
       messages: [
         { role: 'system', content: `Bạn là trợ lý biên tập am hiểu kinh tế.` },
-        { role: 'user', content: `YÊU CẦU: Hãy duyệt qua Dàn ý sau. Với TẤT CẢ các thẻ [CẦN ĐIỀN...], hãy sử dụng kiến thức kinh tế của bạn để TỰ ƯỚC TÍNH một con số/giá trị hợp lý nhất có thể, và thay thế bằng thẻ [KIỂM TRA LẠI: <số liệu ước tính của bạn>].\nVí dụ: đổi [CẦN ĐIỀN Lãi suất tiết kiệm 2020-2024] thành [KIỂM TRA LẠI: khoảng 6-7%/năm].\nTuyệt đối không để lại thẻ [CẦN ĐIỀN]. Chỉ trả về nội dung Dàn ý đã sửa, không thêm chữ gì khác.\n\nDÀN Ý GỐC:\n${script}` },
+        { role: 'user', content: `YÊU CẦU: Hãy duyệt qua Dàn ý sau. Với mỗi thẻ [CẦN ĐIỀN...], hãy TỰ ƯỚC TÍNH một con số/giá trị hợp lý nhất có thể, và bọc bằng thẻ [KIỂM TRA LẠI: <số liệu ước tính của bạn>].\n\nBẮT BUỘC TRẢ VỀ ĐÚNG ĐỊNH DẠNG JSON OBJECT:\n- KEY là toàn bộ chuỗi thẻ cũ (ví dụ: "[CẦN ĐIỀN Giá vàng]").\n- VALUE là chuỗi ước tính mới (ví dụ: "[KIỂM TRA LẠI: khoảng 7 triệu]").\n\nTUYỆT ĐỐI KHÔNG TRẢ VỀ TOÀN BỘ DÀN Ý, CHỈ TRẢ VỀ ĐÚNG 1 ĐỐI TƯỢNG JSON.\n\nDÀN Ý GỐC:\n${script}` },
       ],
     };
   },
@@ -688,7 +688,7 @@ promptRegistry.register('finance.script.resolve.simplify', {
     return {
       messages: [
         { role: 'system', content: `Bạn là trợ lý biên tập.` },
-        { role: 'user', content: `YÊU CẦU: Hãy duyệt qua Dàn ý sau. Có một số thẻ [CẦN ĐIỀN...] yêu cầu dữ liệu quá phức tạp. Hãy XÓA BỎ các thẻ này và VIẾT LẠI câu đó theo hướng đánh giá định tính chung chung (ví dụ: thay vì cần con số lạm phát chính xác, hãy sửa thành "cao hơn lạm phát rất nhiều").\nTuyệt đối không để lại thẻ [CẦN ĐIỀN]. Chỉ trả về nội dung Dàn ý đã sửa, không thêm chữ gì khác.\n\nDÀN Ý GỐC:\n${script}` },
+        { role: 'user', content: `YÊU CẦU: Hãy duyệt qua Dàn ý sau. Có một số thẻ [CẦN ĐIỀN...] yêu cầu dữ liệu phức tạp. Hãy thay thế thẻ này bằng một cụm từ định tính chung chung (ví dụ: đổi thành "cao hơn lạm phát rất nhiều" hoặc "rất đắt đỏ").\n\nBẮT BUỘC TRẢ VỀ ĐÚNG ĐỊNH DẠNG JSON OBJECT:\n- KEY là toàn bộ chuỗi thẻ cũ.\n- VALUE là cụm từ đơn giản hóa.\n\nTUYỆT ĐỐI KHÔNG TRẢ VỀ TOÀN BỘ DÀN Ý, CHỈ TRẢ VỀ ĐÚNG 1 ĐỐI TƯỢNG JSON.\n\nDÀN Ý GỐC:\n${script}` },
       ],
     };
   },

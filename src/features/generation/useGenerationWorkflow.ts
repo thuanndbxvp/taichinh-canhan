@@ -94,6 +94,7 @@ export function useGenerationWorkflow({
   const [fullOutlineText, setFullOutlineText] = useState<string>('');
   const [autoContinue, setAutoContinue] = useState<boolean>(true);
   const [currentAiAction, setCurrentAiAction] = useState<string | null>(null);
+  const [resolvingStrategy, setResolvingStrategy] = useState<'search' | 'estimate' | 'simplify' | null>(null);
   const isStoppingRef = useRef<boolean>(false);
   // Chặn generateNextPart chạy song song (re-entrancy guard).
   const isGeneratingPartRef = useRef<boolean>(false);
@@ -112,6 +113,7 @@ export function useGenerationWorkflow({
     setOutlineParts([]);
     setCurrentPartIndex(0);
     setFullOutlineText('');
+    setResolvingStrategy(null);
     isStoppingRef.current = false;
     isGeneratingPartRef.current = false;
   }, []);
@@ -197,6 +199,7 @@ export function useGenerationWorkflow({
   const handleResolveMissingData = useCallback(async (strategy: 'search' | 'estimate' | 'simplify') => {
     if (!scriptRef.current) return;
     setIsLoading(true);
+    setResolvingStrategy(strategy);
     setError(null);
     try {
       let searchData = '';
@@ -224,20 +227,14 @@ export function useGenerationWorkflow({
         strategy,
         aiProvider,
         selectedModel,
-        searchData,
-        (chunk, fullStream) => {
-          setGeneratedScript(fullStream);
-          scriptRef.current = fullStream;
-          if (outlineParts.length === 0 && !isGeneratingSequentially) {
-            setFullOutlineText(fullStream);
-          }
-        }
+        searchData
       );
       updateScript(resolved);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi khi phân tích dữ liệu.');
     } finally {
       setIsLoading(false);
+      setResolvingStrategy(null);
       setCurrentAiAction(null);
     }
   }, [aiProvider, selectedModel, outlineParts.length, isGeneratingSequentially, updateScript]);
@@ -437,5 +434,6 @@ export function useGenerationWorkflow({
     setExternalError: setError,
     currentAiAction,
     handleResolveMissingData,
+    resolvingStrategy,
   };
 }

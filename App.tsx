@@ -324,6 +324,7 @@ const App: React.FC = () => {
             isOutlinePhase={isOutlinePhase}
             onChangeScript={generation.updateScript}
             onResolveMissingData={generation.handleResolveMissingData}
+            resolvingStrategy={generation.resolvingStrategy}
           />
         </div>
         <div className="lg:col-span-3">

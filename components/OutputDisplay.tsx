@@ -38,6 +38,7 @@ interface OutputDisplayProps {
   isOutlinePhase?: boolean;
   onChangeScript?: (script: string) => void;
   onResolveMissingData?: (strategy: 'search' | 'estimate' | 'simplify') => void;
+  resolvingStrategy?: 'search' | 'estimate' | 'simplify' | null;
 }
 
 const InitialState: React.FC<{ onImportClick: () => void }> = ({ onImportClick }) => (
@@ -111,14 +112,71 @@ const cleanTtsText = (text: string): string => {
         .trim();
 };
 
-const renderHighlightedScript = (text: string) => {
-    const parts = text.split(/(\[CẦN ĐIỀN.*?\]|\[KIỂM TRA LẠI.*?\])/gi);
+const InteractiveBadge: React.FC<{
+    fullMatch: string;
+    value: string;
+    onChangeScript: (newScript: string) => void;
+    script: string;
+}> = ({ fullMatch, value, onChangeScript, script }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editValue, setEditValue] = useState(value);
+
+    const handleSave = () => {
+        onChangeScript(script.replace(fullMatch, editValue));
+        setIsEditing(false);
+    };
+
+    if (isEditing) {
+        return (
+            <span className="inline-flex items-center gap-1 bg-yellow-900/50 p-1 rounded border border-yellow-500/50 shadow-sm align-middle">
+                <input 
+                    type="text" 
+                    value={editValue} 
+                    onChange={e => setEditValue(e.target.value)}
+                    className="bg-secondary text-yellow-300 text-sm px-1.5 py-0.5 rounded outline-none border border-border min-w-[80px]"
+                    autoFocus
+                    onKeyDown={e => {
+                        if (e.key === 'Enter') handleSave();
+                        if (e.key === 'Escape') setIsEditing(false);
+                    }}
+                />
+                <button 
+                    onClick={handleSave}
+                    className="p-1 bg-green-600 hover:bg-green-500 text-white rounded cursor-pointer transition"
+                    title="Xác nhận số liệu này"
+                >
+                    <CheckIcon className="w-3 h-3" />
+                </button>
+            </span>
+        );
+    }
+
+    return (
+        <mark 
+            onClick={() => setIsEditing(true)}
+            className="bg-yellow-500/30 hover:bg-yellow-500/50 text-yellow-400 rounded px-1.5 py-0.5 font-bold shadow-sm cursor-pointer transition inline-flex items-center gap-1"
+            title="Bấm để sửa và xác nhận"
+        >
+            <span>{value}</span>
+            <PencilIcon className="w-3 h-3 opacity-50" />
+        </mark>
+    );
+};
+
+const renderHighlightedScript = (text: string, onChangeScript?: (s: string) => void) => {
+    const parts = text.split(/(\[CẦN ĐIỀN.*?\]|\[KIỂM TRA LẠI:.*?\])/gi);
     return parts.map((part, i) => {
         if (part.toUpperCase().startsWith('[CẦN ĐIỀN')) {
             return <mark key={i} className="bg-orange-500/30 text-orange-400 rounded px-1.5 py-0.5 font-bold shadow-sm">{part}</mark>;
         }
-        if (part.toUpperCase().startsWith('[KIỂM TRA LẠI')) {
-            return <mark key={i} className="bg-yellow-500/30 text-yellow-400 rounded px-1.5 py-0.5 font-bold shadow-sm">{part}</mark>;
+        if (part.toUpperCase().startsWith('[KIỂM TRA LẠI:')) {
+            const valueMatch = part.match(/\[KIỂM TRA LẠI:\s*(.*?)\]/i);
+            const value = valueMatch ? valueMatch[1] : part;
+            if (onChangeScript) {
+                return <InteractiveBadge key={i} fullMatch={part} value={value} onChangeScript={onChangeScript} script={text} />;
+            } else {
+                return <mark key={i} className="bg-yellow-500/30 text-yellow-400 rounded px-1.5 py-0.5 font-bold shadow-sm">{value}</mark>;
+            }
         }
         return <span key={i}>{part}</span>;
     });
@@ -140,10 +198,12 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
     isOutlinePhase,
     onChangeScript,
     onResolveMissingData,
+    resolvingStrategy,
 }) => {
     const bottomRef = useRef<HTMLDivElement>(null);
     const [copySuccess, setCopySuccess] = useState<string>('');
     const [showMissingDataModal, setShowMissingDataModal] = useState(false);
+    const [isEditingOutline, setIsEditingOutline] = useState(false);
     const [copiedStates, setCopiedStates] = useState<Record<number, boolean>>({});
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -284,10 +344,19 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
                         </div>
                     )}
                     {isOutlineState || script.trim() === '--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---' ? (
-                        <div className="prose prose-invert max-w-none prose-p:text-text-secondary">
-                            <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-text-secondary bg-primary/20 p-4 rounded-lg border border-border/50">
-                                {renderHighlightedScript(script)}
-                            </pre>
+                        <div className="prose prose-invert max-w-none prose-p:text-text-secondary relative">
+                            {isEditingOutline ? (
+                                <textarea 
+                                    className="w-full min-h-[500px] p-4 bg-primary/30 border border-border rounded-lg text-sm text-text-secondary font-mono leading-relaxed outline-none focus:border-accent/50"
+                                    value={script}
+                                    onChange={(e) => onChangeScript?.(e.target.value)}
+                                    autoFocus
+                                />
+                            ) : (
+                                <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-text-secondary bg-primary/20 p-4 rounded-lg border border-border/50">
+                                    {renderHighlightedScript(script, onChangeScript)}
+                                </pre>
+                            )}
                         </div>
                     ) : (
                         <div className="overflow-x-auto rounded-lg border border-border shadow-sm">
@@ -451,7 +520,7 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
             )}
             
             {/* Missing Data Banner */}
-            {!isLoading && script && onChangeScript && extractPlaceholders(script).length > 0 && (
+            {!isLoading && script && onChangeScript && (script.includes('[CẦN ĐIỀN') || script.includes('[KIỂM TRA LẠI:') || script.includes('[TÌM KIẾM THẤT BẠI')) && (
                 <div className="w-full bg-orange-900/30 border border-orange-500/50 text-orange-400 p-4 rounded-md flex flex-col gap-3 shadow-sm">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
@@ -459,38 +528,68 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
                             <span className="text-sm font-medium">
-                                Phát hiện {extractPlaceholders(script).length} số liệu cần điền trong dàn ý.
+                                Phát hiện các số liệu cần xử lý trong dàn ý.
                             </span>
                         </div>
-                        <button 
-                            onClick={() => setShowMissingDataModal(true)}
-                            className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded shadow transition flex-shrink-0"
-                        >
-                            Điền thủ công
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button 
+                                onClick={() => setIsEditingOutline(!isEditingOutline)}
+                                className={`px-2 py-1.5 border rounded flex items-center gap-1.5 transition text-xs font-bold ${
+                                    isEditingOutline 
+                                    ? 'bg-accent/20 border-accent/50 text-accent' 
+                                    : 'bg-secondary/50 border-border hover:bg-secondary text-text-secondary'
+                                }`}
+                                title="Chỉnh sửa thủ công"
+                            >
+                                {isEditingOutline ? <SaveIcon className="w-4 h-4" /> : <PencilIcon className="w-4 h-4" />}
+                                {isEditingOutline ? 'Lưu Dàn Ý' : 'Sửa thủ công'}
+                            </button>
+                            {script.includes('[CẦN ĐIỀN') && (
+                                <button 
+                                    onClick={() => setShowMissingDataModal(true)}
+                                    className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded shadow transition flex-shrink-0"
+                                >
+                                    Điền Form
+                                </button>
+                            )}
+                        </div>
                     </div>
-                    {onResolveMissingData && (
+                    {onResolveMissingData && script.includes('[CẦN ĐIỀN') && (
                         <div className="flex gap-2 flex-wrap mt-1">
                             <button 
                                 onClick={() => onResolveMissingData('search')}
-                                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded flex items-center gap-1.5 transition"
+                                disabled={!!resolvingStrategy}
+                                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded flex items-center gap-1.5 transition disabled:opacity-50"
                             >
-                                <BoltIcon className="w-3.5 h-3.5" />
+                                {resolvingStrategy === 'search' ? (
+                                    <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                ) : (
+                                    <BoltIcon className="w-3.5 h-3.5" />
+                                )}
                                 Đặc vụ Tìm kiếm
                             </button>
                             <button 
                                 onClick={() => onResolveMissingData('estimate')}
-                                className="px-3 py-1.5 bg-yellow-600/50 border border-yellow-500/50 hover:bg-yellow-500/50 text-yellow-100 text-xs font-bold rounded flex items-center gap-1.5 transition"
+                                disabled={!!resolvingStrategy}
+                                className="px-3 py-1.5 bg-yellow-600/50 border border-yellow-500/50 hover:bg-yellow-500/50 text-yellow-100 text-xs font-bold rounded flex items-center gap-1.5 transition disabled:opacity-50"
                             >
-                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                </svg>
+                                {resolvingStrategy === 'estimate' ? (
+                                    <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                ) : (
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                    </svg>
+                                )}
                                 Tự Ước Tính & Chờ Duyệt
                             </button>
                             <button 
                                 onClick={() => onResolveMissingData('simplify')}
-                                className="px-3 py-1.5 bg-gray-600/50 border border-gray-500/50 hover:bg-gray-500/50 text-gray-200 text-xs font-bold rounded transition"
+                                disabled={!!resolvingStrategy}
+                                className="px-3 py-1.5 bg-gray-600/50 border border-gray-500/50 hover:bg-gray-500/50 text-gray-200 text-xs font-bold rounded transition disabled:opacity-50 flex items-center gap-1.5"
                             >
+                                {resolvingStrategy === 'simplify' && (
+                                    <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                )}
                                 Đơn giản hoá số liệu
                             </button>
                         </div>
