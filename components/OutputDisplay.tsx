@@ -245,71 +245,70 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
                 return textOnly !== '' && !s.includes('### Dàn Ý Chi Tiết');
             });
             
-            // If it's just the initial "BẮT ĐẦU" or "DÀN Ý", render as simple text
-            if (isOutlineState || script.trim() === '--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---') {
-                return (
-                    <div className="prose prose-invert max-w-none prose-p:text-text-secondary">
-                        {macroData && macroData.trim() !== '' && (
-                            <div className="mb-6 bg-blue-900/10 border border-blue-500/30 p-4 rounded-lg">
-                                <h3 className="text-blue-400 font-bold mb-2 flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <line x1="2" y1="12" x2="22" y2="12"></line>
-                                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                                    </svg>
-                                    Dữ Liệu Vĩ Mô (Tavily Web Search)
-                                </h3>
-                                <pre className="whitespace-pre-wrap font-sans text-sm text-text-secondary/90">
-                                    {macroData}
-                                </pre>
-                            </div>
-                        )}
-                        <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-text-secondary bg-primary/20 p-4 rounded-lg border border-border/50">
-                            {script}
-                        </pre>
-                    </div>
-                );
-            }
-
             return (
-                <div className="overflow-x-auto rounded-lg border border-border shadow-sm">
-                    <table className="w-full border-collapse text-left bg-secondary/30">
-                        <thead className="bg-primary/80 text-accent font-bold text-xs uppercase tracking-wider sticky top-0">
-                            <tr>
-                                <th className="p-4 border-b border-border w-1/4">Tên phân đoạn</th>
-                                <th className="p-4 border-b border-border w-3/4">
-                                    {isOutlineState ? "Dàn ý (Chờ đắp thịt)" : "Kịch bản (Ready for tts)"}
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border/50">
-                            {sections.map((section, index) => {
-                                const lines = section.split('\n');
-                                let rawTitle = '';
-                                let content = section;
-                                if (lines[0].match(/^(#+|\*\*#+)/)) {
-                                    rawTitle = lines[0].trim().replace(/^\*\*#+|\*\*|#+\s*/g, '');
-                                    content = lines.slice(1).join('\n');
-                                }
-                                const cleanedTts = cleanTtsText(content);
-                                
-                                if (!cleanedTts && !rawTitle) return null;
-
-                                return (
-                                    <tr key={index} className="group hover:bg-primary/40 transition-colors">
-                                        <td className="p-4 align-top border-r border-border/20">
-                                            <span className="text-sm font-bold text-text-primary block mb-3">{rawTitle || `Phần ${index + 1}`}</span>
-                                        </td>
-                                        <td className="p-4 align-top">
-                                            <p className="text-sm text-text-secondary leading-relaxed whitespace-pre-wrap font-sans">
-                                                {cleanedTts || <span className="italic opacity-30 text-xs">(Phần này không có lời thoại để đọc)</span>}
-                                            </p>
-                                        </td>
+                <div className="flex flex-col gap-4">
+                    {macroData && macroData.trim() !== '' && (
+                        <div className="bg-blue-900/10 border border-blue-500/30 p-4 rounded-lg">
+                            <h3 className="text-blue-400 font-bold mb-2 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                </svg>
+                                Dữ Liệu Vĩ Mô (Tavily Web Search)
+                            </h3>
+                            <pre className="whitespace-pre-wrap font-sans text-sm text-text-secondary/90">
+                                {macroData}
+                            </pre>
+                        </div>
+                    )}
+                    {isOutlineState || script.trim() === '--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---' ? (
+                        <div className="prose prose-invert max-w-none prose-p:text-text-secondary">
+                            <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-text-secondary bg-primary/20 p-4 rounded-lg border border-border/50">
+                                {script}
+                            </pre>
+                        </div>
+                    ) : (
+                        <div className="overflow-x-auto rounded-lg border border-border shadow-sm">
+                            <table className="w-full border-collapse text-left bg-secondary/30">
+                                <thead className="bg-primary/80 text-accent font-bold text-xs uppercase tracking-wider sticky top-0">
+                                    <tr>
+                                        <th className="p-4 border-b border-border w-1/4">Tên phân đoạn</th>
+                                        <th className="p-4 border-b border-border w-3/4">
+                                            {isOutlineState ? "Dàn ý (Chờ đắp thịt)" : "Kịch bản (Ready for tts)"}
+                                        </th>
                                     </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
+                                </thead>
+                                <tbody className="divide-y divide-border/50">
+                                    {sections.map((section, index) => {
+                                        const lines = section.split('\n');
+                                        let rawTitle = '';
+                                        let content = section;
+                                        if (lines[0].match(/^(#+|\*\*#+)/)) {
+                                            rawTitle = lines[0].trim().replace(/^\*\*#+|\*\*|#+\s*/g, '');
+                                            content = lines.slice(1).join('\n');
+                                        }
+                                        const cleanedTts = cleanTtsText(content);
+                                        
+                                        if (!cleanedTts && !rawTitle) return null;
+
+                                        return (
+                                            <tr key={index} className="group hover:bg-primary/40 transition-colors">
+                                                <td className="p-4 align-top border-r border-border/20">
+                                                    <span className="text-sm font-bold text-text-primary block mb-3">{rawTitle || `Phần ${index + 1}`}</span>
+                                                </td>
+                                                <td className="p-4 align-top">
+                                                    <p className="text-sm text-text-secondary leading-relaxed whitespace-pre-wrap font-sans">
+                                                        {cleanedTts || <span className="italic opacity-30 text-xs">(Phần này không có lời thoại để đọc)</span>}
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
                 </div>
             );
         }

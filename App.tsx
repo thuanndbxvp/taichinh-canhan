@@ -268,6 +268,7 @@ const App: React.FC = () => {
             }}
             autoContinue={generation.autoContinue}
             setAutoContinue={generation.setAutoContinue}
+            macroData={generation.macroData}
           />
         </div>
         <div className="lg:col-span-3">
