@@ -99,11 +99,11 @@
 ### 5.2. Tỷ lệ đan xen
 
 Trong mỗi đoạn văn 80-100 chữ:
-- **25-35% câu ngắn** (tạo punch, nhấn mạnh)
-- **40-50% câu trung bình** (dẫn dắt, chuyển ý)
-- **15-25% câu dài** (phân tích, chiều sâu)
+- **<15% câu ngắn** (tạo punch, nhấn mạnh — dùng có chủ đích, không spam)
+- **50-65% câu trung bình** (dẫn dắt, chuyển ý — nhịp tự nhiên của văn nói)
+- **20-35% câu dài** (phân tích, giải thích — tạo chiều sâu)
 
-> **Cảnh báo:** Nếu đọc lướt 1 phút mà thấy nhịp đều như máy → SAI. Phải có ít nhất 2-3 lần "bẻ nhịp" (câu ngắn xen giữa câu dài) trong mỗi đoạn.
+> **Cảnh báo:** Câu ngắn quá nhiều → script nghe như búa đập, gây mệt sau 10 phút. Chỉ dùng 1-2 câu ngắn mỗi đoạn 80-100 chữ. Nhịp tự nhiên của người Việt nói chuyện trung bình là 60-70% câu trung bình.
 
 ### 5.3. Ví dụ mẫu
 
