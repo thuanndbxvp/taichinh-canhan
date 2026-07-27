@@ -149,6 +149,74 @@ Trong mỗi đoạn văn 80-100 chữ:
 
 ---
 
+## 6B. GÓC NHÌN NGƯỜI KỂ (Narrator Persona) — BẮT BUỘC
+
+> **Sau khi phân tích xong, TRƯỚC KHI viết, phải xác định rõ vai trò người kể.** Vai trò này phải giữ XUYÊN SUỐT toàn bộ kịch bản — từ hook đến đúc kết.
+
+### 6B.1. Người kể phải là ai
+
+Người kể = **một người đồng hành**, không phải giảng viên, không phải bách khoa toàn thư, không phải người trung lập.
+
+**Đặc điểm bắt buộc:**
+
+| Đặc điểm | Giải thích | Ảnh hưởng đến |
+|---|---|---|
+| **Điềm tĩnh, đã từng trải** | Người kể đã đi qua những gì khán giả đang đối mặt. Không hù dọa, không khoe khoang. | Giọng kể chậm, chắc nịch, không vội kết luận |
+| **Hiểu rõ hành vi tiền bạc người bình thường** | Biết cảm giác lương về là tiền "bốc hơi". Biết áp lực bạn bè mua nhà, mua xe. | Dùng ví dụ quen thuộc, không xa vời |
+| **Kể chuyện, phân tích, rút bài học** | Không chỉ liệt kê số liệu. Kể người thật, phân tích sâu, chỉ ra bài học. | Cấu trúc: câu chuyện → phân tích → bài học → hành động |
+| **Không phán xét mạnh** | Không nói "ngu sao không hiểu", không nói "đáng lẽ phải vậy". Giúp khán giả tự nhận ra, không ép nhận. | Dùng "tôi từng...", "tôi hiểu...", "anh em có thể..." |
+| **Dẫn dắt khán giả cùng khám phá** | Người kể không biết hết câu trả lời. Dẫn khán giả đi từ câu hỏi → suy ngẫm → tự nhận ra. | Câu hỏi mở, không đóng khung kết luận quá sớm |
+
+**Người kể KHÔNG phải:**
+- ❌ Giảng viên: "Theo lý thuyết X, chúng ta cần Y..."
+- ❌ Bách khoa toàn thư: "Có 3 nguyên nhân, 4 yếu tố, 5 lưu ý..."
+- ❌ Người trung lập: "Một số người cho rằng... một số người khác cho rằng..."
+- ❌ Chuyên gia học thuật: "Theo nghiên cứu của Fama và French..."
+
+### 6B.2. Ảnh hưởng của góc nhìn đến 4 mảng
+
+**1. Cách đặt câu hỏi:**
+- ❌ Câu hỏi đóng, có sẵn đáp án: "Anh em nghĩ X đúng hay sai?" → đã phán xét
+- ✅ Câu hỏi mở, dẫn suy ngẫm: "Anh em có bao giờ tự hỏi: vì sao...? Để tôi kể một câu chuyện..."
+
+**2. Cách dẫn dắt câu chuyện:**
+- ❌ Dẫn theo outline cứng: "Bước 1... Bước 2... Bước 3..."
+- ✅ Dẫn theo dòng chảy tự nhiên: "Câu chuyện bắt đầu từ... Nhưng điều tôi muốn nói không phải vậy. Mà là..."
+
+**3. Cảm xúc, thái độ, giọng kể:**
+- ❌ Giọng máy: đều đều, không lên xuống, không ngừng
+- ✅ Giọng người: có lúc nhanh (kể chuyện), có lúc chậm (suy ngẫm), có lúc im lặng (để khán giả tự nghĩ)
+
+**4. Yếu tố phân tích — bình luận — giáo dục:**
+- Phân tích: "Tại sao điều này xảy ra?" — người kể giải thích cơ chế
+- Bình luận: "Điều này có nghĩa là..." — người kể chia sẻ suy nghĩ
+- Giáo dục: "Anh em nên làm..." — người kể hướng dẫn nhẹ nhàng
+
+→ Cả 3 yếu tố phải có, nhưng KHÔNG theo tỷ lệ đều. Thay đổi linh hoạt theo nội dung.
+
+### 6B.3. Checklist xác định góc nhìn người kể
+
+**TRƯỚC KHI viết script, tự hỏi:**
+
+- [ ] Người kể là ai? (tôi — một người đã từng, điềm tĩnh, hiểu)
+- [ ] Giọng kể chính là gì? (kể chuyện / phân tích / thấu cảm / gay gắt)
+- [ ] Người kể muốn khán giả LÀM gì sau video? (tự nhận ra / làm 1 việc cụ thể / thay đổi suy nghĩ)
+- [ ] Người kể có đang PHÁN XÉT không? → Nếu có, viết lại
+- [ ] Người kể có đang TRÌNH BÀY hay đang KỂ CHUYỆN? → Phải là KỂ CHUYỆN
+
+### 6B.4. Ví dụ đúng / sai
+
+**❌ Người kể = giảng viên:**
+> "Bây giờ chúng ta sẽ phân tích 3 nguyên nhân chính. Thứ nhất, nguyên nhân vĩ mô. Thứ hai, nguyên nhân vi mô. Thứ ba, nguyên nhân tâm lý."
+
+**❌ Người kể = bách khoa toàn thư:**
+> "Có nhiều yếu tố ảnh hưởng đến quyết định tài chính. Theo nghiên cứu, tâm lý chiếm 40%, thu nhập chiếm 35%, văn hóa chiếm 25%."
+
+**✅ Người kể = người đồng hành:**
+> "Anh em có bao giờ tự hỏi: vì sao mình cứ lặp lại cùng một sai lầm tiền bạc? Tôi từng hỏi câu đó. Và tôi nhận ra: không phải vì mình ngu. Mà vì có một thứ mà não mình đang chơi với mình — mà nó có tên. Để tôi kể."
+
+---
+
 ## 7. GIỌNG TÁC GIẢ — CÁI TÔI MẠNH MẼ
 
 > Đây là phần QUAN TRỌNG NHẤT để chống script "máy móc".
@@ -309,16 +377,26 @@ Mỗi 45-60 giây nên có 1 câu hỏi tu từ:
 
 ## 13. CHECKLIST TỰ KIỂM TRA
 
+**§6B — GÓC NHÌN NGƯỜI KỂ (BẮT BUỘC check trước khi viết):**
+- [ ] Đã xác định vai trò người kể (người đồng hành, điềm tĩnh, đã từng trải)?
+- [ ] Người kể đang KỂ CHUYỆN hay TRÌNH BÀY? (phải là KỂ CHUYỆN)
+- [ ] Người kể đang PHÁN XÉT không? (nếu có → viết lại)
+- [ ] Ảnh hưởng đến 4 mảng: câu hỏi mở? dẫn dắt tự nhiên? cảm xúc rõ? giọng kể có nhịp?
+
+**§5 — NHỊP ĐIỆU:**
 - [ ] Slogan mở + đúc kết cuối? (slogan chỉ 2 lần trong toàn script)
-- [ ] Ít nhất 1 câu chuyện cá nhân (Minh, Hùng, Lan)?
-- [ ] Số liệu có nguồn hoặc "ước tính"?
-- [ ] Câu hỏi tu từ mỗi 60 giây?
-- [ ] Nhịp điệu đan xen (ngắn-trung-dài)?
+- [ ] Nhịp điệu đan xen (ngắn <15% / TB 50-65% / dài 20-35%)?
 - [ ] ĐÃ BỎ hết "Đầu tiên/Tiếp theo/Tóm lại"?
-- [ ] Từ vựng đủ đa dạng? (kiểm tra: "anh em" xuất hiện không quá 8 lần?)
+
+**§7-9 — GIỌNG & TỪ VỰNG:**
+- [ ] Từ vựng đủ đa dạng? ("anh em" không quá 8 lần?)
 - [ ] Có "khoảng trống" (im lặng, câu hỏi treo)?
 - [ ] Không có "bẫy tâm lý số một", "Bước một" (trừ listicle)?
 - [ ] Giọng tác giả đủ mạnh? (tôi từng..., tôi hiểu, tôi nghĩ...)
+
+**§4 — NỘI DUNG:**
+- [ ] Ít nhất 1 câu chuyện cá nhân (Minh, Hùng, Lan)?
+- [ ] Số liệu có nguồn hoặc "ước tính"?
 - [ ] Hành động cụ thể?
 - [ ] Có "câu vàng" memorable?
 - [ ] Disclaimer đầu tư (nếu cần)?
