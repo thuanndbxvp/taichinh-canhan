@@ -11,7 +11,7 @@ import { promptRegistry } from '../PromptRegistry';
 import type { StyleOptions } from '../../../../types';
 import { detectPart } from '../partKeywords';
 
-const V2 = { version: '2.0.0', updatedAt: '2026-07-27', notes: 'DNA v2: Narrator Persona bắt buộc, Anti-Labeling, Vocabulary Diversity, Pacing <15% short sentences, Self-Verification checklist' } as const;
+const V3 = { version: '3.0.0', updatedAt: '2026-07-27', notes: 'DNA v3: Standard 5-step argument structure, analytical narrator, anti-flowery prose, metaphor limits' } as const;
 
 // --- Dữ liệu DNA từ file nhánh ---
 import coreRaw from '../../../../docs/dna/finance-core.md?raw';
@@ -54,22 +54,30 @@ function buildFinanceSystemPrompt(branch?: string, hook?: string, macroContext?:
 TRƯỚC KHI VIẾT bất kỳ nội dung kịch bản nào, AI phải:
 
 1. XÁC ĐỊNH GÓC NHÌN NGƯỜI KỂ:
-   - Người kể = "tôi" = một người đồng hành, điềm tĩnh, đã từng trải.
-   - Tôi KHÔNG phải giảng viên, KHÔNG phải bách khoa toàn thư, KHÔNG phải người trung lập.
-   - Giọng kể: kể chuyện → phân tích → rút bài học → hướng dẫn nhẹ nhàng.
-   - KHÔNG phán xét: không nói "ngu sao không hiểu", không nói "đáng lẽ phải vậy".
-   - Nếu phát hiện mình đang PHÁN XÉT hoặc TRÌNH BÀY thay vì KỂ CHUYỆN → VIẾT LẠI.
+   - Người kể = "tôi" = người có kinh nghiệm phân tích vấn đề bằng dữ liệu và lập luận.
+   - Giọng: bình tĩnh, logic, dựa trên số liệu. KHÔNG cảm tính, KHÔNG kích động.
+   - Ưu tiên GIẢI THÍCH hơn kể chuyện. Kể chuyện chỉ là MINH HỌA cho lập luận.
+   - KHÔNG cảm tính, KHÔNG hoa mỹ. Phân tích thay vì lên lớp.
 
-2. TỰ KIỂM TRA CHECKLIST (bỏ qua nếu đã tuân thủ):
-   Sau khi viết xong mỗi đoạn, tự hỏi:
-   [ ] "anh em" có xuất hiện quá 8 lần? → Thay bằng tên nhân vật / "mọi người" / "người nghe".
-   [ ] Có dùng "Bẫy số 1", "Bước 1", "Lực lượng thứ nhất"? → Thay bằng "thứ mà tôi thấy...", "trước hết...".
-   [ ] Có dùng "Đầu tiên", "Tiếp theo", "Tóm lại"? → Thay bằng từ nối tự nhiên.
-   [ ] Tỷ lệ câu ngắn có dưới 15%? → Nếu không, giảm câu ngắn.
-   [ ] Có "khoảng trống" (im lặng, câu hỏi treo)? → Thêm ít nhất 1 câu không kết luận ngay.
-   [ ] Có slogan lặp ở giữa script? → Xóa, chỉ giữ ở đầu và cuối.
+2. CẤU TRÚC LUẬN ĐIỂM CHUẨN (mỗi luận điểm chính):
+   Bước 1: NÊU vấn đề → Bước 2: GIẢI THÍCH (nhiều nhất) → Bước 3: VÍ DỤ/số liệu → Bước 4: HỆ QUẢ → Bước 5: CHUYỂN Ý (câu mở nút/gài).
+   Nếu viết mà KHÔNG theo cấu trúc này cho luận điểm chính → VIẾT LẠI.
 
-3. NẾU VI PHẠM: script sẽ bị TRẢ VỀ để viết lại. Không có ngoại lệ.
+3. ANTI-FLOWERY PROSE:
+   - KHÔNG tính từ thừa: "cực kỳ", "vô cùng", "tuyệt đối", "khủng khiếp".
+   - KHÔNG hoa mỹ: "như phát hiện ra châu Mỹ", "giống như bị sét đánh".
+   - Ẩn dụ chỉ là GIA VỊ. Nếu bỏ ẩn dụ mà vẫn hiểu → BỎ ẨN DỤ.
+   - Nếu phát hiện lập luận yếu mà dùng cảm xúc che → VIẾT LẠI lập luận.
+
+4. TỰ KIỂM TRA CHECKLIST:
+   Sau khi viết xong, tự hỏi:
+   [ ] Lập luận đứng không? (bỏ tính từ cảm xúc, logic vẫn rõ?)
+   [ ] "anh em" có xuất hiện quá 8 lần? → Thay bằng tên nhân vật.
+   [ ] Có dùng "Bước 1", "Nguyên nhân thứ 1"? → Thay bằng "trước hết...".
+   [ ] Tỷ lệ câu ngắn dưới 15%?
+   [ ] Mỗi phần kết thúc bằng câu "mở nút" chưa?
+
+5. NẾU VI PHẠM: script sẽ bị TRẢ VỀ để viết lại. Không có ngoại lệ.
 
 === KẾT THÚC LỆNH THỰC THI ===`);
   return parts.join('\n\n');
@@ -92,15 +100,15 @@ const styleInstruction = (s: StyleOptions): string =>
 function arcInstructionFor(partOutline: string): string {
   switch (detectPart(partOutline)) {
     case 1:
-      return 'Tạo Hook thu hút (bằng câu chuyện hoặc nghịch lý) -> Giới thiệu Slogan ("Chào mừng anh em đến với Chú Que Tài Chính...") một cách tự nhiên -> Nêu vấn đề chính của video. NHỚ: người kể là người đồng hành, kể chuyện chứ không trình bày.';
+      return 'Tạo Hook thu hút (bằng câu hỏi hoặc nghịch lý) -> Giới thiệu Slogan một cách tự nhiên -> Nêu vấn đề chính. NHỚ: người kể là người phân tích bằng dữ liệu và lập luận, giọng bình tĩnh, logic.';
     case 2:
-      return 'Nêu thực trạng thị trường hoặc bẫy tâm lý. Sử dụng câu chuyện nhân vật làm ví dụ để khán giả dễ đồng cảm. ĐẢM BẢO: dùng "tôi từng...", "tôi hiểu..." để tạo kết nối cảm xúc. KHÔNG phán xét.';
+      return 'Nêu thực trạng thị trường hoặc bẫy tâm lý. Dùng CẤU TRÚC LUẬN ĐIỂM: Nêu vấn đề → Giải thích (nhiều nhất) → Ví dụ/số liệu → Hệ quả → Chuyển ý. KHÔNG phán xét, KHÔNG hoa mỹ.';
     case 3:
-      return 'PHẦN QUAN TRỌNG NHẤT: Phân tích vấn đề bằng các con số thực tế. TỶ LỆ CÂU: <15% ngắn / 50-65% trung bình / 20-35% dài. BẮT BUỘC sử dụng ít nhất 1 hình ảnh ẩn dụ vật lý quen thuộc (như cái xô thủng, máy chạy bộ) để minh họa cho tình trạng tài chính. Đừng quên dùng cấu trúc "Tôi không nói... Tôi đang nói..." để rào trước phản biện.';
+      return 'PHẦN QUAN TRỌNG NHẤT: Phân tích vấn đề bằng con số và lập luận. CẤU TRÚC LUẬN ĐIỂM: Nêu vấn đề → Giải thích (chiếm nhiều nhất) → Ví dụ/số liệu → Hệ quả → Chuyển ý. TỶ LỆ CÂU: <15% ngắn / 50-65% trung bình / 20-35% dài. Dùng câu "mở nút" hoặc "gài" ở cuối mỗi luận điểm.';
     case 4:
-      return 'Cung cấp lộ trình hành động rõ ràng, thực tế. Phân loại rõ giải pháp này hợp với ai, không hợp với ai. DẪN DẮT NHẺ NHÀNG: dùng "thử xem", "nếu được" thay vì "phải làm ngay". KHÔNG dùng "Bước 1, 2, 3" mà dùng "trước hết... rồi... cuối cùng...".';
+      return 'Cung cấp lộ trình hành động rõ ràng. Dùng CẤU TRÚC LUẬN ĐIỂM cho mỗi giải pháp. DẪN DẮT NHẸ NHÀNG: dùng "thử xem", "nếu được" thay vì "phải làm ngay". KHÔNG dùng "Bước 1, 2, 3" mà dùng "trước hết... rồi... cuối cùng...". Kết thúc bằng câu "mở nút" về phần tiếp theo.';
     case 5:
-      return 'Đưa ra một đúc kết/triết lý tài chính sâu sắc. BẮT BUỘC chốt lại bằng 1 câu memorable dễ nhớ. Kết thúc bằng 1 câu hỏi Call-To-Action xoáy vào thực tế khán giả. ĐỂ CÂU HỎI TREO — không cần trả lời ngay, để khán giả suy nghĩ.';
+      return 'Đưa ra đúc kết triết lý tài chính. Câu đúc kết phải dựa trên LẬP LUẬN đã trình bày, không phải cảm xúc. Kết thúc bằng câu hỏi CTA xoáy vào thực tế khán giả. ĐỂ CÂU HỎI TREO — không cần trả lời ngay, để khán giả suy nghĩ.';
     default:
       return 'Trình bày kiến thức tài chính một cách mạch lạc, chuyên nghiệp và có tính ứng dụng cao.';
   }
@@ -109,7 +117,7 @@ function arcInstructionFor(partOutline: string): string {
 // --- Registrations ---
 
 promptRegistry.register('finance.router.classify', {
-  version: V2,
+  version: V3,
   build({ title }) {
     return {
       messages: [
@@ -146,7 +154,7 @@ BẮT BUỘC TRẢ VỀ DƯỚI DẠNG JSON SCHEMA:
 });
 
 promptRegistry.register('finance.data.retrieve', {
-  version: V2,
+  version: V3,
   build({ title }) {
     return {
       messages: [
@@ -167,7 +175,7 @@ Nếu chủ đề không liên quan đến vĩ mô (ví dụ: "cách kiểm soá
 });
 
 promptRegistry.register('finance.script.outline', {
-  version: V2,
+  version: V3,
   build({ params }) {
     const { title, outlineContent, targetAudience, styleOptions, wordCount } = params;
     const style = `Tone: ${styleOptions.expression}, Style: ${styleOptions.style}`;
@@ -217,7 +225,7 @@ PHONG CÁCH: ${style}${userRequirements}`,
 });
 
 promptRegistry.register('finance.script.part', {
-  version: V2,
+  version: V3,
   build({ params, currentPartOutline, fullOutline, previousPartsScript }) {
     const { targetAudience, title, styleOptions, wordCount } = params;
     const style = `DUY TRÌ TÔNG GIỌNG (Tone): ${styleOptions.expression} VÀ PHONG CÁCH (Style): ${styleOptions.style}.`;
@@ -273,7 +281,7 @@ QUY TẮC ĐỊNH DẠNG TỐI THƯỢNG (Bắt buộc tuân thủ 100%):
 });
 
 promptRegistry.register('finance.script.revise', {
-  version: V2,
+  version: V3,
   build({ script, revisionPrompt, style }) {
     const styleLine = style
       ? `Giữ vững Tone: ${style.expression} và Style: ${style.style}.`
@@ -282,7 +290,15 @@ promptRegistry.register('finance.script.revise', {
       'LƯU Ý: Giữ vững triết lý cung cấp kiến thức tài chính thực tế và chuyên nghiệp. Không thêm yếu tố giật gân, kinh dị hay clickbait.';
     return {
       messages: [
-        { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + coreRaw.trim() + `\n\n=== LỆNH DNA v2 BẮT BUỘC ===\n- Người kể = "tôi" = người đồng hành. KHÔNG phán xét. KHÔNG trình bày. Phải kể chuyện.\n- Tỷ lệ câu: <15% ngắn / 50-65% TB / 20-35% dài.\n- Anti-Labeling: KHÔNG "Bước 1", "Nguyên nhân thứ 1". Thay bằng "trước hết...", "thứ tôi thấy...".\n- "anh em" tối đa 8 lần/đoạn.\n- Slogan chỉ 2 lần: đầu + cuối.\n- Có "khoảng trống": câu hỏi treo, không kết luận ngay.\n=== KẾT THÚC LỆNH ===` },
+        { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + coreRaw.trim() + `\n\n=== L�DNA v3 BÐT BUỘC ===
+- Người kể = người phân tíchn bằng dữ liệu và lập luạn. Giọng bình tĩnh, logic. Ưu tién GIảI THÍCH hơn kể chuyện.
+- Cấu trúc luạn điểm: Nêu → Giải thích (nhiều nhất) → Ví dụe → Hệ quả → Chuyển.
+- Anti-Flowery: KHÔNG "cực kỳ", "vô cùng". Lập luạn là món chíchn.
+- Tở lệ câu: <15% ngắn / 50-65% TB / 20-35% dài.
+- Anti-Labeling: KHÔNG "Bước 1", "Nguyên nhân thứ 1".
+- "anh em" tối đđa 8 lần/đoạn.
+- Slogan chỉ 2 lần: đầu + cuối.
+=== KÐT THÚC LÖNH ===ẾT THÚC LỆNH ===` },
         {
           role: 'user',
           content: `Chỉnh sửa kịch bản theo yêu cầu: "${revisionPrompt}".\n${financeGuard}\n${styleLine}\n\nKịch bản gốc:\n${script}`,
@@ -293,7 +309,7 @@ promptRegistry.register('finance.script.revise', {
 });
 
 promptRegistry.register('finance.script.revise.partial', {
-  version: V2,
+  version: V3,
   build({ script, revisionPrompt, style }) {
     const styleLine = style
       ? `Giữ vững Tone: ${style.expression} và Style: ${style.style}.`
@@ -326,7 +342,7 @@ Lưu ý: Chỉ trả về JSON, không giải thích gì thêm.`
 });
 
 promptRegistry.register('finance.dialogue.extract', {
-  version: V2,
+  version: V3,
   build({ script }) {
     return {
       messages: [
@@ -357,7 +373,7 @@ ${script}`,
 });
 
 promptRegistry.register('finance.visual.single', {
-  version: V2,
+  version: V3,
   build({ sceneDescription }) {
     return {
       messages: [
@@ -382,7 +398,7 @@ Trả về JSON array: [ { "english": "FULL_PROMPT_STRING_WITH_TEMPLATE", "vietn
 });
 
 promptRegistry.register('finance.visual.bulk', {
-  version: V2,
+  version: V3,
   build({ script }) {
     return {
       messages: [
@@ -406,7 +422,7 @@ ${script}`,
 });
 
 promptRegistry.register('finance.scenes.summarize', {
-  version: V2,
+  version: V3,
   build({ script }) {
     return {
       messages: [
@@ -446,7 +462,7 @@ ${script}`,
 });
 
 promptRegistry.register('finance.video.single', {
-  version: V2,
+  version: V3,
   build({ scene }) {
     return {
       messages: [
@@ -464,7 +480,7 @@ promptRegistry.register('finance.video.single', {
 });
 
 promptRegistry.register('finance.score', {
-  version: V2,
+  version: V3,
   build({ script }) {
     return {
       messages: [
@@ -528,7 +544,7 @@ ${script}`,
 });
 
 promptRegistry.register('finance.score.outline', {
-  version: V2,
+  version: V3,
   build({ script }) {
     return {
       messages: [
@@ -571,7 +587,7 @@ ${script}`,
 });
 
 promptRegistry.register('finance.style.suggest', {
-  version: V2,
+  version: V3,
   build({ title }) {
     return {
       messages: [
@@ -590,7 +606,7 @@ promptRegistry.register('finance.style.suggest', {
 });
 
 promptRegistry.register('finance.topics.suggest', {
-  version: V2,
+  version: V3,
   build({ title }) {
     return {
       messages: [
@@ -614,7 +630,7 @@ promptRegistry.register('finance.topics.suggest', {
 });
 
 promptRegistry.register('finance.keywords.suggest', {
-  version: V2,
+  version: V3,
   build({ title }) {
     return {
       messages: [
@@ -632,7 +648,7 @@ promptRegistry.register('finance.keywords.suggest', {
 });
 
 promptRegistry.register('finance.ideas.fromFile', {
-  version: V2,
+  version: V3,
   build({ content }) {
     return {
       messages: [
@@ -650,7 +666,7 @@ promptRegistry.register('finance.ideas.fromFile', {
 });
 
 promptRegistry.register('finance.data.planner', {
-  version: V2,
+  version: V3,
   build({ title }) {
     return {
       messages: [
@@ -670,7 +686,7 @@ CHỈ TRẢ VỀ JSON ARRAY, không giải thích.`,
 });
 
 promptRegistry.register('finance.script.factcheck', {
-  version: V2,
+  version: V3,
   build({ outline, macroContext }) {
     return {
       messages: [
@@ -703,7 +719,7 @@ YÊU CẦU KIỂM DUYỆT (FACT-CHECKING):
 });
 
 promptRegistry.register('finance.script.resolve.search', {
-  version: V2,
+  version: V3,
   build({ script, searchData }) {
     return {
       messages: [
@@ -715,7 +731,7 @@ promptRegistry.register('finance.script.resolve.search', {
 });
 
 promptRegistry.register('finance.script.resolve.estimate', {
-  version: V2,
+  version: V3,
   build({ script }) {
     return {
       messages: [
@@ -727,7 +743,7 @@ promptRegistry.register('finance.script.resolve.estimate', {
 });
 
 promptRegistry.register('finance.script.resolve.simplify', {
-  version: V2,
+  version: V3,
   build({ script }) {
     return {
       messages: [

@@ -1,10 +1,12 @@
-# finance-core.md — DNA LÕI (Áp dụng cho MỌI script) — PHIÊN BẢN 2
+# finance-core.md — DNA LÕI (Áp dụng cho MỌI script) — PHIÊN BẢN 3
 
 > **File này là bắt buộc.** Mọi script — dù thuộc nhánh nào (Listicle, Phân tích, Tâm lý, Myth-busting) — đều phải tuân thủ đầy đủ DNA Lõi trước khi áp dụng DNA Nhánh.
 >
-> **Cập nhật v2 (2026-07-27):** Bổ sung phần Giọng tác giả, chống liệt kê cứng nhắc, ngôn ngữ ẩn dụ, và đa dạng hóa từ vựng. Nhằm khắc phục tình trạng script quá "máy móc", nhàm chán sau 30 phút nghe.
+> **Cập nhật v3 (2026-07-27):** Bổ sung §6C Cấu trúc luận điểm chuẩn (Nêu → Giải thích → Ví dụ → Hệ quả → Chuyển), cân bằng §6B (ưu tiên phân tích > kể chuyện), thêm §9.4 anti-flowery prose.
 >
-> **Phân tích dataset:** dựa trên 50 script thực tế kênh `Chú Que Tài Chính` đã làm (2024-2026). DNA Lõi tái hiện đúng văn phong, giọng điệu, nhịp điệu, kỹ thuật dẫn dắt đã tạo nên sức hấp dẫn của kênh.
+> **Cập nhật v2 (2026-07-27):** Bổ sung phần Giọng tác giả, chống liệt kê cứng nhắc, ngôn ngữ ẩn dụ, và đa dạng hóa từ vựng.
+>
+> **Phân tích dataset:** dựa trên 50 script thực tế kênh `Chú Que Tài Chính` đã làm (2024-2026) + hướng dẫn văn phong thuyết minh-phân tích cho video YouTube 15-30 phút.
 >
 > **Cách dùng:** Lõi + (1 trong 4 nhánh) = prompt hoàn chỉnh. Mapping nhánh ở file `niche-finance.md` (profile tổng).
 
@@ -155,23 +157,24 @@ Trong mỗi đoạn văn 80-100 chữ:
 
 ### 6B.1. Người kể phải là ai
 
-Người kể = **một người đồng hành**, không phải giảng viên, không phải bách khoa toàn thư, không phải người trung lập.
+Người kể = **một người có kinh nghiệm đang phân tích vấn đề cho khán giả** — giọng bình tĩnh, logic, dựa trên dữ liệu và lập luận. Không phải giảng viên, không phải bách khoa toàn thư, không phải người trung lập, không phải người kể chuyện cảm tính.
 
 **Đặc điểm bắt buộc:**
 
 | Đặc điểm | Giải thích | Ảnh hưởng đến |
 |---|---|---|
-| **Điềm tĩnh, đã từng trải** | Người kể đã đi qua những gì khán giả đang đối mặt. Không hù dọa, không khoe khoang. | Giọng kể chậm, chắc nịch, không vội kết luận |
+| **Bình tĩnh, logic, dựa trên dữ liệu** | Người kể phân tích bằng con số và lập luận, không bằng cảm xúc. Giọng điềm đạm, không kích động. | Giọng kể đều, chắc nịch, có số liệu cụ thể |
+| **Ưu tiên GIẢI THÍCH hơn kể chuyện** | **Quan trọng:** phân tích là trọng tâm. Kể chuyện chỉ là phương tiện để minh họa cho lập luận, không phải mục đích. | Cấu trúc: Nêu vấn đề → Giải thích (nhiều nhất) → Ví dụ → Hệ quả → Chuyển |
 | **Hiểu rõ hành vi tiền bạc người bình thường** | Biết cảm giác lương về là tiền "bốc hơi". Biết áp lực bạn bè mua nhà, mua xe. | Dùng ví dụ quen thuộc, không xa vời |
-| **Kể chuyện, phân tích, rút bài học** | Không chỉ liệt kê số liệu. Kể người thật, phân tích sâu, chỉ ra bài học. | Cấu trúc: câu chuyện → phân tích → bài học → hành động |
-| **Không phán xét mạnh** | Không nói "ngu sao không hiểu", không nói "đáng lẽ phải vậy". Giúp khán giả tự nhận ra, không ép nhận. | Dùng "tôi từng...", "tôi hiểu...", "anh em có thể..." |
-| **Dẫn dắt khán giả cùng khám phá** | Người kể không biết hết câu trả lời. Dẫn khán giả đi từ câu hỏi → suy ngẫm → tự nhận ra. | Câu hỏi mở, không đóng khung kết luận quá sớm |
+| **Không cảm tính, không phán xét** | Không nói "ngu sao không hiểu", không nói "đáng lẽ phải vậy". Không dùng giọng cảm xúc quá mức. Giúp khán giả tự nhận ra bằng lập luận. | Dùng "tôi tính...", "theo dữ liệu...", "số liệu cho thấy..." |
+| **Dẫn dắt khán giả cùng khám phá** | Người kể không biết hết câu trả lời. Dẫn khán giả đi từ câu hỏi → suy ngẫm → tự nhận ra. | Câu hỏi mở, dẫn dắt bằng logic, không bằng cảm xúc |
 
 **Người kể KHÔNG phải:**
 - ❌ Giảng viên: "Theo lý thuyết X, chúng ta cần Y..."
 - ❌ Bách khoa toàn thư: "Có 3 nguyên nhân, 4 yếu tố, 5 lưu ý..."
 - ❌ Người trung lập: "Một số người cho rằng... một số người khác cho rằng..."
 - ❌ Chuyên gia học thuật: "Theo nghiên cứu của Fama và French..."
+- ❌ Người kể chuyện cảm tính: "Và khi đó, trong tim tôi như tan vỡ..."
 
 ### 6B.2. Ảnh hưởng của góc nhìn đến 4 mảng
 
@@ -214,6 +217,85 @@ Người kể = **một người đồng hành**, không phải giảng viên, k
 
 **✅ Người kể = người đồng hành:**
 > "Anh em có bao giờ tự hỏi: vì sao mình cứ lặp lại cùng một sai lầm tiền bạc? Tôi từng hỏi câu đó. Và tôi nhận ra: không phải vì mình ngu. Mà vì có một thứ mà não mình đang chơi với mình — mà nó có tên. Để tôi kể."
+
+---
+
+## 6C. CẤU TRÚC LUẬN ĐIỂM CHUẨN — PHÂN TÍCH TRƯỚC, KỂ CHUYỆN SAU
+
+> **Đây là xương sống của văn phong "thuyết minh – phân tích".** Mỗi luận điểm trong script phải tuân theo cấu trúc 5 bước này.
+
+### 6C.1. Cấu trúc 5 bước (NÊU → GIẢI THÍCH → VÍ DỤ → HỆ QUẢ → CHUYỂN)
+
+**Bước 1 — NÊU VẤN ĐỀ:**
+Mở đầu luận điểm bằng một nhận định rõ ràng, có thể gây ngạc nhiên nhẹ.
+
+> "Lương 20 triệu không phải là ít. Nhưng nó không đủ để an toàn tài chính — nếu anh em hiểu đúng về 'đủ'."
+
+**Bước 2 — GIẢI THÍCH:**
+Phân tích cơ chế, nguyên nhân, hoặc bản chất của vấn đề. Dùng dữ liệu, logic, hoặc so sánh.
+
+> "Vì sao? Vì an toàn tài chính không phải số tiền, mà là SỐ THÁNG mà tiền đó có thể nuôi anh em sống mà không cần lương."
+
+**Bước 3 — VÍ DỤ / SỐ LIỆU:**
+Minh họa bằng trường hợp cụ thể hoặc số liệu thực tế.
+
+> "Anh em có thể tính nhanh: 20 triệu × 12 tháng = 240 triệu. Chia cho chi phí sống 10 triệu/tháng = 24 tháng. Tức 2 năm. Đó là toàn bộ 'tài sản' của một người lương 20 triệu — nếu hôm nay mất việc."
+
+**Bước 4 — HỆ QUẢ:**
+Nói rõ hậu quả nếu không hành động.
+
+> "Hai năm nghe có vẻ nhiều. Nhưng khi anh em cần tiền trả góp nhà, tiền học cho con, tiền chữa bệnh — 2 năm trôi rất nhanh."
+
+**Bước 5 — CHUYỂN Ý:**
+Nối sang luận điểm tiếp theo bằng câu hỏi, câu móc nối, hoặc câu "mở nút".
+
+> "Vậy bao nhiêu tháng mới 'đủ'? Để tôi chia sẻ công thức mà tôi dùng."
+
+### 6C.2. Câu "Mở nút" và "Gài" — cuối mỗi phần
+
+**Câu "mở nút"** ( teaser) — khiến khán giả MUỐN nghe tiếp:
+
+> "Nhưng đó chưa phải là điều nguy hiểm nhất."
+> "Vấn đề thật sự nằm ở đây..."
+> "Anh em đừng vội kết luận. Để tôi kể tiếp."
+
+**Câu "gài"** — gợi nhớ nội dung phần trước trước khi chuyển:
+
+> "Nhớ câu chuyện của Hùng không? Đó chưa phải kịch tính nhất."
+> "Quay lại con số 24 tháng mà tôi vừa tính. Giờ hãy nhân nó lên."
+
+> **Quy tắc:** Mỗi phần kết thúc bằng 1 câu "mở nút" hoặc "gài". KHÔNG kết thúc bằng kết luận — để người nghe tự muốn nghe tiếp.
+
+### 6C.3. Tỷ lệ trong mỗi luận điểm
+
+| Bước | Tỷ trọng | Mục đích |
+|---|---|---|
+| Nêu vấn đề | 10-15% | Tạo hook cho luận điểm |
+| Giải thích | 30-40% | **TRỌNG TÂM** — lập luận logic |
+| Ví dụ / Số liệu | 20-25% | Minhhọa, làm cụ thể |
+| Hệ quả | 15-20% | Tạo cảm giác cấp bách nhẹ |
+| Chuyển ý | 5-10% | Nối tiếp, không ngắt quãng |
+
+> **Lưu ý:** Bước 2 (Giải thích) chiếm **nhiều nhất**. Kể chuyện (ví dụ) phục vụ cho lập luận, không phải ngược lại.
+
+### 6C.4. Ví dụ đúng hoàn chỉnh
+
+> **Nêu:** "Nhiều người nghĩ tiết kiệm là dành tiền đi gửi ngân hàng."
+>
+> **Giải thích:** "Nhưng gửi tiết kiệm không phải là chiến lược — nó là chỗ đỗ xe. Tiền để đó không làm gì cả, ngoài việc... đợi. Trong khi lạm phát mỗi năm ăn 3-4% giá trị của nó."
+>
+> **Ví dụ:** "Anh em gửi 100 triệu. Sau 10 năm, vẫn là 100 triệu. Nhưng sức mua chỉ còn 70 triệu. Tức anh em đã 'mất' 30 triệu — mà không ai nói cho."
+>
+> **Hệ quả:** "Với người lương 15 triệu, tích lũy 100 triệu mất 5 năm. Và 5 năm sau, nó chỉ còn giá trị của 70 triệu."
+>
+> **Chuyển:** "Vậy có cách nào tốt hơn không? Câu trả lời nằm ở một khái niệm mà tôi muốn nói hôm nay."
+
+### 6C.5. Điều KHÔNG làm trong luận điểm
+
+- ❌ **Không nhảy thẳng vào ví dụ** mà không giải thích trước — người nghe sẽ không hiểu TẠI SAO ví dụ đó quan trọng.
+- ❌ **Không để hệ quả "treo" không ai nghe** — nếu nói hệ quả mà luận điểm tiếp theo không liên quan, hệ quả đó trở nên vô nghĩa.
+- ❌ **Không kết thúc luận điểm bằng kết luận** — kết luận dành cho toàn bộ video, không phải mỗi luận điểm.
+- ❌ **Không dùng cấu trúc này cho mọi thứ** — hook, câu chuyện mở đầu, và đúc kết cuối KHÔNG cần tuân theo 5 bước. Chỉ dùng cho các luận điểm chính (phần 2-4 của script).
 
 ---
 
@@ -326,6 +408,37 @@ Thay vì nói khô khan, dùng **hình ảnh cụ thể**:
 | "Tiết kiệm" | "Nhét tiền vào lỗ", "giữ tiền ở lại" |
 | "Rủi ro" | "Đang đi trên dây", "sợi tơ nhện trên vực" |
 
+> **Lưu ý QUAN TRỌNG — KHÔNG lạm dụng ẩn dụ:**
+> Ẩn dụ là gia vị, không phải món chính. Trọng tâm của mỗi luận điểm là **LẬP LUẬN LOGIC**, không phải hình ảnh.
+>
+> **Cách dùng đúng:**
+> - 1-2 ẩn dụ mỗi luận điểm là đủ.
+> - Ẩn dụ phải phục vụ cho lập luận (giúp giải thích nhanh), không phải thay thế lập luận.
+> - **Không dùng ẩn dụ khi đang ở bước "Giải thích" của luận điểm** — đây là lúc cần logic, không phải hình ảnh.
+> - Nếu viết xong mà thấy "không có ẩn dụ thì vẫn hiểu" → BỎ Ẩn dụ.
+
+### 9.4. KHÔNG viết hoa mỹ — Trọng tâm là lập luận
+
+**Script dành cho video YouTube dài 15-30 phút** — người nghe cần HIỂU và SUY NGHĨ, không cần CẢM THẤY.
+
+**Cấm tuyệt đối:**
+
+- ❌ Tính từ thừa: "cực kỳ quan trọng", "vô cùng nghiêm trọng", "khủng khiếp"
+- ❌ Câu cảm thán liên tục: "Thật đấy!", "Anh em ơi!", "Đúng là như vậy!"
+- ❌ So sánh quá mức: "như phát hiện ra châu Mỹ", "giống như bị sét đánh"
+- ❌ Đại từ nhấn mạnh liên tục: "cực kỳ", "vô cùng", "tuyệt đối", "hoàn toàn"
+- ❌ Câu kết thúc bằng cảm xúc thay vì lập luận: "Và tôi biết ơn vì đã được chia sẻ điều này với anh em"
+
+**Luôn hỏi:** "Nếu bỏ hết tính từ cảm xúc đi, lập luận có đứng không?" — Nếu KHÔNG đứng → lập luận yếu, cần sửa lập luận, không phải thêm cảm xúc.
+
+**Cách viết đúng:**
+
+| ❌ Hoa mỹ | ✅ Nói thẳng |
+|---|---|
+| "Đây là vấn đề cực kỳ quan trọng mà anh em BẮT BUỘC phải hiểu" | "Đây là điều tôi thấy nhiều người hiểu sai nhất." |
+| "Lương 20 triệu thật sự là con số quá nhỏ bé" | "Lương 20 triệu không phải là nhiều — nếu tính theo chi phí sống thực tế." |
+| "Đừng bao giờ để mất tiền như vậy!" | "Mất tiền vào khoản không sinh lời là điều có thể tránh được." |
+
 ---
 
 ## 10. NGÔN NGỮ VĂN NÓI
@@ -378,24 +491,29 @@ Mỗi 45-60 giây nên có 1 câu hỏi tu từ:
 ## 13. CHECKLIST TỰ KIỂM TRA
 
 **§6B — GÓC NHÌN NGƯỜI KỂ (BẮT BUỘC check trước khi viết):**
-- [ ] Đã xác định vai trò người kể (người đồng hành, điềm tĩnh, đã từng trải)?
-- [ ] Người kể đang KỂ CHUYỆN hay TRÌNH BÀY? (phải là KỂ CHUYỆN)
-- [ ] Người kể đang PHÁN XÉT không? (nếu có → viết lại)
-- [ ] Ảnh hưởng đến 4 mảng: câu hỏi mở? dẫn dắt tự nhiên? cảm xúc rõ? giọng kể có nhịp?
+- [ ] Đã xác định vai trò người kể (người có kinh nghiệm phân tích, giọng bình tĩnh, logic)?
+- [ ] Giọng kể là PHÂN TÍCH — dựa trên dữ liệu và lập luận, không phải cảm xúc?
+- [ ] Ưu tiên GIẢI THÍCH hơn kể chuyện? (kể chuyện chỉ là minh họa)
+- [ ] Người kể đang PHÁN XÉT hoặc CẢM TÍNH không? (nếu có → viết lại)
+
+**§6C — CẤU TRÚC LUẬN ĐIỂM (cho các luận điểm chính):**
+- [ ] Mỗi luận điểm tuân theo 5 bước: Nêu → Giải thích → Ví dụ → Hệ quả → Chuyển?
+- [ ] Bước "Giải thích" chiếm nhiều nhất trong luận điểm?
+- [ ] Mỗi phần kết thúc bằng câu "mở nút" hoặc "gài" (không phải kết luận)?
+- [ ] Câu chuyển ý mượt mà, không dùng "Đầu tiên/Tiếp theo"?
 
 **§5 — NHỊP ĐIỆU:**
 - [ ] Slogan mở + đúc kết cuối? (slogan chỉ 2 lần trong toàn script)
 - [ ] Nhịp điệu đan xen (ngắn <15% / TB 50-65% / dài 20-35%)?
-- [ ] ĐÃ BỎ hết "Đầu tiên/Tiếp theo/Tóm lại"?
 
 **§7-9 — GIỌNG & TỪ VỰNG:**
 - [ ] Từ vựng đủ đa dạng? ("anh em" không quá 8 lần?)
-- [ ] Có "khoảng trống" (im lặng, câu hỏi treo)?
+- [ ] Không hoa mỹ (không "cực kỳ", "vô cùng", "tuyệt đối" thừa)?
+- [ ] Không lạm dụng ẩn dụ (ẩn dụ chỉ là gia vị, không phải món chính)?
+- [ ] Ẩn dụ phục vụ cho lập luận, không thay thế lập luận?
 - [ ] Không có "bẫy tâm lý số một", "Bước một" (trừ listicle)?
-- [ ] Giọng tác giả đủ mạnh? (tôi từng..., tôi hiểu, tôi nghĩ...)
 
 **§4 — NỘI DUNG:**
-- [ ] Ít nhất 1 câu chuyện cá nhân (Minh, Hùng, Lan)?
 - [ ] Số liệu có nguồn hoặc "ước tính"?
 - [ ] Hành động cụ thể?
 - [ ] Có "câu vàng" memorable?
@@ -416,8 +534,8 @@ Cách ghép prompt thực tế ở file `niche-finance.md` §3.
 
 ---
 
-**Phiên bản:** 2.0.0
+**Phiên bản:** 3.0.0
 **Cập nhật:** 2026-07-27
-**Lý do cập nhật:** Khắc phục script quá máy móc — bổ sung Giọng tác giả (§7), Anti-Labeling (§8), Đa dạng từ vựng (§9), Khoảng trống/Silence (§7.3).
-**Dựa trên:** Phân tích 50 script + feedback người dùng về script AI
+**Lý do cập nhật v3:** Bổ sung §6C Cấu trúc luận điểm chuẩn 5 bước (Nêu → Giải thích → Ví dụ → Hệ quả → Chuyển), cân bằng §6B narrator persona về phân tích thay vì kể chuyện, thêm §9.4 anti-flowery prose + giới hạn ẩn dụ.
+**Dựa trên:** 50 script thực tế + hướng dẫn văn phong thuyết minh-phân tích cho video YouTube 15-30 phút.
 **Sử dụng cùng:** `finance-{listicle|analytical|psychology|mythbusting}.md`, `finance-hooks.md`
