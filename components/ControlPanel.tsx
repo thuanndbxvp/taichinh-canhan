@@ -19,11 +19,7 @@ interface ControlPanelProps {
   setTitle: (title: string) => void;
   outlineContent: string;
   setOutlineContent: (content: string) => void;
-  onGenerateSuggestions: () => void;
-  isSuggesting: boolean;
-  suggestions: TopicSuggestionItem[];
-  suggestionError: string | null;
-  hasGeneratedTopicSuggestions: boolean;
+
   targetAudience: string;
   setTargetAudience: (audience: string) => void;
   styleOptions: StyleOptions;
@@ -50,7 +46,7 @@ interface ControlPanelProps {
   setVideoDuration: (duration: string) => void;
   savedIdeas: SavedIdea[];
   onSaveIdea: (idea: TopicSuggestionItem) => void | Promise<void>;
-  onOpenSavedIdeasModal: () => void;
+
   onParseFile: (content: string) => void | Promise<void>;
   isParsingFile: boolean;
   parsingFileError: string | null;
@@ -69,7 +65,7 @@ const ControlSection: React.FC<{title: string; children: React.ReactNode; isDark
 export const ControlPanel: React.FC<ControlPanelProps> = ({
   title, setTitle,
   outlineContent, setOutlineContent,
-  onGenerateSuggestions, isSuggesting, suggestions, suggestionError, hasGeneratedTopicSuggestions,
+
   targetAudience, setTargetAudience,
   styleOptions, setStyleOptions,
   wordCount, setWordCount,
@@ -80,7 +76,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   scriptHook, setScriptHook,
   onSuggestStyle, isSuggestingStyle, styleSuggestionError, hasSuggestedStyle,
   lengthType, setLengthType, videoDuration, setVideoDuration,
-  savedIdeas, onSaveIdea, onOpenSavedIdeasModal,
+  savedIdeas, onSaveIdea,
   onParseFile, isParsingFile, parsingFileError, uploadedIdeas,
   getNextAiConfig,
   apiKeys
@@ -240,36 +236,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 </div>
 
 
-            <div className="grid grid-cols-2 gap-2 mt-4">
-                <Tooltip text="Dựa trên tiêu đề bạn nhập, AI sẽ đề xuất 5 ý tưởng video khác nhau với tiêu đề và dàn ý sơ bộ.">
-                  <button 
-                    onClick={onGenerateSuggestions} 
-                    disabled={isSuggesting || !title}
-                    className={`w-full flex items-center justify-center font-bold py-2 px-4 rounded-lg transition border bg-emerald-900/20 border-emerald-900/40 text-emerald-500 hover:bg-emerald-900/40 disabled:opacity-40 disabled:cursor-not-allowed`}
-                  >
-                    {isSuggesting ? (
-                      <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                    ) : (
-                      <>
-                        <SparklesIcon className="w-5 h-5 mr-2" />
-                        <span>Gợi ý AI</span>
-                        {!isSuggesting && hasGeneratedTopicSuggestions && <CheckIcon className="w-5 h-5 ml-2 text-green-400" />}
-                      </>
-                    )}
-                  </button>
-                </Tooltip>
-                <Tooltip text="Xem và quản lý tất cả các ý tưởng video bạn đã lưu trước đó.">
-                  <button 
-                    onClick={onOpenSavedIdeasModal} 
-                    className={`w-full flex items-center justify-center font-bold py-2 px-4 rounded-lg transition border bg-emerald-900/20 border-emerald-900/40 text-emerald-500 hover:bg-emerald-900/40`}
-                  >
-                    Kho Ý Tưởng
-                  </button>
-                </Tooltip>
-            </div>
+
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                 <Tooltip text="Chọn phong cách cho kịch bản. Mặc định AI sẽ tự động phân loại dựa vào chủ đề.">
@@ -308,8 +275,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 </Tooltip>
             </div>
 
-            {suggestionError && <p className="text-red-400 text-sm mt-2">{suggestionError}</p>}
-            {suggestions.length > 0 && <IdeaList ideaList={suggestions} listTitle="Gợi ý từ AI" />}
+
             {uploadedIdeas.length > 0 && <IdeaList ideaList={uploadedIdeas} listTitle="Ý tưởng từ File của bạn" />}
         </ControlSection>
 

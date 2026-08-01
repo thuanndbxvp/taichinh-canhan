@@ -258,11 +258,7 @@ const App: React.FC = () => {
             setTitle={brief.setTitle}
             outlineContent={brief.brief.outlineContent}
             setOutlineContent={brief.setOutlineContent}
-            onGenerateSuggestions={() => ideas.generateSuggestions(brief.brief.title)}
-            isSuggesting={ideas.isSuggesting}
-            suggestions={ideas.topicSuggestions}
-            suggestionError={ideas.suggestionError}
-            hasGeneratedTopicSuggestions={ideas.hasGeneratedTopicSuggestions}
+
             targetAudience={brief.brief.targetAudience}
             setTargetAudience={brief.setTargetAudience}
             styleOptions={brief.brief.styleOptions}
@@ -289,7 +285,7 @@ const App: React.FC = () => {
             setVideoDuration={brief.setVideoDuration}
             savedIdeas={ideas.savedIdeas}
             onSaveIdea={ideas.saveIdea}
-            onOpenSavedIdeasModal={() => modals.open('savedIdeas')}
+
             onParseFile={ideas.parseFile}
             isParsingFile={ideas.isParsing}
             parsingFileError={ideas.parsingError}

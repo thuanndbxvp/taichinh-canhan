@@ -7,6 +7,7 @@
  */
 export type AppErrorCode =
   | 'AI_PROVIDER_FAILED'
+  | 'AI_GENERATION_FAILED'
   | 'AI_KEY_MISSING'
   | 'AI_KEY_INVALID'
   | 'AI_RATE_LIMITED'

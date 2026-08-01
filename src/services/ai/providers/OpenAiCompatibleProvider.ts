@@ -87,7 +87,7 @@ export const OpenAiCompatibleProvider: ProviderAdapter = {
           kind: 'http',
           message: `Provider không trả về stream. Response: ${text.slice(0, 500)}`,
           retryable: false,
-          statusCode: res.status,
+          status: res.status,
           raw: text,
         });
       }

@@ -10,6 +10,8 @@
  */
 export type ProviderErrorKind =
   | 'auth' // 401/403 → key invalid
+  | 'http' // generic HTTP error (non-401/403/429/5xx)
+  | 'provider' // provider-specific business error
   | 'rate_limit' // 429
   | 'server' // 5xx
   | 'network' // offline / DNS / socket

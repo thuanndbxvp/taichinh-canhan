@@ -24,6 +24,8 @@ const brief: ContentBrief = {
   lengthType: 'words',
   videoDuration: '5',
   isFinanceMode: true,
+  scriptStyle: 'analytical',
+  scriptHook: 'story',
 };
 
 describe('useGenerationWorkflow', () => {

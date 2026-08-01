@@ -1,7 +1,7 @@
 import { callWithPrompt } from './AiGateway';
 import type { AiProvider } from '../../../types';
 import { AppError } from '../../lib/errors';
-import { parseAiJsonOrThrow } from './schemas';
+import { parseAiJsonOrThrow } from './responseParser';
 import { z } from 'zod';
 
 export interface RouteResult {

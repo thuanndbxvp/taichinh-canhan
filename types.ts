@@ -59,6 +59,7 @@ export interface LibraryItem {
   outlineContent: string;
   script: string;
   cachedData?: CachedData;
+  brief?: any;
 }
 
 export interface GenerationParams {

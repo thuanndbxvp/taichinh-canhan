@@ -296,7 +296,7 @@ export async function callWithPrompt(
   } catch (e) {
     if (e instanceof ProviderError) {
       throw new AppError(
-        'ai_generation_failed',
+        'AI_GENERATION_FAILED',
         `Lỗi khi ${action}: ${e.message}`,
         { provider, originalError: e }
       );

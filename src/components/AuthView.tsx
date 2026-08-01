@@ -35,6 +35,7 @@ export const AuthView: React.FC<{ children: React.ReactNode }> = ({ children }) 
         email,
         password,
       });
+
       if (error) throw error;
     } catch (err: any) {
       setError(err.message || 'Đã có lỗi xảy ra');
