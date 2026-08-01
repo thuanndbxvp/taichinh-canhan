@@ -180,8 +180,8 @@ promptRegistry.register('finance.script.outline', {
     const { title, outlineContent, targetAudience, styleOptions, wordCount } = params;
     const style = `Tone: ${styleOptions.expression}, Style: ${styleOptions.style}`;
     
-    const userRequirements = outlineContent 
-      ? `\n\nYÊU CẦU NỘI DUNG TỪ ĐẠO DIỄN (TRỌNG SỐ CAO NHẤT):\n"${outlineContent}"\n-> HƯỚNG DẪN: Lấy "Chủ đề" làm móng, nhưng BẮT BUỘC phải lồng ghép tất cả các ý trong "Yêu cầu nội dung" này vào các phần của Dàn ý sao cho mạch lạc và hợp lý nhất.` 
+    const userRequirements = outlineContent
+      ? `\n\nYÊU CẦU NỘI DUNG TỪ ĐẠO DIỄN (CHỈ LÀ Ý PHỤ):\n"${outlineContent}"\nHƯỚNG DẪN: 1. Lấy Chủ đề làm XƯƠNG SỐNG duy nhất. 2. Lồng ghép Yêu cầu nhưng KHÔNG làm lệch Chủ đề. 3. Nếu xung đột -> ƯU TIÊN Chủ đề.`
       : '';
 
     return {
@@ -295,15 +295,15 @@ promptRegistry.register('finance.script.revise', {
       'LƯU Ý: Giữ vững triết lý cung cấp kiến thức tài chính thực tế và chuyên nghiệp. Không thêm yếu tố giật gân, kinh dị hay clickbait.';
     return {
       messages: [
-        { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + coreRaw.trim() + `\n\n=== L�DNA v3 BÐT BUỘC ===
-- Người kể = người phân tíchn bằng dữ liệu và lập luạn. Giọng bình tĩnh, logic. Ưu tién GIảI THÍCH hơn kể chuyện.
-- Cấu trúc luạn điểm: Nêu → Giải thích (nhiều nhất) → Ví dụe → Hệ quả → Chuyển.
-- Anti-Flowery: KHÔNG "cực kỳ", "vô cùng". Lập luạn là món chíchn.
-- Tở lệ câu: <15% ngắn / 50-65% TB / 20-35% dài.
+        { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + coreRaw.trim() + `\n\n=== LỆNH DNA v3 BẮT BUỘC ===
+- Người kể = người phân tích bằng dữ liệu và lập luận. Giọng bình tĩnh, logic. Ưu tiên GIẢI THÍCH hơn kể chuyện.
+- Cấu trúc luận điểm: Nêu → Giải thích (nhiều nhất) → Ví dụ → Hệ quả → Chuyển.
+- Anti-Flowery: KHÔNG "cực kỳ", "vô cùng". Lập luận là món chính.
+- Tỷ lệ câu: <15% ngắn / 50-65% TB / 20-35% dài.
 - Anti-Labeling: KHÔNG "Bước 1", "Nguyên nhân thứ 1".
-- "anh em" tối đđa 8 lần/đoạn.
+- "anh em" tối đa 8 lần/đoạn.
 - Slogan chỉ 2 lần: đầu + cuối.
-=== KÐT THÚC LÖNH ===ẾT THÚC LỆNH ===` },
+=== KẾT THÚC LỆNH ===` },
         {
           role: 'user',
           content: `Chỉnh sửa kịch bản theo yêu cầu: "${revisionPrompt}".\n${financeGuard}\n${styleLine}\n\nKịch bản gốc:\n${script}`,

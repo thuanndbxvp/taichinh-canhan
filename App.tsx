@@ -19,6 +19,7 @@ import type { AiProvider } from './types';
 
 import { LibraryModal } from './components/LibraryModal';
 import { DialogueModal } from './components/DialogueModal';
+import { RewriteModal } from './components/RewriteModal';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import GuideModal from './components/GuideModal';
 import { SummarizeModal } from './components/SummarizeModal';
@@ -26,6 +27,7 @@ import { SavedIdeasModal } from './components/SavedIdeasModal';
 import { ScoreModal } from './components/ScoreModal';
 import { UsageModal } from './components/UsageModal';
 import { AdminPanelModal } from './components/AdminPanelModal';
+import type { RewriteLevel } from './src/features/generation/useGenerationWorkflow';
 
 const YoutubeLogoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="24" viewBox="0 0 28 20" fill="none" {...props}>
@@ -40,6 +42,7 @@ const App: React.FC = () => {
   const aiSettings = useAiSettings();
   const [currentAiConfig, setCurrentAiConfig] = useState<{provider: AiProvider, model: string} | null>(null);
   const [pendingGenerate, setPendingGenerate] = useState(false);
+  const [rewriteResult, setRewriteResult] = useState<string>('');
 
   useEffect(() => {
       // Đảm bảo currentAiConfig luôn valid:
@@ -192,6 +195,39 @@ const App: React.FC = () => {
     });
   }, [library, brief.brief, generation.generatedScript]);
 
+  // MSEW-rewrite-script BƯỚC 5: handlers cho RewriteModal.
+  const handleStartRewrite = useCallback(
+    async (script: string) => {
+      setRewriteResult('');
+      try {
+        const result = await generation.rewriteScript(
+          brief.brief.title,
+          script,
+          generation.rewriteLevel,
+        );
+        setRewriteResult(result);
+      } catch (err) {
+        // Error đã được set vào generation.rewriteError bên trong rewriteScript.
+        // Không cần xử lý thêm ở đây.
+      }
+    },
+    [generation, brief.brief.title],
+  );
+
+  const handleApplyRewrite = useCallback(() => {
+    if (!rewriteResult) return;
+    generation.setGeneratedScript(rewriteResult);
+    setRewriteResult('');
+    modals.close('rewrite');
+    aiSettings.setLocalNotification('Đã áp dụng kết quả tẩy rửa vào kịch bản chính.');
+  }, [rewriteResult, generation, modals, aiSettings]);
+
+  const handleOpenRewriteModal = useCallback(() => {
+    setRewriteResult('');
+    generation.setRewriteLevel(generation.rewriteLevel);
+    modals.open('rewrite');
+  }, [modals, generation]);
+
   // AUTO-SAVE: Khi AI tạo xong (script != null, không còn loading) và chưa save
   useEffect(() => {
     if (generation.generatedScript && !generation.isLoading && !library.hasSaved && !pendingGenerate) {
@@ -343,6 +379,16 @@ const App: React.FC = () => {
         </div>
       </main>
 
+      <button
+        onClick={handleOpenRewriteModal}
+        disabled={!hasApiKey}
+        title="Tẩy rửa kịch bản gốc theo DNA Chú Que"
+        className="fixed bottom-6 right-6 z-30 bg-amber-500 hover:bg-amber-400 text-white font-bold py-3 px-5 rounded-full shadow-lg shadow-amber-900/40 flex items-center gap-2 transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <span aria-hidden className="text-lg">♻️</span>
+        <span className="hidden sm:inline">Tẩy rửa kịch bản</span>
+      </button>
+
       <>
         {modals.isOpen('apiKey') && (
           <ApiKeyModal
@@ -443,6 +489,21 @@ const App: React.FC = () => {
           <AdminPanelModal
             isOpen
             onClose={() => modals.close('admin')}
+          />
+        )}
+        {modals.isOpen('rewrite') && (
+          <RewriteModal
+            isOpen
+            onClose={() => modals.close('rewrite')}
+            title={brief.brief.title}
+            initialScript={generation.generatedScript || ''}
+            rewrittenScript={rewriteResult}
+            isLoading={generation.isLoading && !!rewriteResult === false}
+            error={generation.rewriteError}
+            level={generation.rewriteLevel}
+            setLevel={generation.setRewriteLevel}
+            onStart={handleStartRewrite}
+            onApply={handleApplyRewrite}
           />
         )}
       </>

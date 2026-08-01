@@ -14,6 +14,8 @@ import { performDeepResearch } from '../../services/dataRetrieval';
 
 const PARTS_HEADER = '--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---\n\n';
 
+export type RewriteLevel = 1 | 2;
+
 export interface UseGenerationWorkflowArgs {
   brief: ContentBrief;
   aiProvider: AiProvider;
@@ -45,6 +47,11 @@ export interface UseGenerationWorkflowReturn {
   resetAllCaches: () => void;
   setExternalError: (msg: string | null) => void;
   currentAiAction: string | null;
+  // Rewrite Mode (MSEW-rewrite-script)
+  rewriteError: string | null;
+  rewriteLevel: RewriteLevel;
+  setRewriteLevel: (level: RewriteLevel) => void;
+  rewriteScript: (title: string, originalScript: string, level: RewriteLevel) => Promise<string>;
   // Các field sau được giữ lại cho backward-compat (MSEW-deep-research: Missing Data UI đã gỡ).
   handleResolveMissingData: (strategy: 'search' | 'estimate' | 'simplify') => Promise<void>;
   resolvingStrategy: 'search' | 'estimate' | 'simplify' | null;
@@ -98,6 +105,8 @@ export function useGenerationWorkflow({
   const [fullOutlineText, setFullOutlineText] = useState<string>('');
   const [autoContinue, setAutoContinue] = useState<boolean>(true);
   const [currentAiAction, setCurrentAiAction] = useState<string | null>(null);
+  const [rewriteError, setRewriteError] = useState<string | null>(null);
+  const [rewriteLevel, setRewriteLevel] = useState<RewriteLevel>(1);
   // Stubbed for backward-compat với interface (MSEW-deep-research: Missing Data UI đã gỡ).
   const [resolvingStrategy] = useState<'search' | 'estimate' | 'simplify' | null>(null);
   const isStoppingRef = useRef<boolean>(false);
@@ -381,6 +390,73 @@ export function useGenerationWorkflow({
     }
   }, [generatedScript, revisionPrompt, brief, aiProvider, selectedModel]);
 
+  // MSEW-rewrite-script BƯỚC 4: Rewrite Mode — gọi `classifyTopic` để lấy branch,
+  // sau đó gọi `reviseScript` (đã có sẵn) với `revisionPrompt` được sinh tự động theo level.
+  // Level 1: chỉ sửa văn phong. Level 2: ép thành 5 phần.
+  const rewriteScript = useCallback(
+    async (title: string, originalScript: string, level: RewriteLevel): Promise<string> => {
+      if (!originalScript || !originalScript.trim()) {
+        const msg = 'Vui lòng dán kịch bản gốc trước khi tẩy rửa.';
+        setRewriteError(msg);
+        throw new Error(msg);
+      }
+
+      setIsLoading(true);
+      setRewriteError(null);
+      setCurrentAiAction('Đang nhận diện phong cách kịch bản...');
+
+      try {
+        const baseParams = buildParams(brief, effectiveWordCount(brief));
+
+        // classifyTopic để biết branch (analytical/psychology/...) — đảm bảo DNA file đúng.
+        try {
+          const route = await classifyTopic(title, aiProvider, selectedModel);
+          if (baseParams.scriptStyle === 'auto') baseParams.scriptStyle = route.branch;
+          if (baseParams.scriptHook === 'auto') baseParams.scriptHook = route.hook;
+        } catch (e) {
+          console.warn('classifyTopic lỗi, dùng style mặc định hiện tại', e);
+        }
+
+        const basePrompt =
+          level === 1
+            ? 'Giữ nguyên cấu trúc, chỉ sửa văn phong và từ vựng theo DNA.'
+            : 'Đập đi gò lại toàn bộ bài viết thành đúng 5 phần tiêu chuẩn của DNA. Giữ luận điểm chính.';
+
+        const forcedStructure =
+          level === 2
+            ? ' BẮT BUỘC phân bổ lại nội dung thành 5 phần rõ rệt: MỞ ĐẦU (HOOK) -> BỐI CẢNH & VẤN ĐỀ -> GIẢI PHẪU DỮ LIỆU -> GIẢI PHÁP THỰC TẾ -> ĐÚC KẾT & KÊU GỌI.'
+            : '';
+
+        const revisionPrompt = basePrompt + forcedStructure;
+
+        setCurrentAiAction(
+          level === 1
+            ? 'Đang tẩy rửa văn phong theo DNA Chú Que...'
+            : 'Đang gò lại 5 phần theo DNA Chú Que...',
+        );
+
+        const result = await reviseScript(
+          originalScript,
+          revisionPrompt,
+          baseParams,
+          aiProvider,
+          selectedModel,
+        );
+
+        setRevisionCount((prev) => prev + 1);
+        return result;
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Lỗi khi tẩy rửa kịch bản.';
+        setRewriteError(message);
+        throw err;
+      } finally {
+        setIsLoading(false);
+        setCurrentAiAction(null);
+      }
+    },
+    [brief, aiProvider, selectedModel],
+  );
+
   return {
     generatedScript,
     setGeneratedScript,
@@ -406,6 +482,10 @@ export function useGenerationWorkflow({
     resetAllCaches,
     setExternalError: setError,
     currentAiAction,
+    rewriteError,
+    rewriteLevel,
+    setRewriteLevel,
+    rewriteScript,
     handleResolveMissingData,
     resolvingStrategy,
   };

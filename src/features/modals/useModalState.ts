@@ -11,7 +11,8 @@ export type ModalKey =
   | 'score'
   | 'dialogue'
   | 'usage'
-  | 'admin';
+  | 'admin'
+  | 'rewrite';
 
 const ALL_MODALS: ModalKey[] = [
   'library',
@@ -25,6 +26,7 @@ const ALL_MODALS: ModalKey[] = [
   'dialogue',
   'usage',
   'admin',
+  'rewrite',
 ];
 
 type ModalState = Record<ModalKey, boolean>;

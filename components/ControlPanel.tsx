@@ -205,11 +205,15 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             <textarea
               id="outline"
               rows={4}
+              maxLength={800}
               className={`mt-2 w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
               placeholder="Phác họa nội dung (tùy chọn), VD: 'Đề cập đến lãi kép, quỹ dự phòng, bẫy tâm lý chi tiêu. Tầm nhìn 5 năm tới.'"
               value={outlineContent}
               onChange={(e) => setOutlineContent(e.target.value)}
             />
+            <p className="mt-1 text-xs text-amber-500/80 italic">
+              Tối đa 800 ký tự. Để viết lại kịch bản dài, hãy dùng tính năng Tẩy rửa kịch bản gốc.
+            </p>
 
             <div className="mt-3 bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-3">
                     <label className="flex items-center gap-2 text-xs font-bold text-emerald-500 mb-2 uppercase tracking-wider">
