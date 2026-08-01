@@ -1,6 +1,7 @@
 
 // Ngôn ngữ/giọng điệu mặc định cho Finance Content Studio (Chú Que persona).
 // Chú Que Tài Chính — chỉ giữ 4 tông giọng cốt lõi phục vụ nhân vật.
+/// <reference types="vite/client" />
 export type Expression =
   | 'Empathetic'
   | 'Conversational'
@@ -30,6 +31,8 @@ export interface TopicSuggestionItem {
     vietnameseTitle?: string;
     outline: string;
     category?: string;
+    branch?: string;
+    hook?: string;
 }
 
 export interface SavedIdea {
@@ -112,4 +115,8 @@ export interface SummarizeConfig {
   scenarioType: ScenarioType;
   referenceImages?: string[];
 }
+
+// Vite-specific: khai báo module cho cú pháp import file thô (?raw).
+// Đã được xử lý bằng `/// <reference types="vite/client" />` ở đầu file.
+
 

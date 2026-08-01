@@ -1,4 +1,4 @@
-import type { UsageEntry } from '../services/usage/usageTracker';
+import type { UsageEntry } from '../src/services/usage/usageTracker';
 
 interface UsagePanelProps {
   totals: {
