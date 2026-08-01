@@ -13,7 +13,7 @@ interface RewriteModalProps {
   error: string | null;
   level: RewriteLevel;
   setLevel: (level: RewriteLevel) => void;
-  onStart: (script: string) => void;
+  onStart: (script: string, title: string) => void;
   onApply: () => void;
 }
 
@@ -55,12 +55,14 @@ export const RewriteModal: React.FC<RewriteModalProps> = ({
   onApply,
 }) => {
   const [originalScript, setOriginalScript] = useState(initialScript);
+  const [localTitle, setLocalTitle] = useState(title);
 
   useEffect(() => {
     if (isOpen) {
       setOriginalScript(initialScript);
+      setLocalTitle(title);
     }
-  }, [isOpen, initialScript]);
+  }, [isOpen, initialScript, title]);
 
   if (!isOpen) return null;
 
@@ -68,7 +70,7 @@ export const RewriteModal: React.FC<RewriteModalProps> = ({
   const canStart = !isLoading && originalScript.trim().length > 0;
 
   const handleStartClick = () => {
-    onStart(originalScript);
+    onStart(originalScript, localTitle);
   };
 
   const levelDescription =
@@ -107,10 +109,11 @@ export const RewriteModal: React.FC<RewriteModalProps> = ({
               </label>
               <input
                 type="text"
-                value={title}
-                readOnly
-                className="w-full bg-primary border border-border rounded-md p-2 text-text-primary text-sm opacity-80 cursor-not-allowed"
-                placeholder="Chủ đề video"
+                value={localTitle}
+                onChange={(e) => setLocalTitle(e.target.value)}
+                disabled={isLoading}
+                className="w-full bg-primary border border-border rounded-md p-2 text-text-primary text-sm focus:ring-2 focus:ring-accent focus:border-accent transition disabled:opacity-50"
+                placeholder="Nhập Chủ đề để AI nhận diện phong cách"
               />
             </div>
 

@@ -198,7 +198,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               id="title"
               type="text"
               className={`w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
-              placeholder="Nhập Tiêu đề Video, VD: 'Tương lai của du hành vũ trụ'"
+              placeholder="Nhập Tiêu đề (Móng của Kịch bản), VD: 'Lương 20 triệu vẫn thiếu'"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -207,7 +207,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               rows={4}
               maxLength={800}
               className={`mt-2 w-full border rounded-md p-2 transition focus:ring-2 bg-black border-emerald-900/50 text-emerald-100 focus:ring-emerald-500 focus:border-emerald-500`}
-              placeholder="Phác họa nội dung (tùy chọn), VD: 'Đề cập đến lãi kép, quỹ dự phòng, bẫy tâm lý chi tiêu. Tầm nhìn 5 năm tới.'"
+              placeholder="Yêu cầu từ Đạo diễn (Gia vị), VD: 'Nhấn mạnh bẫy mua sắm trả góp, bắt buộc nhắc quỹ dự phòng'"
               value={outlineContent}
               onChange={(e) => setOutlineContent(e.target.value)}
             />

@@ -197,11 +197,11 @@ const App: React.FC = () => {
 
   // MSEW-rewrite-script BƯỚC 5: handlers cho RewriteModal.
   const handleStartRewrite = useCallback(
-    async (script: string) => {
+    async (script: string, rewriteTitle: string) => {
       setRewriteResult('');
       try {
         const result = await generation.rewriteScript(
-          brief.brief.title,
+          rewriteTitle,
           script,
           generation.rewriteLevel,
         );
@@ -211,7 +211,7 @@ const App: React.FC = () => {
         // Không cần xử lý thêm ở đây.
       }
     },
-    [generation, brief.brief.title],
+    [generation],
   );
 
   const handleApplyRewrite = useCallback(() => {
