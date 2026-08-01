@@ -322,9 +322,6 @@ const App: React.FC = () => {
             setAutoContinue={generation.setAutoContinue}
             macroData={generation.macroData}
             isOutlinePhase={isOutlinePhase}
-            onChangeScript={generation.updateScript}
-            onResolveMissingData={generation.handleResolveMissingData}
-            resolvingStrategy={generation.resolvingStrategy}
           />
         </div>
         <div className="lg:col-span-3">

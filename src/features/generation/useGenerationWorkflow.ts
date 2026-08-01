@@ -6,12 +6,11 @@ import {
   parseOutlineIntoSegments,
   reviseScript,
   classifyTopic,
-  resolveMissingData,
 } from '../../../services/aiService';
 import type { ContentBrief } from '../brief/useContentBrief';
 import { AppError } from '../../lib/errors';
 import { minutesToTargetWords } from '../../domain/wordCount';
-import { fetchMacroData, performTavilySearch } from '../../services/dataRetrieval';
+import { performDeepResearch } from '../../services/dataRetrieval';
 
 const PARTS_HEADER = '--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---\n\n';
 
@@ -24,6 +23,8 @@ export interface UseGenerationWorkflowArgs {
 export interface UseGenerationWorkflowReturn {
   generatedScript: string;
   setGeneratedScript: (s: string) => void;
+  macroData: string | null;
+  updateScript: (newScript: string) => void;
   isLoading: boolean;
   error: string | null;
   revisionPrompt: string;
@@ -44,6 +45,9 @@ export interface UseGenerationWorkflowReturn {
   resetAllCaches: () => void;
   setExternalError: (msg: string | null) => void;
   currentAiAction: string | null;
+  // Các field sau được giữ lại cho backward-compat (MSEW-deep-research: Missing Data UI đã gỡ).
+  handleResolveMissingData: (strategy: 'search' | 'estimate' | 'simplify') => Promise<void>;
+  resolvingStrategy: 'search' | 'estimate' | 'simplify' | null;
 }
 
 function buildParams(brief: ContentBrief, finalWordCount: string): GenerationParams {
@@ -94,7 +98,8 @@ export function useGenerationWorkflow({
   const [fullOutlineText, setFullOutlineText] = useState<string>('');
   const [autoContinue, setAutoContinue] = useState<boolean>(true);
   const [currentAiAction, setCurrentAiAction] = useState<string | null>(null);
-  const [resolvingStrategy, setResolvingStrategy] = useState<'search' | 'estimate' | 'simplify' | null>(null);
+  // Stubbed for backward-compat với interface (MSEW-deep-research: Missing Data UI đã gỡ).
+  const [resolvingStrategy] = useState<'search' | 'estimate' | 'simplify' | null>(null);
   const isStoppingRef = useRef<boolean>(false);
   // Chặn generateNextPart chạy song song (re-entrancy guard).
   const isGeneratingPartRef = useRef<boolean>(false);
@@ -113,7 +118,6 @@ export function useGenerationWorkflow({
     setOutlineParts([]);
     setCurrentPartIndex(0);
     setFullOutlineText('');
-    setResolvingStrategy(null);
     isStoppingRef.current = false;
     isGeneratingPartRef.current = false;
   }, []);
@@ -159,13 +163,19 @@ export function useGenerationWorkflow({
         if (params.scriptHook === 'auto') params.scriptHook = route.hook;
       }
 
-      setCurrentAiAction('Đang thu thập dữ liệu vĩ mô thực tế...');
+      setCurrentAiAction('Đang khởi động quy trình Deep Research (4 bước)...');
       try {
-        const fetchedMacro = await fetchMacroData(brief.title, aiProvider, selectedModel);
-        setMacroData(fetchedMacro);
-        params.macroContext = fetchedMacro;
+        const researchSummary = await performDeepResearch(
+          brief.title,
+          brief.outlineContent,
+          aiProvider,
+          selectedModel,
+          (msg) => setCurrentAiAction(msg),
+        );
+        setMacroData(researchSummary);
+        params.macroContext = researchSummary;
       } catch (e) {
-        console.warn('Lỗi khi fetch dữ liệu vĩ mô, tiếp tục không có context', e);
+        console.warn('Lỗi khi chạy Deep Research, tiếp tục không có context', e);
       }
 
       setCurrentAiAction('Đang phân tích và lập dàn ý...');
@@ -196,48 +206,11 @@ export function useGenerationWorkflow({
     }
   }, [brief, aiProvider, selectedModel, resetAllCaches]);
 
-  const handleResolveMissingData = useCallback(async (strategy: 'search' | 'estimate' | 'simplify') => {
-    if (!scriptRef.current) return;
-    setIsLoading(true);
-    setResolvingStrategy(strategy);
-    setError(null);
-    try {
-      let searchData = '';
-      if (strategy === 'search') {
-        setCurrentAiAction('Đang tìm kiếm dữ liệu vĩ mô bổ sung...');
-        const matches = [...scriptRef.current.matchAll(/\[CẦN ĐIỀN(.*?)\]/gi)];
-        if (matches.length > 0) {
-          const queries = matches.map(m => m[1].trim()).filter(Boolean);
-          const tavilyKey = localStorage.getItem('tavily-api-key') || '';
-          if (tavilyKey && queries.length > 0) {
-            const results = await Promise.all(queries.map(q => performTavilySearch(q, tavilyKey)));
-            searchData = results.map((r, i) => `Truy vấn: ${queries[i]}\nKết quả: ${r}`).join('\n\n');
-          }
-        }
-      }
-
-      setCurrentAiAction(
-        strategy === 'search' ? 'Đang điền số liệu thật vào dàn ý...' :
-        strategy === 'estimate' ? 'Đang tự ước tính số liệu...' :
-        'Đang dọn dẹp số liệu phức tạp...'
-      );
-
-      const resolved = await resolveMissingData(
-        scriptRef.current,
-        strategy,
-        aiProvider,
-        selectedModel,
-        searchData
-      );
-      updateScript(resolved);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Đã xảy ra lỗi khi phân tích dữ liệu.');
-    } finally {
-      setIsLoading(false);
-      setResolvingStrategy(null);
-      setCurrentAiAction(null);
-    }
-  }, [aiProvider, selectedModel, outlineParts.length, isGeneratingSequentially, updateScript]);
+  const handleResolveMissingData = useCallback(async (_strategy: 'search' | 'estimate' | 'simplify') => {
+    // No-op: Missing data UI đã được gỡ bỏ trong MSEW-deep-research.
+    // Hàm này được giữ lại như stub để tương thích ngược với callers cũ (nếu có).
+    return;
+  }, []);
 
   // generateNextPart dùng ref cho previousPartsScript & fullOutlineText để
   // không còn phụ thuộc vào `generatedScript` (mỗi chunk sẽ re-create callback,

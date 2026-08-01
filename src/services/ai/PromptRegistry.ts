@@ -40,6 +40,10 @@ export type PromptId =
   | 'finance.topics.suggest'
   | 'finance.keywords.suggest'
   | 'finance.ideas.fromFile'
+  | 'finance.research.facet'
+  | 'finance.research.synthesis'
+  | 'finance.research.factcheck'
+  | 'finance.research.revise'
   | 'default.script'
   | 'default.script.outline'
   | 'default.script.part';
@@ -86,6 +90,10 @@ export interface PromptRegistryMap {
   'finance.score.outline': { script: string };
   'finance.data.planner': { title: string };
   'finance.script.factcheck': { outline: string; macroContext?: string };
+  'finance.research.facet': { title: string };
+  'finance.research.synthesis': { title: string; outlineContent: string; searchResults: string };
+  'finance.research.factcheck': { title: string; researchSummary: string };
+  'finance.research.revise': { title: string; researchSummary: string; critique: string };
   'default.script': { params: GenerationParams };
   'default.script.outline': { params: GenerationParams };
   'default.script.part': {

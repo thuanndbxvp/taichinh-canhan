@@ -201,7 +201,12 @@ QUY TẮC ĐỊNH DẠNG BẮT BUỘC (không tuân thủ = output vô dụng):
 - KHÔNG gộp 2 phần thành 1; mỗi phần là 1 heading riêng.
 - KHÔNG thêm bất kỳ text nào TRƯỚC heading "## PHẦN 1".
 - Mỗi phần có ÍT NHẤT 3 gạch đầu dòng mô tả ý chính.
-- QUY TẮC SỐ LIỆU TỐI THƯỢNG: TUYỆT ĐỐI KHÔNG TỰ BỊA CÁC SỐ LIỆU CỤ THỂ (như giá vàng, lãi suất, tỷ giá của các năm trong quá khứ/hiện tại). Nếu hệ thống không cung cấp trong DỮ LIỆU VĨ MÔ, bắt buộc phải dùng biến số như [CẦN ĐIỀN GIÁ VÀNG NĂM 2004] để người dùng tự điền. Vi phạm quy tắc này là lỗi chết người.
+- QUY TẮC SỐ LIỆU TỐI THƯỢNG (LUẬT THÉP — CẤM PLACEHOLDER):
+  + CHỈ SỬ DỤNG dữ liệu có thật trong "DỮ LIỆU VĨ MÔ/NGHIÊN CỨU" mà hệ thống cung cấp.
+  + CẤM BỊA số liệu (giá vàng, lãi suất, tỷ giá, năm).
+  + CẤM TUYỆT ĐỐI sử dụng placeholder dạng [CẦN ĐIỀN...] / [KIỂM TRA LẠI...] hay bất kỳ ký hiệu nào đánh dấu "thiếu dữ liệu".
+  + Nếu một ý nào đó cần số liệu mà dữ liệu hiện có KHÔNG CUNG CẤP được → BẮT BUỘC TỰ XOAY TRỤC (PIVOT) luận điểm đó sang một hướng khác khả thi dựa trên dữ liệu đang có. Kịch bản phải liền mạch 100%, không để lại "lỗ hổng" nào.
+  + Vi phạm quy tắc này là lỗi chết người.
 
 QUY TẮC VỀ ĐỘ DÀI:
 - Kịch bản dự kiến dài ${wordCount} từ.
@@ -290,7 +295,7 @@ promptRegistry.register('finance.script.revise', {
       'LƯU Ý: Giữ vững triết lý cung cấp kiến thức tài chính thực tế và chuyên nghiệp. Không thêm yếu tố giật gân, kinh dị hay clickbait.';
     return {
       messages: [
-        { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + coreRaw.trim() + `\n\n=== L�DNA v3 BÐT BUỘC ===
+        { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + coreRaw.trim() + `\n\n=== L�DNA v3 BÐT BUỘC ===
 - Người kể = người phân tíchn bằng dữ liệu và lập luạn. Giọng bình tĩnh, logic. Ưu tién GIảI THÍCH hơn kể chuyện.
 - Cấu trúc luạn điểm: Nêu → Giải thích (nhiều nhất) → Ví dụe → Hệ quả → Chuyển.
 - Anti-Flowery: KHÔNG "cực kỳ", "vô cùng". Lập luạn là món chíchn.
@@ -708,47 +713,86 @@ ${macroContext || 'Không có dữ liệu vĩ mô nào được cung cấp.'}
 
 YÊU CẦU KIỂM DUYỆT (FACT-CHECKING):
 1. Quét toàn bộ dàn ý trên. Tìm các con số cụ thể (giá tiền, lãi suất, tỷ giá, năm) mà AI tự ý đưa vào.
-2. Nếu các con số đó mâu thuẫn với <macro>, hoặc AI tự bịa số liệu lịch sử (VD: tự cho giá vàng 2004 là 10 triệu) mà không có cơ sở, HÃY GẠCH BỎ CHÚNG.
-3. Thay thế các số liệu bịa đặt bằng biến số cần điền, ví dụ: [CẦN ĐIỀN CHÍNH XÁC GIÁ VÀNG NĂM 2004]. Hoặc nếu bạn biết CHẮC CHẮN con số thực tế (và phù hợp với bối cảnh năm hiện tại), bạn có thể sửa lại cho đúng.
-4. KHÔNG làm thay đổi cấu trúc Heading của dàn ý (vẫn giữ nguyên 5 PHẦN).
-5. TRẢ VỀ DÀN Ý ĐÃ ĐƯỢC THANH LỌC, KHÔNG GIẢI THÍCH DÀI DÒNG. Bắt đầu ngay bằng "## PHẦN 1...".`,
+2. Nếu các con số đó mâu thuẫn với <macro>, hoặc AI tự bịa số liệu lịch sử (VD: tự cho giá vàng 2004 là 10 triệu) mà không có cơ sở:
+   - TUYỆT ĐỐI KHÔNG chèn thẻ [CẦN ĐIỀN...] hay bất kỳ placeholder nào.
+   - HÃY TỰ ĐỘNG XÓA luận điểm đó và VIẾT LẠI câu văn theo một hướng XOAY TRỤC (PIVOT) dựa trên dữ liệu an toàn có sẵn trong <macro> hoặc nguyên lý tài chính căn bản.
+3. KHÔNG làm thay đổi cấu trúc Heading của dàn ý (vẫn giữ nguyên 5 PHẦN).
+4. TRẢ VỀ DÀN Ý ĐÃ ĐƯỢC THANH LỌC, KHÔNG GIẢI THÍCH DÀI DÒNG. Bắt đầu ngay bằng "## PHẦN 1...".`,
         },
       ],
     };
   },
 });
 
-promptRegistry.register('finance.script.resolve.search', {
+// --- Deep Research Pipeline (RAG 4 bước) ---
+
+promptRegistry.register('finance.research.facet', {
   version: V3,
-  build({ script, searchData }) {
+  build({ title }) {
     return {
       messages: [
-        { role: 'system', content: `Bạn là trợ lý biên tập. Nhiệm vụ của bạn là giải quyết các biến số [CẦN ĐIỀN...] trong kịch bản bằng dữ liệu thực tế.` },
-        { role: 'user', content: `DỮ LIỆU TÌM KIẾM ĐƯỢC:\n${searchData}\n\nYÊU CẦU: Hãy duyệt qua toàn bộ Dàn ý sau và tìm các thẻ [CẦN ĐIỀN...]. Hãy thay thế các thẻ đó bằng số liệu tương ứng từ Dữ liệu tìm kiếm được.\nNếu dữ liệu tìm kiếm KHÔNG CÓ con số đó, giá trị thay thế phải là chính thẻ đó hoặc ghi rõ [TÌM KIẾM THẤT BẠI: thẻ cũ]. Tuyệt đối KHÔNG tự ước tính.\n\nBẮT BUỘC TRẢ VỀ ĐÚNG ĐỊNH DẠNG JSON OBJECT:\n- KEY là toàn bộ chuỗi thẻ cũ (ví dụ: "[CẦN ĐIỀN Giá vàng]").\n- VALUE là chuỗi mới để thay thế.\n\nVí dụ: { "[CẦN ĐIỀN Giá vàng năm 2004]": "7 triệu VNĐ", "[CẦN ĐIỀN Lãi suất]": "[TÌM KIẾM THẤT BẠI: Lãi suất]" }\n\nTUYỆT ĐỐI KHÔNG TRẢ VỀ TOÀN BỘ DÀN Ý, CHỈ TRẢ VỀ ĐÚNG 1 ĐỐI TƯỢNG JSON.\n\nDÀN Ý GỐC:\n${script}` },
+        {
+          role: 'system',
+          content: `Bạn là chuyên gia phân tách chủ đề thành các khía cạnh cần tìm kiếm trên web. Nhiệm vụ: đọc tiêu đề, trả về JSON array chứa 3-5 chuỗi truy vấn Google cực kỳ cụ thể bằng tiếng Việt (có thể kèm năm) để cào dữ liệu phục vụ kịch bản tài chính cá nhân.\nMỗi truy vấn phải nhắm vào MỘT khía cạnh (giá cả, lịch sử, so sánh, thống kê, bối cảnh Việt Nam, v.v.).\nCHỈ TRẢ VỀ JSON ARRAY, không giải thích.`,
+        },
+        {
+          role: 'user',
+          content: `Chủ đề: "${title}".\nTrả về JSON array 3-5 truy vấn.`,
+        },
       ],
     };
   },
 });
 
-promptRegistry.register('finance.script.resolve.estimate', {
+promptRegistry.register('finance.research.synthesis', {
   version: V3,
-  build({ script }) {
+  build({ title, outlineContent, searchResults }) {
     return {
       messages: [
-        { role: 'system', content: `Bạn là trợ lý biên tập am hiểu kinh tế.` },
-        { role: 'user', content: `YÊU CẦU: Hãy duyệt qua Dàn ý sau. Với mỗi thẻ [CẦN ĐIỀN...], hãy TỰ ƯỚC TÍNH một con số/giá trị hợp lý nhất có thể, và bọc bằng thẻ [KIỂM TRA LẠI: <số liệu ước tính của bạn>].\n\nBẮT BUỘC TRẢ VỀ ĐÚNG ĐỊNH DẠNG JSON OBJECT:\n- KEY là toàn bộ chuỗi thẻ cũ (ví dụ: "[CẦN ĐIỀN Giá vàng]").\n- VALUE là chuỗi ước tính mới (ví dụ: "[KIỂM TRA LẠI: khoảng 7 triệu]").\n\nTUYỆT ĐỐI KHÔNG TRẢ VỀ TOÀN BỘ DÀN Ý, CHỈ TRẢ VỀ ĐÚNG 1 ĐỐI TƯỢNG JSON.\n\nDÀN Ý GỐC:\n${script}` },
+        {
+          role: 'system',
+          content: `Bạn là biên tập viên chuyên tổng hợp dữ liệu web thô thành một bản "Tóm Tắt Nghiên Cứu" có cấu trúc rõ ràng, phục vụ việc viết kịch bản tài chính cá nhân. \nNhiệm vụ: Đọc dữ liệu tìm kiếm thô và gom thành các mục có gạch đầu dòng, mỗi mục kèm con số/dữ kiện cụ thể và nguồn (nếu có).\nTuyệt đối KHÔNG bịa số liệu. Nếu dữ liệu tìm được mơ hồ, ghi rõ "không tìm được con số chính xác".`,
+        },
+        {
+          role: 'user',
+          content: `CHỦ ĐỀ: "${title}"\n\nYÊU CẦU NỘI DUNG TỪ ĐẠO DIỄN: "${outlineContent || '(không có)'}"\n\nDỮ LIỆU THÔ TỪ TAVILY:\n${searchResults}\n\nHãy trả về bản Tóm Tắt Nghiên Cứu có cấu trúc (dùng gạch đầu dòng, nhóm theo chủ đề).`,
+        },
       ],
     };
   },
 });
 
-promptRegistry.register('finance.script.resolve.simplify', {
+promptRegistry.register('finance.research.factcheck', {
   version: V3,
-  build({ script }) {
+  build({ title, researchSummary }) {
     return {
       messages: [
-        { role: 'system', content: `Bạn là trợ lý biên tập.` },
-        { role: 'user', content: `YÊU CẦU: Hãy duyệt qua Dàn ý sau. Có một số thẻ [CẦN ĐIỀN...] yêu cầu dữ liệu phức tạp. Hãy thay thế thẻ này bằng một cụm từ định tính chung chung (ví dụ: đổi thành "cao hơn lạm phát rất nhiều" hoặc "rất đắt đỏ").\n\nBẮT BUỘC TRẢ VỀ ĐÚNG ĐỊNH DẠNG JSON OBJECT:\n- KEY là toàn bộ chuỗi thẻ cũ.\n- VALUE là cụm từ đơn giản hóa.\n\nTUYỆT ĐỐI KHÔNG TRẢ VỀ TOÀN BỘ DÀN Ý, CHỈ TRẢ VỀ ĐÚNG 1 ĐỐI TƯỢNG JSON.\n\nDÀN Ý GỐC:\n${script}` },
+        {
+          role: 'system',
+          content: `Bạn là Tổng Biên Tập kiểm duyệt chất lượng bản Tóm Tắt Nghiên Cứu. \nNhiệm vụ: Đọc lại bản tóm tắt và chỉ ra những điểm yếu: (1) số liệu mơ hồ hoặc thiếu nguồn, (2) lỗ hổng thông tin cần bổ sung, (3) mâu thuẫn nội tại. \nTrả về JSON object: { "gaps": ["..."], "weakClaims": ["..."], "contradictions": ["..."], "overallScore": <số 1-10> }.\nCHỈ TRẢ VỀ JSON, không giải thích ngoài JSON.`,
+        },
+        {
+          role: 'user',
+          content: `CHỦ ĐỀ: "${title}"\n\nBẢN TÓM TẮT NGHIÊN CỨU:\n${researchSummary}`,
+        },
+      ],
+    };
+  },
+});
+
+promptRegistry.register('finance.research.revise', {
+  version: V3,
+  build({ title, researchSummary, critique }) {
+    return {
+      messages: [
+        {
+          role: 'system',
+          content: `Bạn là biên tập viên cao cấp. Nhiệm vụ: Đọc bản Tóm Tắt Nghiên Cứu và phần phê bình từ Tổng Biên Tập, sau đó viết lại bản tóm tắt để khắc phục lỗ hổng. Giữ nguyên cấu trúc gạch đầu dòng. Tuyệt đối KHÔNG bịa số liệu — nếu thiếu, ghi rõ "không tìm được con số chính xác, cần đạo diễn xác nhận".\nTrả về bản Tóm Tắt Nghiên Cứu đã được tinh chỉnh (chỉ phần nội dung, không kèm JSON meta).`,
+        },
+        {
+          role: 'user',
+          content: `CHỦ ĐỀ: "${title}"\n\nBẢN TÓM TẮT GỐC:\n${researchSummary}\n\nPHÊ BÌNH TỪ TỔNG BIÊN TẬP:\n${critique}\n\nHãy viết lại bản Tóm Tắt Nghiên Cứu đã khắc phục các lỗ hổng được chỉ ra.`,
+        },
       ],
     };
   },
