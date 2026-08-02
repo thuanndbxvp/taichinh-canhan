@@ -74,7 +74,7 @@ TRƯỚC KHI VIẾT bất kỳ nội dung kịch bản nào, AI phải:
    [ ] Lập luận đứng không? (bỏ tính từ cảm xúc, logic vẫn rõ?)
    [ ] "anh em" có xuất hiện quá 8 lần? → Thay bằng tên nhân vật.
    [ ] Có dùng "Bước 1", "Nguyên nhân thứ 1"? → Thay bằng "trước hết...".
-   [ ] Tỷ lệ câu ngắn dưới 15%?
+   [ ] Câu văn có nối kết mạch lạc và dẫn dắt trôi chảy không?
    [ ] Mỗi phần kết thúc bằng câu "mở nút" chưa?
 
 5. NẾU VI PHẠM: script sẽ bị TRẢ VỀ để viết lại. Không có ngoại lệ.
@@ -275,7 +275,7 @@ QUY TẮC ĐỊNH DẠNG TỐI THƯỢNG (Bắt buộc tuân thủ 100%):
 5. GIAO TIẾP GẦN GŨI: Luôn xưng "Tôi" và gọi khán giả là "Anh em" hoặc "Bạn". KHÔNG dùng từ nối khô khan (Đầu tiên là, Tóm lại). Hãy dùng: "Anh em thử nghĩ mà xem...", "Nói thật với anh em...".
 6. SẮC BÉN DỮ LIỆU: Phải giữ nguyên 100% các con số đã chốt trong Dàn Ý. KHÔNG bịa số liệu mới. Hãy phân tích cặn kẽ từng ý, tuyệt đối không viết tóm tắt hời hợt.
 7. GÓC NHÌN NGƯỜI KỂ: Người kể = "tôi" = người đồng hành điềm tĩnh. KHÔNG phán xét ("ngu sao", "đáng lẽ phải vậy"). KHÔNG trình bày khô khan. Phải kể chuyện → phân tích → rút bài học → hướng dẫn nhẹ nhàng. Nếu phát hiện mình đang PHÁN XÉT → VIẾT LẠI.
-8. NHỊP ĐIỆU (Pacing): TỶ LỆ BẮT BUỘC = <15% câu ngắn / 50-65% câu trung bình / 20-35% câu dài. Câu ngắn quá nhiều → gây mệt sau 10 phút. KHÔNG spam câu ngắn.
+8. NHỊP ĐIỆU (Pacing): Viết câu tự nhiên, mạch lạc, có tính dẫn dắt như đang trò chuyện. TUYỆT ĐỐI KHÔNG viết các câu ngắn cụt lủn, ngắt quãng.
 9. TỪ VỰNG ĐA DẠNG: "anh em" tối đa 8 lần/đoạn. Thay bằng tên nhân vật (Minh, Hùng, Lan) hoặc "mọi người". KHÔNG lặp "phải", "chính là", "sai rồi".
 10. ANTI-LABELING: KHÔNG dùng "Bẫy số 1", "Bước 1", "Lực lượng thứ nhất", "Nguyên nhân thứ 1". Thay bằng "thứ mà tôi thấy...", "trước hết...", "có mấy thứ đan lại với nhau".
 11. SLOGAN: Chỉ xuất hiện 2 lần — đầu và cuối. KHÔNG lặp slogan ở giữa script.`,
@@ -500,7 +500,7 @@ promptRegistry.register('finance.score', {
             '- Narrator Persona: Người kể có giữ vai trò người đồng hành xuyên suốt? Hay bị phán xét, trình bày, giảng bài?\n' +
             '- Anti-Labeling: Có dùng "Bước 1", "Nguyên nhân thứ 1", "Bẫy số 1" trong phần không phải listicle?\n' +
             '- Vocabulary: "anh em" có xuất hiện quá 8 lần/đoạn? Có lặp "phải", "chính là", "sai rồi"?\n' +
-            '- Pacing: Tỷ lệ câu ngắn có dưới 15%? Hay spam câu ngắn?\n' +
+            '- Pacing: Nhịp điệu câu văn có tự nhiên, trôi chảy và dẫn dắt tốt không?\n' +
             '- Silence/Khoảng trống: Có câu hỏi treo, không kết luận ngay? Hay nói tuôn 1 đường?\n\n' +
             coreRaw.trim(),
         },

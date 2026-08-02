@@ -29,13 +29,13 @@
 ### 2.2. Pattern thường gặp
 
 **Pattern A — Câu chuyện "sai lầm":**
-> "Hồi 25 tuổi, tôi từng mở 1 quán café. Tôi bỏ vào 200 triệu. 8 tháng sau đóng cửa. Mất trắng. Ngày đó, tôi tự hỏi: mình sai ở đâu?"
+> "Hồi 25 tuổi, tôi từng tự tin mở một quán café và dồn hết 200 triệu tiền tiết kiệm vào đó, nhưng chỉ 8 tháng sau quán phải đóng cửa mất trắng. Ngày đó, tôi luôn tự hỏi rốt cuộc mình đã sai ở đâu?"
 
 **Pattern B — Câu chuyện "thành công bất ngờ":**
-> "Có một bạn tên Lan, 28 tuổi, lương 12 triệu. Lan không mua nhà, không mua xe, không đi du lịch. 5 năm sau, Lan có 800 triệu tiết kiệm. Bí mật?"
+> "Có một bạn tên Lan năm nay 28 tuổi, dù lương chỉ 12 triệu nhưng lại đưa ra một quyết định ngược đời: không mua nhà, không sắm xe, và tuyệt đối không đi du lịch. Thế nhưng 5 năm sau, cô ấy lại có trong tay 800 triệu tiền mặt. Bí mật ở đây là gì?"
 
 **Pattern C — Câu chuyện "chính tôi":**
-> "Tôi từng nghĩ: lương 20 triệu, ổn rồi. Cho đến khi bố tôi nhập viện, viện phí 200 triệu, và tôi chỉ có 30 triệu. Đó là ngày tôi hiểu."
+> "Tôi từng vô tư nghĩ rằng mức lương 20 triệu đã là quá đủ để sống khỏe, cho đến ngày bố tôi đột ngột nhập viện với tờ viện phí 200 triệu trong khi tôi chỉ còn vỏn vẹn 30 triệu trong thẻ."
 
 ---
 
@@ -50,10 +50,10 @@
 ### 3.2. Pattern thường gặp
 
 **Pattern A — Số liệu lớn:**
-> "Chỉ trong Q1 năm 2026, 91.800 doanh nghiệp đóng cửa. 91 nghìn. Mỗi ngày hơn 1.000 doanh nghiệp Việt Nam biến mất. Vì sao?"
+> "Chỉ trong quý 1 năm 2026, đã có tới 91.800 doanh nghiệp phải đóng cửa, đồng nghĩa với việc mỗi ngày có hơn 1.000 công ty biến mất khỏi thị trường. Đâu là nguyên nhân thực sự?"
 
 **Pattern B — Phép so sánh nhỏ:**
-> "Cafe 35k mỗi sáng. 1 năm = 12 triệu. 30 năm = 360 triệu. Nhiều hơn giá 1 căn hộ ở ngoại ô."
+> "Một ly cafe 35 ngàn mỗi sáng tưởng chừng vô hại, nhưng 1 năm nó ngốn của bạn 12 triệu, và sau 30 năm con số đó lên tới 360 triệu — nhiều hơn cả mức chênh lệch khi bạn cố mua một căn hộ ở ngoại ô."
 
 ---
 

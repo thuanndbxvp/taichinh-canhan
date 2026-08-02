@@ -85,31 +85,24 @@
 
 ---
 
-## 5. NHỊP ĐIỆU CÂU — ĐAN XEN, KHÔNG ĐỀU ĐẶN
+## 5. NHỊP ĐIỆU CÂU — ĐAN XEN, MẠCH LẠC
 
-### 5.1. Ba tầng nhịp
+### 5.1. Viết như một cuộc trò chuyện
 
-**Câu ngắn (3-8 chữ):** Chốt, tạo nhịp, gây sốc.
-> "Hùng mua xe." / "Hùng trả góp." / "Hùng mất sạch."
+- **Đề cao tính dẫn dắt:** Tránh viết các câu quá ngắn, cụt lủn liên tục (VD: "Hùng mua xe. Hùng trả góp."). Điều này khiến kịch bản bị ngắt quãng, thiếu cảm xúc.
+- **Dùng từ nối linh hoạt:** Sử dụng các từ nối (Nhưng, Vậy mà, Cho đến khi...) để liên kết các câu, tạo flow trôi chảy như đang kể chuyện.
+- **Đan xen nhịp độ:**
+> *"Hùng quyết định mua xe trả góp dù lương chỉ có 15 triệu, để rồi 8 tháng sau, cậu ấy mất sạch khoản tiền tiết kiệm bao năm."*
+> *"Anh em thấy không, đó là cả một bài toán dài hạn mà Hùng không nhìn ra: 12 triệu đó là 67% thu nhập, ăn mòn sạch khoản tiết kiệm, và ngay cả khi trả hết gốc thì chi phí nuôi xe mỗi tháng đã ngốn thêm 5-6 triệu nữa."*
 
-**Câu trung bình (15-25 chữ):** Dẫn dắt, chuyển ý.
-> "Anh em thấy không, đó là cả một bài toán dài hạn mà Hùng không nhìn ra."
+### 5.2. Không rập khuôn máy móc
 
-**Câu dài (30-60 chữ):** Phân tích, giải thích, tạo chiều sâu.
-> "Nhưng đây là cả một bài toán dài hạn mà anh không nhìn ra: 12 triệu đó là 67% thu nhập, ăn mòn sạch khoản tiết kiệm, và ngay cả khi trả hết gốc thì chi phí nuôi xe mỗi tháng đã ngốn thêm 5-6 triệu nữa."
-
-### 5.2. Tỷ lệ đan xen
-
-Trong mỗi đoạn văn 80-100 chữ:
-- **<15% câu ngắn** (tạo punch, nhấn mạnh — dùng có chủ đích, không spam)
-- **50-65% câu trung bình** (dẫn dắt, chuyển ý — nhịp tự nhiên của văn nói)
-- **20-35% câu dài** (phân tích, giải thích — tạo chiều sâu)
-
-> **Cảnh báo:** Câu ngắn quá nhiều → script nghe như búa đập, gây mệt sau 10 phút. Chỉ dùng 1-2 câu ngắn mỗi đoạn 80-100 chữ. Nhịp tự nhiên của người Việt nói chuyện trung bình là 60-70% câu trung bình.
+- Không cần đếm số lượng câu ngắn dài, quan trọng nhất là kịch bản phải trôi chảy, có tính dẫn dắt và giống một cuộc trò chuyện giữa những người bạn.
+- Câu ngắn chỉ dùng 1-2 lần ở những chỗ thật sự cần tạo điểm nhấn, gây ấn tượng mạnh.
 
 ### 5.3. Ví dụ mẫu
 
-> Hùng năm nay 30 tuổi. Lương 18 triệu. Anh quyết định mua ô tô trả góp 700 triệu, mỗi tháng trả 12 triệu. Nghe có vẻ hợp lý. Nhưng đây là cả một bài toán dài hạn mà anh không nhìn ra. Kết quả? Ba năm sau Hùng vẫn đi làm công ty, không mua nổi nhà, và tài khoản tiết kiệm vẫn là con số 0 tròn trĩnh.
+> Hùng năm nay 30 tuổi, cầm mức lương 18 triệu mỗi tháng nhưng lại quyết định mua ô tô trả góp 700 triệu và phải gánh khoản nợ 12 triệu/tháng. Nhìn qua thì có vẻ hợp lý và anh ta nghĩ mình kham được, nhưng đây thực chất là cả một bài toán dài hạn mà Hùng không hề lường trước. Kết quả thì sao? Ba năm sau, Hùng vẫn cặm cụi đi làm công ăn lương, không mua nổi một căn nhà, và tài khoản tiết kiệm thì vẫn là con số 0 tròn trĩnh.
 
 ### 5.4. KHÔNG viết kiểu
 
