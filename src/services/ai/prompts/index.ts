@@ -37,6 +37,64 @@ function getHookDna(hook?: string): string {
   return `${hooksRaw}\n\n[LỆNH BẮT BUỘC TỪ HỆ THỐNG]: Trong kịch bản này, BẮT BUỘC sử dụng kiểu mở đầu (Hook): "${hook || 'story'}". TUYỆT ĐỐI không dùng kiểu khác.`;
 }
 
+// --- Humanizer Engine ---
+
+export function buildGenerationHumanizerBlock(): string {
+  return `
+=== BỘ LỌC TẨY RỬA MÙI VĂN AI (HUMANIZER RULES — 11 QUY TẮC CỐT LÕI) ===
+1. CẤM TỪ VỰNG AI (§7): Cấm dùng "cực kỳ", "vô cùng", "tuyệt đối", "đáng chú ý", "bức tranh toàn cảnh", "minh chứng rõ nét", "chìa khóa vàng", "ngọn hải đăng", "cột mốc quan trọng".
+2. CẤM ĐIỆP TỪ MÁY MÓC (§9): Cấm cấu trúc "Không chỉ... mà còn...", "Không những... mà còn...". Thay bằng 2 câu độc lập hoặc nối tự nhiên.
+3. GIỚI HẠN DẤU EM-DASH (§14): Tối đa 2 dấu gạch ngang (—) trong toàn bộ 1 phần kịch bản. Ưu tiên dùng dấu phẩy hoặc tách câu.
+4. CẤM 100% EMOJI (§18): Tuyệt đối KHÔNG chứa emoji (🚀, 💡, ⚠️, 📊...) trong lời thoại kịch bản.
+5. CẤM FILLER PHRASES (§23): Cấm "Cần lưu ý rằng", "Điều quan trọng là", "Như chúng ta đã biết", "Có thể nói rằng". Cắt thẳng vào vấn đề.
+6. CẤM SIGNPOSTING (§28): Cấm "Ở phần này tôi sẽ nói về...", "Tiếp theo chúng ta cùng tìm hiểu...". Chuyển ý tự nhiên bằng logic.
+7. CẤM STACCATO DRAMA (§31): Cấm chuỗi 3+ câu ngắn liên tiếp cụt lủn cố tạo drama (Ví dụ: "Họ sợ. Rất sợ. Nhưng đã muộn."). Viết câu tự nhiên, mạch lạc, có chủ vị đầy đủ.
+8. CẤM ĐẠO LÝ SÁO RỖNG (§32): Cấm câu chốt đạo lý chung chung ("Hãy là nhà đầu tư thông minh"). Mọi lời khuyên phải gắn liền với hành động tài chính cụ thể.
+9. CẤM BẢN MẪU RULE-OF-THREE GƯỢNG ÉP (§10): Không ép mọi thứ phải thành đúng 3 ý nếu thực tế chỉ có 2 hoặc 4 ý.
+10. KHÔNG BỊA SỐ LIỆU: Chỉ sử dụng số liệu thực tế từ dữ liệu nghiên cứu hoặc nêu rõ "ước tính / giả định".
+11. TỪ XƯNG HÔ: Luôn xưng "Tôi" và gọi người nghe là "Anh em" hoặc "Bạn", tối đa 8 lần "anh em"/phần.
+=== KẾT THÚC BỘ LỌC HUMANIZER ===`;
+}
+
+export function buildRewritingHumanizerBlock(level: 'light' | 'deep' = 'light'): string {
+  if (level === 'light') {
+    return buildGenerationHumanizerBlock();
+  }
+
+  return `
+=== BỘ LỌC TẨY RỬA VĂN PHONG AI TOÀN DIỆN (FULL 33 HUMANIZER RULES) ===
+[NHÓM I — TỪ VỰNG & CỤM TỪ CẤM]:
+1. §7: Cấm từ sáo rỗng: "cực kỳ", "vô cùng", "bức tranh toàn cảnh", "chìa khóa", "cột mốc", "minh chứng", "ngọn hải đăng", "cửa tử", "ngã rẽ".
+2. §23: Cấm filler: "Cần lưu ý rằng", "Điều quan trọng là", "Như đã biết", "Thực tế cho thấy rằng".
+3. §28: Cấm signposting: "Trong phần này", "Tiếp theo chúng ta sẽ", "Dưới đây là".
+4. §18: Cấm 100% Emoji trong toàn bộ nội dung.
+
+[NHÓM II — CẤU TRÚC CÂU & NGỮ PHÁP]:
+5. §9: Cấm cấu trúc song song phủ định: "Không chỉ... mà còn...", "Không phải A, mà là B" lặp lại.
+6. §14: Giới hạn tối đa 2 dấu em-dash (—) trên mỗi phần kịch bản.
+7. §31: Cấm Staccato Drama: Tuyệt đối không ngắt dòng cụt lủn cố ý tạo kịch tính vô lý.
+8. §32: Cấm Aphorism: Không đúc kết đạo lý rỗng tuếch.
+9. §10: Phá vỡ Rule-of-three gượng ép: Đa dạng hóa số lượng luận điểm.
+10. §12: Giảm tỷ lệ câu hỏi tu từ (Rhetorical Questions) xuống tối đa 1-2 câu/phần.
+
+[NHÓM III — NỘI DUNG & SỐ LIỆU]:
+11. §1: Xóa bỏ 100% phần giới thiệu lan man, cắt ngay vào tình huống/số liệu.
+12. §2: Xóa bỏ kết luận tóm tắt lặp lại ("Tóm lại là...", "Như vậy chúng ta đã thấy...").
+13. §3 & §4: BẮT BUỘC giữ hoặc bổ sung bài toán mô phỏng số liệu thực tế (tiền, lãi, thời gian).
+14. §8: Biến các luận điểm chung chung thành ví dụ đời thường sống động.
+=== KẾT THÚC BỘ LỌC HUMANIZER TOÀN DIỆN ===`;
+}
+
+export function buildRewritingSystemPrompt(branch?: string, level: 'light' | 'deep' = 'light'): string {
+  return [
+    `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]`,
+    coreRaw.trim(),
+    getBranchDna(branch),
+    getHookDna(),
+    buildRewritingHumanizerBlock(level),
+  ].join('\n\n');
+}
+
 function buildFinanceSystemPrompt(branch?: string, hook?: string, macroContext?: string): string {
   const parts = [
     `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]`,
@@ -48,8 +106,7 @@ function buildFinanceSystemPrompt(branch?: string, hook?: string, macroContext?:
     parts.push(`[DỮ LIỆU VĨ MÔ THỰC TẾ TRÊN THỊ TRƯỜNG - DO HỆ THỐNG CUNG CẤP]:\n${macroContext}\n\nHãy lấy dữ liệu thật này làm cơ sở, tuyệt đối không bịa số liệu.`);
   }
   // Enforcement block — always appended, cannot be skipped
-  parts.push(`
-=== LỆNH THỰC THI BẮT BUỘC (AI KHÔNG ĐƯỢC BỎ QUA) ===
+  parts.push(`=== LỆNH THỰC THI BẮT BUỘC (AI KHÔNG ĐƯỢC BỎ QUA) ===
 
 TRƯỚC KHI VIẾT bất kỳ nội dung kịch bản nào, AI phải:
 
@@ -80,6 +137,10 @@ TRƯỚC KHI VIẾT bất kỳ nội dung kịch bản nào, AI phải:
 5. NẾU VI PHẠM: script sẽ bị TRẢ VỀ để viết lại. Không có ngoại lệ.
 
 === KẾT THÚC LỆNH THỰC THI ===`);
+
+  // Humanizer Block — kích hoạt 11 rules cho toàn bộ luồng sinh kịch bản
+  parts.push(buildGenerationHumanizerBlock());
+
   return parts.join('\n\n');
 }
 
@@ -216,9 +277,19 @@ QUY TẮC VỀ ĐỘ DÀI:
 Nội dung từng phần:
 - PHẦN 1: Hook thu hút -> Slogan -> Vấn đề chính.
 - PHẦN 2: Thực trạng; bẫy tâm lý khán giả đang mắc.
-- PHẦN 3: So sánh số liệu (không viết công thức toán); bẻ gãy phản biện.
-- PHẦN 4: Lộ trình step-by-step; phân nhóm đối tượng.
+- PHẦN 3: So sánh số liệu (không viết công thức toán); bẻ gãy phản biện. **BẮT BUỘC gợi ý 1 bài toán mô phỏng số liệu cụ thể (VD: tính lãi kép, so sánh 2 phương án)**.
+- PHẦN 4: Lộ trình step-by-step; phân nhóm đối tượng. **BẮT BUỘC gợi ý 1 bài toán mô phỏng dòng tiền cụ thể (VD: nếu đầu tư X triệu với lãi suất Y%)**.
 - PHẦN 5: Đúc kết/triết lý + 1 câu hỏi xoáy vào khán giả (CTA).
+
+**YÊU CẦU BẮT BUỘC VỀ WORD COUNT METADATA:**
+Sau khi viết xong dàn ý, HÃY THÊM KHỐI JSON sau ở CUỐI OUTPUT (để hệ thống tự động đọc):
+\`\`\`
+<!-- WORD_COUNT_ESTIMATION: {"minRecommendedWords": <số tối thiểu>, "optimalWords": <số khuyến nghị>, "reason": "<giải thích ngắn gọn tại sao cần số từ này, có bao nhiêu bài toán mô phỏng được đề xuất>"} -->
+\`\`\`
+VD thực tế:
+\`\`\`
+<!-- WORD_COUNT_ESTIMATION: {"minRecommendedWords": 1650, "optimalWords": 1900, "reason": "Dàn ý có 2 bài toán mô phỏng (lãi kép và so sánh phương án tài chính), cần tối thiểu 1.650 từ để giải trình chi tiết từng bước tính toán."} -->
+\`\`\`
 
 CHỦ ĐỀ CHÍNH: "${title}"
 NGÔN NGỮ: ${targetAudience}
@@ -267,6 +338,13 @@ NGÔN NGỮ: ${targetAudience}.
 
 ĐỘ DÀI PHẦN NÀY: ${perPart} từ spoken (đã bao gồm buffer 15% cho Markdown overhead — khi TTS lọc bỏ heading/bullet/SFX, phần spoken text thực tế phải CÒN LẠI ÍT NHẤT ${minSpoken} từ).
 
+**YÊU CẦU BẮT BUỘC VỀ BÀI TOÁN SỐ LIỆU:**
+- NẾU PHẦN NÀY LÀ PHẦN 3 HOẶC 4: BẮT BUỘC phải có 1 bài toán mô phỏng số liệu cụ thể.
+  * Phần 3: Bài toán tính lãi kép / so sánh 2 phương án tài chính (VD: "Nếu anh em đầu tư 50 triệu với lãi suất 9.5%/năm trong 5 năm, tổng cộng nhận được bao nhiêu?")
+  * Phần 4: Bài toán dòng tiền thực tế (VD: "So sánh 2 phương án: Mua nhà 2.5 tỷ trả góp 20 năm vs thuê nhà 8 triệu/tháng + đầu tư chênh lệch")
+- SỐ LIỆU PHẢI CỤ THỂ: Lãi suất, số tiền, thời gian, phần trăm — không nói chung chung
+- NẾU KHÔNG CÓ SỐ LIỆU THỰC: Ghi rõ "ước tính" hoặc "giả định" ngay trong kịch bản
+
 QUY TẮC ĐỊNH DẠNG TỐI THƯỢNG (Bắt buộc tuân thủ 100%):
 1. TRẢ VỀ TRỰC TIẾP NỘI DUNG KỊCH BẢN. TUYỆT ĐỐI KHÔNG giải thích, KHÔNG dạo đầu, KHÔNG suy luận.
 2. BẮT ĐẦU NGAY văn bản bằng TOÀN BỘ heading "## PHẦN X: ..." (đúng định dạng markdown cấp 2). Các nội dung tiếp theo bắt đầu từ dòng thứ 2.
@@ -295,15 +373,7 @@ promptRegistry.register('finance.script.revise', {
       'LƯU Ý: Giữ vững triết lý cung cấp kiến thức tài chính thực tế và chuyên nghiệp. Không thêm yếu tố giật gân, kinh dị hay clickbait.';
     return {
       messages: [
-        { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\n` + coreRaw.trim() + `\n\n=== LỆNH DNA v3 BẮT BUỘC ===
-- Người kể = người phân tích bằng dữ liệu và lập luận. Giọng bình tĩnh, logic. Ưu tiên GIẢI THÍCH hơn kể chuyện.
-- Cấu trúc luận điểm: Nêu → Giải thích (nhiều nhất) → Ví dụ → Hệ quả → Chuyển.
-- Anti-Flowery: KHÔNG "cực kỳ", "vô cùng". Lập luận là món chính.
-- Tỷ lệ câu: <15% ngắn / 50-65% TB / 20-35% dài.
-- Anti-Labeling: KHÔNG "Bước 1", "Nguyên nhân thứ 1".
-- "anh em" tối đa 8 lần/đoạn.
-- Slogan chỉ 2 lần: đầu + cuối.
-=== KẾT THÚC LỆNH ===` },
+        { role: 'system', content: buildRewritingSystemPrompt(undefined, 'light') },
         {
           role: 'user',
           content: `Chỉnh sửa kịch bản theo yêu cầu: "${revisionPrompt}".\n${financeGuard}\n${styleLine}\n\nKịch bản gốc:\n${script}`,
@@ -323,7 +393,7 @@ promptRegistry.register('finance.script.revise.partial', {
       'LƯU Ý: Giữ vững triết lý cung cấp kiến thức tài chính thực tế và chuyên nghiệp. Không thêm yếu tố giật gân, kinh dị hay clickbait.';
     return {
       messages: [
-        { role: 'system', content: `[BỐI CẢNH THỜI GIAN: Năm hiện tại là ${new Date().getFullYear()}]\n\nBạn là Script Doctor của kênh "Chú Que Tài Chính". Nhiệm vụ của bạn là sửa kịch bản dựa trên các feedback cụ thể. ${financeGuard}\n\n` + coreRaw.trim() + `\n\n=== LỆNH DNA v2 BẮT BUỘC ===\n- Người kể = "tôi" = người đồng hành. KHÔNG phán xét. KHÔNG trình bày. Phải kể chuyện.\n- Tỷ lệ câu: <15% ngắn / 50-65% TB / 20-35% dài.\n- Anti-Labeling: KHÔNG "Bước 1", "Nguyên nhân thứ 1". Thay bằng "trước hết...", "thứ tôi thấy...".\n- "anh em" tối đa 8 lần/đoạn.\n- Slogan chỉ 2 lần: đầu + cuối.\n- Có "khoảng trống": câu hỏi treo, không kết luận ngay.\n=== KẾT THÚC LỆNH ===` },
+        { role: 'system', content: buildRewritingSystemPrompt(undefined, 'light') },
         {
           role: 'user',
           content: `KỊCH BẢN GỐC:\n${script}\n\nYÊU CẦU CHỈNH SỬA:\n${revisionPrompt}\n${styleLine}\n\nNHIỆM VỤ QUAN TRỌNG:

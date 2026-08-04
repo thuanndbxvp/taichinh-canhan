@@ -10,6 +10,14 @@ import { CheckIcon } from './icons/CheckIcon';
 import type { ScriptType } from '../types';
 import { UploadIcon } from './icons/UploadIcon';
 import { Tooltip } from './Tooltip';
+import {
+  countWords,
+  getWordCountTolerance,
+  isWithinTolerance,
+  formatWordCount,
+  determineToleranceMode,
+} from '../src/domain/wordCount';
+import type { OutlineEstimation } from '../src/features/generation/useGenerationWorkflow';
 
 // Make TypeScript aware of the global XLSX object from the CDN
 declare const XLSX: any;
@@ -33,6 +41,10 @@ interface OutputDisplayProps {
   currentAiAction?: string | null;
   macroData?: string | null;
   isOutlinePhase?: boolean;
+  // MSEW-track1-phase4: Word count estimation
+  targetWordCount?: string;
+  outlineEstimation?: OutlineEstimation | null;
+  userDescription?: string;
 }
 
 const InitialState: React.FC<{ onImportClick: () => void }> = ({ onImportClick }) => (
@@ -106,8 +118,8 @@ const cleanTtsText = (text: string): string => {
         .trim();
 };
 
-export const OutputDisplay: React.FC<OutputDisplayProps> = ({ 
-    title, script, isLoading, error, 
+export const OutputDisplay: React.FC<OutputDisplayProps> = ({
+    title, script, isLoading, error,
     onStartSequentialGenerate,
     onResumeSequentialGenerate,
     onStopSequentialGenerate,
@@ -120,6 +132,9 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
     currentAiAction,
     macroData,
     isOutlinePhase,
+    targetWordCount,
+    outlineEstimation,
+    userDescription,
 }) => {
     const bottomRef = useRef<HTMLDivElement>(null);
     const [copySuccess, setCopySuccess] = useState<string>('');
@@ -238,15 +253,46 @@ export const OutputDisplay: React.FC<OutputDisplayProps> = ({
         if (script) {
             // Remove the start header so it doesn't become an empty section
             const cleanScriptForSplit = script.replace('--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---\n\n', '');
-            
+
             // Split by main headers
             const sections = cleanScriptForSplit.split(/(?=^#+ .*?$|^#{0,3}\s*\*\*#+ .*?)/m).filter(s => {
                 const textOnly = s.replace(/-/g, '').trim();
                 return textOnly !== '' && !s.includes('### Dàn Ý Chi Tiết');
             });
-            
+
+            // MSEW-track1-phase4: Word Count Badge
+            const isOutlineState = !isGeneratingSequentially && !script.includes('--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT');
+
             return (
                 <div className="flex flex-col gap-4">
+                    {/* Word Count Badge */}
+                    {script && !isOutlineState && (
+                      <div className="flex items-center justify-between py-2 px-3 rounded-lg bg-zinc-900/80 border border-emerald-900/40 text-xs">
+                        {(() => {
+                          const targetNum = parseInt(targetWordCount || '1800', 10) || 1800;
+                          const mode = determineToleranceMode(
+                            userDescription || '',
+                            targetNum,
+                            outlineEstimation?.minRecommendedWords ?? 0
+                          );
+                          const tolerance = getWordCountTolerance(targetNum, mode);
+                          const actualWords = countWords(script);
+                          const isOk = isWithinTolerance(actualWords, tolerance);
+
+                          return (
+                            <div className="flex items-center gap-2">
+                              <span className="font-semibold text-emerald-400">Kiem soat dung luong:</span>
+                              <span className={`px-2 py-0.5 rounded font-mono font-medium ${
+                                isOk ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' : 'bg-amber-950 text-amber-300 border border-amber-500/40'
+                              }`}>
+                                {formatWordCount(actualWords, tolerance)}
+                              </span>
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    )}
+
                     {macroData && macroData.trim() !== '' && (
                         <div className="bg-blue-900/10 border border-blue-500/30 p-4 rounded-lg">
                             <h3 className="text-blue-400 font-bold mb-2 flex items-center gap-2">

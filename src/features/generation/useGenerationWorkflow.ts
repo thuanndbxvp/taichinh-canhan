@@ -10,7 +10,42 @@ import {
 import type { ContentBrief } from '../brief/useContentBrief';
 import { AppError } from '../../lib/errors';
 import { minutesToTargetWords } from '../../domain/wordCount';
+import {
+  rebalanceRemainingParts,
+  determineToleranceMode,
+  ToleranceMode,
+} from '../../domain/wordCount';
 import { performDeepResearch } from '../../services/dataRetrieval';
+
+export interface OutlineEstimation {
+  minRecommendedWords: number;
+  optimalWords: number;
+  reason: string;
+}
+
+export function parseOutlineEstimation(text: string): OutlineEstimation | null {
+  if (!text) return null;
+  // Tìm dạng comment: <!-- WORD_COUNT_ESTIMATION: {...} -->
+  const commentMatch = text.match(/<!--\s*WORD_COUNT_ESTIMATION:\s*(\{[\s\S]*?\})\s*-->/i);
+  if (commentMatch) {
+    try {
+      const parsed = JSON.parse(commentMatch[1]);
+      if (parsed.minRecommendedWords && parsed.optimalWords) return parsed;
+    } catch {
+      // ignore error
+    }
+  }
+  // Fallback tìm JSON block chứa minRecommendedWords
+  const jsonBlockMatch = text.match(/\{[\s\S]*?"minRecommendedWords"[\s\S]*?\}/i);
+  if (jsonBlockMatch) {
+    try {
+      return JSON.parse(jsonBlockMatch[0]);
+    } catch {
+      // ignore error
+    }
+  }
+  return null;
+}
 
 const PARTS_HEADER = '--- BẮT ĐẦU TẠO KỊCH BẢN CHI TIẾT ---\n\n';
 
@@ -55,6 +90,9 @@ export interface UseGenerationWorkflowReturn {
   // Các field sau được giữ lại cho backward-compat (MSEW-deep-research: Missing Data UI đã gỡ).
   handleResolveMissingData: (strategy: 'search' | 'estimate' | 'simplify') => Promise<void>;
   resolvingStrategy: 'search' | 'estimate' | 'simplify' | null;
+  // MSEW-track1-phase3: Word count estimation from outline
+  outlineEstimation: OutlineEstimation | null;
+  setOutlineEstimation: (est: OutlineEstimation | null) => void;
 }
 
 function buildParams(brief: ContentBrief, finalWordCount: string): GenerationParams {
@@ -109,6 +147,8 @@ export function useGenerationWorkflow({
   const [rewriteLevel, setRewriteLevel] = useState<RewriteLevel>(1);
   // Stubbed for backward-compat với interface (MSEW-deep-research: Missing Data UI đã gỡ).
   const [resolvingStrategy] = useState<'search' | 'estimate' | 'simplify' | null>(null);
+  // MSEW-track1-phase3: Word count estimation from outline
+  const [outlineEstimation, setOutlineEstimation] = useState<OutlineEstimation | null>(null);
   const isStoppingRef = useRef<boolean>(false);
   // Chặn generateNextPart chạy song song (re-entrancy guard).
   const isGeneratingPartRef = useRef<boolean>(false);
@@ -127,6 +167,7 @@ export function useGenerationWorkflow({
     setOutlineParts([]);
     setCurrentPartIndex(0);
     setFullOutlineText('');
+    setOutlineEstimation(null);
     isStoppingRef.current = false;
     isGeneratingPartRef.current = false;
   }, []);
@@ -204,6 +245,10 @@ export function useGenerationWorkflow({
         }
       );
       setFullOutlineText(outline);
+      const estimation = parseOutlineEstimation(outline);
+      if (estimation) {
+        setOutlineEstimation(estimation);
+      }
       if (!outline || !outline.trim()) {
         setError('AI provider trả về dàn ý rỗng. V vui lòng thử lại hoặc đổi model.');
       }
@@ -248,7 +293,31 @@ export function useGenerationWorkflow({
     isGeneratingPartRef.current = true;
     setIsLoading(true);
     const finalWordCount = effectiveWordCount(brief);
-    const params = buildParams(brief, finalWordCount);
+    const totalNum = parseInt(finalWordCount, 10) || 1800;
+    const remainingCount = parts.length - index;
+
+    // MSEW-track1-phase3: Rebalance word count dynamically
+    const generatedPartsList = scriptRef.current
+      .replace(PARTS_HEADER, '')
+      .split(/\n\n---\n\n/)
+      .map(p => p.trim())
+      .filter(Boolean);
+
+    const toleranceMode = determineToleranceMode(
+      brief.outlineContent,
+      totalNum,
+      outlineEstimation?.minRecommendedWords ?? 0
+    );
+
+    const { newPartTarget } = rebalanceRemainingParts(
+      totalNum,
+      generatedPartsList,
+      remainingCount,
+      toleranceMode
+    );
+
+    // Ép dung lượng cho phần hiện tại
+    const params = buildParams(brief, (newPartTarget * parts.length).toString());
 
     try {
       setCurrentAiAction(`Đang viết phần ${index + 1}/${parts.length}...`);
@@ -488,5 +557,7 @@ export function useGenerationWorkflow({
     rewriteScript,
     handleResolveMissingData,
     resolvingStrategy,
+    outlineEstimation,
+    setOutlineEstimation,
   };
 }

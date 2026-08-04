@@ -328,6 +328,7 @@ const App: React.FC = () => {
             uploadedIdeas={ideas.uploadedIdeas}
             getNextAiConfig={aiSettings.getNextAiConfig}
             apiKeys={aiSettings.apiKeys}
+            outlineEstimation={generation.outlineEstimation}
           />
         </div>
         <div className="lg:col-span-6">
@@ -354,6 +355,9 @@ const App: React.FC = () => {
             setAutoContinue={generation.setAutoContinue}
             macroData={generation.macroData}
             isOutlinePhase={isOutlinePhase}
+            targetWordCount={brief.brief.wordCount}
+            outlineEstimation={generation.outlineEstimation}
+            userDescription={brief.brief.outlineContent}
           />
         </div>
         <div className="lg:col-span-3">

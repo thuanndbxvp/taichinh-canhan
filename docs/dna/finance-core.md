@@ -525,10 +525,64 @@ DNA Lõi này là **bắt buộc**. Sau đó ghép với 1 trong 4 nhánh:
 
 Cách ghép prompt thực tế ở file `niche-finance.md` §3.
 
+## 10. BỘ LỌC TẨY RỬA MÙI VĂN AI & BÀI TOÁN MÔ PHỎNG
+
+### 10.1. 11 Quy Tắc Humanizer Cốt Lõi (Cho Generation)
+
+Áp dụng cho mọi kịch bản được sinh ra:
+
+| # | Quy tắc | Mô tả |
+|---|---------|--------|
+| 1 | **Cấm từ vựng AI** | "cực kỳ", "vô cùng", "tuyệt đối", "đáng chú ý", "bức tranh toàn cảnh", "minh chứng rõ nét", "chìa khóa vàng", "ngọn hải đăng" |
+| 2 | **Cấm điệp từ máy móc** | Cấm "Không chỉ... mà còn...", "Không những... mà còn...". Thay bằng 2 câu độc lập |
+| 3 | **Giới hạn em-dash** | Tối đa 2 dấu gạch ngang (—) trên mỗi phần kịch bản |
+| 4 | **Cấm 100% emoji** | Không emoji (🚀, 💡, ⚠️, 📊...) trong lời thoại |
+| 5 | **Cấm filler phrases** | "Cần lưu ý rằng", "Điều quan trọng là", "Như chúng ta đã biết" |
+| 6 | **Cấm signposting** | "Ở phần này tôi sẽ nói về...", "Tiếp theo chúng ta cùng tìm hiểu..." |
+| 7 | **Cấm Staccato Drama** | Cấm chuỗi 3+ câu ngắn cụt lủn cố tạo drama |
+| 8 | **Cấm đạo lý sáo rỗng** | Không "Hãy là nhà đầu tư thông minh" — lời khuyên phải gắn với hành động cụ thể |
+| 9 | **Cấm Rule-of-three gượng ép** | Không ép mọi thứ thành đúng 3 ý |
+| 10 | **Không bịa số liệu** | Chỉ số liệu thực, hoặc nêu rõ "ước tính / giả định" |
+| 11 | **Từ xưng hô** | "Tôi" + "Anh em" hoặc "Bạn", tối đa 8 lần "anh em"/phần |
+
+### 10.2. Bài Toán Mô Phỏng Số Liệu (BẮT BUỘC Phần 3 & 4)
+
+#### Cấu trúc 3 tầng:
+
+**Tầng 1 — Bài toán cơ bản (Phần 3):**
+- Mô phỏng tính toán với số cụ thể
+- Ví dụ: "Nếu anh em đầu tư 50 triệu với lãi suất 9.5%/năm trong 5 năm (compound interest), tổng cộng nhận được bao nhiêu?"
+- Yêu cầu: Đủ dữ kiện để người xem tự tính lại
+
+**Tầng 2 — So sánh phương án (Phần 3 & 4):**
+- So sánh 2 phương án tài chính
+- Ví dụ: "Mua nhà 2.5 tỷ trả góp 20 năm vs thuê nhà 8 triệu/tháng + đầu tư chênh lệch"
+- Yêu cầu: Rõ ràng về chi phí, lợi ích, thời gian
+
+**Tầng 3 — Dòng tiền thực tế (Phần 4):**
+- Mô phỏng dòng tiền theo tháng/năm
+- Ví dụ: "Nếu anh em tiết kiệm 5 triệu/tháng với lãi suất 7%/năm, sau 10 năm sẽ có bao nhiêu?"
+- Yêu cầu: Có bảng số liệu hoặc công thức tính nhanh
+
+#### Yêu cầu về số liệu:
+
+- **BẮT BUỘC:** Lãi suất, số tiền, thời gian, phần trăm phải cụ thể
+- **KHÔNG:** Nói chung chung như "lãi suất cao" hay "đầu tư nhiều tiền"
+- **NẾU KHÔNG CÓ SỐ LIỆU THỰC:** Ghi rõ "ước tính" hoặc "giả định" trong kịch bản
+
+### 10.3. Word Count Estimation Metadata
+
+Sau khi tạo dàn ý, AI phải trả về khối metadata:
+
+```html
+<!-- WORD_COUNT_ESTIMATION: {"minRecommendedWords": 1650, "optimalWords": 1900, "reason": "Dàn ý có 2 bài toán mô phỏng (lãi kép và so sánh phương án), cần tối thiểu 1.650 từ để giải trình chi tiết."} -->
+```
+
 ---
 
 **Phiên bản:** 3.0.0
-**Cập nhật:** 2026-07-27
+**Cập nhật:** 2026-08-04
 **Lý do cập nhật v3:** Bổ sung §6C Cấu trúc luận điểm chuẩn 5 bước (Nêu → Giải thích → Ví dụ → Hệ quả → Chuyển), cân bằng §6B narrator persona về phân tích thay vì kể chuyện, thêm §9.4 anti-flowery prose + giới hạn ẩn dụ.
+**Lý do cập nhật v3.1:** Thêm §10 Bộ lọc Humanizer 11 quy tắc và Bài toán Mô phỏng Số liệu bắt buộc cho Phần 3 & 4.
 **Dựa trên:** 50 script thực tế + hướng dẫn văn phong thuyết minh-phân tích cho video YouTube 15-30 phút.
 **Sử dụng cùng:** `finance-{listicle|analytical|psychology|mythbusting}.md`, `finance-hooks.md`
